@@ -20,7 +20,9 @@ public class MazeGenerator
 	private Point guide;
 	private Stack<Point> pathHistory;
 	
+	private char[][] visitedCells;
 	private char[][] maze;
+	
 	private int sizeX;
 	private int sizeY;
 
@@ -48,7 +50,8 @@ public class MazeGenerator
 
 		this.sizeX = dimension;
 		this.sizeY = dimension;
-		this.maze = new char[sizeX][sizeY];
+		this.maze = new char[sizeY][sizeX];
+		this.visitedCells = new char[(sizeY - 1) / 2][(sizeX - 1) / 2];
 		this.rand = new Random();
 		this.guide = new Point(0, 0);
 
@@ -125,6 +128,7 @@ public class MazeGenerator
 		Point x0 = new Point();
 		
 		pathHistory.push(x0);
+		visitedCells[0][1] = 'X';
 	}
 
 	private boolean isWall(int x, int y)
