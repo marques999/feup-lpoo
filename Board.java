@@ -3,7 +3,8 @@ package lpoo;
 import java.util.Random;
 import java.util.Scanner;
 
-enum Direction {
+enum Direction 
+{
 	UP, DOWN, LEFT, RIGHT, NONE
 };
 
@@ -12,8 +13,12 @@ public class Board
 	private static Random rnd = new Random();
 	private static Scanner in = new Scanner(System.in);
 
-	public static final int NUM_COLUNAS = 10;
-	public static final int NUM_LINHAS = 10;
+	public static int NUM_COLUNAS = 11;
+	public static int NUM_LINHAS = 11;
+	
+	private static Hero player;
+	private static Dragon dragon;
+	private static Sword sword;
 
 	public static char[][] m = new char[][]
 	{
@@ -42,11 +47,23 @@ public class Board
 		}
 	}
 
-	public static void clear(int x, int y) 
+	// ------------------------------
+	// |	BOARD SYMBOLS		 	|
+	// ------------------------------
+	
+	public static void clearSymbol(int x, int y) 
 	{
 		if (x >= 0 && x < NUM_COLUNAS && y >= 0 && y < NUM_LINHAS)
 		{
 			m[y][x] = ' ';
+		}
+	}
+	
+	public static void placeSymbol(int x, int y, char s)
+	{
+		if (x >= 0 && x < NUM_COLUNAS && y >= 0 && y < NUM_LINHAS)
+		{
+			m[y][x] = s;
 		}
 	}
 	
@@ -106,35 +123,71 @@ public class Board
 		
 		dragon.move(moveDirection);
 	}
+	
+	private static Point placeEntity(char symbol)
+	{
+		int initialX = 0;
+		int initialY = 0;
+				
+		while(m[initialY][initialX] != ' ')
+		{
+			initialX = 1 + rnd.nextInt(NUM_COLUNAS - 2);
+			initialY = 1 + rnd.nextInt(NUM_LINHAS - 2);
+		}
+				
+		return new Point(initialX, initialY);
+	}
+	
+	
+	private static void initializeMaze(int n)
+	{
+		MazeGenerator maze = new MazeGenerator(11);
+		
+		m = maze.getMatrix();
+		
+		Point playerPosition = placeEntity('H');
+		Point dragonPosition = placeEntity('D');
+		Point swordPosition = placeEntity('E');
+		
+		player = new Hero(playerPosition.getX(), playerPosition.getY());
+		player.draw();
+		
+		dragon = new Dragon(dragonPosition.getX(), dragonPosition.getY());
+		dragon.draw();
+		
+		sword = new Sword(swordPosition.getX(), swordPosition.getY());
+		sword.draw();
+		
+		NUM_LINHAS = maze.getNumberRows();
+		NUM_COLUNAS = maze.getNumberColumns();
+	}
 
 	public static void main(String[] args)
 	{
-		Hero player1 = new Hero(1, 1);
-		Dragon dragon1 = new Dragon(1, 3);
-		Sword sword1 = new Sword(5, 4);
+		initializeMaze(11);
 		
-		boolean gameOver = false;;
+		boolean gameOver = false;
 
-		while (!player1.hasFinished()) 
+		while (!player.hasFinished()) 
 		{
 			print();
 			System.out.print("Enter a key to move the character : ");
 			
 			char input = readChar();
 
-			player1.makeMove(getDirection(input));
-			player1.draw();
+			player.makeMove(getDirection(input));
+			player.draw();
 			
-			player1.attackDragon(dragon1);
-			dragon1.attackPlayer(player1);
+			player.attackDragon(dragon);
+			dragon.attackPlayer(player);
 			
-			if (player1.getHealth() <= 0)
+			if (player.getHealth() <= 0)
 			{
 				gameOver = true;
 				break;
 			}
 			
-			moveDragon(dragon1);
+			moveDragon(dragon);
 		}
 
 		print();

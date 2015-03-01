@@ -21,8 +21,10 @@ public class Hero
 
 	/**
 	 * @brief constructor with parameters for class 'Hero'
-	 * @param x initial x position for player
-	 * @param y initial y position for player
+	 * @param x
+	 *            initial x position for player
+	 * @param y
+	 *            initial y position for player
 	 */
 	public Hero(int x, int y)
 	{
@@ -42,7 +44,8 @@ public class Hero
 
 	/**
 	 * @brief changes player location
-	 * @param x new X coordinate for player location
+	 * @param x
+	 *            new X coordinate for player location
 	 */
 	public void setX(int x)
 	{
@@ -59,7 +62,8 @@ public class Hero
 
 	/**
 	 * @brief changes player location
-	 * @param y new Y coordinate for player location
+	 * @param y
+	 *            new Y coordinate for player location
 	 */
 	public void setY(int y)
 	{
@@ -76,7 +80,8 @@ public class Hero
 
 	/**
 	 * @brief changes player health
-	 * @param health new value for player's health
+	 * @param health
+	 *            new value for player's health
 	 */
 	public void setHealth(int health)
 	{
@@ -136,7 +141,8 @@ public class Hero
 	 * @brief checks if player can move in specified direction
 	 * @param direction
 	 * @param board
-	 * @return returns 'true' if player is still alive and can move to the specified direction, 'false' otherwise
+	 * @return returns 'true' if player is still alive and can move to the
+	 *         specified direction, 'false' otherwise
 	 */
 	public final boolean validMove(Direction direction)
 	{
@@ -172,7 +178,8 @@ public class Hero
 	 * @brief checks if player is close enough to attack an enemy dragon
 	 * @param dragon
 	 * @param board
-	 * @return returns 'true' if player has the sword and can attack the dragon; 'false' otherwise
+	 * @return returns 'true' if player has the sword and can attack the dragon;
+	 *         'false' otherwise
 	 */
 	public final boolean canAttack(Dragon dragon)
 	{
@@ -180,7 +187,7 @@ public class Hero
 		{
 			return false;
 		}
-		
+
 		if (dragon.getHealth() <= 0)
 		{
 			return false;
@@ -211,7 +218,7 @@ public class Hero
 	{
 		if (canAttack(dragon))
 		{
-			Board.clear(dragon.getX(), dragon.getY());
+			Board.clearSymbol(dragon.getX(), dragon.getY());
 			dragon.setHealth(0);
 		}
 	}
@@ -226,7 +233,7 @@ public class Hero
 		{
 			if (health > 0)
 			{
-				Board.m[y][x] = hasSword() ? 'A' : 'H';
+				Board.placeSymbol(x, y, hasSword() ? 'A' : 'H');
 			}
 		}
 	}
@@ -260,7 +267,7 @@ public class Hero
 				pickedUp = true;
 			}
 
-			Board.clear(x, y);
+			Board.clearSymbol(x, y);
 
 			y--;
 		}
@@ -281,7 +288,7 @@ public class Hero
 				pickedUp = true;
 			}
 
-			Board.clear(x, y);
+			Board.clearSymbol(x, y);
 
 			y++;
 		}
@@ -301,7 +308,7 @@ public class Hero
 				pickedUp = true;
 			}
 
-			Board.clear(x, y);
+			Board.clearSymbol(x, y);
 
 			x--;
 		}
@@ -321,7 +328,7 @@ public class Hero
 				pickedUp = true;
 			}
 
-			Board.clear(x, y);
+			Board.clearSymbol(x, y);
 
 			x++;
 		}

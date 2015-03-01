@@ -132,28 +132,28 @@ public class Dragon
 		// move the dragon upwards
 		if (direction == Direction.UP)
 		{
-			Board.clear(x, y);
+			Board.clearSymbol(x, y);
 			y--;
 		}
 
 		// move the dragon southwards
 		else if (direction == Direction.DOWN)
 		{
-			Board.clear(x, y);
+			Board.clearSymbol(x, y);
 			y++;
 		}
 
 		// move the dragon westwards
 		else if (direction == Direction.LEFT)
 		{
-			Board.clear(x, y);
+			Board.clearSymbol(x, y);
 			x--;
 		}
 
 		// move the dragon eastwards
 		else if (direction == Direction.RIGHT)
 		{
-			Board.clear(x, y);
+			Board.clearSymbol(x, y);
 			x++;
 		}
 
@@ -208,7 +208,7 @@ public class Dragon
 	{
 		if (canAttack(player))
 		{
-			Board.clear(player.getX(), player.getY());
+			Board.clearSymbol(player.getX(), player.getY());
 			player.setHealth(0);
 		}
 	}
