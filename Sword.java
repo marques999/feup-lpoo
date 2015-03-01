@@ -2,8 +2,8 @@ package lpoo;
 
 public class Sword
 {
-	int x;
-	int y;
+	private int x;
+	private int y;
 	
 	public Sword()
 	{

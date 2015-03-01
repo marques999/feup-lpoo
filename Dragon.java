@@ -1,3 +1,14 @@
+/*!
+ * \file Dragon.java
+ *
+ * LPOO_2014-2015_P1
+ * \author Diogo Marques
+ * \author Pedro Melo
+ *
+ * \date March 2015
+ *
+ */
+
 package lpoo;
 
 public class Dragon
@@ -25,11 +36,11 @@ public class Dragon
 	{
 		this.x = x;
 		this.y = y;
-		this.setHealth(DRAGON_HEALTH);
+		this.health = DRAGON_HEALTH;
 	}
 
 	/**
-	 * @brief return the dragon x coordinate
+	 * @brief returns the dragon's current position x coordinate
 	 */
 	public final int getX()
 	{
@@ -37,9 +48,8 @@ public class Dragon
 	}
 
 	/**
-	 * @brief changes the dragon x coordinate
-	 * @param x
-	 *            new x coordinate value
+	 * @brief changes the dragon's current position x coordinate
+	 * @param x new value for x coordinate
 	 */
 	public void setX(int x)
 	{
@@ -47,7 +57,7 @@ public class Dragon
 	}
 
 	/**
-	 * @brief returns the dragon's position y coordinate
+	 * @brief returns the dragon's current position y coordinate
 	 */
 	public final int getY()
 	{
@@ -55,9 +65,8 @@ public class Dragon
 	}
 
 	/**
-	 * @brief changes the dragon's position y coordinate
-	 * @param y
-	 *            new y coordinate value
+	 * @brief changes the dragon's current psosition y coordinate
+	 * @param y new value for y coordinate
 	 */
 	public void setY(int y)
 	{
@@ -65,7 +74,7 @@ public class Dragon
 	}
 
 	/**
-	 * @return returns current dragon health
+	 * @return returns the dragon's current health
 	 */
 	public final int getHealth()
 	{
@@ -74,8 +83,7 @@ public class Dragon
 
 	/**
 	 * @brief changes the dragon's current health
-	 * @param health
-	 *            new value for dragon's health
+	 * @param health new value for dragon's health
 	 */
 	public void setHealth(int health)
 	{
@@ -84,8 +92,7 @@ public class Dragon
 
 	/**
 	 * @brief tells if the dragon move is valid
-	 * @param direction
-	 *            the direction to move
+	 * @param direction the direction to move
 	 */
 	public final boolean validMove(Direction direction)
 	{
@@ -95,25 +102,25 @@ public class Dragon
 			return false;
 		}
 
-		// check if the dragon can move upwards
+		// check if the dragon can go north
 		if (direction == Direction.UP && Board.m[y - 1][x] != 'X')
 		{
 			return true;
 		}
 
-		// check if the dragon can move downwards
+		// check if the dragon can go south
 		if (direction == Direction.DOWN && Board.m[y + 1][x] != 'X')
 		{
 			return true;
 		}
 
-		// check if the dragon can move westwards
+		// check if the dragon can move to the left
 		if (direction == Direction.LEFT && Board.m[y][x - 1] != 'X')
 		{
 			return true;
 		}
 
-		// check if the dragon can move eastwards
+		// check if the dragon can move to the right
 		if (direction == Direction.RIGHT && Board.m[y][x + 1] != 'X')
 		{
 			return true;
@@ -124,8 +131,7 @@ public class Dragon
 
 	/**
 	 * @brief move the dragon
-	 * @param direction
-	 *            the direction to move
+	 * @param direction the direction to move
 	 */
 	public void move(Direction direction)
 	{
@@ -168,8 +174,7 @@ public class Dragon
 
 	/**
 	 * @brief attacks the 'Hero'
-	 * @param player
-	 *            the player
+	 * @param player the player entity
 	 */
 	private final boolean canAttack(Hero player)
 	{

@@ -1,3 +1,14 @@
+/*!
+ * \file Hero.java
+ *
+ * LPOO_2014-2015_P1
+ * \author Diogo Marques
+ * \author Pedro Melo
+ *
+ * \date March 2015
+ *
+ */
+
 package lpoo;
 
 public class Hero
@@ -21,10 +32,8 @@ public class Hero
 
 	/**
 	 * @brief constructor with parameters for class 'Hero'
-	 * @param x
-	 *            initial x position for player
-	 * @param y
-	 *            initial y position for player
+	 * @param x initial x position for player
+	 * @param y initial y position for player
 	 */
 	public Hero(int x, int y)
 	{
@@ -44,8 +53,7 @@ public class Hero
 
 	/**
 	 * @brief changes player location
-	 * @param x
-	 *            new X coordinate for player location
+	 * @param x new X coordinate for player location
 	 */
 	public void setX(int x)
 	{
@@ -62,8 +70,7 @@ public class Hero
 
 	/**
 	 * @brief changes player location
-	 * @param y
-	 *            new Y coordinate for player location
+	 * @param y new Y coordinate for player location
 	 */
 	public void setY(int y)
 	{

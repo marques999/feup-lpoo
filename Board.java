@@ -1,3 +1,14 @@
+/*!
+ * \file Board.java
+ *
+ * LPOO_2014-2015_P1
+ * \author Diogo Marques
+ * \author Pedro Melo
+ *
+ * \date March 2015
+ *
+ */
+
 package lpoo;
 
 import java.util.Random;
@@ -13,8 +24,8 @@ public class Board
 	private static Random rnd = new Random();
 	private static Scanner in = new Scanner(System.in);
 
-	public static int NUM_COLUNAS = 11;
-	public static int NUM_LINHAS = 11;
+	public static final int NUM_COLUNAS = 11;
+	public static final int NUM_LINHAS = 11;
 	
 	private static Hero player;
 	private static Dragon dragon;
@@ -34,21 +45,8 @@ public class Board
 		{ 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' },
 	};
 
-	public static final void print() 
-	{
-		for (int y = 0; y < NUM_LINHAS; y++) 
-		{
-			for (int x = 0; x < NUM_COLUNAS; x++) 
-			{
-				System.out.print(m[y][x] + " ");
-			}
-
-			System.out.println("");
-		}
-	}
-
 	// ------------------------------
-	// |	BOARD SYMBOLS		 	|
+	// |	SYMBOL METHODS		 	|
 	// ------------------------------
 	
 	public static void clearSymbol(int x, int y) 
@@ -66,6 +64,10 @@ public class Board
 			m[y][x] = s;
 		}
 	}
+	
+	// ------------------------------
+	// |	   INPUT METHODS		|
+	// ------------------------------
 	
 	private static final char readChar() 
 	{
@@ -91,7 +93,7 @@ public class Board
 		return Direction.NONE;
 	}
 
-	private static void moveDragon(Dragon dragon) 
+	private static final void moveDragon(Dragon dragon) 
 	{
 		Direction moveDirection = Direction.NONE;
 		
@@ -122,14 +124,31 @@ public class Board
 		}
 		
 		dragon.move(moveDirection);
+	}	
+	
+	// ------------------------------
+	// |	   MAZE  METHODS	 	|
+	// ------------------------------
+	
+	public static final void printMaze() 
+	{
+		for (int y = 0; y < NUM_LINHAS; y++) 
+		{
+			for (int x = 0; x < NUM_COLUNAS; x++) 
+			{
+				System.out.print(m[y][x] + " ");
+			}
+
+			System.out.println("");
+		}
 	}
 	
-	private static Point placeEntity(char symbol)
+	private static final Point placeEntity(char symbol)
 	{
 		int initialX = 0;
 		int initialY = 0;
 				
-		while(m[initialY][initialX] != ' ')
+		while (m[initialY][initialX] != ' ')
 		{
 			initialX = 1 + rnd.nextInt(NUM_COLUNAS - 2);
 			initialY = 1 + rnd.nextInt(NUM_LINHAS - 2);
@@ -138,10 +157,9 @@ public class Board
 		return new Point(initialX, initialY);
 	}
 	
-	
 	private static void initializeMaze(int n)
 	{
-		MazeGenerator maze = new MazeGenerator(11);
+		MazeGenerator maze = new MazeGenerator(NUM_LINHAS);
 		
 		m = maze.getMatrix();
 		
@@ -157,9 +175,6 @@ public class Board
 		
 		sword = new Sword(swordPosition.getX(), swordPosition.getY());
 		sword.draw();
-		
-		NUM_LINHAS = maze.getNumberRows();
-		NUM_COLUNAS = maze.getNumberColumns();
 	}
 
 	public static void main(String[] args)
@@ -170,7 +185,7 @@ public class Board
 
 		while (!player.hasFinished()) 
 		{
-			print();
+			printMaze();
 			System.out.print("Enter a key to move the character : ");
 			
 			char input = readChar();
@@ -190,7 +205,7 @@ public class Board
 			moveDragon(dragon);
 		}
 
-		print();
+		printMaze();
 		
 		if (gameOver)
 		{
