@@ -12,12 +12,14 @@
 package lpoo;
 
 import java.util.Random;
+import java.util.Stack;
 
 public class MazeGenerator
 {
 	private Random rand;
 	private Point guide;
-
+	private Stack<Point> pathHistory;
+	
 	private char[][] maze;
 	private int sizeX;
 	private int sizeY;
@@ -52,6 +54,7 @@ public class MazeGenerator
 
 		initializeMatrix();
 		initializeGuide();
+		generatePaths();
 	}
 
 	private void initializeMatrix()
@@ -115,6 +118,13 @@ public class MazeGenerator
 
 		guide.setX(initialX);
 		guide.setY(initialY);
+	}
+	
+	private void generatePaths()
+	{
+		Point x0 = new Point();
+		
+		pathHistory.push(x0);
 	}
 
 	private boolean isWall(int x, int y)
