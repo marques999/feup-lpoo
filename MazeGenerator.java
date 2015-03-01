@@ -23,22 +23,12 @@ public class MazeGenerator
 	private char[][] visitedCells;
 	private char[][] maze;
 	
-	private int sizeX;
-	private int sizeY;
+	private int mazeDimension;
+	private int visitedCellsDimension;
 
 	public char[][] getMatrix()
 	{
 		return this.maze;
-	}
-
-	public final int getNumberRows()
-	{
-		return this.sizeY;
-	}
-
-	public final int getNumberColumns()
-	{
-		return this.sizeX;
 	}
 
 	public MazeGenerator(int dimension)
@@ -48,10 +38,10 @@ public class MazeGenerator
 			return;
 		}
 
-		this.sizeX = dimension;
-		this.sizeY = dimension;
-		this.maze = new char[sizeY][sizeX];
-		this.visitedCells = new char[(sizeY - 1) / 2][(sizeX - 1) / 2];
+		this.mazeDimension = dimension;
+		this.maze = new char[mazeDimension][mazeDimension];
+		this.visitedCellsDimension = (mazeDimension - 1) / 2;
+		this.visitedCells = new char[visitedCellsDimension][visitedCellsDimension];
 		this.rand = new Random();
 		this.guide = new Point(0, 0);
 
@@ -62,9 +52,9 @@ public class MazeGenerator
 
 	private void initializeMatrix()
 	{
-		for (int y = 0; y < sizeY; y++)
+		for (int y = 0; y < mazeDimension; y++)
 		{
-			for (int x = 0; x < sizeX; x++)
+			for (int x = 0; x < mazeDimension; x++)
 			{
 				if (x % 2 != 0 && y % 2 != 0)
 				{
@@ -91,8 +81,8 @@ public class MazeGenerator
 
 			while (maze[initialY][initialX] != ' ')
 			{
-				initialX = 1 + rand.nextInt(sizeX - 2);
-				initialY = 1 + rand.nextInt(sizeY - 2);
+				initialX = 1 + rand.nextInt(mazeDimension - 2);
+				initialY = 1 + rand.nextInt(mazeDimension - 2);
 			}
 
 			if (isWall(initialX + 1, initialY))
@@ -133,6 +123,6 @@ public class MazeGenerator
 
 	private boolean isWall(int x, int y)
 	{
-		return (x == 0 || x == sizeX - 1 || y == 0 || y == sizeY - 1);
+		return (x == 0 || x == mazeDimension - 1 || y == 0 || y == mazeDimension - 1);
 	}
 }
