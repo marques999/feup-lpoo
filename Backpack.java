@@ -1,8 +1,11 @@
 package lpoo;
 
+import java.util.*;
+
 abstract class Backpack
 {
-	String[] items;
+
+	private String[] items;
 	
 	private int maxCapacity;
 	private int currentCapacity;

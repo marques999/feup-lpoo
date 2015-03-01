@@ -1,10 +1,37 @@
 package lpoo;
 
 import java.util.Random;
+import java.util.Stack;
 
 public class MazeGenerator
 {
+	
+	private class Point
+	{
+		private int x;	// the x coordinate
+		private int y;	// the y coordinate
+		
+		// default class constructor
+		public Point()
+		{
+			this(0,0);
+		}
+		
+		// class constructor
+		public Point(int x, int y)
+		{
+			this.x = x;
+			this.y = y;
+		}
+		
+		public final int getX(){return x;}
+		public final int getY(){return y;}
+		public void setX(int x){this.x = x;}
+		public void setY(int y){this.y = y;}
+	}
+	
 	private Random rand = new Random();
+	private Stack pathHistory;
 	private char[][] maze;
 	private int guideX;
 	private int guideY;
@@ -48,60 +75,60 @@ public class MazeGenerator
 		}
 	}
 
+	// JÁ UTILIZA Point
 	private void initializeGuide()
 	{
-		int initialX = 2;
-		int initialY = 2;
-
+		Point initialPoint = new Point();	// (0,0)
+		
 		boolean exitPlaced = false;
-
+		
 		while (!exitPlaced)
-		{
-			while (maze[initialY][initialX] != ' ')
+		{	
+			while (maze[initialPoint.getY()][initialPoint.getX()] != ' ')
 			{
-				initialX = generateRandom(1, sizeX - 2);
-				initialY = generateRandom(1, sizeY - 2);
+				initialPoint.setX(generateRandom(1, sizeX - 2));
+				initialPoint.setY(generateRandom(1, sizeY - 2));
 			}
 
-			if (isWall(initialX + 1, initialY))
+			if (isWall(initialPoint.getX() + 1, initialPoint.getY()))
 			{
-				maze[initialY][initialX + 1] = 'S';
+				maze[initialPoint.getY()][initialPoint.getX() + 1] = 'S';
 				exitPlaced = true;
 			} 
-			else if (isWall(initialX, initialY + 1))
+			else if (isWall(initialPoint.getX(), initialPoint.getY() + 1))
 			{
-				maze[initialY + 1][initialX] = 'S';
+				maze[initialPoint.getY() + 1][initialPoint.getX()] = 'S';
 				exitPlaced = true;
 			} 
-			else if (isWall(initialX - 1, initialY))
+			else if (isWall(initialPoint.getX() - 1, initialPoint.getY()))
 			{
-				maze[initialY][initialX - 1] = 'S';
+				maze[initialPoint.getY()][initialPoint.getX() - 1] = 'S';
 				exitPlaced = true;
 			} 
-			else if (isWall(initialX, initialY - 1))
+			else if (isWall(initialPoint.getX(), initialPoint.getY() - 1))
 			{
-				maze[initialY - 1][initialX] = 'S';
+				maze[initialPoint.getY() - 1][initialPoint.getX()] = 'S';
 				exitPlaced = true;
 			}
 		}
 		
-		maze[initialY][initialX] = '+';
-		guideX = initialX;
-		guideY = initialY;
+		maze[initialPoint.getY()][initialPoint.getX()] = '+';
+		guideX = initialPoint.getX();
+		guideY = initialPoint.getY();
 	}
 
+	//JÁ UTILIZA Point
 	private void placeEntity(char symbol)
 	{
-		int initialX = 1;
-		int initialY = 1;
+		Point initialPoint = new Point(1,1);
 		
-		while(maze[initialY][initialX] != ' ')
+		while(maze[initialPoint.getY()][initialPoint.getX()] != ' ')
 		{
-			initialX = 1 + rand.nextInt(sizeX - 2);
-			initialY = 1 + rand.nextInt(sizeY - 2);
+			initialPoint.setX(1 + rand.nextInt(sizeX - 2));
+			initialPoint.setY(1 + rand.nextInt(sizeY - 2));
 		}
 		
-		maze[initialY][initialX] = symbol;
+		maze[initialPoint.getY()][initialPoint.getX()] = symbol;
 	}
 	
 	
