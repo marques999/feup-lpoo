@@ -120,17 +120,7 @@ public class MazeGenerator
 		guide.setX(initialX);
 		guide.setY(initialY);
 	}
-
-	private boolean isWall(int x, int y)
-	{
-		return (x == 0 || x == mazeDimension - 1 || y == 0 || y == mazeDimension - 1);
-	}
-
-	private static Point convertCoordinates(Point point)
-	{
-		return new Point((point.getX() - 1) / 2, (point.getY() - 1) / 2);
-	}
-
+	
 	private void initializeVisitedCells()
 	{
 		for (int y = 0; y < visitedCellsDimension; ++y)
@@ -142,6 +132,11 @@ public class MazeGenerator
 		}
 	}
 
+	private boolean isWall(int x, int y)
+	{
+		return (x == 0 || x == mazeDimension - 1 || y == 0 || y == mazeDimension - 1);
+	}
+
 	private boolean isStuck()
 	{
 		Point convertedGuide = convertCoordinates(guide);
@@ -151,7 +146,7 @@ public class MazeGenerator
 
 		boolean canMoveLeft = false;
 		boolean canMoveRight = false;
-		boolean canMoveUp= false ;
+		boolean canMoveUp = false;
 		boolean canMoveDown = false;
 
 		if (x > 0)
@@ -175,6 +170,11 @@ public class MazeGenerator
 		} 
 
 		return (!canMoveLeft && !canMoveRight && !canMoveUp && !canMoveDown);
+	}
+	
+	private static Point convertCoordinates(Point point)
+	{
+		return new Point((point.getX() - 1) / 2, (point.getY() - 1) / 2);
 	}
 
 	private boolean moveGuide(Direction direction)
