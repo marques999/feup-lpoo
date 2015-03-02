@@ -24,8 +24,8 @@ public class Board
 	private static Random rnd = new Random();
 	private static Scanner in = new Scanner(System.in);
 
-	public static final int NUM_COLUNAS = 11;
-	public static final int NUM_LINHAS = 11;
+	public static final int NUM_COLUNAS = 31;
+	public static final int NUM_LINHAS = 31;
 	
 	private static Hero player;
 	private static Dragon dragon;
