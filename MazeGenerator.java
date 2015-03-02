@@ -51,7 +51,7 @@ public class MazeGenerator
 		initializeVisitedCells();
 		generatePath();
 
-		while (!isFull())
+		while (!pathHistory.empty())
 		{
 			generatePath();
 		}
@@ -140,23 +140,6 @@ public class MazeGenerator
 				visitedCells[x][y] = '.';
 			}
 		}
-	}
-
-	// CHECKS IF ALL CELLS HAVE BEEN VISITED
-	private boolean isFull()
-	{
-		for (int y = 0; y < visitedCellsDimension; ++y)
-		{
-			for (int x = 0; x < visitedCellsDimension; ++x)
-			{
-				if (visitedCells[y][x] == '.')
-				{
-					return false;
-				}
-			}
-		}
-
-		return true;
 	}
 
 	private boolean isStuck()
