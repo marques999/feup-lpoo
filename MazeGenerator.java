@@ -11,7 +11,6 @@
 
 package lpoo;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
@@ -34,14 +33,13 @@ public class MazeGenerator
 
 	public MazeGenerator(int dimension)
 	{
-		if (dimension < 3 || dimension % 2 == 0)
+		if (dimension % 2 == 0)
 		{
 			return;
 		}
 
 		this.mazeDimension = dimension;
 		this.maze = new char[mazeDimension][mazeDimension];
-
 		this.visitedCellsDimension = (mazeDimension - 1) / 2;
 		this.visitedCells = new char[visitedCellsDimension][visitedCellsDimension];
 		this.pathHistory = new Stack<Point>();
@@ -51,9 +49,8 @@ public class MazeGenerator
 		initializeMatrix();
 		initializeGuide();
 		initializeVisitedCells();
-
 		generatePath();
-		
+
 		while (!isFull())
 		{
 			generatePath();
@@ -62,9 +59,9 @@ public class MazeGenerator
 
 	private void initializeMatrix()
 	{
-		for (int y = 0; y < mazeDimension; y++)
+		for (int y = 0; y < mazeDimension; ++y)
 		{
-			for (int x = 0; x < mazeDimension; x++)
+			for (int x = 0; x < mazeDimension; ++x)
 			{
 				if (x % 2 != 0 && y % 2 != 0)
 				{
@@ -82,7 +79,7 @@ public class MazeGenerator
 	{
 		int initialX = 0;
 		int initialY = 0;
-
+		
 		boolean exitPlaced = false;
 
 		while (!exitPlaced)
@@ -100,15 +97,18 @@ public class MazeGenerator
 			{
 				maze[initialY][initialX + 1] = 'S';
 				exitPlaced = true;
-			} else if (isWall(initialX, initialY + 1))
+			} 
+			else if (isWall(initialX, initialY + 1))
 			{
 				maze[initialY + 1][initialX] = 'S';
 				exitPlaced = true;
-			} else if (isWall(initialX - 1, initialY))
+			} 
+			else if (isWall(initialX - 1, initialY))
 			{
 				maze[initialY][initialX - 1] = 'S';
 				exitPlaced = true;
-			} else if (isWall(initialX, initialY - 1))
+			} 
+			else if (isWall(initialX, initialY - 1))
 			{
 				maze[initialY - 1][initialX] = 'S';
 				exitPlaced = true;
@@ -126,17 +126,7 @@ public class MazeGenerator
 		return (x == 0 || x == mazeDimension - 1 || y == 0 || y == mazeDimension - 1);
 	}
 
-	private boolean isWall(Point point)
-	{
-		int x = point.getX();
-		int y = point.getY();
-
-		return (x == 0 || x == mazeDimension - 1 || y == 0 || y == mazeDimension - 1);
-	}
-
-	// TUDO O QUE ESTÁ PARA BAIXO FOI O QUE FIZ AGORA
-
-	private Point convertCoordinates(Point point)
+	private static Point convertCoordinates(Point point)
 	{
 		return new Point((point.getX() - 1) / 2, (point.getY() - 1) / 2);
 	}
@@ -150,26 +140,9 @@ public class MazeGenerator
 				visitedCells[x][y] = '.';
 			}
 		}
-
-		Point initialGuide = convertCoordinates(guide);
-
-		pathHistory.push(initialGuide);
-		visitedCells[initialGuide.getX()][initialGuide.getY()] = '+';
 	}
 
-	private void printVisitedCells()
-	{
-		for (int y = 0; y < visitedCellsDimension; ++y)
-		{
-			for (int x = 0; x < visitedCellsDimension; x++)
-			{
-				System.out.print(visitedCells[y][x] + " ");
-			}
-			
-			System.out.println("");
-		}
-	}
-	// TELL IF VERIFIED CELLS IS FULL
+	// CHECKS IF ALL CELLS HAVE BEEN VISITED
 	private boolean isFull()
 	{
 		for (int y = 0; y < visitedCellsDimension; ++y)
@@ -185,55 +158,38 @@ public class MazeGenerator
 
 		return true;
 	}
-	
+
 	private boolean isStuck()
 	{
 		Point convertedGuide = convertCoordinates(guide);
-	
+
 		int x = convertedGuide.getX();
 		int y = convertedGuide.getY();
-	//	int df = 0;
-		boolean canMoveLeft;
-		boolean canMoveRight;
-		boolean canMoveUp;
-		boolean canMoveDown;
-		
-		// verify if movement is possible	
+
+		boolean canMoveLeft = false;
+		boolean canMoveRight = false;
+		boolean canMoveUp= false ;
+		boolean canMoveDown = false;
+
 		if (x > 0)
 		{
-			canMoveLeft = (visitedCells[y][x-1] != '+');
-		}
-		else
-		{
-			canMoveLeft = false;
-		}
-		
+			canMoveLeft = (visitedCells[y][x - 1] != '+');
+		} 
+
 		if (x < visitedCellsDimension - 1)
 		{
-			canMoveRight = (visitedCells[y][x+1] != '+');
-		}
-		else
-		{
-			canMoveRight = false;
-		}
-		
+			canMoveRight = (visitedCells[y][x + 1] != '+');
+		} 
+
 		if (y > 0)
 		{
-			canMoveUp = (visitedCells[y-1][x] != '+');
-		}
-		else 
-		{
-			canMoveUp = false;
-		}
-		
+			canMoveUp = (visitedCells[y - 1][x] != '+');
+		} 
+
 		if (y < visitedCellsDimension - 1)
 		{
-			canMoveDown = (visitedCells[y+1][x] != '+');
-		}
-		else
-		{
-			canMoveDown = false;
-		}
+			canMoveDown = (visitedCells[y + 1][x] != '+');
+		} 
 
 		return (!canMoveLeft && !canMoveRight && !canMoveUp && !canMoveDown);
 	}
@@ -275,7 +231,6 @@ public class MazeGenerator
 
 		Point newGuide = convertCoordinates(destination);
 
-		// verify if movement is possible
 		if (isWall(middle.getX(), middle.getY()))
 		{
 			return false;
@@ -291,7 +246,7 @@ public class MazeGenerator
 
 		guide.setY(destination.getY());
 		guide.setX(destination.getX());
-		
+
 		visitedCells[newGuide.getY()][newGuide.getX()] = '+';
 		pathHistory.push(destination);
 
@@ -300,12 +255,10 @@ public class MazeGenerator
 
 	private void generatePath()
 	{
-		int randomMove;
-
 		while (!isStuck())
 		{
-			randomMove = rand.nextInt(4);
-			
+			int randomMove = rand.nextInt(4);
+
 			switch (randomMove)
 			{
 			case 0:
@@ -322,7 +275,7 @@ public class MazeGenerator
 				break;
 			}
 		}
-		
+
 		if (!pathHistory.empty())
 		{
 			guide = pathHistory.pop();
