@@ -13,11 +13,10 @@ package lpoo;
 
 public class Dragon
 {
-	private int x; // the x coordinate
-	private int y; // the y coordinate
-	private int health; // the dragon health
+	private Point pos;
+	private int health;
 
-	private final int DRAGON_HEALTH = 100; // initial health
+	private final int DRAGON_HEALTH = 100;
 
 	/**
 	 * @brief default constructor for class 'Dragon'
@@ -34,8 +33,7 @@ public class Dragon
 	 */
 	public Dragon(int x, int y)
 	{
-		this.x = x;
-		this.y = y;
+		this.pos = new Point(x, y);
 		this.health = DRAGON_HEALTH;
 	}
 
@@ -44,7 +42,15 @@ public class Dragon
 	 */
 	public final int getX()
 	{
-		return x;
+		return pos.x;
+	}
+	
+	/**
+	 * @brief returns the dragon's current position y coordinate
+	 */
+	public final int getY()
+	{
+		return pos.y;
 	}
 
 	/**
@@ -53,24 +59,33 @@ public class Dragon
 	 */
 	public void setX(int x)
 	{
-		this.x = x;
+		this.pos.x = x;
 	}
 
 	/**
-	 * @brief returns the dragon's current position y coordinate
-	 */
-	public final int getY()
-	{
-		return y;
-	}
-
-	/**
-	 * @brief changes the dragon's current psosition y coordinate
+	 * @brief changes the dragon's current position y coordinate
 	 * @param y new value for y coordinate
 	 */
 	public void setY(int y)
 	{
-		this.y = y;
+		this.pos.y = y;
+	}
+
+	/**
+	 * @return returns the dragon's current position
+	 */
+	public final Point getPosition()
+	{
+		return this.pos;
+	}
+
+	/**
+	 * @brief changes the dragon's current position
+	 * @param pos new coordinates for dragon position
+	 */
+	public void setPosition(Point pos)
+	{
+		this.pos = pos;
 	}
 
 	/**
@@ -96,32 +111,32 @@ public class Dragon
 	 */
 	public final boolean validMove(Direction direction)
 	{
-		// check if the dragon is still alive
+		// checks if the dragon is still alive
 		if (health <= 0)
 		{
 			return false;
 		}
 
-		// check if the dragon can go north
-		if (direction == Direction.UP && Board.m[y - 1][x] != 'X')
+		// checks if the dragon can go north
+		if (direction == Direction.UP && Board.m[pos.y - 1][pos.x] != 'X')
 		{
 			return true;
 		}
 
-		// check if the dragon can go south
-		if (direction == Direction.DOWN && Board.m[y + 1][x] != 'X')
+		// checks if the dragon can go south
+		if (direction == Direction.DOWN && Board.m[pos.y + 1][pos.x] != 'X')
 		{
 			return true;
 		}
 
-		// check if the dragon can move to the left
-		if (direction == Direction.LEFT && Board.m[y][x - 1] != 'X')
+		// checks if the dragon can move to the left
+		if (direction == Direction.LEFT && Board.m[pos.y][pos.x - 1] != 'X')
 		{
 			return true;
 		}
 
-		// check if the dragon can move to the right
-		if (direction == Direction.RIGHT && Board.m[y][x + 1] != 'X')
+		// checks if the dragon can move to the right
+		if (direction == Direction.RIGHT && Board.m[pos.y][pos.x + 1] != 'X')
 		{
 			return true;
 		}
@@ -135,60 +150,45 @@ public class Dragon
 	 */
 	public void move(Direction direction)
 	{
-		// move the dragon upwards
-		if (direction == Direction.UP)
-		{
-			Board.clearSymbol(x, y);
-			y--;
-		}
-
-		// move the dragon southwards
-		else if (direction == Direction.DOWN)
-		{
-			Board.clearSymbol(x, y);
-			y++;
-		}
-
-		// move the dragon westwards
-		else if (direction == Direction.LEFT)
-		{
-			Board.clearSymbol(x, y);
-			x--;
-		}
-
-		// move the dragon eastwards
-		else if (direction == Direction.RIGHT)
-		{
-			Board.clearSymbol(x, y);
-			x++;
-		}
-
-		// don't move the dragon!
-		else
+		if (direction == Direction.NONE)
 		{
 			return;
 		}
 
-		this.draw();
+		Board.clearSymbol(pos.x, pos.y);
+
+		if (direction == Direction.UP)
+		{
+			pos.y--;
+		}
+		else if (direction == Direction.DOWN)
+		{
+			pos.y++;
+		}
+		else if (direction == Direction.LEFT)
+		{
+			pos.x--;
+		} 
+		else if (direction == Direction.RIGHT)
+		{
+			pos.x++;
+		}
+
 	}
 
 	/**
 	 * @brief attacks the 'Hero'
-	 * @param player the player entity
+	 * @param player
+	 *            the player entity
 	 */
 	private final boolean canAttack(Hero player)
 	{
-		if (player.getHealth() <= 0)
-		{
-			return false;
-		}
-
 		if (health <= 0)
 		{
 			return false;
 		}
 
-		if (player.hasSword())
+		if (player.getHealth() <= 0 || player.hasSword())
 		{
 			return false;
 		}
@@ -196,12 +196,12 @@ public class Dragon
 		int playerX = player.getX();
 		int playerY = player.getY();
 
-		if (x <= playerX + 1 && x >= playerX - 1 && y == playerY)
+		if (pos.x <= playerX + 1 && pos.x >= playerX - 1 && pos.y == playerY)
 		{
 			return true;
 		}
 
-		if (y <= playerY + 1 && y >= playerY - 1 && x == playerX)
+		if (pos.y <= playerY + 1 && pos.y >= playerY - 1 && pos.x == playerX)
 		{
 			return true;
 		}
@@ -223,15 +223,20 @@ public class Dragon
 	 */
 	public final void draw()
 	{
-		if (health > 0 && x >= 0 && x < Board.NUM_COLUNAS && y >= 0 && y < Board.NUM_LINHAS)
+		if (health <= 0)
 		{
-			if (Board.m[y][x] == 'E')
+			return;
+		}
+
+		if (pos.x >= 0 && pos.x < Board.NUM_COLUNAS && pos.y >= 0
+				&& pos.y < Board.NUM_LINHAS)
+		{
+			if (Board.m[pos.y][pos.x] == 'E')
 			{
-				Board.m[y][x] = 'F';
-			} 
-			else
+				Board.m[pos.y][pos.x] = 'F';
+			} else
 			{
-				Board.m[y][x] = 'D';
+				Board.m[pos.y][pos.x] = 'D';
 			}
 		}
 	}

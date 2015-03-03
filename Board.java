@@ -24,8 +24,8 @@ public class Board
 	private static Random rnd = new Random();
 	private static Scanner in = new Scanner(System.in);
 
-	public static final int NUM_COLUNAS = 31;
-	public static final int NUM_LINHAS = 31;
+	public static final int NUM_COLUNAS = 15;
+	public static final int NUM_LINHAS = 15;
 	
 	private static Hero player;
 	private static Dragon dragon;
@@ -71,9 +71,7 @@ public class Board
 	
 	private static final char readChar() 
 	{
-		String getLine = in.next();
-
-		return getLine.charAt(0);
+		return in.next().charAt(0);
 	}
 
 	private static final Direction getDirection(char input) 
@@ -102,7 +100,7 @@ public class Board
 			return;
 		}
 
-		while (dragon.validMove(moveDirection) == false)
+		while (!dragon.validMove(moveDirection))
 		{
 			int randomMove = rnd.nextInt(4);
 			
@@ -167,14 +165,30 @@ public class Board
 		Point dragonPosition = placeEntity('D');
 		Point swordPosition = placeEntity('E');
 		
-		player = new Hero(playerPosition.getX(), playerPosition.getY());
+		player = new Hero(playerPosition.x, playerPosition.y);
 		player.draw();
 		
-		dragon = new Dragon(dragonPosition.getX(), dragonPosition.getY());
+		dragon = new Dragon(dragonPosition.x, dragonPosition.y);
 		dragon.draw();
 		
-		sword = new Sword(swordPosition.getX(), swordPosition.getY());
+		sword = new Sword(swordPosition.x, swordPosition.y);
 		sword.draw();
+	}
+	
+	private static final void showObjectives()
+	{
+		if (!player.hasSword())
+		{
+			System.out.println("OBJECTIVE: Pick up the sword!");
+		}
+		else if (dragon.getHealth() > 0)
+		{
+			System.out.println("OBJECTIVE: Kill the dragon!");
+		}
+		else 
+		{
+			System.out.println("OBJECTIVE: Find the exit!");
+		}
 	}
 
 	public static void main(String[] args)
@@ -183,18 +197,27 @@ public class Board
 		
 		boolean gameOver = false;
 
-		while (!player.hasFinished()) 
+		while (!player.hasEscaped()) 
 		{
+			showObjectives();
 			printMaze();
+			
+			player.attackDragon(dragon);
+			dragon.attackPlayer(player);
+			
 			System.out.print("Enter a key to move the character : ");
 			
 			char input = readChar();
 
 			player.makeMove(getDirection(input));
 			player.draw();
-			
-			player.attackDragon(dragon);
-			dragon.attackPlayer(player);
+			moveDragon(dragon);
+			dragon.draw();
+
+			if (!player.hasSword())
+			{
+				sword.draw();
+			}
 			
 			if (player.getHealth() <= 0)
 			{
@@ -202,7 +225,6 @@ public class Board
 				break;
 			}
 			
-			moveDragon(dragon);
 		}
 
 		printMaze();

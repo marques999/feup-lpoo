@@ -19,7 +19,7 @@ public class MazeGenerator
 	private Random rand;
 	private Point guide;
 	private Stack<Point> pathHistory;
-
+	
 	private char[][] visitedCells;
 	private char[][] maze;
 
@@ -117,8 +117,8 @@ public class MazeGenerator
 
 		maze[initialY][initialX] = '+';
 
-		guide.setX(initialX);
-		guide.setY(initialY);
+		guide.x = initialX;
+		guide.y = initialY;
 	}
 	
 	private void initializeVisitedCells()
@@ -141,8 +141,8 @@ public class MazeGenerator
 	{
 		Point convertedGuide = convertCoordinates(guide);
 
-		int x = convertedGuide.getX();
-		int y = convertedGuide.getY();
+		int x = convertedGuide.x;
+		int y = convertedGuide.y;
 
 		boolean canMoveLeft = false;
 		boolean canMoveRight = false;
@@ -174,7 +174,7 @@ public class MazeGenerator
 	
 	private static Point convertCoordinates(Point point)
 	{
-		return new Point((point.getX() - 1) / 2, (point.getY() - 1) / 2);
+		return new Point((point.x - 1) / 2, (point.y - 1) / 2);
 	}
 
 	private boolean moveGuide(Direction direction)
@@ -185,28 +185,28 @@ public class MazeGenerator
 		switch (direction)
 		{
 		case UP:
-			middle.setX(guide.getX());
-			middle.setY(guide.getY() - 1);
-			destination.setX(guide.getX());
-			destination.setY(middle.getY() - 1);
+			middle.x = guide.x;
+			middle.y = guide.y - 1;
+			destination.x = guide.x;
+			destination.y = middle.y - 1;
 			break;
 		case DOWN:
-			middle.setX(guide.getX());
-			middle.setY(guide.getY() + 1);
-			destination.setX(middle.getX());
-			destination.setY(middle.getY() + 1);
+			middle.x = guide.x;
+			middle.y = guide.y + 1;
+			destination.x = middle.x;
+			destination.y = middle.y + 1;
 			break;
 		case LEFT:
-			middle.setX(guide.getX() - 1);
-			middle.setY(guide.getY());
-			destination.setX(middle.getX() - 1);
-			destination.setY(middle.getY());
+			middle.x = guide.x - 1;
+			middle.y = guide.y;
+			destination.x = middle.x - 1;
+			destination.y = middle.y;
 			break;
 		case RIGHT:
-			middle.setX(guide.getX() + 1);
-			middle.setY(guide.getY());
-			destination.setX(middle.getX() + 1);
-			destination.setY(middle.getY());
+			middle.x = guide.x + 1;
+			middle.y = guide.y;
+			destination.x = middle.x + 1;
+			destination.y = middle.y;
 			break;
 		case NONE:
 			return false;
@@ -214,23 +214,23 @@ public class MazeGenerator
 
 		Point newGuide = convertCoordinates(destination);
 
-		if (isWall(middle.getX(), middle.getY()))
+		if (isWall(middle.x, middle.y))
 		{
 			return false;
 		}
 
-		if (visitedCells[newGuide.getY()][newGuide.getX()] == '+')
+		if (visitedCells[newGuide.y][newGuide.x] == '+')
 		{
 			return false;
 		}
 
-		maze[guide.getY()][guide.getX()] = ' ';
-		maze[middle.getY()][middle.getX()] = ' ';
+		maze[guide.y][guide.x] = ' ';
+		maze[middle.y][middle.x] = ' ';
 
-		guide.setY(destination.getY());
-		guide.setX(destination.getX());
+		guide.y = destination.y;
+		guide.x = destination.x;
 
-		visitedCells[newGuide.getY()][newGuide.getX()] = '+';
+		visitedCells[newGuide.y][newGuide.x] = '+';
 		pathHistory.push(destination);
 
 		return true;
