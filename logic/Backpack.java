@@ -1,4 +1,4 @@
-package lpoo;
+package lpoo.logic;
 
 abstract class Backpack
 {
