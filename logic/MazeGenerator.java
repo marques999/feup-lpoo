@@ -115,7 +115,12 @@ public class MazeGenerator
 			}
 		}
 
+<<<<<<< HEAD:logic/MazeGenerator.java
 	//	maze[initialY][initialX] = '+';
+=======
+		maze[initialY][initialX] = '+';
+
+>>>>>>> origin/master:MazeGenerator.java
 		guide.x = initialX;
 		guide.y = initialY;
 	}
@@ -225,8 +230,15 @@ public class MazeGenerator
 
 		maze[guide.y][guide.x] = ' ';
 		maze[middle.y][middle.x] = ' ';
+<<<<<<< HEAD:logic/MazeGenerator.java
 		guide.y = destination.y;
 		guide.x = destination.x;
+=======
+
+		guide.y = destination.y;
+		guide.x = destination.x;
+
+>>>>>>> origin/master:MazeGenerator.java
 		visitedCells[newGuide.y][newGuide.x] = '+';
 		pathHistory.push(destination);
 
