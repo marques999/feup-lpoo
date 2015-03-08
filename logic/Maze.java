@@ -23,6 +23,11 @@ public abstract class Maze
 		this.m_matrix = m_matrix;
 	}
 	
+	protected final boolean isWall(Point pos)
+	{
+		return (pos.x == 0 || pos.x == m_size - 1 || pos.y == 0 || pos.y == m_size - 1);
+	}
+
 	protected final void printMaze()
 	{
 		for (int y = 0; y < m_size; y++)

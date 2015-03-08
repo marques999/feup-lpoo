@@ -3,8 +3,6 @@ package lpoo.logic;
 public final class Hero extends Entity
 {
 	private boolean sword; // tells if the player has the sword
-	private boolean done; // tells if hero escaped
-	private char itemPicked; // symbol representing if the hero took some item
 
 	/**
 	 * @brief default constructor for class 'Hero'
@@ -22,17 +20,6 @@ public final class Hero extends Entity
 	protected Hero(int x, int y)
 	{
 		super(x, y, 100);
-		
-		this.done = false;
-	}
-
-	/**
-	 * @brief checks if the hero has escaped from the maze
-	 * @return returns 'true' if the hero has reached the exit; 'false' if game is still in progress
-	 */
-	protected final boolean hasEscaped()
-	{
-		return this.done;
 	}
 
 	/**
@@ -77,7 +64,8 @@ public final class Hero extends Entity
 			return true;
 		}
 
-		if (direction == Direction.DOWN && maze.symbolAt(pos.x, pos.y + 1) != 'X')
+		if (direction == Direction.DOWN
+				&& maze.symbolAt(pos.x, pos.y + 1) != 'X')
 		{
 			return true;
 		}
@@ -168,6 +156,8 @@ public final class Hero extends Entity
 	protected void move(Maze maze, Direction direction)
 	{
 		Point newPosition = new Point();
+
+		char itemPicked;
 		
 		if (validMove(maze, direction))
 		{
@@ -194,31 +184,21 @@ public final class Hero extends Entity
 			}
 
 			itemPicked = maze.symbolAt(newPosition.x, newPosition.y);
+			
+			if (itemPicked == 'S' && !hasSword())
+			{
+				return;
+			}
+
+			switch (itemPicked)
+			{
+			case 'E':
+				sword = true;
+				break;
+			}
+			
 			maze.clearSymbol(pos.x, pos.y);
 			pos = newPosition;
-
-			if (itemPicked != ' ')
-			{
-				if (itemPicked == 'E')
-				{
-					sword = true;
-				}
-
-				if (itemPicked == 'S' && hasSword())
-				{
-					done = true;
-				}
-				else 
-				{
-					maze.clearSymbol(pos.x, pos.y);
-					pos = newPosition;
-				}
-			}
-			else 
-			{
-				maze.clearSymbol(pos.x, pos.y);
-				pos = newPosition;
-			}
 		}
 	}
 }

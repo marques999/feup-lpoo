@@ -184,7 +184,7 @@ public class GameState
 			playerWon = false;
 		}
 
-		if (player.hasEscaped())
+		if (dragonsDefeated && maze.isWall(player.pos))
 		{
 			gameOver = true;
 			playerWon = true;

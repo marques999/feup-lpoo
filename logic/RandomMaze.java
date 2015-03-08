@@ -1,6 +1,4 @@
-package lpoo.maze;
-
-import lpoo.logic.Maze;
+package lpoo.logic;
 
 public final class RandomMaze extends Maze
 {

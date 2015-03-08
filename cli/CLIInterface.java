@@ -15,8 +15,8 @@ import java.util.Scanner;
 
 import lpoo.logic.Direction;
 import lpoo.logic.GameState;
-import lpoo.maze.RandomMaze;
-import lpoo.maze.StaticMaze;
+import lpoo.logic.RandomMaze;
+import lpoo.logic.StaticMaze;
 
 public class CLIInterface
 {

@@ -1,10 +1,7 @@
-package lpoo.maze;
+package lpoo.logic;
 
 import java.util.Random;
 import java.util.Stack;
-
-import lpoo.logic.Direction;
-import lpoo.logic.Point;
 
 public final class MazeBuilder
 {
