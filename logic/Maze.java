@@ -1,5 +1,5 @@
 /*!
- * \file Board.java
+ * \file Maze.java
  *
  * LPOO_2014-2015_P1
  * \author Diogo Marques
@@ -13,37 +13,24 @@ package lpoo.logic;
 
 import java.util.Random;
 
-public abstract class Maze 
+public abstract class Maze
 {
-	protected int NUM_COLUNAS = 11;
-	protected int NUM_LINHAS = 11;
+	private Random m_rand;
 	
-	private Random randomGenerator;
-	
-	public char[][] m;
-	
-	public Maze(int n)
+	protected int m_size;
+	protected char[][] m;
+
+	protected Maze(int n)
 	{
-		randomGenerator = new Random();
-		NUM_COLUNAS = n;
-		NUM_LINHAS = n;
+		m_rand = new Random();
+		m_size = n;
 	}
 
-	public final int getNumberRows()
+	protected final void printMaze()
 	{
-		return NUM_LINHAS;
-	}
-	
-	public final int getNumberColumns()
-	{
-		return NUM_COLUNAS;
-	}
-	
-	public final void printMaze() 
-	{
-		for (int y = 0; y < NUM_COLUNAS; y++) 
+		for (int y = 0; y < m_size; y++)
 		{
-			for (int x = 0; x < NUM_LINHAS; x++) 
+			for (int x = 0; x < m_size; x++)
 			{
 				System.out.print(m[y][x] + " ");
 			}
@@ -51,42 +38,42 @@ public abstract class Maze
 			System.out.println("");
 		}
 	}
-	
+
 	// ------------------------------
-	// |	SYMBOL METHODS		 	|
+	// | SYMBOL METHODS |
 	// ------------------------------
-	
-	public void clearSymbol(int x, int y) 
+
+	protected void clearSymbol(int x, int y)
 	{
-		if (x >= 0 && x < NUM_COLUNAS && y >= 0 && y < NUM_LINHAS)
+		if (x >= 0 && x < m_size && y >= 0 && y < m_size)
 		{
 			m[y][x] = ' ';
 		}
 	}
-	
-	public void placeSymbol(int x, int y, char s)
+
+	protected void placeSymbol(int x, int y, char s)
 	{
-		if (x >= 0 && x < NUM_COLUNAS && y >= 0 && y < NUM_LINHAS)
+		if (x >= 0 && x < m_size && y >= 0 && y < m_size)
 		{
 			m[y][x] = s;
 		}
 	}
-	
+
 	// ------------------------------
-	// |	   MAZE  METHODS	 	|
+	// | MAZE METHODS |
 	// ------------------------------
-	
+
 	protected final Point placeEntity(char symbol)
 	{
 		int initialX = 0;
 		int initialY = 0;
-				
+
 		while (m[initialY][initialX] != ' ')
 		{
-			initialX = 1 + randomGenerator.nextInt(NUM_COLUNAS - 2);
-			initialY = 1 + randomGenerator.nextInt(NUM_LINHAS - 2);
+			initialX = 1 + m_rand.nextInt(m_size - 2);
+			initialY = 1 + m_rand.nextInt(m_size - 2);
 		}
-				
+
 		return new Point(initialX, initialY);
 	}
 }

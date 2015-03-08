@@ -6,8 +6,11 @@ public class RandomMaze extends Maze
 	{
 		super(n);
 
-		MazeGenerator maze = new MazeGenerator(NUM_LINHAS);
+		MazeBuilder m_builder = new MazeBuilder();
 
-		m = maze.getMatrix();
+		m_builder.setType(1);
+		m_builder.setSize(n);
+		
+		m = m_builder.getMatrix();
 	}
 }

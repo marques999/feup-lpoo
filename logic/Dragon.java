@@ -15,8 +15,7 @@ public class Dragon extends Entity
 {
 	private int health;
 	private boolean sleeping;
-	private final int DRAGON_HEALTH = 100;
-
+	
 	/**
 	 * @brief default constructor for class 'Dragon'
 	 */
@@ -33,8 +32,9 @@ public class Dragon extends Entity
 	public Dragon(int x, int y)
 	{
 		super(x, y);
+		
 		this.sleeping = false;
-		this.health = DRAGON_HEALTH;
+		this.health = 100;
 	}
 
 	/**
@@ -107,7 +107,6 @@ public class Dragon extends Entity
 	 * @brief move the dragon
 	 * @param direction the direction to move
 	 */
-
 	public void move(Maze maze, Direction direction)
 	{
 		if (direction == Direction.NONE)
@@ -120,7 +119,7 @@ public class Dragon extends Entity
 		if (direction == Direction.UP)
 		{
 			pos.y--;
-		}
+		} 
 		else if (direction == Direction.DOWN)
 		{
 			pos.y++;
@@ -133,13 +132,11 @@ public class Dragon extends Entity
 		{
 			pos.x++;
 		}
-
 	}
 
 	/**
 	 * @brief attacks the 'Hero'
-	 * @param player
-	 *            the player entity
+	 * @param player the player entity
 	 */
 	private final boolean canAttack(Hero player)
 	{
@@ -152,7 +149,7 @@ public class Dragon extends Entity
 		{
 			return false;
 		}
-		
+
 		if (sleeping)
 		{
 			return false;
@@ -188,20 +185,18 @@ public class Dragon extends Entity
 	 */
 	public final void draw(Maze maze)
 	{
-		if (health <= 0)
+		if (health > 0)
 		{
-			return;
-		}
-
-		if (pos.x >= 0 && pos.x < maze.NUM_COLUNAS && pos.y >= 0 && pos.y < maze.NUM_LINHAS)
-		{
-			if (sleeping)
+			if (pos.x >= 0 && pos.x < maze.m_size && pos.y >= 0 && pos.y < maze.m_size)
 			{
-				maze.m[pos.y][pos.x] = 'd';
-			}
-			else
-			{
-				maze.m[pos.y][pos.x] = 'D';
+				if (sleeping)
+				{
+					maze.m[pos.y][pos.x] = 'd';
+				}
+				else
+				{
+					maze.m[pos.y][pos.x] = 'D';
+				}
 			}
 		}
 	}

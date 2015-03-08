@@ -188,7 +188,7 @@ public class Hero extends Entity
 	{
 		if (health > 0)
 		{
-			if (pos.x >= 0 && pos.x < maze.NUM_LINHAS && pos.y >= 0 && pos.y < maze.getNumberRows())
+			if (pos.x >= 0 && pos.x < maze.m_size && pos.y >= 0 && pos.y < maze.m_size)
 			{
 				maze.placeSymbol(pos.x, pos.y, hasSword() ? 'A' : 'H');
 			}
