@@ -1,6 +1,5 @@
 package lpoo.logic;
 
-
 public abstract class Entity
 {
 	protected Point pos;

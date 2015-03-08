@@ -34,7 +34,7 @@ public class GameState
 		}
 	}
 	
-	private static final void updateDragons()
+	private static void updateDragons()
 	{
 		dragonsDefeated = true;
 		
