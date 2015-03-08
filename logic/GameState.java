@@ -169,10 +169,10 @@ public class GameState
 		player.move(maze, direction);
 		player.draw(maze);
 		
+		updateDragons();
 		drawDragons();
 		attackDragons();
-		updateDragons();
-	
+		
 		if (!player.hasSword())
 		{
 			sword.draw(maze);

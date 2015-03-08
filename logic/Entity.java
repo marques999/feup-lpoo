@@ -4,23 +4,36 @@ package lpoo.logic;
 public abstract class Entity
 {
 	protected Point pos;
+	private int health;
 	
 	/**
 	 * @brief default constructor for class 'Entity'
 	 */
 	protected Entity()
 	{
-		this(0, 0);
+		this(0, 0, 0);
 	}
 
 	/**
 	 * @brief constructor with parameters for class 'Entity'
-	 * @param x
-	 * @param y
+	 * @param x initial X coordinate for entity position
+	 * @param y initial Y coordinate for entity position
 	 */
 	protected Entity(int x, int y)
 	{
+		this(x, y, 0);
+	}
+	
+	/**
+	 * @brief constructor with three parameters for class 'Entity'
+	 * @param x initial X coordinate for entity position
+	 * @param y initial Y coordinate for entity position
+	 * @param health initial entity health
+	 */
+	protected Entity(int x, int y, int health)
+	{
 		this.pos = new Point(x, y);
+		this.health = health;
 	}
 	
 	/**
@@ -55,6 +68,23 @@ public abstract class Entity
 	protected void setY(int y)
 	{
 		this.pos.y = y;
+	}
+	
+	/**
+	 * @return returns the entity's current health
+	 */
+	protected final int getHealth()
+	{
+		return this.health;
+	}
+	
+	/**
+	 * @brief changes the entity's current health
+	 * @param health new value for entity's health
+	 */
+	protected void setHealth(int health)
+	{
+		this.health = health;
 	}
 	
 	/**

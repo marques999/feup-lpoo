@@ -2,9 +2,8 @@ package lpoo.logic;
 
 public final class Dragon extends Entity
 {
-	private int health;
 	private boolean sleeping;
-	
+
 	/**
 	 * @brief default constructor for class 'Dragon'
 	 */
@@ -15,42 +14,30 @@ public final class Dragon extends Entity
 
 	/**
 	 * @brief constructor with parameters for class 'Dragon'
-	 * @param x
-	 * @param y
+	 * @param x initial X coordinate for dragon position
+	 * @param y initial Y coordinate for dragon position
 	 */
 	protected Dragon(int x, int y)
 	{
-		super(x, y);
-		
+		super(x, y, 100);
+
 		this.sleeping = false;
-		this.health = 100;
 	}
 
 	/**
-	 * @return returns the dragon's current health
+	 * @return returns 'true' is dragon is asleep/can't move; 'false' otherwise
 	 */
-	protected final int getHealth()
-	{
-		return this.health;
-	}
-
 	protected final boolean isSleeping()
 	{
 		return this.sleeping;
 	}
 
+	/**
+	 * @brief toggles dragon sleep status
+	 */
 	protected void toggleSleep()
 	{
 		this.sleeping = !sleeping;
-	}
-
-	/**
-	 * @brief changes the dragon's current health
-	 * @param health new value for dragon's health
-	 */
-	protected void setHealth(int health)
-	{
-		this.health = health;
 	}
 
 	/**
@@ -60,31 +47,31 @@ public final class Dragon extends Entity
 	protected final boolean validMove(Maze maze, Direction direction)
 	{
 		// checks if the dragon is still alive
-		if (health <= 0)
+		if (this.getHealth() <= 0)
 		{
 			return false;
 		}
 
 		// checks if the dragon can go north
-		if (direction == Direction.UP && maze.m[pos.y - 1][pos.x] != 'X')
+		if (direction == Direction.UP && maze.symbolAt(pos.x, pos.y - 1) != 'X')
 		{
 			return true;
 		}
 
 		// checks if the dragon can go south
-		if (direction == Direction.DOWN && maze.m[pos.y + 1][pos.x] != 'X')
+		if (direction == Direction.DOWN && maze.symbolAt(pos.x, pos.y + 1) != 'X')
 		{
 			return true;
 		}
 
 		// checks if the dragon can move to the left
-		if (direction == Direction.LEFT && maze.m[pos.y][pos.x - 1] != 'X')
+		if (direction == Direction.LEFT && maze.symbolAt(pos.x - 1, pos.y) != 'X')
 		{
 			return true;
 		}
 
 		// checks if the dragon can move to the right
-		if (direction == Direction.RIGHT && maze.m[pos.y][pos.x + 1] != 'X')
+		if (direction == Direction.RIGHT && maze.symbolAt(pos.x + 1, pos.y) != 'X')
 		{
 			return true;
 		}
@@ -108,7 +95,7 @@ public final class Dragon extends Entity
 		if (direction == Direction.UP)
 		{
 			pos.y--;
-		} 
+		}
 		else if (direction == Direction.DOWN)
 		{
 			pos.y++;
@@ -116,7 +103,7 @@ public final class Dragon extends Entity
 		else if (direction == Direction.LEFT)
 		{
 			pos.x--;
-		}
+		} 
 		else if (direction == Direction.RIGHT)
 		{
 			pos.x++;
@@ -129,11 +116,11 @@ public final class Dragon extends Entity
 	 */
 	private final boolean canAttack(Hero player)
 	{
-		if (health <= 0)
+		if (this.getHealth() <= 0)
 		{
 			return false;
 		}
-		
+
 		if (sleeping)
 		{
 			return false;
@@ -174,18 +161,15 @@ public final class Dragon extends Entity
 	 */
 	protected final void draw(Maze maze)
 	{
-		if (health > 0)
+		if (this.getHealth() > 0)
 		{
-			if (pos.x >= 0 && pos.x < maze.m_size && pos.y >= 0 && pos.y < maze.m_size)
+			if (sleeping)
 			{
-				if (sleeping)
-				{
-					maze.m[pos.y][pos.x] = 'd';
-				}
-				else
-				{
-					maze.m[pos.y][pos.x] = 'D';
-				}
+				maze.placeSymbol(pos.x, pos.y, 'd');
+			} 
+			else
+			{
+				maze.placeSymbol(pos.x, pos.y, 'D');
 			}
 		}
 	}

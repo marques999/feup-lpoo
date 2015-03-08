@@ -14,6 +14,6 @@ public final class RandomMaze extends Maze
 		m_builder.setSize(n);
 		m_builder.generateMaze();
 		
-		m = m_builder.getMatrix();
+		setMatrix(m_builder.getMatrix());
 	}
 }

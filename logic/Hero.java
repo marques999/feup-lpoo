@@ -2,7 +2,6 @@ package lpoo.logic;
 
 public final class Hero extends Entity
 {
-	private int health; // player health (default: 100)
 	private boolean sword; // tells if the player has the sword
 	private boolean done; // tells if hero escaped
 	private char itemPicked; // symbol representing if the hero took some item
@@ -22,27 +21,9 @@ public final class Hero extends Entity
 	 */
 	protected Hero(int x, int y)
 	{
-		super(x, y);
+		super(x, y, 100);
 		
-		this.health = 100;
 		this.done = false;
-	}
-
-	/**
-	 * @return returns player's current health
-	 */
-	protected final int getHealth()
-	{
-		return this.health;
-	}
-
-	/**
-	 * @brief changes player's current health
-	 * @param health new value for player's health
-	 */
-	public void setHealth(int health)
-	{
-		this.health = health;
 	}
 
 	/**
@@ -86,27 +67,27 @@ public final class Hero extends Entity
 	 */
 	private final boolean validMove(Maze maze, Direction direction)
 	{
-		if (health <= 0)
+		if (this.getHealth() <= 0)
 		{
 			return false;
 		}
 
-		if (direction == Direction.UP && maze.m[pos.y - 1][pos.x] != 'X')
+		if (direction == Direction.UP && maze.symbolAt(pos.x, pos.y - 1) != 'X')
 		{
 			return true;
 		}
 
-		if (direction == Direction.DOWN && maze.m[pos.y + 1][pos.x] != 'X')
+		if (direction == Direction.DOWN && maze.symbolAt(pos.x, pos.y + 1) != 'X')
 		{
 			return true;
 		}
 
-		if (direction == Direction.LEFT && maze.m[pos.y][pos.x - 1] != 'X')
+		if (direction == Direction.LEFT && maze.symbolAt(pos.x - 1, pos.y) != 'X')
 		{
 			return true;
 		}
 
-		if (direction == Direction.RIGHT && maze.m[pos.y][pos.x + 1] != 'X')
+		if (direction == Direction.RIGHT && maze.symbolAt(pos.x + 1, pos.y) != 'X')
 		{
 			return true;
 		}
@@ -122,7 +103,7 @@ public final class Hero extends Entity
 	 */
 	private final boolean canAttack(Dragon dragon)
 	{
-		if (health <= 0)
+		if (this.getHealth() <= 0)
 		{
 			return false;
 		}
@@ -173,7 +154,7 @@ public final class Hero extends Entity
 	 */
 	protected final void draw(Maze maze)
 	{
-		if (health > 0)
+		if (this.getHealth() > 0)
 		{
 			maze.placeSymbol(pos.x, pos.y, hasSword() ? 'A' : 'H');
 		}
@@ -212,7 +193,7 @@ public final class Hero extends Entity
 				return;
 			}
 
-			itemPicked = maze.m[newPosition.y][newPosition.x];
+			itemPicked = maze.symbolAt(newPosition.x, newPosition.y);
 			maze.clearSymbol(pos.x, pos.y);
 			pos = newPosition;
 
@@ -227,6 +208,16 @@ public final class Hero extends Entity
 				{
 					done = true;
 				}
+				else 
+				{
+					maze.clearSymbol(pos.x, pos.y);
+					pos = newPosition;
+				}
+			}
+			else 
+			{
+				maze.clearSymbol(pos.x, pos.y);
+				pos = newPosition;
 			}
 		}
 	}

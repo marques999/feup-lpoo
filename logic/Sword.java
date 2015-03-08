@@ -12,8 +12,8 @@ public final class Sword extends Item
 
 	/**
 	 * @brief constructor with parameters for class 'Sword'
-	 * @param x
-	 * @param y
+	 * @param x initial X coordinate for sword position
+	 * @param y initial Y coordinate for sword position
 	 */
 	protected Sword(int x, int y)
 	{
@@ -21,17 +21,17 @@ public final class Sword extends Item
 	}
 
 	/**
-	 * @brief draws the sword at its corresponding position on the game board
+	 * @brief draws the sword on the game board
 	 */
 	protected final void draw(Maze maze)
 	{
-		if (maze.m[pos.y][pos.x] == 'D')
+		if (maze.symbolAt(pos.x, pos.y) == 'D')
 		{
-			maze.m[pos.y][pos.x] = 'F';
+			maze.placeSymbol(pos.x, pos.y, 'F');
 		} 
 		else
 		{
-			maze.m[pos.y][pos.x] = 'E';
+			maze.placeSymbol(pos.x, pos.y, 'E');
 		}
 	}
 }

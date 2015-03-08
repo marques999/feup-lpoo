@@ -14,8 +14,8 @@ public abstract class Item
 
 	/**
 	 * @brief constructor with parameters for class 'Entity'
-	 * @param x
-	 * @param y
+	 * @param x initial X coordinate for item position
+	 * @param y initial Y coordinate for item position
 	 */
 	protected Item(int x, int y)
 	{

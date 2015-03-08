@@ -14,6 +14,6 @@ public final class StaticMaze extends Maze
 		m_builder.setSize(10);
 		m_builder.generateMaze();
 		
-		m = m_builder.getMatrix();
+		setMatrix(m_builder.getMatrix());
 	}
 }
