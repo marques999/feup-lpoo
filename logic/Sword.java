@@ -1,11 +1,11 @@
 package lpoo.logic;
 
-public class Sword extends Item
+public final class Sword extends Item
 {
 	/**
 	 * @brief default constructor for class 'Sword'
 	 */
-	public Sword()
+	protected Sword()
 	{
 		this(0, 0);
 	}
@@ -15,7 +15,7 @@ public class Sword extends Item
 	 * @param x
 	 * @param y
 	 */
-	public Sword(int x, int y)
+	protected Sword(int x, int y)
 	{
 		super(x, y);
 	}
@@ -23,7 +23,7 @@ public class Sword extends Item
 	/**
 	 * @brief draws the sword at its corresponding position on the game board
 	 */
-	public final void draw(Maze maze)
+	protected final void draw(Maze maze)
 	{
 		if (maze.m[pos.y][pos.x] == 'D')
 		{

@@ -1,14 +1,3 @@
-/*!
- * \file Maze.java
- *
- * LPOO_2014-2015_P1
- * \author Diogo Marques
- * \author Pedro Melo
- *
- * \date March 2015
- *
- */
-
 package lpoo.logic;
 
 import java.util.Random;
@@ -60,7 +49,7 @@ public abstract class Maze
 	}
 
 	// ------------------------------
-	// | MAZE METHODS |
+	// 	| MAZE METHODS |
 	// ------------------------------
 
 	protected final Point placeEntity(char symbol)

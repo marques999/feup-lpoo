@@ -7,7 +7,7 @@ public abstract class Item
 	/**
 	 * @brief default constructor for class 'Entity'
 	 */
-	public Item()
+	protected Item()
 	{
 		this(0, 0);
 	}
@@ -17,7 +17,7 @@ public abstract class Item
 	 * @param x
 	 * @param y
 	 */
-	public Item(int x, int y)
+	protected Item(int x, int y)
 	{
 		this.pos = new Point(x, y);
 	}
@@ -25,7 +25,7 @@ public abstract class Item
 	/**
 	 * @brief returns the entity's current position x coordinate
 	 */
-	public final int getX()
+	protected final int getX()
 	{
 		return pos.x;
 	}
@@ -33,7 +33,7 @@ public abstract class Item
 	/**
 	 * @brief returns the entity's current position y coordinate
 	 */
-	public final int getY()
+	protected final int getY()
 	{
 		return pos.y;
 	}
@@ -42,7 +42,7 @@ public abstract class Item
 	 * @brief changes the entity's current position x coordinate
 	 * @param x new value for x coordinate
 	 */
-	public void setX(int x)
+	protected void setX(int x)
 	{
 		this.pos.x = x;
 	}
@@ -51,16 +51,15 @@ public abstract class Item
 	 * @brief changes the entity's current position y coordinate
 	 * @param y new value for y coordinate
 	 */
-	public void setY(int y)
+	protected void setY(int y)
 	{
 		this.pos.y = y;
 	}
 	
-
 	/**
 	 * @return returns the entity's current position
 	 */
-	public final Point getPosition()
+	protected final Point getPosition()
 	{
 		return this.pos;
 	}
@@ -69,7 +68,7 @@ public abstract class Item
 	 * @brief changes the entity's current position
 	 * @param pos new coordinates for dragon position
 	 */
-	public void setPosition(Point pos)
+	protected void setPosition(Point pos)
 	{
 		this.pos = pos;
 	}
@@ -77,5 +76,5 @@ public abstract class Item
 	/**
 	 * @brief draws the entity on the game board
 	 */
-	public abstract void draw(Maze maze);
+	protected abstract void draw(Maze maze);
 }

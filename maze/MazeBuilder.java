@@ -1,20 +1,12 @@
-/*!
- * \file MazeGenerator.java
- *
- * LPOO_2014-2015_P1
- * \author Diogo Marques
- * \author Pedro Melo
- *
- * \date March 2015
- *
- */
-
-package lpoo.logic;
+package lpoo.maze;
 
 import java.util.Random;
 import java.util.Stack;
 
-public class MazeBuilder
+import lpoo.logic.Direction;
+import lpoo.logic.Point;
+
+public final class MazeBuilder
 {
 	private Random rand;
 
@@ -34,7 +26,7 @@ public class MazeBuilder
 	private char[][] visitedCells;
 	private int visitedCellsDimension;
 
-	public MazeBuilder()
+	protected MazeBuilder()
 	{
 		this.rand = new Random();
 	}
@@ -44,17 +36,17 @@ public class MazeBuilder
 		return this.m_matrix;
 	}
 
-	public void setType(int type)
+	protected void setType(int type)
 	{
 		this.m_type = type;
 	}
 
-	public void setSize(int size)
+	protected void setSize(int size)
 	{
 		this.m_size = size;
 	}
 
-	public void generateMaze()
+	protected void generateMaze()
 	{
 		// static maze
 		if (m_type == 0)
@@ -65,7 +57,6 @@ public class MazeBuilder
 		// random maze
 		if (m_type == 1)
 		{
-
 			// random maze dimensions must be EVEN!
 			if (m_size % 2 != 0)
 			{
@@ -183,12 +174,12 @@ public class MazeBuilder
 		}
 	}
 
-	private boolean isWall(int x, int y)
+	private final boolean isWall(int x, int y)
 	{
 		return (x == 0 || x == m_size - 1 || y == 0 || y == m_size - 1);
 	}
 
-	private boolean isStuck()
+	private final boolean isStuck()
 	{
 		Point convertedGuide = convertCoordinates(m_guide);
 
@@ -223,7 +214,7 @@ public class MazeBuilder
 		return (!canMoveLeft && !canMoveRight && !canMoveUp && !canMoveDown);
 	}
 
-	private static Point convertCoordinates(Point point)
+	private static final Point convertCoordinates(Point point)
 	{
 		return new Point((point.x - 1) / 2, (point.y - 1) / 2);
 	}

@@ -1,20 +1,7 @@
-/*!
- * \file Hero.java
- *
- * LPOO_2014-2015_P1
- * \author Diogo Marques
- * \author Pedro Melo
- *
- * \date March 2015
- *
- */
-
 package lpoo.logic;
 
-public class Hero extends Entity
+public final class Hero extends Entity
 {
-	private final int PLAYER_HEALTH = 100;
-
 	private int health; // player health (default: 100)
 	private boolean sword; // tells if the player has the sword
 	private boolean done; // tells if hero escaped
@@ -23,7 +10,7 @@ public class Hero extends Entity
 	/**
 	 * @brief default constructor for class 'Hero'
 	 */
-	public Hero()
+	protected Hero()
 	{
 		this(0, 0);
 	}
@@ -33,18 +20,18 @@ public class Hero extends Entity
 	 * @param x initial x position for player
 	 * @param y initial y position for player
 	 */
-	public Hero(int x, int y)
+	protected Hero(int x, int y)
 	{
 		super(x, y);
 		
-		this.health = PLAYER_HEALTH;
+		this.health = 100;
 		this.done = false;
 	}
 
 	/**
 	 * @return returns player's current health
 	 */
-	public final int getHealth()
+	protected final int getHealth()
 	{
 		return this.health;
 	}
@@ -62,7 +49,7 @@ public class Hero extends Entity
 	 * @brief checks if the hero has escaped from the maze
 	 * @return returns 'true' if the hero has reached the exit; 'false' if game is still in progress
 	 */
-	public final boolean hasEscaped()
+	protected final boolean hasEscaped()
 	{
 		return this.done;
 	}
@@ -70,7 +57,7 @@ public class Hero extends Entity
 	/**
 	 * @brief equips the player with a sword
 	 */
-	public void takeSword()
+	protected void takeSword()
 	{
 		sword = true;
 	}
@@ -78,7 +65,7 @@ public class Hero extends Entity
 	/**
 	 * @brief removes the sword from the player
 	 */
-	public void removeSword()
+	protected void removeSword()
 	{
 		sword = false;
 	}
@@ -86,7 +73,7 @@ public class Hero extends Entity
 	/**
 	 * @return returns 'true' if the player has the sword; 'false' otherwise
 	 */
-	public final boolean hasSword()
+	protected final boolean hasSword()
 	{
 		return this.sword;
 	}
@@ -171,7 +158,7 @@ public class Hero extends Entity
 		return false;
 	}
 
-	public final void attackDragon(Maze maze, Dragon dragon)
+	protected final void attackDragon(Maze maze, Dragon dragon)
 	{
 		if (canAttack(dragon))
 		{
@@ -184,14 +171,11 @@ public class Hero extends Entity
 	 * @brief draws a symbol on the screen representing the player
 	 * @param board
 	 */
-	public final void draw(Maze maze)
+	protected final void draw(Maze maze)
 	{
 		if (health > 0)
 		{
-			if (pos.x >= 0 && pos.x < maze.m_size && pos.y >= 0 && pos.y < maze.m_size)
-			{
-				maze.placeSymbol(pos.x, pos.y, hasSword() ? 'A' : 'H');
-			}
+			maze.placeSymbol(pos.x, pos.y, hasSword() ? 'A' : 'H');
 		}
 	}
 
@@ -200,7 +184,7 @@ public class Hero extends Entity
 	 * @param board
 	 * @param direction
 	 */
-	public void move(Maze maze, Direction direction)
+	protected void move(Maze maze, Direction direction)
 	{
 		Point newPosition = new Point();
 		

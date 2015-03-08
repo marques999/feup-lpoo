@@ -1,6 +1,8 @@
-package lpoo.logic;
+package lpoo.maze;
 
-public class RandomMaze extends Maze
+import lpoo.logic.Maze;
+
+public final class RandomMaze extends Maze
 {
 	public RandomMaze(int n)
 	{
@@ -10,6 +12,7 @@ public class RandomMaze extends Maze
 
 		m_builder.setType(1);
 		m_builder.setSize(n);
+		m_builder.generateMaze();
 		
 		m = m_builder.getMatrix();
 	}

@@ -2,38 +2,38 @@ package lpoo.logic;
 
 abstract class Backpack
 {
-	private String[] items;
-	private int maxCapacity;
-	private int currentCapacity;
+	private Item[] b_items;
+	private int b_size;
+	private int b_index;
 		
-	public Backpack()
+	protected Backpack()
 	{
 		this(10);
 	}
 	
-	public Backpack(int maxSize)
+	protected Backpack(int maxSize)
 	{
-		this.maxCapacity = maxSize;
-		this.currentCapacity = 0;
-		this.items = new String[maxCapacity];
+		this.b_size = maxSize;
+		this.b_index = 0;
+		this.b_items = new Item[b_size];
 	}
 	
-	public final String[] getItems()
+	protected final Item[] getItems()
 	{
-		return this.items;
+		return this.b_items;
 	}
 	
-	public void setItems(String[] items)
+	protected void setItems(Item[] items)
 	{
-		this.items = items;
+		this.b_items = items;
 	}
 	
-	public boolean addItem(String item)
+	protected boolean addItem(Item item)
 	{
-		if (currentCapacity < maxCapacity)
+		if (b_index < b_size)
 		{
-			items[currentCapacity] = item;
-			currentCapacity++;
+			b_items[b_index] = item;
+			b_index++;
 			
 			return true;
 		}
@@ -41,12 +41,12 @@ abstract class Backpack
 		return false;
 	}
 	
-	public boolean removeItem(String item)
+	protected boolean removeItem(String item)
 	{
-		if (currentCapacity != 0)
+		if (b_index != 0)
 		{
-			currentCapacity--;
-			items[currentCapacity] = null;
+			b_index--;
+			b_items[b_index] = null;
 			
 			return true;
 		}
@@ -54,11 +54,11 @@ abstract class Backpack
 		return false;
 	}
 	
-	public boolean findItem(String item)
+	protected boolean findItem(String item)
 	{
-		if (currentCapacity != 0)
+		if (b_index != 0)
 		{
-			for (String it : items)
+			for (Item it : b_items)
 			{
 				if (it.equals(item))
 				{

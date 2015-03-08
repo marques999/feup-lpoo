@@ -1,5 +1,5 @@
 /*!
- * \file Board.java
+ * \file CLIInterface.java
  *
  * LPOO_2014-2015_P1
  * \author Diogo Marques
@@ -12,10 +12,11 @@
 package lpoo.cli;
 
 import java.util.Scanner;
-import lpoo.logic.GameState;
+
 import lpoo.logic.Direction;
-import lpoo.logic.RandomMaze;
-import lpoo.logic.StaticMaze;
+import lpoo.logic.GameState;
+import lpoo.maze.RandomMaze;
+import lpoo.maze.StaticMaze;
 
 public class CLIInterface
 {
@@ -25,7 +26,7 @@ public class CLIInterface
 	// | INPUT METHODS |
 	// ------------------------------
 
-	private static void selectMaze()
+	private static final void selectMaze()
 	{
 		System.out.println("-----------------------------------");
 		System.out.println("              MAZE RUN             ");
@@ -72,7 +73,7 @@ public class CLIInterface
 
 	}
 
-	private static void selectDragon()
+	private static final void selectDragon()
 	{
 		System.out.println("");
 		System.out.println("1. Easy (static, never sleeps)");
@@ -102,7 +103,6 @@ public class CLIInterface
 		}
 	}
 
-	
 	private static final char readChar()
 	{
 		return in.next().charAt(0);
@@ -128,20 +128,16 @@ public class CLIInterface
 
 			switch (input)
 			{
-			case 'W':
-			case 'w':
+			case 'W': case 'w':
 				GameState.update(Direction.UP);
 				break;
-			case 'S':
-			case 's':
+			case 'S': case 's':
 				GameState.update(Direction.DOWN);
 				break;
-			case 'A':
-			case 'a':
+			case 'A': case 'a':
 				GameState.update(Direction.LEFT);
 				break;
-			case 'D':
-			case 'd':
+			case 'D': case 'd':
 				GameState.update(Direction.RIGHT);
 				break;
 			}
@@ -164,6 +160,5 @@ public class CLIInterface
 				System.out.println("GAME OVER :( R.I.P HERO");
 			}
 		}
-
 	}
 }

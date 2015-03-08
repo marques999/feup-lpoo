@@ -1,6 +1,8 @@
-package lpoo.logic;
+package lpoo.maze;
 
-public class StaticMaze extends Maze
+import lpoo.logic.Maze;
+
+public final class StaticMaze extends Maze
 {
 	public StaticMaze()
 	{
@@ -10,7 +12,8 @@ public class StaticMaze extends Maze
 
 		m_builder.setType(0);
 		m_builder.setSize(10);
-
+		m_builder.generateMaze();
+		
 		m = m_builder.getMatrix();
 	}
 }

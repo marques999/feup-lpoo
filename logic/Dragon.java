@@ -1,17 +1,6 @@
-/*!
- * \file Dragon.java
- *
- * LPOO_2014-2015_P1
- * \author Diogo Marques
- * \author Pedro Melo
- *
- * \date March 2015
- *
- */
-
 package lpoo.logic;
 
-public class Dragon extends Entity
+public final class Dragon extends Entity
 {
 	private int health;
 	private boolean sleeping;
@@ -19,7 +8,7 @@ public class Dragon extends Entity
 	/**
 	 * @brief default constructor for class 'Dragon'
 	 */
-	public Dragon()
+	protected Dragon()
 	{
 		this(0, 0);
 	}
@@ -29,7 +18,7 @@ public class Dragon extends Entity
 	 * @param x
 	 * @param y
 	 */
-	public Dragon(int x, int y)
+	protected Dragon(int x, int y)
 	{
 		super(x, y);
 		
@@ -40,17 +29,17 @@ public class Dragon extends Entity
 	/**
 	 * @return returns the dragon's current health
 	 */
-	public final int getHealth()
+	protected final int getHealth()
 	{
 		return this.health;
 	}
 
-	public final boolean isSleeping()
+	protected final boolean isSleeping()
 	{
 		return this.sleeping;
 	}
 
-	public void toggleSleep()
+	protected void toggleSleep()
 	{
 		this.sleeping = !sleeping;
 	}
@@ -59,7 +48,7 @@ public class Dragon extends Entity
 	 * @brief changes the dragon's current health
 	 * @param health new value for dragon's health
 	 */
-	public void setHealth(int health)
+	protected void setHealth(int health)
 	{
 		this.health = health;
 	}
@@ -68,7 +57,7 @@ public class Dragon extends Entity
 	 * @brief tells if the dragon move is valid
 	 * @param direction the direction to move
 	 */
-	public final boolean validMove(Maze maze, Direction direction)
+	protected final boolean validMove(Maze maze, Direction direction)
 	{
 		// checks if the dragon is still alive
 		if (health <= 0)
@@ -107,7 +96,7 @@ public class Dragon extends Entity
 	 * @brief move the dragon
 	 * @param direction the direction to move
 	 */
-	public void move(Maze maze, Direction direction)
+	protected void move(Maze maze, Direction direction)
 	{
 		if (direction == Direction.NONE)
 		{
@@ -144,13 +133,13 @@ public class Dragon extends Entity
 		{
 			return false;
 		}
-
-		if (player.getHealth() <= 0 || player.hasSword())
+		
+		if (sleeping)
 		{
 			return false;
 		}
 
-		if (sleeping)
+		if (player.getHealth() <= 0 || player.hasSword())
 		{
 			return false;
 		}
@@ -171,7 +160,7 @@ public class Dragon extends Entity
 		return false;
 	}
 
-	public final void attackPlayer(Maze maze, Hero player)
+	protected final void attackPlayer(Maze maze, Hero player)
 	{
 		if (canAttack(player))
 		{
@@ -183,7 +172,7 @@ public class Dragon extends Entity
 	/**
 	 * @brief draws the dragon on the game board
 	 */
-	public final void draw(Maze maze)
+	protected final void draw(Maze maze)
 	{
 		if (health > 0)
 		{
