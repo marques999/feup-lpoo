@@ -28,22 +28,28 @@ public class CLIInterface
 
 	private static final void selectMaze()
 	{
-		System.out.println("-----------------------------------");
-		System.out.println("              MAZE RUN             ");
-		System.out.println("-----------------------------------");
-		System.out.println("");
-		System.out.println("1. Practice (static, 11x11, 1D)");
-		System.out.println("2. Easy (random, 11x11, 1D)");
-		System.out.println("3. Medium (random, 15x15, 2D)");
-		System.out.println("4. Hard (random, 23x23, 4D)");
-		System.out.println("5. Nightmare (random, 31x31, 8D)");
+		System.out.println("+ - \\ | / - \\ | / - \\ | / - \\ | / - \\ | / - \\ | / - \\ | / - \\ | / - +");  
+		System.out.println("|                                                                   |");
+		System.out.println("/                         M A Z E    R U N                          \\");
+		System.out.println("-                                                                    -");
+		System.out.println("\\                                                                   /");
+		System.out.println("|     Select difficulty:                                            |");
+		System.out.println("/                                                                   \\");
+		System.out.println("-     1. Practice (static, 11x11, one dragon)                        -");
+		System.out.println("\\     2. Easy (random, 11x11, two dragons)                          /");
+		System.out.println("|     3. Medium (random, 15x15, three dragons)                      |");
+		System.out.println("/     4. Hard (random, 23x23, six dragons)                          \\");
+		System.out.println("-     5. Nightmare (random, 31x31, twelve dragons)                   -");
+		System.out.println("\\                                                                   /");
+		System.out.println("|                                                                   |");
+		System.out.println("+ - / | \\ - / | \\ - / | \\ - / | \\ - / | \\ - / | \\ - / | \\ - / | \\ - +");
 		System.out.println("");
 
 		int userInput;
 
 		do
 		{
-			System.out.print("Select maze difficulty: ");
+			System.out.print("Please enter an option: ");
 			userInput = in.nextInt();
 		} while (userInput < 1 || userInput > 5);
 
@@ -55,49 +61,74 @@ public class CLIInterface
 			break;
 		case 2:
 			GameState.initialize(new RandomMaze(11));
-			GameState.initializeDragons(1);
+			GameState.initializeDragons(2);
 			break;
 		case 3:
 			GameState.initialize(new RandomMaze(15));
-			GameState.initializeDragons(2);
+			GameState.initializeDragons(3);
 			break;
 		case 4:
 			GameState.initialize(new RandomMaze(23));
-			GameState.initializeDragons(4);
+			GameState.initializeDragons(6);
 			break;
 		case 5:
 			GameState.initialize(new RandomMaze(31));
-			GameState.initializeDragons(8);
+			GameState.initializeDragons(12);
 			break;
 		}
 
+	}
+	
+	private static final void showObjectives()
+	{
+		String currentObjective = String.format("%-24s", GameState.getObjective());
+		String numberDragons = String.format("%4d", GameState.getNumberDragons());
+		System.out.println("=====================================================");
+		System.out.println("= OBJECTIVE: " + currentObjective + " DRAGONS: " + numberDragons + " =");
+		System.out.println("=====================================================");
 	}
 
 	private static final void selectDragon()
 	{
 		System.out.println("");
-		System.out.println("1. Easy (static, never sleeps)");
-		System.out.println("2. Medium (random)");
-		System.out.println("3. Hard (random, never sleeps)");
+		System.out.println("+ - \\ | / - \\ | / - \\ | / - \\ | / - \\ | / - \\ | / - \\ | / - \\ | / - +");  
+		System.out.println("|                                                                   |");
+		System.out.println("/                         M A Z E    R U N                          \\");
+		System.out.println("-                                                                    -");
+		System.out.println("\\                                                                   /");
+		System.out.println("|     Select dragon difficulty:                                     |");
+		System.out.println("/                                                                   \\");
+		System.out.println("-     1. Beginner (static, sleeps randomly)                          -");
+		System.out.println("\\     2. Easy (static, never sleeps)                                /");
+		System.out.println("|     3. Medium (random, sleeps randomly)                           |");
+		System.out.println("/     4. Hard (random, 23x23, never sleeps)                         \\");
+		System.out.println("-                                                                    -");
+		System.out.println("\\                                                                   /");
+		System.out.println("|                                                                   |");
+		System.out.println("+ - / | \\ - / | \\ - / | \\ - / | \\ - / | \\ - / | \\ - / | \\ - / | \\ - +");
 		System.out.println("");
 
 		int userInput;
 
 		do
 		{
-			System.out.print("Select dragon difficulty: ");
+			System.out.print("Please enter an option: ");
 			userInput = in.nextInt();
 		} while (userInput < 1 || userInput > 3);
 
 		switch (userInput)
 		{
-		case 1:
+		case 1: 
+			// not implemented yet
 			GameState.setDragonMovement(-1);
 			break;
 		case 2:
-			GameState.setDragonMovement(1);
+			GameState.setDragonMovement(-1);
 			break;
 		case 3:
+			GameState.setDragonMovement(1);
+			break;
+		case 4:
 			GameState.setDragonMovement(0);
 			break;
 		}
@@ -119,7 +150,7 @@ public class CLIInterface
 
 		while (!GameState.gameOver())
 		{
-			GameState.showObjectives();
+			showObjectives();
 			GameState.printMaze();
 
 			System.out.print("Enter a key to move the character : ");
@@ -128,16 +159,20 @@ public class CLIInterface
 
 			switch (input)
 			{
-			case 'W': case 'w':
+			case 'W':
+			case 'w':
 				GameState.update(Direction.UP);
 				break;
-			case 'S': case 's':
+			case 'S':
+			case 's':
 				GameState.update(Direction.DOWN);
 				break;
-			case 'A': case 'a':
+			case 'A':
+			case 'a':
 				GameState.update(Direction.LEFT);
 				break;
-			case 'D': case 'd':
+			case 'D':
+			case 'd':
 				GameState.update(Direction.RIGHT);
 				break;
 			}
@@ -154,10 +189,9 @@ public class CLIInterface
 			if (GameState.playerWon())
 			{
 				System.out.println("CONGRATULATIONS!");
-			}
-			else
+			} else
 			{
-				System.out.println("GAME OVER :( R.I.P HERO");
+				System.out.println("--- GAME OVER --- R.I.P HERO :(");
 			}
 		}
 	}

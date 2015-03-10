@@ -10,7 +10,7 @@ public class GameState
 	private static Dragon[] dragons;
 
 	private static boolean gameOver = false;
-	private static boolean dragonsDefeated = false;
+	private static int dragonsDefeated = 0;
 	private static boolean playerWon = false;
 	private static int dragonMovement = 1;
 
@@ -35,16 +35,16 @@ public class GameState
 	}
 	
 	private static void updateDragons()
-	{
-		dragonsDefeated = true;
+	{	
+		dragonsDefeated = 0;
 		
 		for (int i = 0; i < dragons.length; i++)
 		{
 			updateDragon(dragons[i]);
 			
-			if (dragons[i].getHealth() > 0)
+			if (dragons[i].getHealth() <= 0)
 			{
-				dragonsDefeated = false;
+				dragonsDefeated++;
 			}
 		}
 	}
@@ -148,30 +148,35 @@ public class GameState
 		return playerWon;
 	}
 
-	public static final void showObjectives()
+	public static final String getObjective()
 	{
 		if (!player.hasSword())
 		{
-			System.out.println("OBJECTIVE: Pick up the sword!");
+			return ("Pick up the sword!");
 		} 
-		else if (!dragonsDefeated)
+		
+		if (getNumberDragons() > 0)
 		{
-			System.out.println("OBJECTIVE: Kill the dragons!");
+			return("Kill the dragons!");
 		} 
-		else
-		{
-			System.out.println("OBJECTIVE: Find the exit!");
-		}
+				
+		return("Find the exit!");
+	}
+	
+	public static final int getNumberDragons()
+	{
+		return dragons.length - dragonsDefeated;
 	}
 
 	public static void update(Direction direction)
 	{
 		player.move(maze, direction);
-		player.draw(maze);
 		
 		updateDragons();
-		drawDragons();
 		attackDragons();
+		
+		player.draw(maze);
+		drawDragons();
 		
 		if (!player.hasSword())
 		{
@@ -184,7 +189,7 @@ public class GameState
 			playerWon = false;
 		}
 
-		if (dragonsDefeated && maze.isWall(player.pos))
+		if (getNumberDragons() == 0 && maze.isWall(player.pos))
 		{
 			gameOver = true;
 			playerWon = true;
