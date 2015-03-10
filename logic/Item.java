@@ -89,12 +89,10 @@ public abstract class Item
 	{
 		return (this.owner != null);
 	}
-	
-
-	
+		
 	/**
 	 * @brief draws the entity on the game board
 	 */
 	protected abstract void draw(Maze maze);
-	protected abstract char getDescription();
+	protected abstract char type();
 }

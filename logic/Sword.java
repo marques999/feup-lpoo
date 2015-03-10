@@ -12,15 +12,15 @@ public final class Sword extends Item
 
 	/**
 	 * @brief constructor with parameters for class 'Sword'
-	 * @param x initial X coordinate for sword position
-	 * @param y initial Y coordinate for sword position
+	 * @param x X coordinate for sword position
+	 * @param y Y coordinate for sword position
 	 */
 	protected Sword(int x, int y)
 	{
 		super(x, y);
 	}
 	
-	protected final char getDescription()
+	protected final char type()
 	{
 		return 'E';
 	}

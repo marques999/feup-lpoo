@@ -1,11 +1,11 @@
 package lpoo.logic;
 
-public class Dart extends Item
+public class Fireball extends Item
 {	
 	/**
 	 * @brief default constructor for class 'Dart'
 	 */
-	public Dart()
+	public Fireball()
 	{
 		this(0, 0);
 	}
@@ -15,7 +15,7 @@ public class Dart extends Item
 	 * @param x X coordinate for sword position
 	 * @param y Y coordinate for sword position
 	 */
-	public Dart(int x, int y)
+	public Fireball(int x, int y)
 	{
 		super(x, y);
 	}
@@ -25,17 +25,7 @@ public class Dart extends Item
 	 */
 	public final void draw(Maze maze)
 	{
-		if (!hasOwner())
-		{
-			if (maze.symbolAt(pos.x, pos.y) == 'D')
-			{
-				maze.placeSymbol(pos.x, pos.y, 'F');
-			} 
-			else
-			{
-				maze.placeSymbol(pos.x, pos.y, '*');
-			}
-		}
+		maze.placeSymbol(pos.x, pos.y, 'o');
 	}
 	
 	/**

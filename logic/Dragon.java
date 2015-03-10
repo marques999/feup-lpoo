@@ -110,11 +110,8 @@ public final class Dragon extends Entity
 		}
 	}
 
-	/**
-	 * @brief attacks the 'Hero'
-	 * @param player the player entity
-	 */
-	private final boolean canAttack(Hero player)
+
+	private final boolean isActive()
 	{
 		if (this.getHealth() <= 0)
 		{
@@ -122,6 +119,20 @@ public final class Dragon extends Entity
 		}
 
 		if (sleeping)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * @brief attacks the 'Hero'
+	 * @param player the player entity
+	 */
+	private final boolean canAttack(Hero player)
+	{
+		if (!isActive())
 		{
 			return false;
 		}
@@ -134,12 +145,40 @@ public final class Dragon extends Entity
 		int playerX = player.getX();
 		int playerY = player.getY();
 
-		if (pos.x <= playerX + 1 && pos.x >= playerX - 1 && pos.y == playerY)
+		if ((pos.x == playerX + 1 || pos.x == playerX - 1) && pos.y == playerY)
 		{
 			return true;
 		}
 
-		if (pos.y <= playerY + 1 && pos.y >= playerY - 1 && pos.x == playerX)
+		if ((pos.y == playerY + 1 || pos.y == playerY - 1) && pos.x == playerX)
+		{
+			return true;
+		}
+
+		return false;
+	}
+	
+	private final boolean canAttackFire(Hero player)
+	{
+		if (!isActive())
+		{
+			return false;
+		}
+		
+		if (player.getHealth() <= 0 || player.hasShield())
+		{
+			return false;
+		}
+		
+		int playerX = player.getX();
+		int playerY = player.getY();
+
+		if (pos.x <= playerX + 3 && pos.x >= playerX - 3 && pos.y == playerY)
+		{
+			return true;
+		}
+
+		if (pos.y <= playerY + 3 && pos.y >= playerY - 3 && pos.x == playerX)
 		{
 			return true;
 		}
@@ -149,13 +188,13 @@ public final class Dragon extends Entity
 
 	protected final void attackPlayer(Maze maze, Hero player)
 	{
-		if (canAttack(player))
+		if (canAttack(player) || canAttackFire(player))
 		{
 			maze.clearSymbol(player.getX(), player.getY());
 			player.setHealth(0);
 		}
 	}
-
+	
 	/**
 	 * @brief draws the dragon on the game board
 	 */

@@ -1,11 +1,11 @@
 package lpoo.logic;
 
-public class Dart extends Item
+public class Shield extends Item
 {	
 	/**
 	 * @brief default constructor for class 'Dart'
 	 */
-	public Dart()
+	public Shield()
 	{
 		this(0, 0);
 	}
@@ -15,7 +15,7 @@ public class Dart extends Item
 	 * @param x X coordinate for sword position
 	 * @param y Y coordinate for sword position
 	 */
-	public Dart(int x, int y)
+	public Shield(int x, int y)
 	{
 		super(x, y);
 	}
@@ -33,7 +33,7 @@ public class Dart extends Item
 			} 
 			else
 			{
-				maze.placeSymbol(pos.x, pos.y, '*');
+				maze.placeSymbol(pos.x, pos.y, 'V');
 			}
 		}
 	}

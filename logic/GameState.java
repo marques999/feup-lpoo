@@ -6,6 +6,7 @@ public class GameState
 {
 	private static Maze maze;
 	private static Hero player;
+	private static Shield shield;
 	private static Sword sword;
 	private static Dart[] darts;
 	private static Dragon[] dragons;
@@ -71,6 +72,38 @@ public class GameState
 		}
 	}
 	
+	private final static void drawDragons()
+	{
+		for (Dragon dragon : dragons)
+		{
+			dragon.draw(maze);
+		}
+	}
+	
+	private static void updateDragons()
+	{	
+		dragonsDefeated = 0;
+		
+		for (Dragon dragon : dragons)
+		{
+			updateDragon(dragon);
+			
+			if (dragon.getHealth() <= 0)
+			{
+				dragonsDefeated++;
+			}
+		}
+	}
+	
+	private static void attackDragons()
+	{
+		for (Dragon dragon : dragons)
+		{
+			player.attackSword(maze, dragon);
+			dragon.attackPlayer(maze, player);
+		}
+	}
+	
 	private static void drawItems(Item[] items)
 	{
 		for (Item item : items)
@@ -95,38 +128,7 @@ public class GameState
 		}
 	}
 	
-	private static void updateDragons()
-	{	
-		dragonsDefeated = 0;
-		
-		for (Dragon dragon : dragons)
-		{
-			updateDragon(dragon);
-			
-			if (dragon.getHealth() <= 0)
-			{
-				dragonsDefeated++;
-			}
-		}
-	}
-	
-	private final static void drawDragons()
-	{
-		for (Dragon dragon : dragons)
-		{
-			dragon.draw(maze);
-		}
-	}
-	
-	private static void attackDragons()
-	{
-		for (Dragon dragon : dragons)
-		{
-			player.attackSword(maze, dragon);
-			dragon.attackPlayer(maze, player);
-		}
-	}
-	
+
 	private static final void updateDragon(Dragon dragon)
 	{
 		if (dragon.getHealth() <= 0)
@@ -186,12 +188,16 @@ public class GameState
 
 		Point playerPosition = maze.placeEntity('H');
 		Point swordPosition = maze.placeEntity('E');
+		Point shieldPosition = maze.placeEntity('V');
 
 		player = new Hero(playerPosition.x, playerPosition.y);
 		player.draw(maze);
 
 		sword = new Sword(swordPosition.x, swordPosition.y);
 		sword.draw(maze);
+		
+		shield = new Shield(shieldPosition.x, shieldPosition.y);
+		shield.draw(maze);
 	}
 
 	public static final void printMaze()
@@ -213,15 +219,15 @@ public class GameState
 	{
 		if (!player.hasSword() && !player.hasDarts())
 		{
-			return ("Pick up a weapon (darts or sword)!");
+			return ("Pick up a weapon (darts or sword)...");
 		} 
 		
 		if (getNumberDragons() > 0)
 		{
-			return("Kill the dragons!");
+			return("Kill all the dragons!");
 		} 
 				
-		return("Find the exit!");
+		return("Find the exit");
 	}
 	
 	public static final int getNumberDragons()

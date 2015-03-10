@@ -63,22 +63,22 @@ public class CLIInterface
 			break;
 		case 2:
 			GameState.initialize(new RandomMaze(11));
-			GameState.initializeDarts(1);
+			GameState.initializeDarts(2);
 			GameState.initializeDragons(2);
 			break;
 		case 3:
 			GameState.initialize(new RandomMaze(15));
-			GameState.initializeDarts(2);
+			GameState.initializeDarts(4);
 			GameState.initializeDragons(3);
 			break;
 		case 4:
 			GameState.initialize(new RandomMaze(23));
-			GameState.initializeDarts(4);
+			GameState.initializeDarts(8);
 			GameState.initializeDragons(6);
 			break;
 		case 5:
 			GameState.initialize(new RandomMaze(31));
-			GameState.initializeDarts(8);
+			GameState.initializeDarts(16);
 			GameState.initializeDragons(12);
 			break;
 		}
