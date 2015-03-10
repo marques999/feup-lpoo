@@ -3,6 +3,7 @@ package lpoo.logic;
 public abstract class Item
 {
 	protected Point pos;
+	private Entity owner;
 	
 	/**
 	 * @brief default constructor for class 'Entity'
@@ -20,6 +21,7 @@ public abstract class Item
 	protected Item(int x, int y)
 	{
 		this.pos = new Point(x, y);
+		this.owner = null;
 	}
 	
 	/**
@@ -73,8 +75,26 @@ public abstract class Item
 		this.pos = pos;
 	}
 	
+	protected void setOwner(Entity owner)
+	{
+		this.owner = owner;
+	}
+	
+	protected void removeOwner(Entity owner)
+	{
+		this.owner = null;
+	}
+	
+	protected boolean hasOwner()
+	{
+		return (this.owner != null);
+	}
+	
+
+	
 	/**
 	 * @brief draws the entity on the game board
 	 */
 	protected abstract void draw(Maze maze);
+	protected abstract char getDescription();
 }

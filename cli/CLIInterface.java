@@ -11,6 +11,7 @@
 
 package lpoo.cli;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import lpoo.logic.Direction;
@@ -57,22 +58,27 @@ public class CLIInterface
 		{
 		case 1:
 			GameState.initialize(new StaticMaze());
+			GameState.initializeDarts(1);
 			GameState.initializeDragons(1);
 			break;
 		case 2:
 			GameState.initialize(new RandomMaze(11));
+			GameState.initializeDarts(1);
 			GameState.initializeDragons(2);
 			break;
 		case 3:
 			GameState.initialize(new RandomMaze(15));
+			GameState.initializeDarts(2);
 			GameState.initializeDragons(3);
 			break;
 		case 4:
 			GameState.initialize(new RandomMaze(23));
+			GameState.initializeDarts(4);
 			GameState.initializeDragons(6);
 			break;
 		case 5:
 			GameState.initialize(new RandomMaze(31));
+			GameState.initializeDarts(8);
 			GameState.initializeDragons(12);
 			break;
 		}
@@ -143,13 +149,16 @@ public class CLIInterface
 	// | MAZE METHODS |
 	// ------------------------------
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
 		selectMaze();
 		selectDragon();
 
+		boolean dartFailed;
+		
 		while (!GameState.gameOver())
 		{
+			dartFailed = false;
 			showObjectives();
 			GameState.printMaze();
 
@@ -175,6 +184,31 @@ public class CLIInterface
 			case 'd':
 				GameState.update(Direction.RIGHT);
 				break;
+			case '8':
+				dartFailed = !GameState.attackDarts(Direction.UP);
+				GameState.update(Direction.NONE);
+				break;
+			case '2':
+				dartFailed = !GameState.attackDarts(Direction.DOWN);
+				GameState.update(Direction.NONE);
+				break;
+			case '4':
+				dartFailed = !GameState.attackDarts(Direction.LEFT);
+				GameState.update(Direction.NONE);
+				break;
+			case '6':
+				dartFailed = !GameState.attackDarts(Direction.RIGHT);
+				GameState.update(Direction.NONE);
+				break;
+			}
+			
+			if (dartFailed)
+			{
+				System.out.println("");
+				System.out.println("*******************************");
+				System.out.println("*        MISSED TARGET        *");
+				System.out.println("*******************************");
+				System.in.read();
 			}
 		}
 

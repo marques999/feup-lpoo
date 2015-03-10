@@ -19,19 +19,27 @@ public final class Sword extends Item
 	{
 		super(x, y);
 	}
+	
+	protected final char getDescription()
+	{
+		return 'E';
+	}
 
 	/**
 	 * @brief draws the sword on the game board
 	 */
 	protected final void draw(Maze maze)
 	{
-		if (maze.symbolAt(pos.x, pos.y) == 'D')
+		if (!hasOwner())
 		{
-			maze.placeSymbol(pos.x, pos.y, 'F');
-		} 
-		else
-		{
-			maze.placeSymbol(pos.x, pos.y, 'E');
+			if (maze.symbolAt(pos.x, pos.y) == 'D')
+			{
+				maze.placeSymbol(pos.x, pos.y, 'F');
+			} 
+			else
+			{
+				maze.placeSymbol(pos.x, pos.y, 'E');
+			}
 		}
 	}
 }
