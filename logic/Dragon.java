@@ -14,10 +14,8 @@ public final class Dragon extends Entity
 
 	/**
 	 * @brief constructor with parameters for class 'Dragon'
-	 * @param x
-	 *            initial X coordinate for dragon position
-	 * @param y
-	 *            initial Y coordinate for dragon position
+	 * @param x initial X coordinate for dragon position
+	 * @param y initial Y coordinate for dragon position
 	 */
 	protected Dragon(int x, int y)
 	{
@@ -27,7 +25,7 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * @return returns 'true' is dragon is asleep/can't move; 'false' otherwise
+	 * @return returns 'true' is dragon is asleep; 'false' otherwise
 	 */
 	protected final boolean isSleeping()
 	{
@@ -35,7 +33,7 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * @brief toggles dragon sleep status
+	 * @brief toggles dragon sleep status (puts him to sleep/wakes him up)
 	 */
 	protected void toggleSleep()
 	{
@@ -44,8 +42,7 @@ public final class Dragon extends Entity
 
 	/**
 	 * @brief tells if the dragon move is valid
-	 * @param direction
-	 *            the direction to move
+	 * @param direction the direction to move
 	 */
 	protected final boolean validMove(Maze maze, Direction direction)
 	{
@@ -88,8 +85,7 @@ public final class Dragon extends Entity
 
 	/**
 	 * @brief move the dragon
-	 * @param direction
-	 *            the direction to move
+	 * @param direction the direction to move
 	 */
 	protected void move(Maze maze, Direction direction)
 	{
@@ -118,32 +114,16 @@ public final class Dragon extends Entity
 
 	private final boolean isActive()
 	{
-		if (this.getHealth() <= 0)
-		{
-			return false;
-		}
-
-		if (sleeping)
-		{
-			return false;
-		}
-
-		return true;
+		return getHealth() > 0 && !sleeping;
 	}
 
 	/**
-	 * @brief attacks the 'Hero'
-	 * @param player
-	 *            the player entity
+	 * @brief attacks the 'Hero' from close range
+	 * @param player the player entity
 	 */
 	private final boolean canAttack(Hero player)
 	{
-		if (!isActive())
-		{
-			return false;
-		}
-
-		if (player.getHealth() <= 0 || player.hasSword())
+		if (!isActive() || player.getHealth() <= 0 || player.hasSword())
 		{
 			return false;
 		}
@@ -166,57 +146,40 @@ public final class Dragon extends Entity
 
 	protected final boolean canAttackFire(Maze maze, Hero player)
 	{
-		if (!isActive())
-		{
-			return false;
-		}
-
-		if (player.getHealth() <= 0 || player.hasShield())
+		if (!isActive() || player.getHealth() <= 0 || player.hasShield())
 		{
 			return false;
 		}
 
 		int playerX = player.getX();
 		int playerY = player.getY();
-		int dragonX = 0;
-		int dragonY = 0;
+		int dragonX = pos.x;
+		int dragonY = pos.y;
+		int incrementX = 0;
+		int incrementY = 0;
 
-		if (playerY == pos.y)
+		if (playerY == pos.y && Math.abs(playerX - pos.x) <= 3)
 		{
-			dragonX = pos.x - 3;
-			
-			if (dragonX < 0)
+			incrementX = (playerX < pos.x) ? -1 : 1;
+		}
+		else if (playerX == pos.x && Math.abs(playerY - pos.y) <= 3)
+		{
+			incrementY = (playerY < pos.y) ? -1 : 1;
+		}
+		else
+		{
+			return false;
+		}
+		
+		for (int i = 0; i < 3 && maze.symbolAt(dragonX, dragonY) != 'X';
+				i++, dragonX += incrementX, dragonY += incrementY)
+		{
+			if (playerX == dragonX && playerY == dragonY)
 			{
-				dragonX = 0;
-			}
-			
-			for (; dragonX <= pos.x + 3	&& maze.symbolAt(dragonX, pos.y) != 'X'; dragonX++)
-			{
-				if (playerX == dragonX)
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 		
-		if (playerX == pos.x)
-		{
-			dragonY = pos.y - 3;
-			
-			if (dragonY < 0)
-			{
-				dragonY = 0;
-			}
-			
-			for (; dragonY <= pos.y + 3 && maze.symbolAt(pos.x, dragonY) != 'X'; dragonY++)
-			{
-				if (playerY == dragonY)
-				{
-					return true;
-				}
-			}
-		}
-
 		return false;
 	}
 

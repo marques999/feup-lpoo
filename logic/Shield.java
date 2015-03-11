@@ -39,7 +39,7 @@ public class Shield extends Item
 	}
 	
 	/**
-	 * @return returns a symbol
+	 * @return returns a symbol representing the item type
 	 */
 	protected final char type()
 	{

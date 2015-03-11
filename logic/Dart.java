@@ -12,8 +12,8 @@ public class Dart extends Item
 
 	/**
 	 * @brief constructor with parameters for class 'Dart'
-	 * @param x X coordinate for sword position
-	 * @param y Y coordinate for sword position
+	 * @param x X coordinate for dart position
+	 * @param y Y coordinate for dart position
 	 */
 	public Dart(int x, int y)
 	{
@@ -21,7 +21,7 @@ public class Dart extends Item
 	}
 	
 	/**
-	 * @brief draws the sword at its corresponding position on the game board
+	 * @brief draws a dart on the game board
 	 */
 	public final void draw(Maze maze)
 	{
@@ -39,7 +39,7 @@ public class Dart extends Item
 	}
 	
 	/**
-	 * @return returns a symbol
+	 * @return returns a symbol representing a dart
 	 */
 	protected final char type()
 	{

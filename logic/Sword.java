@@ -20,6 +20,9 @@ public final class Sword extends Item
 		super(x, y);
 	}
 	
+	/**
+	 * @return returns a symbol representing the sword
+	 */
 	protected final char type()
 	{
 		return 'E';

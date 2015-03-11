@@ -234,12 +234,7 @@ public final class Hero extends Entity
 	 */
 	private final boolean canAttack(Dragon dragon)
 	{
-		if (this.getHealth() <= 0)
-		{
-			return false;
-		}
-
-		if (dragon.getHealth() <= 0)
+		if (getHealth() <= 0 || dragon.getHealth() <= 0)
 		{
 			return false;
 		}
