@@ -105,8 +105,7 @@ public final class Hero extends Entity
 	 * @brief checks if player can move in specified direction
 	 * @param direction
 	 * @param board
-	 * @return returns 'true' if player is still alive and can move to the
-	 *         specified direction, 'false' otherwise
+	 * @return returns 'true' if player is still alive and can move to the specified direction, 'false' otherwise
 	 */
 	private final boolean validMove(Maze maze, Direction direction)
 	{
@@ -115,27 +114,31 @@ public final class Hero extends Entity
 			return false;
 		}
 
-		if (direction == Direction.UP && maze.symbolAt(pos.x, pos.y - 1) != 'X')
+		Point newPosition = new Point();
+		
+		switch (direction)
 		{
-			return true;
+		case UP:
+			newPosition.x = pos.x;
+			newPosition.y = pos.y - 1;
+			break;
+		case DOWN:
+			newPosition.x = pos.x;
+			newPosition.y = pos.y + 1;
+			break;
+		case LEFT:
+			newPosition.x = pos.x - 1;
+			newPosition.y = pos.y;
+			break;
+		case RIGHT:
+			newPosition.x = pos.x + 1;
+			newPosition.y = pos.y;
+			break;
+		case NONE:
+			return false;
 		}
 
-		if (direction == Direction.DOWN && maze.symbolAt(pos.x, pos.y + 1) != 'X')
-		{
-			return true;
-		}
-
-		if (direction == Direction.LEFT && maze.symbolAt(pos.x - 1, pos.y) != 'X')
-		{
-			return true;
-		}
-
-		if (direction == Direction.RIGHT && maze.symbolAt(pos.x + 1, pos.y) != 'X')
-		{
-			return true;
-		}
-
-		return false;
+		return (maze.symbolAt(newPosition.x, newPosition.y) != 'X');
 	}
 
 	protected void pickItem(Maze maze, Point pos)
@@ -241,7 +244,7 @@ public final class Hero extends Entity
 			return false;
 		}
 
-		if (!hasSword() && !hasDarts())
+		if (!hasSword())
 		{
 			return false;
 		}
@@ -254,12 +257,12 @@ public final class Hero extends Entity
 		int dragonX = dragon.getX();
 		int dragonY = dragon.getY();
 
-		if ((pos.x == dragonX + 1 || pos.x == dragonX - 1) && pos.y == dragonY)
+		if (pos.x <= dragonX + 1 && pos.x >= dragonX - 1 && pos.y == dragonY)
 		{
 			return true;
 		}
 
-		if ((pos.y == dragonY + 1 || pos.y == dragonY - 1) && pos.x == dragonX)
+		if (pos.y <= dragonY + 1 && pos.y >= dragonY - 1 && pos.x == dragonX)
 		{
 			return true;
 		}

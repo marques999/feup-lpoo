@@ -43,6 +43,6 @@ public class Shield extends Item
 	 */
 	protected final char type()
 	{
-		return '*';
+		return 'V';
 	}
 }

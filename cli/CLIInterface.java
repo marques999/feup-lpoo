@@ -223,9 +223,10 @@ public class CLIInterface
 			if (GameState.playerWon())
 			{
 				System.out.println("CONGRATULATIONS!");
-			} else
+			} 
+			else
 			{
-				System.out.println("--- GAME OVER --- R.I.P HERO :(");
+				System.out.println("GAME OVER :( R.I.P HERO");
 			}
 		}
 	}
