@@ -54,11 +54,6 @@ public class GameState
 		items.remove(item);
 	}
 	
-	/**
-	 * 
-	 * @param direction
-	 * @return
-	 */
 	public static boolean attackDarts(Direction direction) 
 	{
 		return player.attackDarts(maze, direction);
@@ -224,13 +219,9 @@ public class GameState
 		maze = m;
 		dragons = new LinkedList<Dragon>();
 		items = new LinkedList<Item>();
-
-		Point playerPosition = maze.placeEntity();
-
-		player = new Hero(playerPosition.x, playerPosition.y);
+		player = new Hero(maze.placeEntity());
 		items.add(new Sword(maze.placeEntity()));
 		items.add(new Shield(maze.placeEntity()));
-		
 		player.draw(maze);
 	}
 
@@ -241,8 +232,9 @@ public class GameState
 		items = new LinkedList<Item>();
 		player = new Hero(1, 1);
 		items.add(new Sword(1, 8));
-		dragons.add(new Dragon(1, 3));
 		items.add(new Shield(3, 1));
+		dragons.add(new Dragon(1, 3));
+		player.draw(maze);
 	}
 
 	public static final void printMaze() 

@@ -9,7 +9,7 @@ public final class Hero extends Entity
 	/**
 	 * @brief default constructor for class 'Hero'
 	 */
-	public Hero()
+	protected Hero()
 	{
 		this(0, 0);
 	}
@@ -19,9 +19,14 @@ public final class Hero extends Entity
 	 * @param x initial x position for player
 	 * @param y initial y position for player
 	 */
-	public Hero(int x, int y)
+	protected Hero(int x, int y)
 	{
 		super(x, y, 100);
+	}
+	
+	protected Hero(Point pos)
+	{
+		super(pos, 100);
 	}
 
 	/**

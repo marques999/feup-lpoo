@@ -124,17 +124,13 @@ public class CLIInterface
 
 		switch (userInput)
 		{
-		case 1: 
-			// not implemented yet
+		case 1:
 			GameState.setDragonMovement(-1);
 			break;
 		case 2:
-			GameState.setDragonMovement(-1);
-			break;
-		case 3:
 			GameState.setDragonMovement(1);
 			break;
-		case 4:
+		case 3:
 			GameState.setDragonMovement(0);
 			break;
 		}
@@ -208,6 +204,7 @@ public class CLIInterface
 				System.out.println("*******************************");
 				System.out.println("*        MISSED TARGET        *");
 				System.out.println("*******************************");
+				System.out.println("");
 				System.in.read();
 			}
 		}
@@ -223,7 +220,8 @@ public class CLIInterface
 			if (GameState.playerWon())
 			{
 				System.out.println("CONGRATULATIONS!");
-			} else
+			} 
+			else
 			{
 				System.out.println("--- GAME OVER --- R.I.P HERO :(");
 			}
