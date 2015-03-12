@@ -1,3 +1,14 @@
+/*!
+ * \file CLIInterface.java
+ *
+ * LPOO_2014-2015_P1
+ * \author Diogo Marques
+ * \author Pedro Melo
+ *
+ * \date March 2015
+ *
+ */
+
 package lpoo.cli;
 
 import java.io.IOException;
@@ -78,7 +89,6 @@ public class CLIInterface
 	{
 		String currentObjective = String.format("%-24s", GameState.getObjective());
 		String numberDragons = String.format("%4d", GameState.getNumberDragons());
-		
 		System.out.println("=====================================================");
 		System.out.println("= OBJECTIVE: " + currentObjective + " DRAGONS: " + numberDragons + " =");
 		System.out.println("=====================================================");
@@ -110,7 +120,7 @@ public class CLIInterface
 		{
 			System.out.print("Please enter an option: ");
 			userInput = in.nextInt();
-		} while (userInput < 1 || userInput > 4);
+		} while (userInput < 1 || userInput > 3);
 
 		switch (userInput)
 		{
@@ -213,10 +223,9 @@ public class CLIInterface
 			if (GameState.playerWon())
 			{
 				System.out.println("CONGRATULATIONS!");
-			} 
-			else
+			} else
 			{
-				System.out.println("GAME OVER :( R.I.P HERO");
+				System.out.println("--- GAME OVER --- R.I.P HERO :(");
 			}
 		}
 	}

@@ -18,9 +18,10 @@ public abstract class Entity
 	 * @param x initial X coordinate for entity position
 	 * @param y initial Y coordinate for entity position
 	 */
-	protected Entity(int x, int y)
+	protected Entity(Point pos, int health)
 	{
-		this(x, y, 0);
+		this.pos = pos;
+		this.health = health;
 	}
 	
 	/**
@@ -31,14 +32,13 @@ public abstract class Entity
 	 */
 	protected Entity(int x, int y, int health)
 	{
-		this.pos = new Point(x, y);
-		this.health = health;
+		this(new Point(x, y), health);
 	}
 	
 	/**
 	 * @brief returns the entity's current position x coordinate
 	 */
-	protected final int getX()
+	public final int getX()
 	{
 		return pos.x;
 	}
@@ -46,7 +46,7 @@ public abstract class Entity
 	/**
 	 * @brief returns the entity's current position y coordinate
 	 */
-	protected final int getY()
+	public final int getY()
 	{
 		return pos.y;
 	}
@@ -72,7 +72,7 @@ public abstract class Entity
 	/**
 	 * @return returns the entity's current health
 	 */
-	protected final int getHealth()
+	public final int getHealth()
 	{
 		return this.health;
 	}
@@ -89,7 +89,7 @@ public abstract class Entity
 	/**
 	 * @return returns the entity's current position
 	 */
-	protected final Point getPosition()
+	public final Point getPosition()
 	{
 		return this.pos;
 	}

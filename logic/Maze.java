@@ -70,7 +70,7 @@ public abstract class Maze
 	// | 		ENTITY METHODS		 |
 	// -------------------------------
 
-	protected final Point placeEntity(char symbol)
+	protected final Point placeEntity()
 	{
 		int initialX = 0;
 		int initialY = 0;

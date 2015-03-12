@@ -3,7 +3,6 @@ package lpoo.logic;
 public abstract class Item
 {
 	protected Point pos;
-	private Entity owner;
 	
 	/**
 	 * @brief default constructor for class 'Item'
@@ -20,14 +19,21 @@ public abstract class Item
 	 */
 	protected Item(int x, int y)
 	{
-		this.pos = new Point(x, y);
-		this.owner = null;
+		this(new Point(x, y));
+	}
+	
+	/**
+	 * @brief alternative constructor with parameters for class 'Item'
+	 */
+	protected Item(Point pos)
+	{
+		this.pos = pos;
 	}
 	
 	/**
 	 * @brief returns the item's current position x coordinate
 	 */
-	protected final int getX()
+	public final int getX()
 	{
 		return pos.x;
 	}
@@ -35,7 +41,7 @@ public abstract class Item
 	/**
 	 * @brief returns the item's current position y coordinate
 	 */
-	protected final int getY()
+	public final int getY()
 	{
 		return pos.y;
 	}
@@ -61,7 +67,7 @@ public abstract class Item
 	/**
 	 * @return returns the item's current position
 	 */
-	protected final Point getPosition()
+	public final Point getPosition()
 	{
 		return this.pos;
 	}
@@ -76,35 +82,7 @@ public abstract class Item
 	}
 	
 	/**
-	 * @brief changes the owner of this item
-	 * @param owner new owner 
-	 */
-	protected void setOwner(Entity owner)
-	{
-		this.owner = owner;
-	}
-	
-
-	protected void removeOwner()
-	{
-		this.owner = null;
-	}
-	
-	/**
-	 * @return returns 'true' if an entity (e.g. the player) owns this item; 'false' otherwise
-	 */
-	protected boolean hasOwner()
-	{
-		return (this.owner != null);
-	}
-		
-	/**
 	 * @brief draws an item on the game board
 	 */
 	protected abstract void draw(Maze maze);
-	
-	/**
-	 * @return returns a symbol representing the item type
-	 */
-	protected abstract char type();
 }
