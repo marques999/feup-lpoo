@@ -2,32 +2,24 @@ package lpoo.logic;
 
 public final class Hero extends Entity
 {
-	private Item sword;
-	private Item dart;
-	private Item shield;
-	
-	/**
-	 * @brief default constructor for class 'Hero'
-	 */
-	protected Hero()
-	{
-		this(0, 0);
-	}
+	private Item sword = null;
+	private Item dart = null;
+	private Item shield = null;
 
 	/**
-	 * @brief constructor with parameters for class 'Hero'
+	 * @brief default constructor for class 'Hero'
 	 * @param x initial x position for player
 	 * @param y initial y position for player
-	 */
-	protected Hero(int x, int y)
+	 */	
+	protected Hero(Point pos)
 	{
-		super(x, y, 100);
+		super(pos, 100);
 	}
 
 	/**
 	 * @return returns 'true' if the player has the sword; 'false' otherwise
 	 */
-	protected final boolean hasSword()
+	public final boolean hasSword()
 	{
 		return (this.sword != null);
 	}
@@ -35,7 +27,7 @@ public final class Hero extends Entity
 	/**
 	 * @return returns 'true' if the player has darts; 'false' otherwise
 	 */
-	protected final boolean hasDarts()
+	public final boolean hasDarts()
 	{
 		return (this.dart != null);
 	}
@@ -43,12 +35,12 @@ public final class Hero extends Entity
 	/**
 	 * @return returns 'true' if player has the shield; 'false' otherwise
 	 */
-	protected final boolean hasShield()
+	public final boolean hasShield()
 	{
 		return (this.shield != null);
 	}
 
-	protected boolean attackDarts(Maze maze, Direction direction)
+	public boolean attackDarts(Maze maze, Direction direction)
 	{
 		if (!hasDarts())
 		{
@@ -84,7 +76,7 @@ public final class Hero extends Entity
 
 		for (; maze.symbolAt(positionX, positionY) != 'X'; positionX += incrementX, positionY += incrementY)
 		{
-			Dragon target = GameState.dragonAt(positionX, positionY);
+			Dragon target = GameState.dragonAt(new Point(positionX, positionY));
 
 			if (target != null)
 			{
@@ -107,9 +99,9 @@ public final class Hero extends Entity
 	 * @param board
 	 * @return returns 'true' if player is still alive and can move to the specified direction, 'false' otherwise
 	 */
-	private final boolean validMove(Maze maze, Direction direction)
+	public final boolean validMove(Maze maze, Direction direction)
 	{
-		if (this.getHealth() <= 0)
+		if (getHealth() <= 0)
 		{
 			return false;
 		}
@@ -141,7 +133,7 @@ public final class Hero extends Entity
 		return (maze.symbolAt(newPosition.x, newPosition.y) != 'X');
 	}
 
-	protected void pickItem(Maze maze, Point pos)
+	public void pickItem(Maze maze, Point pos)
 	{
 		Item itemPicked = null;
 		
@@ -152,42 +144,34 @@ public final class Hero extends Entity
 
 		if (itemPicked != null)
 		{
-			switch (itemPicked.type())
+			if (itemPicked instanceof Sword) // SWORD
 			{
-			case 'E': // SWORD
-				
 				if (!hasSword())
 				{
-					itemPicked.setOwner(this);
+					GameState.removeItem(itemPicked);
 					sword = itemPicked;
 				}
-
-				break;
-				
-			case '*': // DARTS
-				
-				if (!hasDarts())
-				{	
-					itemPicked.setOwner(this);
-					dart = itemPicked;
-				}
-				
-				break;
-				
-			case 'V': // SHEILD
-				
+			}
+			else if (itemPicked instanceof Shield) // SHIELD
+			{
 				if (!hasShield())
 				{
-					itemPicked.setOwner(this);
+					GameState.removeItem(itemPicked);
 					shield = itemPicked;
 				}
-				
-				break;
+			}
+			else if (itemPicked instanceof Dart)
+			{
+				if (!hasDarts())
+				{	
+					GameState.removeItem(itemPicked);
+					dart = itemPicked;
+				}
 			}
 		}
 	}
 	
-	protected void move(Maze maze, Direction direction)
+	public void move(Maze maze, Direction direction)
 	{
 		Point newPosition = new Point();
 
@@ -215,7 +199,7 @@ public final class Hero extends Entity
 				return;
 			}
 
-			if (maze.symbolAt(newPosition.x, newPosition.y) == 'S' && !hasSword())
+			if (maze.symbolAt(newPosition.x, newPosition.y) == 'S' && !GameState.canExit())
 			{
 				return;
 			}
@@ -232,7 +216,7 @@ public final class Hero extends Entity
 	 * @param board
 	 * @return returns 'true' if player has the sword and can attack the dragon; 'false' otherwise
 	 */
-	private final boolean canAttack(Dragon dragon)
+	public final boolean canAttack(Dragon dragon)
 	{
 		if (getHealth() <= 0 || dragon.getHealth() <= 0)
 		{
@@ -265,7 +249,7 @@ public final class Hero extends Entity
 		return false;
 	}
 
-	protected final void attackSword(Maze maze, Dragon dragon)
+	public final void attackSword(Maze maze, Dragon dragon)
 	{
 		if (canAttack(dragon))
 		{
@@ -288,7 +272,7 @@ public final class Hero extends Entity
 			}
 			else
 			{
-				maze.placeSymbol(pos.x, pos.y, hasSword() ? 'A' : 'h');
+				maze.placeSymbol(pos.x, pos.y, hasSword() ? 'a' : 'h');
 			}
 		}
 	}

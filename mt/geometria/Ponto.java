@@ -5,18 +5,18 @@ public class Ponto implements Comparable<Ponto>
 	private int x;
 	private int y;
 
-	public Ponto(int x, int y)
+	protected Ponto(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
 	}
 
-	public final int getX()
+	protected final int getX()
 	{
 		return this.x;
 	}
 
-	public final int getY()
+	protected final int getY()
 	{
 		return this.y;
 	}

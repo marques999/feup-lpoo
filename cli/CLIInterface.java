@@ -1,8 +1,18 @@
+/*!
+ * \file CLIInterface.java
+ *
+ * LPOO_2014-2015_P1
+ * \author Diogo Marques
+ * \author Pedro Melo
+ *
+ * \date March 2015
+ *
+ */
+
 package lpoo.cli;
 
 import java.io.IOException;
 import java.util.Scanner;
-
 import lpoo.logic.Direction;
 import lpoo.logic.GameState;
 import lpoo.logic.RandomMaze;
@@ -78,7 +88,6 @@ public class CLIInterface
 	{
 		String currentObjective = String.format("%-24s", GameState.getObjective());
 		String numberDragons = String.format("%4d", GameState.getNumberDragons());
-		
 		System.out.println("=====================================================");
 		System.out.println("= OBJECTIVE: " + currentObjective + " DRAGONS: " + numberDragons + " =");
 		System.out.println("=====================================================");
@@ -110,13 +119,12 @@ public class CLIInterface
 		{
 			System.out.print("Please enter an option: ");
 			userInput = in.nextInt();
-		} while (userInput < 1 || userInput > 4);
+		} while (userInput < 1 || userInput > 3);
 
 		switch (userInput)
 		{
-		case 1: 
-			// not implemented yet
-			GameState.setDragonMovement(-1);
+		case 1:
+			GameState.setDragonMovement(-2);
 			break;
 		case 2:
 			GameState.setDragonMovement(-1);
@@ -198,6 +206,7 @@ public class CLIInterface
 				System.out.println("*******************************");
 				System.out.println("*        MISSED TARGET        *");
 				System.out.println("*******************************");
+				System.out.println("");
 				System.in.read();
 			}
 		}
@@ -216,7 +225,7 @@ public class CLIInterface
 			} 
 			else
 			{
-				System.out.println("GAME OVER :( R.I.P HERO");
+				System.out.println("--- GAME OVER --- R.I.P HERO :(");
 			}
 		}
 	}

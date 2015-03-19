@@ -5,29 +5,29 @@ public final class Dragon extends Entity
 	private boolean sleeping;
 
 	/**
-	 * @brief default constructor for class 'Dragon'
-	 */
-	protected Dragon()
-	{
-		this(0, 0);
-	}
-
-	/**
 	 * @brief constructor with parameters for class 'Dragon'
 	 * @param x initial X coordinate for dragon position
 	 * @param y initial Y coordinate for dragon position
 	 */
 	protected Dragon(int x, int y)
 	{
-		super(x, y, 100);
-
-		this.sleeping = false;
+		this(new Point(x, y));
 	}
 
 	/**
+	 * @brief constructor with parameters for class 'Dragon'
+	 * @param pos initial dragon position
+	 */
+	protected Dragon(Point pos)
+	{
+		super(pos, 100);
+		
+		this.sleeping = false;
+	}
+	/**
 	 * @return returns 'true' is dragon is asleep; 'false' otherwise
 	 */
-	protected final boolean isSleeping()
+	public final boolean isSleeping()
 	{
 		return this.sleeping;
 	}
@@ -77,10 +77,8 @@ public final class Dragon extends Entity
 
 		boolean isNotWall = maze.symbolAt(newPosition.x, newPosition.y) != 'X';
 		boolean isNotExit = maze.symbolAt(newPosition.x, newPosition.y) != 'S';
-		boolean isNotDragon = maze.symbolAt(newPosition.x, newPosition.y) != 'D';
-		boolean isNotSleeping = maze.symbolAt(newPosition.x, newPosition.y) != 'd';
 
-		return (isNotWall && isNotExit && isNotDragon && isNotSleeping);
+		return (isNotWall && isNotExit);
 	}
 
 	/**
@@ -146,6 +144,11 @@ public final class Dragon extends Entity
 
 	protected final boolean canAttackFire(Maze maze, Hero player)
 	{
+		if (canAttack(player))
+		{
+			return false;
+		}
+		
 		if (!isActive() || player.getHealth() <= 0 || player.hasShield())
 		{
 			return false;
@@ -171,7 +174,7 @@ public final class Dragon extends Entity
 			return false;
 		}
 		
-		for (int i = 0; i < 3 && maze.symbolAt(dragonX, dragonY) != 'X';
+		for (int i = 0; i < 4 && maze.symbolAt(dragonX, dragonY) != 'X';
 				i++, dragonX += incrementX, dragonY += incrementY)
 		{
 			if (playerX == dragonX && playerY == dragonY)
@@ -183,14 +186,18 @@ public final class Dragon extends Entity
 		return false;
 	}
 
-	protected final void attackPlayer(Maze maze, Hero player)
+	protected final void attack(Maze maze, Hero player)
 	{
 		if (canAttack(player))
 		{
 			maze.clearSymbol(player.getX(), player.getY());
 			player.setHealth(0);
 		}
-		else if (canAttackFire(maze, player))
+	}
+	
+	protected final void attackFire(Maze maze, Hero player)
+	{
+		if (canAttackFire(maze, player))
 		{
 			maze.placeSymbol(player.getX(), player.getY(), 'O');
 			player.setHealth(0);

@@ -1,16 +1,26 @@
 package lpoo.logic;
 
 public final class Dart extends Item
+<<<<<<< HEAD
 {	
+=======
+{
+>>>>>>> origin/master
 	/**
 	 * @brief default constructor for class 'Dart'
+	 * @param pos initial coordinates for dart position
 	 */
+<<<<<<< HEAD
 	protected Dart()
+=======
+	protected Dart(Point pos)
+>>>>>>> origin/master
 	{
-		this(0, 0);
+		super(pos);
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @brief constructor with parameters for class 'Dart'
 	 * @param x X coordinate for dart position
 	 * @param y Y coordinate for dart position
@@ -21,28 +31,19 @@ public final class Dart extends Item
 	}
 	
 	/**
+=======
+>>>>>>> origin/master
 	 * @brief draws a dart on the game board
 	 */
 	protected final void draw(Maze maze)
 	{
-		if (!hasOwner())
+		if (maze.symbolAt(pos.x, pos.y) == 'D' || maze.symbolAt(pos.x, pos.y) == 'd')
 		{
-			if (maze.symbolAt(pos.x, pos.y) == 'D')
-			{
-				maze.placeSymbol(pos.x, pos.y, 'F');
-			} 
-			else
-			{
-				maze.placeSymbol(pos.x, pos.y, '*');
-			}
+			maze.placeSymbol(pos.x, pos.y, 'F');
+		} 
+		else
+		{
+			maze.placeSymbol(pos.x, pos.y, '*');
 		}
-	}
-	
-	/**
-	 * @return returns a symbol representing a dart
-	 */
-	protected final char type()
-	{
-		return '*';
 	}
 }

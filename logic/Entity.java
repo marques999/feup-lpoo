@@ -7,38 +7,19 @@ public abstract class Entity
 	
 	/**
 	 * @brief default constructor for class 'Entity'
-	 */
-	protected Entity()
-	{
-		this(0, 0, 0);
-	}
-
-	/**
-	 * @brief constructor with parameters for class 'Entity'
 	 * @param x initial X coordinate for entity position
 	 * @param y initial Y coordinate for entity position
 	 */
-	protected Entity(int x, int y)
+	protected Entity(Point pos, int health)
 	{
-		this(x, y, 0);
-	}
-	
-	/**
-	 * @brief constructor with three parameters for class 'Entity'
-	 * @param x initial X coordinate for entity position
-	 * @param y initial Y coordinate for entity position
-	 * @param health initial entity health
-	 */
-	protected Entity(int x, int y, int health)
-	{
-		this.pos = new Point(x, y);
+		this.pos = pos;
 		this.health = health;
 	}
 	
 	/**
 	 * @brief returns the entity's current position x coordinate
 	 */
-	protected final int getX()
+	public final int getX()
 	{
 		return pos.x;
 	}
@@ -46,33 +27,15 @@ public abstract class Entity
 	/**
 	 * @brief returns the entity's current position y coordinate
 	 */
-	protected final int getY()
+	public final int getY()
 	{
 		return pos.y;
 	}
 	
 	/**
-	 * @brief changes the entity's current position x coordinate
-	 * @param x new value for x coordinate
-	 */
-	protected void setX(int x)
-	{
-		this.pos.x = x;
-	}
-
-	/**
-	 * @brief changes the entity's current position y coordinate
-	 * @param y new value for y coordinate
-	 */
-	protected void setY(int y)
-	{
-		this.pos.y = y;
-	}
-	
-	/**
 	 * @return returns the entity's current health
 	 */
-	protected final int getHealth()
+	public final int getHealth()
 	{
 		return this.health;
 	}
@@ -89,18 +52,9 @@ public abstract class Entity
 	/**
 	 * @return returns the entity's current position
 	 */
-	protected final Point getPosition()
+	public final Point getPosition()
 	{
 		return this.pos;
-	}
-
-	/**
-	 * @brief changes the entity's current position
-	 * @param pos new coordinates for dragon position
-	 */
-	protected void setPosition(Point pos)
-	{
-		this.pos = pos;
 	}
 	
 	/**
