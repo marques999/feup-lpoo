@@ -17,11 +17,6 @@ public class GameState
 
 	private static Random randomGenerator = new Random();
 
-	public static void setDragonMovement(int type) 
-	{
-		dragonMovement = type;
-	}
-
 	// -------------------------------
 	// | 	  	 JUNIT TESTS		 |
 	// -------------------------------
@@ -59,7 +54,7 @@ public class GameState
 		return player.attackDarts(maze, direction);
 	}
 
-	protected static Dragon dragonAt(Point pos) 
+	public static Dragon dragonAt(Point pos) 
 	{
 		for (Dragon dragon : dragons) 
 		{
@@ -109,10 +104,7 @@ public class GameState
 
 	private static void attackDragonsFire() 
 	{
-		for (Dragon dragon : dragons) 
-		{
-			dragon.attackFire(maze, player);
-		}
+		dragons.forEach((d) -> d.attackFire(maze, player));
 	}
 
 	// --------------------------------
@@ -121,34 +113,35 @@ public class GameState
 	
 	private final static void drawDragons() 
 	{
-		for (Dragon dragon : dragons) 
-		{
-			if (dragon != null)
-			{
-				dragon.draw(maze);
-			}
-		}
+		dragons.forEach((d) -> d.draw(maze));
 	}
 
-	private static void drawItems() 
+	private final static void drawItems() 
 	{
-		for (Item item : items) 
+		items.forEach((i) -> i.draw(maze));
+	}
+	
+	public static void setDragonMovement(int type) 
+	{
+		dragonMovement = type;
+	}
+	
+	public static void moveDragon(Dragon dragon, Direction direction)
+	{
+		if (dragon.validMove(maze, direction))
 		{
-			if (item != null) 
-			{
-				item.draw(maze);
-			}
+			dragon.move(maze, direction);
 		}
 	}
 	
-	private static final void updateDragon(Dragon dragon) 
+	private static void updateDragon(Dragon dragon) 
 	{
-		if (dragon.getHealth() <= 0 || dragonMovement == -1) 
+		if (dragon.getHealth() <= 0) 
 		{
 			return;
 		}
-
-		if (dragonMovement == 1) 
+		
+		if (dragonMovement == 1 || dragonMovement == -2) 
 		{
 			int randomSleep = randomGenerator.nextInt(6);
 
@@ -161,6 +154,11 @@ public class GameState
 			{
 				return;
 			}
+		}
+		
+		if (dragonMovement < 0)
+		{
+			return;
 		}
 
 		Direction moveDirection = Direction.NONE;
@@ -189,26 +187,39 @@ public class GameState
 		dragon.move(maze, moveDirection);
 	}
 
-
 	/**
 	 * GAME INITIALIZATION
 	 */
 	
 	public static void initializeDarts(int numberDarts) 
 	{
-		for (int i = 0; i < numberDarts; i++) 
+		while (numberDarts != 0)
 		{
-			items.add(new Dart(maze.placeEntity()));
+			placeDart(maze.placeEntity());
+			numberDarts--;
 		}
-		
+
 		drawItems();
+	}
+	
+	public static void placeDart(Point pos)
+	{
+		items.add(new Dart(pos));
+	}
+	
+	public static Dragon placeDragon(Point pos)
+	{
+		dragons.add(new Dragon(pos));
+		
+		return dragons.peek();
 	}
 
 	public static void initializeDragons(int numberDragons) 
 	{
-		for (int i = 0; i < numberDragons; i++) 
+		while (numberDragons != 0)
 		{
 			dragons.add(new Dragon(maze.placeEntity()));
+			numberDragons--;
 		}
 		
 		drawDragons();
@@ -217,22 +228,30 @@ public class GameState
 	public static void initialize(Maze m) 
 	{
 		maze = m;
+		
 		dragons = new LinkedList<Dragon>();
 		items = new LinkedList<Item>();
+		
 		player = new Hero(maze.placeEntity());
 		items.add(new Sword(maze.placeEntity()));
 		items.add(new Shield(maze.placeEntity()));
+		
 		player.draw(maze);
 	}
 
 	public static void initializeStatic(Maze m) 
 	{
+		Point playerPosition = new Point(1, 1);
+		Point swordPosition = new Point(1, 8);
+		Point shieldPosition = new Point(3, 1);
+		
 		maze = m;
 		dragons = new LinkedList<Dragon>();
 		items = new LinkedList<Item>();
-		player = new Hero(1, 1);
-		items.add(new Sword(1, 8));
-		items.add(new Shield(3, 1));
+		
+		player = new Hero(playerPosition);
+		items.add(new Sword(swordPosition));
+		items.add(new Shield(shieldPosition));
 		dragons.add(new Dragon(1, 3));
 		player.draw(maze);
 	}
@@ -274,7 +293,7 @@ public class GameState
 	
 	public static boolean canExit() 
 	{
-		return (player.hasSword() && getNumberDragons() == 0);
+		return (player.hasSword() && dragons.size() == 0);
 	}
 
 	public static void update(Direction direction) 
@@ -283,7 +302,6 @@ public class GameState
 		player.move(maze, direction);
 		attackDragonsFire();
 		attackDragons();
-
 		drawItems();
 		player.draw(maze);
 		drawDragons();

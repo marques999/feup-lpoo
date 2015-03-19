@@ -18,7 +18,7 @@ public class TestGeometria
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void testCirculo() throws IllegalArgumentException
+	public void testCirculo()
 	{
 		Ponto p = new Ponto(1, 5);
 		Circulo c = new Circulo(p, 3);
@@ -29,14 +29,14 @@ public class TestGeometria
 
 	@SuppressWarnings("static-method")
 	@Test(expected = IllegalArgumentException.class)
-	public void testExcepcoes() throws IllegalArgumentException
+	public void testExcepcoes()
 	{
 		new Circulo(new Ponto(1, 5), -1);
 	}
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void testFigura() throws IllegalArgumentException
+	public void testFigura()
 	{
 		Figura f = new Circulo(new Ponto(0, 0), 5);
 
@@ -59,7 +59,7 @@ public class TestGeometria
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void testFiguraComposta() throws IllegalArgumentException
+	public void testFiguraComposta()
 	{
 		Circulo c = new Circulo(new Ponto(2, 2), 1);
 		Rectangulo r = new Rectangulo(0, 0, 1, 1);
@@ -72,7 +72,7 @@ public class TestGeometria
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void testCountable() throws IllegalArgumentException
+	public void testCountable()
 	{
 		Circulo c = new Circulo(new Ponto(2, 2), 1);
 		Rectangulo r = new Rectangulo(0, 0, 1, 1);
@@ -104,6 +104,7 @@ public class TestGeometria
 		assertFalse(p1.equals(p3));
 	}
 
+	@SuppressWarnings("static-method")
 	@Test
 	public void testOrdenacaoPontos()
 	{

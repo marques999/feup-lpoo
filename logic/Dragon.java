@@ -5,14 +5,6 @@ public final class Dragon extends Entity
 	private boolean sleeping;
 
 	/**
-	 * @brief default constructor for class 'Dragon'
-	 */
-	protected Dragon()
-	{
-		this(0, 0);
-	}
-
-	/**
 	 * @brief constructor with parameters for class 'Dragon'
 	 * @param x initial X coordinate for dragon position
 	 * @param y initial Y coordinate for dragon position
@@ -35,7 +27,7 @@ public final class Dragon extends Entity
 	/**
 	 * @return returns 'true' is dragon is asleep; 'false' otherwise
 	 */
-	protected final boolean isSleeping()
+	public final boolean isSleeping()
 	{
 		return this.sleeping;
 	}
@@ -85,10 +77,8 @@ public final class Dragon extends Entity
 
 		boolean isNotWall = maze.symbolAt(newPosition.x, newPosition.y) != 'X';
 		boolean isNotExit = maze.symbolAt(newPosition.x, newPosition.y) != 'S';
-		boolean isNotDragon = maze.symbolAt(newPosition.x, newPosition.y) != 'D';
-		boolean isNotSleeping = maze.symbolAt(newPosition.x, newPosition.y) != 'd';
 
-		return (isNotWall && isNotExit && isNotDragon && isNotSleeping);
+		return (isNotWall && isNotExit);
 	}
 
 	/**

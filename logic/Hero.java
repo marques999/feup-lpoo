@@ -5,25 +5,12 @@ public final class Hero extends Entity
 	private Item sword = null;
 	private Item dart = null;
 	private Item shield = null;
-	
-	/**
-	 * @brief default constructor for class 'Hero'
-	 */
-	protected Hero()
-	{
-		this(0, 0);
-	}
 
 	/**
-	 * @brief constructor with parameters for class 'Hero'
+	 * @brief default constructor for class 'Hero'
 	 * @param x initial x position for player
 	 * @param y initial y position for player
-	 */
-	protected Hero(int x, int y)
-	{
-		super(x, y, 100);
-	}
-	
+	 */	
 	protected Hero(Point pos)
 	{
 		super(pos, 100);

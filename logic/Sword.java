@@ -4,29 +4,11 @@ public final class Sword extends Item
 {
 	/**
 	 * @brief default constructor for class 'Sword'
-	 */
-	protected Sword()
-	{
-		this(0, 0);
-	}
-	
-	/**
-	 * @brief constructor with parameters for class 'Sword'
 	 * @param pos initial sword position
 	 */
 	protected Sword(Point pos)
 	{
 		super(pos);
-	}
-
-	/**
-	 * @brief constructor with parameters for class 'Sword'
-	 * @param x X coordinate for sword position
-	 * @param y Y coordinate for initial sword position
-	 */
-	protected Sword(int x, int y)
-	{
-		super(x, y);
 	}
 
 	/**

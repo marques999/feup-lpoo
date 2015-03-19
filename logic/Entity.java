@@ -7,14 +7,6 @@ public abstract class Entity
 	
 	/**
 	 * @brief default constructor for class 'Entity'
-	 */
-	protected Entity()
-	{
-		this(0, 0, 0);
-	}
-
-	/**
-	 * @brief constructor with parameters for class 'Entity'
 	 * @param x initial X coordinate for entity position
 	 * @param y initial Y coordinate for entity position
 	 */
@@ -22,17 +14,6 @@ public abstract class Entity
 	{
 		this.pos = pos;
 		this.health = health;
-	}
-	
-	/**
-	 * @brief constructor with three parameters for class 'Entity'
-	 * @param x initial X coordinate for entity position
-	 * @param y initial Y coordinate for entity position
-	 * @param health initial entity health
-	 */
-	protected Entity(int x, int y, int health)
-	{
-		this(new Point(x, y), health);
 	}
 	
 	/**
@@ -49,24 +30,6 @@ public abstract class Entity
 	public final int getY()
 	{
 		return pos.y;
-	}
-	
-	/**
-	 * @brief changes the entity's current position x coordinate
-	 * @param x new value for x coordinate
-	 */
-	protected void setX(int x)
-	{
-		this.pos.x = x;
-	}
-
-	/**
-	 * @brief changes the entity's current position y coordinate
-	 * @param y new value for y coordinate
-	 */
-	protected void setY(int y)
-	{
-		this.pos.y = y;
 	}
 	
 	/**
@@ -92,15 +55,6 @@ public abstract class Entity
 	public final Point getPosition()
 	{
 		return this.pos;
-	}
-
-	/**
-	 * @brief changes the entity's current position
-	 * @param pos new coordinates for dragon position
-	 */
-	protected void setPosition(Point pos)
-	{
-		this.pos = pos;
 	}
 	
 	/**

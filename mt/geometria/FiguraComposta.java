@@ -4,12 +4,12 @@ public class FiguraComposta extends Figura implements Countable
 {
 	Figura[] figuras;
 
-	public FiguraComposta(Figura[] figuras)
+	protected FiguraComposta(Figura[] figuras)
 	{
 		this.figuras = figuras;
 	}
 
-	public double getArea()
+	protected final double getArea()
 	{
 		double areaTotal = 0.0;
 
@@ -21,7 +21,7 @@ public class FiguraComposta extends Figura implements Countable
 		return areaTotal;
 	}
 
-	public double getPerimetro()
+	protected final double getPerimetro()
 	{
 		double perimetroTotal = 0.0;
 
@@ -33,7 +33,7 @@ public class FiguraComposta extends Figura implements Countable
 		return perimetroTotal;
 	}
 
-	public int count()
+	public final int count()
 	{
 		return figuras.length;
 	}

@@ -5,7 +5,7 @@ public class Circulo extends Figura
 	private Ponto centro;
 	private int raio;
 
-	public Circulo(Ponto centro, int raio) throws IllegalArgumentException
+	protected Circulo(Ponto centro, int raio)
 	{
 		if (raio <= 0)
 		{
@@ -16,22 +16,22 @@ public class Circulo extends Figura
 		this.raio = raio;
 	}
 
-	public final Ponto getCentro()
+	protected final Ponto getCentro()
 	{
 		return this.centro;
 	}
 
-	public final int getRaio()
+	protected final int getRaio()
 	{
 		return this.raio;
 	}
 
-	public double getArea()
+	protected final double getArea()
 	{
 		return Math.PI * raio * raio;
 	}
 
-	public double getPerimetro()
+	protected final double getPerimetro()
 	{
 		return 2 * Math.PI * raio;
 	}

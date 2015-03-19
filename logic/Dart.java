@@ -4,14 +4,6 @@ public final class Dart extends Item
 {
 	/**
 	 * @brief default constructor for class 'Dart'
-	 */
-	protected Dart()
-	{
-		super(0, 0);
-	}
-
-	/**
-	 * @brief constructor with parameters for class 'Dart'
 	 * @param pos initial coordinates for dart position
 	 */
 	protected Dart(Point pos)

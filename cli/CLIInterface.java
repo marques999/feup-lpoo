@@ -13,7 +13,6 @@ package lpoo.cli;
 
 import java.io.IOException;
 import java.util.Scanner;
-
 import lpoo.logic.Direction;
 import lpoo.logic.GameState;
 import lpoo.logic.RandomMaze;
@@ -125,12 +124,15 @@ public class CLIInterface
 		switch (userInput)
 		{
 		case 1:
-			GameState.setDragonMovement(-1);
+			GameState.setDragonMovement(-2);
 			break;
 		case 2:
-			GameState.setDragonMovement(1);
+			GameState.setDragonMovement(-1);
 			break;
 		case 3:
+			GameState.setDragonMovement(1);
+			break;
+		case 4:
 			GameState.setDragonMovement(0);
 			break;
 		}

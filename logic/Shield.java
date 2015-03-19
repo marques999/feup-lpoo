@@ -3,24 +3,6 @@ package lpoo.logic;
 public final class Shield extends Item
 {
 	/**
-	 * @brief default constructor for class 'Dart'
-	 */
-	protected Shield()
-	{
-		super(0, 0);
-	}
-
-	/**
-	 * @brief constructor with parameters for class 'Dart'
-	 * @param x X coordinate for initial sword position
-	 * @param y Y coordinate for initial sword position
-	 */
-	protected Shield(int x, int y)
-	{
-		super(x, y);
-	}
-
-	/**
 	 * @brief constructor with parameters for class 'Dart'
 	 * @param pos initial dart position
 	 */
