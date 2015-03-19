@@ -1,11 +1,11 @@
 package lpoo.logic;
 
-public class Shield extends Item
+public final class Shield extends Item
 {	
 	/**
 	 * @brief default constructor for class 'Dart'
 	 */
-	public Shield()
+	protected Shield()
 	{
 		this(0, 0);
 	}
@@ -15,7 +15,7 @@ public class Shield extends Item
 	 * @param x X coordinate for sword position
 	 * @param y Y coordinate for sword position
 	 */
-	public Shield(int x, int y)
+	protected Shield(int x, int y)
 	{
 		super(x, y);
 	}
@@ -23,7 +23,7 @@ public class Shield extends Item
 	/**
 	 * @brief draws the sword at its corresponding position on the game board
 	 */
-	public final void draw(Maze maze)
+	protected final void draw(Maze maze)
 	{
 		if (!hasOwner())
 		{

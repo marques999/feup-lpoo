@@ -1,11 +1,11 @@
 package lpoo.logic;
 
-public class Dart extends Item
+public final class Dart extends Item
 {	
 	/**
 	 * @brief default constructor for class 'Dart'
 	 */
-	public Dart()
+	protected Dart()
 	{
 		this(0, 0);
 	}
@@ -15,7 +15,7 @@ public class Dart extends Item
 	 * @param x X coordinate for dart position
 	 * @param y Y coordinate for dart position
 	 */
-	public Dart(int x, int y)
+	protected Dart(int x, int y)
 	{
 		super(x, y);
 	}
@@ -23,7 +23,7 @@ public class Dart extends Item
 	/**
 	 * @brief draws a dart on the game board
 	 */
-	public final void draw(Maze maze)
+	protected final void draw(Maze maze)
 	{
 		if (!hasOwner())
 		{
