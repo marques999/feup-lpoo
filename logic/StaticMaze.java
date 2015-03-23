@@ -1,9 +1,9 @@
 package lpoo.logic;
 
-public final class StaticMaze extends Maze {
-
-    public StaticMaze() {
-        
+public final class StaticMaze extends Maze 
+{
+    public StaticMaze() 
+    {
         super(10);
 
         MazeBuilder m_builder = new MazeBuilder();

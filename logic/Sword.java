@@ -14,7 +14,8 @@ public final class Sword extends Item
 	/**
 	 * @brief draws the sword on the game board
 	 */
-	protected final void draw(Maze maze)
+	@Override
+	protected void draw(Maze maze)
 	{
 		if (maze.symbolAt(pos.x, pos.y) == 'D' || maze.symbolAt(pos.x, pos.y) == 'd')
 		{
