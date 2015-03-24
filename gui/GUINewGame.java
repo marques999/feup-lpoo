@@ -1,11 +1,10 @@
 package lpoo.gui;
 
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 import lpoo.logic.GameState;
 
-public class GUINewGame extends javax.swing.JFrame 
+public class GUINewGame extends JDialog
 {
     private int userDifficulty;
     private int dragonMovement;
@@ -75,8 +74,8 @@ public class GUINewGame extends javax.swing.JFrame
         lblDragon12 = new javax.swing.JLabel();
         lblNumDragons = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Maze Run v0.01b");
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        setTitle("Preferences");
         setBackground(new java.awt.Color(255, 255, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
@@ -113,38 +112,22 @@ public class GUINewGame extends javax.swing.JFrame
 
         buttonGroup1.add(rbGameEasy);
         rbGameEasy.setText("Easy (random maze, 11x11)");
-        rbGameEasy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbGameEasyActionPerformed(evt);
-            }
-        });
+        rbGameEasy.addActionListener(this::rbGameEasyActionPerformed);
         pnlGame.add(rbGameEasy);
 
         buttonGroup1.add(rbGameMedium);
         rbGameMedium.setText("Medium (random maze, 15x15)");
-        rbGameMedium.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbGameMediumActionPerformed(evt);
-            }
-        });
+        rbGameMedium.addActionListener(this::rbGameMediumActionPerformed);
         pnlGame.add(rbGameMedium);
 
         buttonGroup1.add(rbGameHard);
         rbGameHard.setText("Hard (random maze, 23x23)");
-        rbGameHard.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbGameHardActionPerformed(evt);
-            }
-        });
+        rbGameHard.addActionListener(this::rbGameHardActionPerformed);
         pnlGame.add(rbGameHard);
 
         buttonGroup1.add(rbGameHard1);
         rbGameHard1.setText("Nightmare (random maze, 31x31)");
-        rbGameHard1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbGameHard1ActionPerformed(evt);
-            }
-        });
+        rbGameHard1.addActionListener(this::rbGameHard1ActionPerformed);
         pnlGame.add(rbGameHard1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -167,39 +150,23 @@ public class GUINewGame extends javax.swing.JFrame
 
         buttonGroup2.add(rbDragonBeginner);
         rbDragonBeginner.setText("Beginner (static, random sleep)");
-        rbDragonBeginner.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbDragonBeginnerActionPerformed(evt);
-            }
-        });
+        rbDragonBeginner.addActionListener(this::rbDragonBeginnerActionPerformed);
         pnlDragon.add(rbDragonBeginner);
 
         buttonGroup2.add(rbDragonEasy);
         rbDragonEasy.setSelected(true);
         rbDragonEasy.setText("Easy (static, doesn't sleep)");
-        rbDragonEasy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbDragonEasyActionPerformed(evt);
-            }
-        });
+        rbDragonEasy.addActionListener(this::rbDragonEasyActionPerformed);
         pnlDragon.add(rbDragonEasy);
 
         buttonGroup2.add(rbDragonMedium);
         rbDragonMedium.setText("Medium (random, random sleep)");
-        rbDragonMedium.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbDragonMediumActionPerformed(evt);
-            }
-        });
+        rbDragonMedium.addActionListener(this::rbDragonMediumActionPerformed);
         pnlDragon.add(rbDragonMedium);
 
         buttonGroup2.add(rbDragonHard);
         rbDragonHard.setText("Hard (random, doesn't sleep)");
-        rbDragonHard.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbDragonHardActionPerformed(evt);
-            }
-        });
+        rbDragonHard.addActionListener(this::rbDragonHardActionPerformed);
         pnlDragon.add(rbDragonHard);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -207,20 +174,12 @@ public class GUINewGame extends javax.swing.JFrame
         gridBagConstraints.gridy = 6;
         pnlSelect.add(pnlDragon, gridBagConstraints);
 
-        btnStart.setText("Start Game");
-        btnStart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStartActionPerformed(evt);
-            }
-        });
+        btnStart.setText("Save");
+        btnStart.addActionListener(this::btnStartActionPerformed);
         pnlButtons.add(btnStart);
 
         jButton2.setText("Exit");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.addActionListener(this::jButton2ActionPerformed);
         pnlButtons.add(jButton2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -299,7 +258,7 @@ public class GUINewGame extends javax.swing.JFrame
 
         setSize(new java.awt.Dimension(710, 390));
         setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+    }               
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) 
     {
@@ -425,28 +384,7 @@ public class GUINewGame extends javax.swing.JFrame
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) 
-    {
-        try 
-        {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
-            {
-                if ("Nimbus".equals(info.getName())) 
-                {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } 
-        catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) 
-        {
-            java.util.logging.Logger.getLogger(GUINewGame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
 
-        java.awt.EventQueue.invokeLater(() -> {
-            new GUINewGame().setVisible(true);
-        });
-    }
 
     private ImageIcon imgDragon;
     private ImageIcon heroDragon;

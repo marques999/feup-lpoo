@@ -34,13 +34,10 @@ public final class AreaDesenho extends JPanel
         this.m_size = g_maze.getSize();
         this.g_size = 640 / m_size;
 
-        Image t_img = s_hero.getImage();
-
-        this.s_hero_resized = t_img;/*t_img.getScaledInstance(g_size, g_size, java.awt.Image.SCALE_SMOOTH);*/
-
-        this.s_dragon_resized = s_dragon.getImage();
-        this.s_dart_resized = s_dart.getImage();
-        this.s_shield_resized = s_shield.getImage();
+        this.s_hero_resized = s_hero.getImage().getScaledInstance(g_size, g_size, java.awt.Image.SCALE_SMOOTH);
+        this.s_dragon_resized = s_dragon.getImage().getScaledInstance(g_size, g_size, Image.SCALE_SMOOTH);
+        this.s_dart_resized = s_dart.getImage().getScaledInstance(g_size, g_size, Image.SCALE_SMOOTH);
+        this.s_shield_resized = s_shield.getImage().getScaledInstance(g_size, g_size, Image.SCALE_SMOOTH);
     }
 
     public void paintComponent(Graphics g) 
