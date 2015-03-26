@@ -12,12 +12,10 @@ public class Sprite
 {
     private Image spriteImage;
     private Graphics2D spriteImageG2D;
-    
     private Point pos;
+    
     private int height;
     private int width;
-
-    /** The matrix transform responsible for geometric transformations to the sprite */
     private AffineTransform spriteTransform;
     
     /**The double buffer onto which this Sprite object should draw itself */

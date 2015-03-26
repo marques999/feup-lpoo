@@ -77,8 +77,7 @@ public final class Hero extends Entity
         {
             Dragon target = GameState.dragonAt(new Point(positionX, positionY));
 
-            if (target != null) 
-            {
+            if (target != null) {
                 maze.placeSymbol(positionX, positionY, '*');
                 target.setHealth(0);
                 dart = null;

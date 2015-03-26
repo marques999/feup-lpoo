@@ -132,7 +132,7 @@ public class GUIInterface extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void mHelpAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mHelpAboutActionPerformed
-        GUIAbout guiAbout = new GUIAbout();
+        GUIAbout guiAbout = new GUIAbout(this);
         guiAbout.setVisible(true);
     }//GEN-LAST:event_mHelpAboutActionPerformed
 

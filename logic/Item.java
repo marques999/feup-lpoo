@@ -1,47 +1,43 @@
 package lpoo.logic;
 
-public abstract class Item 
-{
-	protected Point pos;
+public abstract class Item {
 
-	/**
-	 * @brief default constructor for class 'Item'
-	 * @param pos initial coordinates for item position
-	 */
-	protected Item(Point pos) 
-	{
-		this.pos = pos;
-	}
+    protected Point pos;
 
-	/**
-	 * @return
-	 * @brief returns the item's current position x coordinate
-	 */
-	public final int getX() 
-	{
-		return pos.x;
-	}
+    /**
+     * @param pos
+     * @brief alternative constructor with parameters for class 'Item'
+     */
+    protected Item(Point pos) {
+        this.pos = pos;
+    }
 
-	/**
-	 * @return
-	 * @brief returns the item's current position y coordinate
-	 */
-	public final int getY() 
-	{
-		return pos.y;
-	}
+    /**
+     * @return 
+     * @brief returns the item's current position x coordinate
+     */
+    public final int getX() {
+        return pos.x;
+    }
 
-	/**
-	 * @return returns the item's current position
-	 */
-	public final Point getPosition() 
-	{
-		return this.pos;
-	}
+    /**
+     * @return 
+     * @brief returns the item's current position y coordinate
+     */
+    public final int getY() {
+        return pos.y;
+    }
 
-	/**
-	 * @brief draws an item on the game board
-	 * @param maze
-	 */
-	protected abstract void draw(Maze maze);
+    /**
+     * @return returns the item's current position
+     */
+    public final Point getPosition() {
+        return this.pos;
+    }
+
+    /**
+     * @param maze
+     * @brief draws an item on the game board
+     */
+    protected abstract void draw(Maze maze);
 }
