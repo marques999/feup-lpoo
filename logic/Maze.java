@@ -1,81 +1,111 @@
 package lpoo.logic;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Maze {
+public class Maze implements Serializable
+{
+	private final int mazeWidth;
+	private final int mazeHeight;
+	private transient final Random mazeRandom;
+	private Point mazeExit;
+	private char[][] mazeMatrix;
 
-    private final Random m_rand;
-    private Point m_exit;
-    private final int m_size;
-    private char[][] m_matrix;
+	public Maze(int w, int h)
+	{
+		mazeMatrix = new char[h][w];
+		mazeRandom = new Random();
+		mazeWidth = w;
+		mazeHeight = h;
+	}
 
-    public Maze(int n) {
-        m_matrix = new char[n][n];
-        m_rand = new Random();
-        m_size = n;
-    }
-    
-    protected void setExitPosition(Point e) {
-        this.m_exit = e;
-    }
+	protected void setExitPosition(Point e)
+	{
+		mazeExit = e;
+	}
 
-    public char[][] getMatrix() {
-        return this.m_matrix;
-    }
+	public char[][] getMatrix()
+	{
+		return mazeMatrix;
+	}
 
-    public Point getExitPosition() {
-        return this.m_exit;
-    }
+	public void setMatrix(char[][] m)
+	{
+		mazeMatrix = m;
+	}
 
-    public int getSize() {
-        return this.m_size;
-    }
+	public Point getExitPosition()
+	{
+		return mazeExit;
+	}
 
-    protected void setMatrix(char[][] m_matrix) {
-        this.m_matrix = m_matrix;
-    }
+	public int getWidth()
+	{
+		return mazeWidth;
+	}
 
-    protected final boolean isWall(Point pos) {
-        return (pos.x == 0 || pos.x == m_size - 1 || pos.y == 0 || pos.y == m_size - 1);
-    }
+	public int getHeight()
+	{
+		return mazeHeight;
+	}
 
-    protected final void printMaze() {
-        for (int y = 0; y < m_size; y++) {
-            for (int x = 0; x < m_size; x++) {
-                System.out.print(m_matrix[y][x] + " ");
-            }
+	public final boolean isWall(int x, int y)
+	{
+		return x == 0 || x == mazeWidth - 1 || y == 0 || y == mazeHeight - 1;
+	}
 
-            System.out.println("");
-        }
-    }
+	public final boolean isCorner(int x, int y)
+	{
+		return (x == 0 && y == 0) || (x == 0 && y == mazeHeight - 1) || (x == mazeWidth - 1 && y == 0) || (x == mazeWidth - 1 && y == mazeHeight - 1);
+	}
 
-    public final char symbolAt(int x, int y) {
-        return m_matrix[y][x];
-    }
+	protected final void printMaze()
+	{
+		for (int y = 0; y < mazeHeight; y++)
+		{
+			for (int x = 0; x < mazeWidth; x++)
+			{
+				System.out.print(mazeMatrix[y][x] + " ");
+			}
 
-    protected void clearSymbol(int x, int y) {
-        if (x >= 0 && x < m_size && y >= 0 && y < m_size) {
-            m_matrix[y][x] = ' ';
-        }
-    }
+			System.out.println("");
+		}
+	}
 
-    protected void placeSymbol(int x, int y, char s) {
-        if (x >= 0 && x < m_size && y >= 0 && y < m_size) {
-            m_matrix[y][x] = s;
-        }
-    }
+	public final char symbolAt(int x, int y)
+	{
+		return mazeMatrix[y][x];
+	}
 
-    protected final Point placeEntity(char symbol) {
-        int initialX = 0;
-        int initialY = 0;
+	protected void clearSymbol(int x, int y)
+	{
+		if (x >= 0 && x < mazeWidth && y >= 0 && y < mazeHeight)
+		{
+			mazeMatrix[y][x] = ' ';
+		}
+	}
 
-        while (m_matrix[initialY][initialX] != ' ') {
-            initialX = 1 + m_rand.nextInt(m_size - 2);
-            initialY = 1 + m_rand.nextInt(m_size - 2);
-        }
+	public void placeSymbol(int x, int y, char s)
+	{
+		if (x >= 0 && x < mazeWidth && y >= 0 && y < mazeHeight)
+		{
+			mazeMatrix[y][x] = s;
+		}
+	}
 
-        placeSymbol(initialX, initialY, symbol);
+	protected final Point placeEntity(char symbol)
+	{
+		int initialX = 0;
+		int initialY = 0;
 
-        return new Point(initialX, initialY);
-    }
+		while (mazeMatrix[initialY][initialX] != ' ')
+		{
+			initialX = 1 + mazeRandom.nextInt(mazeWidth - 2);
+			initialY = 1 + mazeRandom.nextInt(mazeHeight - 2);
+		}
+
+		placeSymbol(initialX, initialY, symbol);
+
+		return new Point(initialX, initialY);
+	}
 }

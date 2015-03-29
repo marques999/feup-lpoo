@@ -1,18 +1,23 @@
 package lpoo.logic;
 
-public final class RandomMaze extends Maze 
+public final class RandomMaze extends Maze
 {
-    public RandomMaze(int n) 
-    {
-        super(n);
+	/**
+	 * @brief generates a random maze (w x h)
+	 * @param w number of columns
+	 * @param h number of rows
+	 */
+	public RandomMaze(int w, int h)
+	{
+		super(w, h);
 
-        MazeBuilder m_builder = new MazeBuilder();
+		final MazeBuilder m_builder = new MazeBuilder();
 
-        m_builder.setType(1);
-        m_builder.setSize(n);
-        m_builder.generateMaze();
+		m_builder.setType(1);
+		m_builder.setSize(h);
+		m_builder.generateMaze();
 
-        setExitPosition(m_builder.getExitPosition());
-        setMatrix(m_builder.getMatrix());
-    }
+		setExitPosition(m_builder.getExitPosition());
+		setMatrix(m_builder.getMatrix());
+	}
 }

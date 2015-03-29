@@ -1,109 +1,154 @@
 package lpoo.gui;
 
-import java.awt.event.KeyEvent;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.*;
+import javax.swing.*;
 import lpoo.logic.Direction;
 import lpoo.logic.GameState;
+import lpoo.logic.RandomMaze;
 
-public class GUIInterface extends javax.swing.JFrame 
-{
-    private int gDragonMovement;
-    private int gDifficulty;
-    
+public class GUIInterface extends JFrame 
+{    
     public GUIInterface() 
     {
-        gDragonMovement = -1;
-        gDifficulty = 1;
-        
-        GameState.setDifficulty(gDifficulty);
-        GameState.setDragonMovement(gDragonMovement);  
-
         initComponents();
+        initializeGame();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/FireDragon_icon.png")));
     }
 
-    @SuppressWarnings("unchecked")
+    private void initializeGame()
+    {
+        if (GUIGlobals.userDifficulty != -1)
+        {
+            GameState.setDifficulty(GUIGlobals.userDifficulty);
+        }
+        else
+        {
+            GameState.initialize(new RandomMaze(GUIGlobals.mazeWidth, GUIGlobals.mazeHeight));
+            GameState.initializeDragons(GUIGlobals.numberDragons);
+            GameState.initializeDarts(GUIGlobals.numberDragons + 1);
+        }
+        
+        GameState.setDragonMovement(GUIGlobals.dragonDifficulty);
+        
+        pnlPlayfield.initializeMaze(GameState.getMaze());
+        pnlPlayfield.setPreferredSize(pnlPlayfield.getWindowSize());
+        
+        checkState();
+        revalidate();
+        repaint();
+        pack();
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         lblStatus = new javax.swing.JLabel();
         pnlPlayfield = new lpoo.gui.AreaDesenho();
-        mMenu = new javax.swing.JMenuBar();
-        mGame = new javax.swing.JMenu();
-        mGameNew = new javax.swing.JMenuItem();
-        mGameRestart = new javax.swing.JMenuItem();
-        mGameSeparator1 = new javax.swing.JPopupMenu.Separator();
-        mGameLoad = new javax.swing.JMenuItem();
-        mGameSave = new javax.swing.JMenuItem();
-        mGameSeparator2 = new javax.swing.JPopupMenu.Separator();
-        mGameExit = new javax.swing.JMenuItem();
+        mbDefault = new javax.swing.JMenuBar();
+        mnGame = new javax.swing.JMenu();
+        btnNew = new javax.swing.JMenuItem();
+        btnLoadLevel = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        btnLoadState = new javax.swing.JMenuItem();
+        btnSaveState = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        btnExit = new javax.swing.JMenuItem();
+        mnOptions = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        mHelp = new javax.swing.JMenu();
-        mHelpAbout = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        btnControls = new javax.swing.JMenuItem();
+        btnPreferences = new javax.swing.JMenuItem();
+        mnHelp = new javax.swing.JMenu();
+        btnAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(620, 520));
-        setMinimumSize(new java.awt.Dimension(620, 520));
-        setPreferredSize(new java.awt.Dimension(620, 520));
+        setTitle("Maze Run");
         setResizable(false);
-        setSize(new java.awt.Dimension(620, 520));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
             }
         });
-        getContentPane().setLayout(new java.awt.BorderLayout(0, 6));
 
-        lblStatus.setText("jLabel2");
+        lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 13));
+        lblStatus.setText("jLabel1");
         getContentPane().add(lblStatus, java.awt.BorderLayout.PAGE_END);
+
+        pnlPlayfield.setPreferredSize(new java.awt.Dimension(640, 480));
         getContentPane().add(pnlPlayfield, java.awt.BorderLayout.CENTER);
 
-        mGame.setText("Game");
+        mnGame.setText("Game");
 
-        mGameNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        mGameNew.setMnemonic('n');
-        mGameNew.setText("New Game");
-        mGame.add(mGameNew);
-
-        mGameRestart.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        mGameRestart.setMnemonic('r');
-        mGameRestart.setText("Restart");
-        mGame.add(mGameRestart);
-        mGame.add(mGameSeparator1);
-
-        mGameLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        mGameLoad.setMnemonic('l');
-        mGameLoad.setText("Load...");
-        mGame.add(mGameLoad);
-
-        mGameSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        mGameSave.setText("Save Game");
-        mGameSave.addActionListener(new java.awt.event.ActionListener() {
+        btnNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        btnNew.setText("New Game");
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mGameSaveActionPerformed(evt);
+                btnNewActionPerformed(evt);
             }
         });
-        mGame.add(mGameSave);
-        mGame.add(mGameSeparator2);
+        mnGame.add(btnNew);
 
-        mGameExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
-        mGameExit.setMnemonic('e');
-        mGameExit.setText("Exit");
-        mGameExit.addActionListener(new java.awt.event.ActionListener() {
+        btnLoadLevel.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
+        btnLoadLevel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/world.png"))); // NOI18N
+        btnLoadLevel.setText("Load...");
+        btnLoadLevel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mGameExitActionPerformed(evt);
+                btnLoadLevelActionPerformed(evt);
             }
         });
-        mGame.add(mGameExit);
+        mnGame.add(btnLoadLevel);
+        mnGame.add(jSeparator2);
 
-        mMenu.add(mGame);
+        btnLoadState.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        btnLoadState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/folder.png"))); // NOI18N
+        btnLoadState.setText("Load State");
+        btnLoadState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadStateActionPerformed(evt);
+            }
+        });
+        mnGame.add(btnLoadState);
 
-        jMenu1.setText("Options");
+        btnSaveState.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        btnSaveState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/disk.png"))); // NOI18N
+        btnSaveState.setText("Save State");
+        btnSaveState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveStateActionPerformed(evt);
+            }
+        });
+        mnGame.add(btnSaveState);
+        mnGame.add(jSeparator1);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Preferences");
+        btnExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/door_open.png"))); // NOI18N
+        btnExit.setText("Exit");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
+        mnGame.add(btnExit);
+
+        mbDefault.add(mnGame);
+
+        mnOptions.setText("Options");
+
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/magnifier.png"))); // NOI18N
+        jMenu1.setText("Zoom");
+
+        jMenuItem1.setText("75%");
+        buttonGroup1.add(jMenuItem1);
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -111,129 +156,244 @@ public class GUIInterface extends javax.swing.JFrame
         });
         jMenu1.add(jMenuItem1);
 
-        mMenu.add(jMenu1);
-
-        mHelp.setText("Help");
-
-        mHelpAbout.setText("About...");
-        mHelpAbout.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem2.setText("100%");
+        buttonGroup1.add(jMenuItem2);
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mHelpAboutActionPerformed(evt);
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        mHelp.add(mHelpAbout);
+        jMenu1.add(jMenuItem2);
 
-        mMenu.add(mHelp);
+        jMenuItem3.setText("150%");
+        buttonGroup1.add(jMenuItem3);
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
 
-        setJMenuBar(mMenu);
+        jMenuItem4.setText("200%");
+        buttonGroup1.add(jMenuItem4);
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
 
-        setSize(new java.awt.Dimension(636, 685));
+        mnOptions.add(jMenu1);
+        mnOptions.add(jSeparator3);
+
+        btnControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/joystick.png"))); // NOI18N
+        btnControls.setText("Controls");
+        btnControls.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnControlsActionPerformed(evt);
+            }
+        });
+        mnOptions.add(btnControls);
+
+        btnPreferences.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/wrench.png"))); // NOI18N
+        btnPreferences.setText("Preferences");
+        btnPreferences.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreferencesActionPerformed(evt);
+            }
+        });
+        mnOptions.add(btnPreferences);
+
+        mbDefault.add(mnOptions);
+
+        mnHelp.setText("Help");
+
+        btnAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/help.png"))); // NOI18N
+        btnAbout.setText("About");
+        btnAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAboutActionPerformed(evt);
+            }
+        });
+        mnHelp.add(btnAbout);
+
+        mbDefault.add(mnHelp);
+
+        setJMenuBar(mbDefault);
+
+        pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mHelpAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mHelpAboutActionPerformed
+    private void btnPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreferencesActionPerformed
+        GUIOptions guiOptions = new GUIOptions(this);
+        guiOptions.setVisible(true);
+    }//GEN-LAST:event_btnPreferencesActionPerformed
+
+    private void btnControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnControlsActionPerformed
+        GUIControls guiControls = new GUIControls(this);
+        guiControls.setVisible(true);
+    }//GEN-LAST:event_btnControlsActionPerformed
+
+    private void btnAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutActionPerformed
         GUIAbout guiAbout = new GUIAbout(this);
         guiAbout.setVisible(true);
-    }//GEN-LAST:event_mHelpAboutActionPerformed
+    }//GEN-LAST:event_btnAboutActionPerformed
 
-    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-
-        boolean validKey = false;
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        int r = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit?", "Exit", JOptionPane.YES_NO_OPTION);
         
-        switch (evt.getKeyCode()) {
-            case KeyEvent.VK_W:
-                validKey = true;
-                GameState.update(Direction.UP);
-                break;
-            case KeyEvent.VK_S:
-                validKey = true;
-                GameState.update(Direction.DOWN);
-                break;
-            case KeyEvent.VK_A:
-                 validKey = true;
-                GameState.update(Direction.LEFT);
-                break;
-            case KeyEvent.VK_D:
-                validKey = true;                
-                GameState.update(Direction.RIGHT);
-                break;
-        }
-
-        if (!validKey)
+        if (r == JOptionPane.OK_OPTION)
         {
-            return;
+            System.exit(0);
         }
-        
+    }//GEN-LAST:event_btnExitActionPerformed
+
+    private void checkState()
+    {
         lblStatus.setText("OBJECTIVE: " + GameState.getObjective());
 
         if (GameState.gameOver()) 
         {
             if (GameState.playerWon()) 
             {
-                JOptionPane.showMessageDialog(null, "You were killed by the dragon :(", "Game Over", JOptionPane.PLAIN_MESSAGE);
+                lblStatus.setText("CONGRATULATIONS!");
+                JOptionPane.showMessageDialog(null, "Congratulations! You have reached the exit safe and sound :)", "Player Wins", JOptionPane.PLAIN_MESSAGE);
+                
             } 
             else 
             {
+                 lblStatus.setText("GAME OVER");
                 JOptionPane.showMessageDialog(null, "You were killed by the dragon :(", "Game Over", JOptionPane.PLAIN_MESSAGE);
+               
             }
         }
+    }
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        
+        if (GameState.gameOver())
+        {
+            return;
+        }
+        
+        boolean validKey = false;
+        int pressedKey = evt.getKeyCode();
+        
+        if (pressedKey == GUIGlobals.currentKeys[GUIGlobals.keyUp])
+        {
+            GameState.update(Direction.UP);
+            validKey = true; 
+        }
+        else if (pressedKey == GUIGlobals.currentKeys[GUIGlobals.keyDown])
+        {
+            GameState.update(Direction.DOWN);
+            validKey = true; 
+        }
+        else if (pressedKey == GUIGlobals.currentKeys[GUIGlobals.keyLeft])
+        {
+            GameState.update(Direction.LEFT);
+            validKey = true; 
+        }
+        else if (pressedKey == GUIGlobals.currentKeys[GUIGlobals.keyRight])
+        {
+            GameState.update(Direction.RIGHT);
+            validKey = true; 
+        }
 
-      pnlPlayfield.revalidate();
-      pnlPlayfield.repaint();
+       
+        if (validKey)
+        {
+            checkState();
+            pnlPlayfield.repaint();
+        }
     }//GEN-LAST:event_formKeyPressed
 
-    private void mGameSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mGameSaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mGameSaveActionPerformed
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        int r;
+        
+        if (GameState.gameOver())
+        {
+            r = JOptionPane.YES_OPTION;
+        }
+        else
+        {
+             r = JOptionPane.showConfirmDialog(this, "Do you want to start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
+        }
+      
+        if (r == JOptionPane.YES_OPTION)
+        {
+            initializeGame();
+            repaint();
+        }
+    }//GEN-LAST:event_btnNewActionPerformed
 
-    private void mGameExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mGameExitActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_mGameExitActionPerformed
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        getParent().setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
+
+    private void btnLoadStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadStateActionPerformed
+     
+    }//GEN-LAST:event_btnLoadStateActionPerformed
+
+    private void btnSaveStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveStateActionPerformed
+
+    }//GEN-LAST:event_btnSaveStateActionPerformed
+
+    private void btnLoadLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadLevelActionPerformed
+  
+    }//GEN-LAST:event_btnLoadLevelActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        GUINewGame newGame = new GUINewGame();
-        newGame.setVisible(true);
+        lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 10));
+        pnlPlayfield.scaleSprites(24, 24);
+        repaint();
+        pack();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    
-        public static void main(String args[]) 
-    {
-        try 
-        {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
-            {
-                if ("Nimbus".equals(info.getName())) 
-                {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } 
-        catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) 
-        {
-            java.util.logging.Logger.getLogger(GUINewGame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 15));
+        pnlPlayfield.scaleSprites(48, 48);
+        repaint();
+        pack();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-        java.awt.EventQueue.invokeLater(() -> {
-            new GUIInterface().setVisible(true);
-        });
-    }
-    
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 17));
+        pnlPlayfield.scaleSprites(64, 64);
+        repaint();
+        pack();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        pnlPlayfield.scaleSprites(32, 32);
+        lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 13));
+        repaint();
+        pack();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem btnAbout;
+    private javax.swing.JMenuItem btnControls;
+    private javax.swing.JMenuItem btnExit;
+    private javax.swing.JMenuItem btnLoadLevel;
+    private javax.swing.JMenuItem btnLoadState;
+    private javax.swing.JMenuItem btnNew;
+    private javax.swing.JMenuItem btnPreferences;
+    private javax.swing.JMenuItem btnSaveState;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JLabel lblStatus;
-    private javax.swing.JMenu mGame;
-    private javax.swing.JMenuItem mGameExit;
-    private javax.swing.JMenuItem mGameLoad;
-    private javax.swing.JMenuItem mGameNew;
-    private javax.swing.JMenuItem mGameRestart;
-    private javax.swing.JMenuItem mGameSave;
-    private javax.swing.JPopupMenu.Separator mGameSeparator1;
-    private javax.swing.JPopupMenu.Separator mGameSeparator2;
-    private javax.swing.JMenu mHelp;
-    private javax.swing.JMenuItem mHelpAbout;
-    private javax.swing.JMenuBar mMenu;
+    private javax.swing.JMenuBar mbDefault;
+    private javax.swing.JMenu mnGame;
+    private javax.swing.JMenu mnHelp;
+    private javax.swing.JMenu mnOptions;
     private lpoo.gui.AreaDesenho pnlPlayfield;
     // End of variables declaration//GEN-END:variables
 }

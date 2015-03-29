@@ -1,85 +1,208 @@
 package lpoo.gui;
 
 import java.awt.*;
+import java.io.*;
+import java.util.Arrays;
 import javax.swing.*;
-import lpoo.logic.GameState;
 import lpoo.logic.Maze;
+import lpoo.logic.RandomMaze;
 
-public final class AreaDesenho extends JPanel 
+public class AreaDesenho extends JPanel
 {
-	private ImageIcon s_hero;
-	private ImageIcon s_dragon;
-	private ImageIcon s_dart;
-	private ImageIcon s_shield;
+	private ImageIcon spriteHero;
+	private ImageIcon spriteDragon;
+	private ImageIcon spriteDoorOpened;
+	private ImageIcon spriteDoorClosed;
+	private ImageIcon spriteDart;
+	private ImageIcon spriteShield;
+	private ImageIcon spriteSword;
 
-	private Image s_hero_resized;
-	private Image s_dragon_resized;
-	private Image s_dart_resized;
-	private Image s_shield_resized;
+	private Image resizedHero;
+	private Image resizedDragon;
+	private Image resizedDart;
+	private Image resizedDoorOpened;
+	private Image resizedDoorClosed;
+	private Image resizedShield;
+	private Image resizedSword;
 
-	private Maze g_maze;
-	private int m_size;
-	private int g_size;
+	protected Maze maze;
+	protected int mazeWidth;
+	protected int mazeHeight;
+	protected int mazeCells;
+	protected int spriteWidth;
+	protected int spriteHeight;
 
-	public AreaDesenho() 
+	private Dimension windowSize;
+
+	public AreaDesenho()
 	{
-		this.g_maze = GameState.getMaze();
-		this.m_size = g_maze.getSize();
-		this.g_size = 640 / m_size;
+		this(11, 11);
+	}
 
+	protected AreaDesenho(int w, int h)
+	{
 		initializeSprites();
+                scaleSprites(32, 32);
+		initializeMaze(w, h);
 	}
 
-	private void initializeSprites() 
+	protected void setMaze(Maze m)
 	{
-		this.s_hero = new ImageIcon(getClass().getResource("/lpoo/res/unarmedhero.png"));
-		this.s_shield = new ImageIcon(getClass().getResource("/lpoo/res/shield-64x64.png"));
-		this.s_dart = new ImageIcon(getClass().getResource("/lpoo/res/dart-64x64.png"));
-		this.s_dragon = new ImageIcon(getClass().getResource("/lpoo/res/FireDragon_tiny.png"));
-		
-		this.s_hero_resized = s_hero.getImage().getScaledInstance(g_size, g_size, java.awt.Image.SCALE_SMOOTH);
-		this.s_dragon_resized = s_dragon.getImage().getScaledInstance(g_size, g_size, Image.SCALE_SMOOTH);
-		this.s_dart_resized = s_dart.getImage().getScaledInstance(g_size, g_size, Image.SCALE_SMOOTH);
-		this.s_shield_resized = s_shield.getImage().getScaledInstance(g_size, g_size, Image.SCALE_SMOOTH);
+		maze = m;
+	}
+        
+        protected Dimension getWindowSize()
+        {
+            return windowSize;
+        }
+
+	protected void initializeMaze(int w, int h)
+	{
+		mazeWidth = w;
+		mazeHeight = h;
+		mazeCells = mazeWidth * mazeHeight;
+		maze = new Maze(mazeWidth, mazeHeight);
+
+                updateWindow();
+	}
+        
+        protected void initializeMaze(Maze m)
+        {
+            maze = m;
+            mazeWidth = m.getWidth();
+            mazeHeight = m.getHeight();
+            mazeCells = mazeWidth * mazeHeight;
+            
+            updateWindow();
+        }
+        
+        private void updateWindow()
+        {
+            windowSize = new Dimension(mazeWidth * spriteWidth, mazeHeight * spriteHeight);
+             
+            setPreferredSize(windowSize);
+            revalidate();
+        }
+        
+	protected void generateMaze()
+	{
+            initializeMaze(new RandomMaze(mazeWidth, mazeHeight));
+            repaint();
 	}
 
-	public void paintComponent(Graphics g) 
+	protected void erase()
 	{
-		g.setColor(new Color(255, 255, 255));
-		g.fillRect(0, 0, 640, 640);
-		g.setColor(new Color(200, 100, 50));
+            char[][] newMatrix = new char[mazeHeight][mazeWidth];
+
+		for (char[] r : newMatrix)
+		{
+			Arrays.fill(r, ' ');
+		}
+
+		maze.setMatrix(newMatrix);
+		repaint();
+	}
+
+	private void initializeSprites()
+	{
+		spriteDart = new ImageIcon(getClass().getResource("/lpoo/res/dart-64x64.png"));
+		spriteDragon = new ImageIcon(getClass().getResource("/lpoo/res/dragon-64x64.png"));
+		spriteDoorOpened = new ImageIcon(getClass().getResource("/lpoo/res/door2-64x64.png"));
+		spriteDoorClosed = new ImageIcon(getClass().getResource("/lpoo/res/door1-64x64.png"));
+		spriteHero = new ImageIcon(getClass().getResource("/lpoo/res/unarmedhero.png"));
+		spriteShield = new ImageIcon(getClass().getResource("/lpoo/res/shield-64x64.png"));
+		spriteSword = new ImageIcon(getClass().getResource("/lpoo/res/sword-64x64.png"));
+	}
+        
+        protected void scaleSprites(int w, int h)
+        {
+            	spriteWidth = w;
+		spriteHeight = h;
+                
+                resizedDart = spriteDart.getImage().getScaledInstance(spriteWidth, spriteHeight, Image.SCALE_SMOOTH);
+		resizedDragon = spriteDragon.getImage().getScaledInstance(spriteWidth, spriteHeight, Image.SCALE_SMOOTH);
+		resizedDoorOpened = spriteDoorOpened.getImage().getScaledInstance(spriteWidth, spriteHeight, Image.SCALE_SMOOTH);
+		resizedDoorClosed = spriteDoorClosed.getImage().getScaledInstance(spriteWidth, spriteHeight, Image.SCALE_SMOOTH);
+		resizedHero = spriteHero.getImage().getScaledInstance(spriteWidth, spriteHeight, java.awt.Image.SCALE_SMOOTH);
+		resizedShield = spriteShield.getImage().getScaledInstance(spriteWidth, spriteHeight, Image.SCALE_SMOOTH);
+		resizedSword = spriteSword.getImage().getScaledInstance(spriteWidth, spriteHeight, Image.SCALE_SMOOTH);
+            
+                updateWindow();
+        }
+        
+        protected void readMaze(ObjectInputStream s) throws IOException, ClassNotFoundException
+        {
+                initializeMaze((Maze) s.readObject());
+        }
+        
+        protected void writeMaze(ObjectOutputStream s) throws IOException
+        {
+            s.writeObject(maze);
+        }
+        
+        protected void readState(ObjectInputStream s) throws IOException, ClassNotFoundException
+        {
+            readMaze(s);
+        }
+
+        protected void writeState(ObjectOutputStream s) throws IOException
+        {
+            writeMaze(s);
+        }
+        
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, getSize().width, getSize().height);
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, windowSize.width, windowSize.height);
 
 		int y = 0;
 
-		for (int i = 0; i < m_size; i++) 
+		for (int i = 0; i < mazeHeight; i++)
 		{
 			int x = 0;
 
-			for (int j = 0; j < m_size; j++) 
+			for (int j = 0; j < mazeWidth; j++)
 			{
-				switch (g_maze.symbolAt(j, i)) 
+				switch (maze.symbolAt(j, i))
 				{
-				case 'h': case 'a': case 'H': case 'A':
-					g.drawImage(s_hero_resized, x, y, null);
+				case 'h':
+				case 'a':
+				case 'H':
+				case 'A':
+					g.drawImage(resizedHero, x, y, null);
 					break;
-				case '*':
-					g.drawImage(s_dart_resized, x, y, null);
-					break;
-				case 'V':
-					g.drawImage(s_shield_resized, x, y, null);
-					break;
-				case 'D': case 'd':
-					g.drawImage(s_dragon_resized, x, y, null);
+				case 'D':
+				case 'd':
+					g.drawImage(resizedDragon, x, y, null);
 					break;
 				case 'X':
-					g.fillRect(x, y, g_size, g_size);
+					g.setColor(Color.CYAN);
+					g.fillRect(x, y, spriteWidth, spriteHeight);
+					break;
+				case 'S':
+					g.drawImage(resizedDoorClosed, x, y, null);
+					break;
+				case 's':
+					g.drawImage(resizedDoorOpened, x, y, null);
+					break;
+				case 'E':
+					g.drawImage(resizedSword, x, y, null);
+					break;
+				case '*':
+					g.drawImage(resizedDart, x, y, null);
+					break;
+				case 'V':
+					g.drawImage(resizedShield, x, y, null);
 					break;
 				}
 
-				x += g_size;
+				x += spriteWidth;
 			}
 
-			y += g_size;
+			y += spriteHeight;
 		}
 	}
 }

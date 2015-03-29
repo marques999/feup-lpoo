@@ -1,187 +1,90 @@
 package lpoo.gui;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.util.Stack;
 import javax.swing.*;
 import lpoo.logic.Point;
-import lpoo.logic.RandomMaze;
 
-public class AreaEdicao extends JPanel implements MouseListener, MouseMotionListener 
+public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotionListener
 {
-	private ImageIcon s_hero;
-	private ImageIcon s_dragon;
-	private ImageIcon s_dart;
-	private ImageIcon s_shield;
-	private ImageIcon s_sword;
-
-	private Image s_hero_resized;
-	private Image s_dragon_resized;
-	private Image s_dart_resized;
-	private Image s_shield_resized;
-	private Image s_sword_resized;
-
-	private char[][] m_maze;
-	private int m_width;
-	private int m_height;
-	private int s_width;
 	private char m_symbol;
-	private int m_cells;
-	private int s_height;
 
-	private Dimension w_size;
 	private Stack<LastAction> undoStack;
 	private Stack<LastAction> redoStack;
 
 	private int maxDragons;
-	protected int numDragons;
-	protected int numDarts;
-	protected int numShields;
-	protected int numSwords;
-	protected int numPlayers;
+	private int maxDarts;
+	private int maxDoors;
+	private int maxPlayers;
+	private int maxShields;
+	private int maxSwords;
 
-	public AreaEdicao() 
+	private int numDragons;
+	private int numDarts;
+	private int numDoors;
+	private int numPlayers;
+	private int numShields;
+	private int numSwords;
+
+	public AreaEdicao()
 	{
 		this(11, 11);
 	}
 
-	public AreaEdicao(int w, int h) 
+	public AreaEdicao(int w, int h)
 	{
-		m_width = w;
-		m_height = h;
+		super(w, h);
+
 		m_symbol = ' ';
 		undoStack = new Stack<>();
 		redoStack = new Stack<>();
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
-
-		initializeMaze();
 		initializeCounters();
-		initializeSprites();
-
-		this.maxDragons = m_cells / 60;
-
-		setSize(w_size);
+		resetCounters();
 		revalidate();
 		repaint();
 	}
 
-	private void initializeMaze() 
+	private void initializeCounters()
 	{
-		this.s_width = 32;
-		this.s_height = 32;
-		this.m_cells = m_width * m_height;
-		this.m_maze = new char[this.m_height][this.m_width];
-		this.w_size = new Dimension(m_width * s_width, m_height * s_height);
+		maxDragons = mazeCells / 60;
+		maxDarts = maxDragons + 1;
+		maxDoors = 1;
+		maxShields = 1;
+		maxSwords = 1;
+		maxPlayers = 1;
 	}
 
-	private void initializeCounters() 
+	private void resetCounters()
 	{
 		numDragons = 0;
 		numDarts = 0;
+		numDoors = 0;
 		numShields = 0;
 		numSwords = 0;
 		numPlayers = 0;
 	}
 
-	private void initializeSprites() 
+	private void updateCounters()
 	{
-		this.s_dart = new ImageIcon(getClass().getResource("/lpoo/res/dart-64x64.png"));
-		this.s_dragon = new ImageIcon(getClass().getResource("/lpoo/res/dragon-64x64.png"));
-		this.s_hero = new ImageIcon(getClass().getResource("/lpoo/res/unarmedhero.png"));
-		this.s_shield = new ImageIcon(getClass().getResource("/lpoo/res/shield-64x64.png"));
-		this.s_sword = new ImageIcon(getClass().getResource("/lpoo/res/sword-64x64.png"));
+		resetCounters();
 
-		this.s_dart_resized = s_dart.getImage().getScaledInstance(s_width, s_height, Image.SCALE_DEFAULT);
-		this.s_dragon_resized = s_dragon.getImage().getScaledInstance(s_width, s_height, Image.SCALE_DEFAULT);
-		this.s_hero_resized = s_hero.getImage().getScaledInstance(s_width, s_height, java.awt.Image.SCALE_DEFAULT);
-		this.s_shield_resized = s_shield.getImage().getScaledInstance(s_width, s_height, Image.SCALE_DEFAULT);
-		this.s_sword_resized = s_sword.getImage().getScaledInstance(s_width, s_height, Image.SCALE_DEFAULT);
-	}
-
-	protected void generateMaze() 
-	{
-		RandomMaze m = new RandomMaze(m_width);
-		m_maze = m.getMatrix();
-		repaint();
-	}
-
-	protected void setMazeSize(int w, int h) 
-	{
-		m_width = w;
-		m_height = h;
-
-		initializeMaze();
-	}
-
-	protected void erase() 
-	{
-		for (char[] r : m_maze) 
+		for (int i = 0; i < mazeHeight; i++)
 		{
-			Arrays.fill(r, ' ');
-		}
-
-		undoStack.clear();
-		redoStack.clear();
-		repaint();
-	}
-
-	protected void undo() 
-	{
-		if (!undoStack.empty()) 
-		{
-			LastAction la = undoStack.pop();
-			m_maze[la.position.y][la.position.x] = la.oldSymbol;
-			pushRedo(la.newSymbol, la.position.x, la.position.y);
-			repaint();
-		}
-	}
-
-	protected void redo() 
-	{
-		if (!redoStack.empty()) 
-		{
-			LastAction la = redoStack.pop();
-			placeSymbol(la.position.x, la.position.y, la.newSymbol);
-		}
-	}
-
-	private class LastAction 
-	{
-		protected Point position;
-		protected char oldSymbol;
-		protected char newSymbol;
-
-		LastAction(char oldSymbol, char newSymbol, Point position) 
-		{
-			this.oldSymbol = oldSymbol;
-			this.newSymbol = newSymbol;
-			this.position = position;
-		}
-	}
-
-	public void setSymbol(char s) 
-	{
-		this.m_symbol = s;
-	}
-
-	private void updateCounters() 
-	{
-		initializeCounters();
-
-		for (int i = 0; i < m_height; i++) 
-		{
-			for (int j = 0; j < m_width; j++) 
+			for (int j = 0; j < mazeWidth; j++)
 			{
-				switch (m_maze[i][j]) 
+				switch (maze.symbolAt(j, i))
 				{
-				case 'h': case 'H': case 'a': case 'A':
+				case 'H':
 					++numPlayers;
 					break;
-				case 'd': case 'D':
+				case 'D':
 					++numDragons;
+					break;
+				case 'S':
+					++numDoors;
 					break;
 				case 'V':
 					++numShields;
@@ -197,99 +100,210 @@ public class AreaEdicao extends JPanel implements MouseListener, MouseMotionList
 		}
 	}
 
-	private void placeHero(int x, int y) 
+	@Override
+	protected void initializeMaze(int w, int h)
 	{
-		if (numPlayers >= 1) 
+		super.initializeMaze(w, h);
+
+		initializeCounters();
+		resetCounters();
+	}
+
+	@Override
+	protected void erase()
+	{
+		super.erase();
+		undoStack.clear();
+		redoStack.clear();
+	}
+
+	protected void undo()
+	{
+		if (!undoStack.empty())
 		{
-			JOptionPane.showMessageDialog(getParent(), "Number of players must not be greater than 1!", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		else 
-		{
-			writeSymbol(x, y, 'h');
+			LastAction la = undoStack.pop();
+			maze.placeSymbol(la.position.y, la.position.x, la.oldSymbol);
+			pushRedo(la.newSymbol, la.position.x, la.position.y);
+			repaint();
 		}
 	}
 
-	private void placeDragon(int x, int y) 
+	protected void redo()
 	{
-		if (numDragons >= maxDragons) 
+		if (!redoStack.empty())
+		{
+			LastAction la = redoStack.pop();
+			placeSymbol(la.position.x, la.position.y, la.newSymbol);
+			repaint();
+		}
+	}
+
+	private class LastAction
+	{
+		protected Point position;
+		protected char oldSymbol;
+		protected char newSymbol;
+
+		LastAction(char oldSymbol, char newSymbol, Point position)
+		{
+			this.oldSymbol = oldSymbol;
+			this.newSymbol = newSymbol;
+			this.position = position;
+		}
+	}
+
+	public void setSymbol(char s)
+	{
+		this.m_symbol = s;
+	}
+
+	private void placeDart(int x, int y)
+	{
+		if (numDarts < maxDarts)
+		{
+			if (maze.isWall(x, y))
+			{
+				JOptionPane.showMessageDialog(getParent(), "Darts must not be placed on maze borders!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				writeSymbol(x, y, '*');
+			}
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(getParent(), "Number of darts must not be greater than " + maxDarts + "!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void placeDoor(int x, int y)
+	{
+		if (numDoors < maxDoors)
+		{
+			if (maze.isWall(x, y))
+			{
+				if (maze.isCorner(x, y))
+				{
+					JOptionPane.showMessageDialog(getParent(), "Doors must not be placed in corners!", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					writeSymbol(x, y, 'S');
+				}
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(getParent(), "Doors must be placed on maze borders!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(getParent(), "Number of doors must not be greater than 1.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void placeDragon(int x, int y)
+	{
+		if (numDragons < maxDragons)
+		{
+			if (maze.isWall(x, y))
+			{
+				JOptionPane.showMessageDialog(getParent(), "Dragons must not be placed on maze borders!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				writeSymbol(x, y, 'D');
+			}
+		}
+		else
 		{
 			JOptionPane.showMessageDialog(getParent(), "Number of dragons must not be greater than " + maxDragons + "!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		else 
+	}
+
+	private void placeHero(int x, int y)
+	{
+		if (numPlayers >= maxPlayers)
 		{
-			writeSymbol(x, y, 'D');
+			JOptionPane.showMessageDialog(getParent(), "Number of players must not be greater than 1!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		else
+		{
+			writeSymbol(x, y, 'H');
 		}
 	}
 
-	private void placeSword(int x, int y) 
+	private void placeSword(int x, int y)
 	{
-		if (numSwords >= 1) 
+		if (numSwords < maxSwords)
 		{
-			JOptionPane.showMessageDialog(getParent(), "Number of swords must not be greater than 1!", "Error",	JOptionPane.ERROR_MESSAGE);
-		} 
-		else 
+			if (maze.isWall(x, y))
+			{
+				JOptionPane.showMessageDialog(getParent(), "Swords must not be placed on maze borders!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				writeSymbol(x, y, 'E');
+			}
+		}
+		else
 		{
-			writeSymbol(x, y, 'E');
+			JOptionPane.showMessageDialog(getParent(), "Number of swords must not be greater than 1!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
-	private void placeShield(int x, int y) 
+	private void placeShield(int x, int y)
 	{
-		if (numShields >= 1) 
+		if (numShields < maxShields)
+		{
+			if (maze.isWall(x, y))
+			{
+				JOptionPane.showMessageDialog(getParent(), "Shields must not be placed on maze borders!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				writeSymbol(x, y, 'V');
+			}
+		}
+		else
 		{
 			JOptionPane.showMessageDialog(getParent(), "Number of shields must not be greater than 1!", "Error", JOptionPane.ERROR_MESSAGE);
-		} 
-		else 
-		{
-			writeSymbol(x, y, 'V');
 		}
 	}
 
-	private void placeDart(int x, int y) 
-	{
-		if (numDarts >= maxDragons) 
-		{
-			JOptionPane.showMessageDialog(getParent(), "Number of darts must not be greater than " + maxDragons + "!", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		else 
-		{
-			writeSymbol(x, y, '*');
-		}
-	}
-
-	private void placeWall(int x, int y) 
+	private void placeWall(int x, int y)
 	{
 		writeSymbol(x, y, 'X');
 	}
 
-	private void placeBlank(int x, int y) 
+	private void placeBlank(int x, int y)
 	{
 		writeSymbol(x, y, ' ');
 	}
 
-	private void writeSymbol(int x, int y, char s) 
+	private void writeSymbol(int x, int y, char s)
 	{
-		undoStack.add(new LastAction(m_maze[y][x], s, new Point(x, y)));
-		m_maze[y][x] = s;
+		undoStack.add(new LastAction(maze.symbolAt(x, y), s, new Point(x, y)));
+		maze.placeSymbol(x, y, s);
 	}
 
-	protected void placeSymbol(int x, int y, char s) 
+	protected void placeSymbol(int x, int y, char s)
 	{
-		if (x < 0 || x >= m_width || y < 0 || y >= m_height) 
+		if (x < 0 || x >= mazeWidth || y < 0 || y >= mazeHeight)
 		{
 			return;
 		}
 
-		if (m_maze[y][x] == s) 
+		if (maze.symbolAt(x, y) == s)
 		{
 			return;
 		}
 
 		updateCounters();
 
-		switch (s) 
+		switch (s)
 		{
-		case 'h':
+		case 'H':
 			placeHero(x, y);
 			break;
 		case 'D':
@@ -301,6 +315,9 @@ public class AreaEdicao extends JPanel implements MouseListener, MouseMotionList
 		case ' ':
 			placeBlank(x, y);
 			break;
+		case 'S':
+			placeDoor(x, y);
+			break;
 		case 'E':
 			placeSword(x, y);
 			break;
@@ -311,16 +328,14 @@ public class AreaEdicao extends JPanel implements MouseListener, MouseMotionList
 			placeDart(x, y);
 			break;
 		}
-
-		repaint();
 	}
 
-	public int[] getValues() 
+	public int[] getValues()
 	{
 		int[] values = new int[8];
 
-		values[0] = m_width;
-		values[1] = m_height;
+		values[0] = mazeWidth;
+		values[1] = mazeHeight;
 		values[2] = numPlayers;
 		values[3] = numDragons;
 		values[4] = numSwords;
@@ -330,101 +345,94 @@ public class AreaEdicao extends JPanel implements MouseListener, MouseMotionList
 		return values;
 	}
 
-	public void pushRedo(char newSymbol, int x, int y) 
+	protected boolean validateMaze()
 	{
-		redoStack.push(new LastAction(m_maze[y][x], newSymbol, new Point(x, y)));
-	}
+		updateCounters();
 
-	@Override
-	public void paintComponent(Graphics g) 
-	{
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(0, 0, getSize().width, getSize().height);
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, w_size.width, w_size.height);
-
-		int y = 0;
-
-		for (int i = 0; i < m_height; i++) 
+		if (numPlayers < 1)
 		{
-			int x = 0;
-
-			for (int j = 0; j < m_width; j++) 
-			{
-				switch (m_maze[i][j]) 
-				{
-				case 'h': case 'a': case 'H': case 'A':
-					g.drawImage(s_hero_resized, x, y, null);
-					break;
-				case 'D': case 'd':
-					g.drawImage(s_dragon_resized, x, y, null);
-					break;
-				case 'X':
-					g.setColor(Color.CYAN);
-					g.fillRect(x, y, s_width, s_height);
-					break;
-				case 'E':
-					g.drawImage(s_sword_resized, x, y, null);
-					break;
-				case '*':
-					g.drawImage(s_dart_resized, x, y, null);
-					break;
-				case 'V':
-					g.drawImage(s_shield_resized, x, y, null);
-					break;
-				}
-
-				x += s_width;
-			}
-
-			y += s_height;
+			JOptionPane.showMessageDialog(getParent(), "You must place the player first!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+		else if (numDoors < 1)
+		{
+			JOptionPane.showMessageDialog(getParent(), "You must place the exit first!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		else if (numDragons < 1)
+		{
+			JOptionPane.showMessageDialog(getParent(), "You must place at least one dragon.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		else if (numShields < 1)
+		{
+			JOptionPane.showMessageDialog(getParent(), "You must place the shield first!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		else if (numSwords < 1 || numDarts < numDragons)
+		{
+			JOptionPane.showMessageDialog(getParent(), "You must place at least one weapon (sword or darts)!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(getParent(), "Maze successfully validated.", "Information", JOptionPane.OK_OPTION);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public void pushRedo(char newSymbol, int x, int y)
+	{
+		redoStack.push(new LastAction(maze.symbolAt(x, y), newSymbol, new Point(x, y)));
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent me) 
+	public void mouseClicked(MouseEvent me)
 	{
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent me) 
+	public void mouseDragged(MouseEvent me)
 	{
-		placeSymbol(me.getX() / s_width, me.getY() / s_height, m_symbol);
+		placeSymbol(me.getX() / spriteWidth, me.getY() / spriteHeight, m_symbol);
 
-		if (!redoStack.empty()) 
+		if (!redoStack.empty())
 		{
 			redoStack.clear();
 		}
+
+		repaint();
 	}
 
 	@Override
-	public void mousePressed(MouseEvent me) 
+	public void mousePressed(MouseEvent me)
 	{
-		placeSymbol(me.getX() / s_width, me.getY() / s_height, m_symbol);
+		placeSymbol(me.getX() / spriteWidth, me.getY() / spriteHeight, m_symbol);
 
-		if (!redoStack.empty()) 
+		if (!redoStack.empty())
 		{
 			redoStack.clear();
 		}
+
+		repaint();
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent me) 
+	public void mouseReleased(MouseEvent me)
+	{
+		repaint();
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent me)
 	{
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent me) 
+	public void mouseEntered(MouseEvent me)
 	{
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent me) 
-	{
-	}
-
-	@Override
-	public void mouseExited(MouseEvent me) 
+	public void mouseExited(MouseEvent me)
 	{
 	}
 }

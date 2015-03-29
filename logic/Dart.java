@@ -1,29 +1,32 @@
 package lpoo.logic;
 
-public final class Dart extends Item 
+public final class Dart extends Item
 {
-    /**
-     * @brief default constructor for class 'Shield'
-     * @param pos initial dart position
-     */
-    protected Dart(Point pos) 
-    {
-        super(pos);
-    }
+	private static final long serialVersionUID = 2572702298191276648L;
 
-    /**
-     * @brief draws a dart at its corresponding position on the game board
-     */
-    @Override
-    protected void draw(Maze maze) 
-    {
-        if (maze.symbolAt(pos.x, pos.y) == 'D' || maze.symbolAt(pos.x, pos.y) == 'd') 
-        {
-            maze.placeSymbol(pos.x, pos.y, 'F');
-        }
-        else 
-        {
-            maze.placeSymbol(pos.x, pos.y, '*');
-        }
-    }
+	/**
+	 * @brief default constructor for class 'Dart'
+	 * @param pos initial coordinates for Dart's position
+	 */
+	protected Dart(Point pos)
+	{
+		super(pos);
+	}
+
+	/**
+	 * @brief draws the Dart at its corresponding position
+	 * @param maze an instance of 'Maze' class
+	 */
+	@Override
+	protected final void draw(Maze maze)
+	{
+		if (maze.symbolAt(pos.x, pos.y) == 'D' || maze.symbolAt(pos.x, pos.y) == 'd')
+		{
+			maze.placeSymbol(pos.x, pos.y, 'F');
+		}
+		else
+		{
+			maze.placeSymbol(pos.x, pos.y, '*');
+		}
+	}
 }

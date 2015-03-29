@@ -1,43 +1,69 @@
 package lpoo.logic;
 
-public abstract class Item {
+import java.io.*;
 
-    protected Point pos;
+public abstract class Item implements Serializable
+{
+	private static final long serialVersionUID = -6596044906701645940L;
+	protected Point pos;
 
-    /**
-     * @param pos
-     * @brief alternative constructor with parameters for class 'Item'
-     */
-    protected Item(Point pos) {
-        this.pos = pos;
-    }
+	/**
+	 * @brief default constructor for 'Item' class
+	 * @param pos initial coordinates for Item's position
+	 */
+	protected Item(Point pos)
+	{
+		this.pos = pos;
+	}
 
-    /**
-     * @return 
-     * @brief returns the item's current position x coordinate
-     */
-    public final int getX() {
-        return pos.x;
-    }
+	/**
+	 * @return returns the Item's current position x coordinate
+	 */
+	public final int getX()
+	{
+		return pos.x;
+	}
 
-    /**
-     * @return 
-     * @brief returns the item's current position y coordinate
-     */
-    public final int getY() {
-        return pos.y;
-    }
+	/**
+	 * @return returns the Item's current position y coordinate
+	 */
+	public final int getY()
+	{
+		return pos.y;
+	}
 
-    /**
-     * @return returns the item's current position
-     */
-    public final Point getPosition() {
-        return this.pos;
-    }
+	/**
+	 * @return returns the Item's current position
+	 */
+	public final Point getPosition()
+	{
+		return pos;
+	}
 
-    /**
-     * @param maze
-     * @brief draws an item on the game board
-     */
-    protected abstract void draw(Maze maze);
+	/**
+	 * @brief reads Item's state from stream
+	 * @param aInputStream file/object input stream to read from
+	 * @throws IOException if stream not found or invalid
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(ObjectInputStream aInputStream) throws IOException, ClassNotFoundException
+	{
+		pos = (Point) aInputStream.readObject();
+	}
+
+	/**
+	 * @brief writes current Item's state to a stream
+	 * @param aOutputStream file/object output stream to write to
+	 * @throws IOException if stream not found or invalid
+	 */
+	private void writeObject(ObjectOutputStream aOutputStream) throws IOException
+	{
+		aOutputStream.writeObject(pos);
+	}
+
+	/**
+	 * @brief draws Item at its corresponding position
+	 * @param maze an instance of 'Maze' class
+	 */
+	protected abstract void draw(Maze maze);
 }

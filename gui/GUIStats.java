@@ -5,13 +5,13 @@ import javax.swing.*;
 
 public class GUIStats extends JDialog 
 {
-    private final int[] values;
+    private final int[] arrayValues;
     
-    public GUIStats(Frame parent, int[] values) 
+    public GUIStats(Frame p, int[] v) 
     {
-        super(parent, true);
-        this.values = values;
+        super(p, true);
         
+        arrayValues = v;  
         initComponents();
     }
 
@@ -190,13 +190,13 @@ public class GUIStats extends JDialog
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        lblNumWidth.setText(Integer.toString(values[0]));
-        lblNumHeight.setText(Integer.toString(values[1]));
-        lblNumPlayers.setText(Integer.toString(values[2]));
-        lblNumDragons.setText(Integer.toString(values[3]));
-        lblNumSwords.setText(Integer.toString(values[4]));
-        lblNumDarts.setText(Integer.toString(values[5]));
-        lblNumShields.setText(Integer.toString(values[6]));
+        lblNumWidth.setText(Integer.toString(arrayValues[0]));
+        lblNumHeight.setText(Integer.toString(arrayValues[1]));
+        lblNumPlayers.setText(Integer.toString(arrayValues[2]));
+        lblNumDragons.setText(Integer.toString(arrayValues[3]));
+        lblNumSwords.setText(Integer.toString(arrayValues[4]));
+        lblNumDarts.setText(Integer.toString(arrayValues[5]));
+        lblNumShields.setText(Integer.toString(arrayValues[6]));
     }//GEN-LAST:event_formComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

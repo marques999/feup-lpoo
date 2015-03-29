@@ -4,16 +4,18 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class GUIAbout extends JDialog 
+public class GUIAbout extends JDialog
 {
-	public GUIAbout(Frame parent) 
+	private static final long serialVersionUID = -2510033787356166251L;
+
+	public GUIAbout(Frame parent)
 	{
 		super(parent, true);
 
 		initComponents();
 	}
 
-	private void initComponents() 
+	private void initComponents()
 	{
 		GridBagConstraints gridBagConstraints;
 
@@ -50,7 +52,7 @@ public class GUIAbout extends JDialog
 		lblTitle.setFont(lblTitle.getFont().deriveFont(lblTitle.getFont().getStyle() | Font.BOLD, lblTitle.getFont().getSize() + 3));
 		lblTitle.setText("Maze Run");
 		pnlText.add(lblTitle, new GridBagConstraints());
-		lblVersion.setText("Version 0.05b2");
+		lblVersion.setText("Version 0.20b3");
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -119,7 +121,7 @@ public class GUIAbout extends JDialog
 		setLocationRelativeTo(getParent());
 	}
 
-	private void btnOKActionPerformed(ActionEvent evt) 
+	private void btnOKActionPerformed(ActionEvent evt)
 	{
 		setVisible(false);
 		dispose();
