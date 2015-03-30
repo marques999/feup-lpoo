@@ -4,7 +4,7 @@ public final class Dragon extends Entity
 {
 	private static final long serialVersionUID = -5875613832655200186L;
 	private boolean sleeping;
-        
+
 	/**
 	 * @brief default constructor for class 'Dragon'
 	 * @param pos initial coordinates for Dragon's position
@@ -15,6 +15,7 @@ public final class Dragon extends Entity
 
 		sleeping = false;
 	}
+
 	/**
 	 * @brief constructor with parameters for class 'Dragon'
 	 * @param x initial X coordinate for dragon position
@@ -142,11 +143,11 @@ public final class Dragon extends Entity
 
 	protected final boolean canAttackFire(Maze maze, Hero player)
 	{
-                if (!isActive() || player.getHealth() <= 0 || player.hasShield())
+		if (!isActive() || player.getHealth() <= 0 || player.hasShield())
 		{
 			return false;
 		}
-                
+
 		if (canAttack(player))
 		{
 			return false;
@@ -187,7 +188,7 @@ public final class Dragon extends Entity
 	{
 		if (canAttack(player))
 		{
-			maze.clearSymbol(player.getX(), player.getY());
+			maze.placeSymbol(player.getX(), player.getY(), 'x');
 			player.setHealth(0);
 		}
 	}
@@ -217,6 +218,10 @@ public final class Dragon extends Entity
 			{
 				maze.placeSymbol(pos.x, pos.y, 'D');
 			}
+		}
+		else
+		{
+			maze.placeSymbol(pos.x, pos.y, 'x');
 		}
 	}
 }

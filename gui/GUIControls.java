@@ -171,7 +171,7 @@ public class GUIControls extends JDialog
 		jPanel2.add(btnCancel);
 
 		getContentPane().add(jPanel2, BorderLayout.PAGE_END);
-                setResizable(false);
+		setResizable(false);
 		setSize(new Dimension(244, 257));
 		setLocationRelativeTo(getParent());
 	}
@@ -237,7 +237,7 @@ public class GUIControls extends JDialog
 	private void btnApplyActionPerformed(ActionEvent evt)
 	{
 		GUIGlobals.currentKeys = defaultKeys;
-                setVisible(false);
+		setVisible(false);
 		dispose();
 	}
 
@@ -258,7 +258,7 @@ public class GUIControls extends JDialog
 	}
 
 	private int[] defaultKeys = GUIGlobals.currentKeys.clone();
-	
+
 	private JButton btnAction;
 	private JButton btnApply;
 	private JButton btnCancel;

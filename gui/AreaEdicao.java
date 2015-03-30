@@ -303,7 +303,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 
 		switch (s)
 		{
-		case 'H':
+		case 'h':
 			placeHero(x, y);
 			break;
 		case 'D':

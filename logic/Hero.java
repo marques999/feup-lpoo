@@ -9,8 +9,8 @@ public final class Hero extends Entity
 	private Item shield = null;
 
 	/**
-	 * @param pos
 	 * @brief default constructor for class 'Hero'
+	 * @param pos initial coordinates for Player's position
 	 */
 	protected Hero(Point pos)
 	{
@@ -145,7 +145,7 @@ public final class Hero extends Entity
 
 		if (itemPicked != null)
 		{
-			if (itemPicked instanceof Sword) // SWORD
+			if (itemPicked instanceof Sword)
 			{
 				if (!hasSword())
 				{
@@ -153,7 +153,7 @@ public final class Hero extends Entity
 					sword = itemPicked;
 				}
 			}
-			else if (itemPicked instanceof Shield) // SHIELD
+			else if (itemPicked instanceof Shield)
 			{
 				if (!hasShield())
 				{
@@ -224,11 +224,6 @@ public final class Hero extends Entity
 			return false;
 		}
 
-		if (pos.equals(dragon.getPosition()))
-		{
-			return true;
-		}
-
 		final Point dpos = dragon.getPosition();
 
 		if (pos.x <= dpos.x + 1 && pos.x >= dpos.x - 1 && pos.y == dpos.y)
@@ -243,7 +238,7 @@ public final class Hero extends Entity
 	{
 		if (canAttack(dragon))
 		{
-			maze.clearSymbol(dragon.getX(), dragon.getY());
+			maze.placeSymbol(dragon.getX(), dragon.getY(), 'x');
 			dragon.setHealth(0);
 		}
 	}

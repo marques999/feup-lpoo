@@ -7,14 +7,14 @@ public class Maze implements Serializable
 {
 	private final int mazeWidth;
 	private final int mazeHeight;
-	private transient final Random mazeRandom;
+	private final Random mazeRandom;
 	private Point mazeExit;
 	private char[][] mazeMatrix;
 
 	public Maze(int w, int h)
 	{
 		mazeMatrix = new char[h][w];
-		mazeRandom = new Random();
+                mazeRandom = new Random();
 		mazeWidth = w;
 		mazeHeight = h;
 	}
@@ -92,6 +92,23 @@ public class Maze implements Serializable
 			mazeMatrix[y][x] = s;
 		}
 	}
+        
+        protected Point findSymbol(char s)
+        {
+            for (int y = 0; y < mazeHeight; y++)
+            {
+                for (int x = 0; x < mazeWidth; x++)
+                {
+                    if (mazeMatrix[y][x] == s)
+                    {
+                        clearSymbol(x, y);
+                        return new Point(x, y);
+                    }
+                }
+            }
+            
+            return null;
+        }
 
 	protected final Point placeEntity(char symbol)
 	{

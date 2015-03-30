@@ -54,8 +54,8 @@ public class GUIMain extends JFrame
 		}
 
 		EventQueue.invokeLater(() -> {
-            new GUIMain().setVisible(true);
-        });
+			new GUIMain().setVisible(true);
+		});
 	}
 
 	private JButton jButton1;

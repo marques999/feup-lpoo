@@ -88,5 +88,6 @@ public abstract class Entity implements Serializable
 	 * @param maze
 	 */
 	protected abstract void draw(Maze maze);
+
 	protected abstract void move(Maze maze, Direction direction);
 }

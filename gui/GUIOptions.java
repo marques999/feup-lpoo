@@ -2,22 +2,22 @@ package lpoo.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 
 public class GUIOptions extends JDialog
 {
 	private int userDifficulty = 1;
 	private int numberDragons = 1;
 	private int dragonMovement = 2;
-        
-        private final ImageIcon spriteHero;
-        private final ImageIcon spriteDragon;
+
+	private final ImageIcon spriteHero;
+	private final ImageIcon spriteDragon;
 
 	public GUIOptions(Frame parent)
 	{
 		super(parent, true);
-                spriteDragon = new ImageIcon(getClass().getResource("/lpoo/res/dragon-64x64.png"));
-                spriteHero = new ImageIcon(getClass().getResource("/lpoo/res/Knight-concept-art.png"));
+		spriteDragon = new ImageIcon(getClass().getResource("/lpoo/res/dragon-64x64.png"));
+		spriteHero = new ImageIcon(getClass().getResource("/lpoo/res/Knight-concept-art.png"));
 		initComponents();
 		setLocationRelativeTo(getParent());
 		loadDefaults();
@@ -192,7 +192,7 @@ public class GUIOptions extends JDialog
 
 		pnlCustom.add(rbGameCustom, gridBagConstraints);
 		lblX.setText("x");
-                
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridy = 0;
@@ -270,13 +270,14 @@ public class GUIOptions extends JDialog
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 
 		pnlSelect.add(cmbNumber, gridBagConstraints);
-		cmbDifficulty.setModel(new DefaultComboBoxModel(new String[] { "Beginner (static, random sleep)", "Easy (static, doesn't sleep)", "Medium (random, random sleep)", "Hard (random, doesn't sleep)" }));
+		cmbDifficulty.setModel(new DefaultComboBoxModel(new String[] { "Beginner (static, random sleep)", "Easy (static, doesn't sleep)",
+				"Medium (random, random sleep)", "Hard (random, doesn't sleep)" }));
 		cmbDifficulty.addActionListener(this::cmbDifficultyActionPerformed);
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 6;
-                gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 
 		pnlSelect.add(cmbDifficulty, gridBagConstraints);
 

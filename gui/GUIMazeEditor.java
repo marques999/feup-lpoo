@@ -1,24 +1,30 @@
 package lpoo.gui;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
+import lpoo.logic.Maze;
 
-public class GUIMazeEditor extends javax.swing.JFrame 
-{
+public class GUIMazeEditor extends javax.swing.JFrame {
+
     private char btnSymbol;
+    private File buffer;
 
-    private final JFileChooser fin = new JFileChooser();
-    private final JFileChooser fout = new JFileChooser();
-
-    public GUIMazeEditor() 
-    {
+    public GUIMazeEditor() {
         initComponents();
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/editor-128x128.png")));
         btnSymbol = ' ';
     }
 
-    public void setMazeSize(int w, int h) 
-    {
+    public void setMazeSize(int w, int h) {
         areaEdicao1 = new AreaEdicao(w, h);
         areaEdicao1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         areaEdicao1.setMinimumSize(new java.awt.Dimension(64, 64));
@@ -33,12 +39,12 @@ public class GUIMazeEditor extends javax.swing.JFrame
         javax.swing.GroupLayout areaEdicao1Layout = new javax.swing.GroupLayout(areaEdicao1);
         areaEdicao1.setLayout(areaEdicao1Layout);
         areaEdicao1Layout.setHorizontalGroup(
-            areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 717, Short.MAX_VALUE)
+                areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 717, Short.MAX_VALUE)
         );
         areaEdicao1Layout.setVerticalGroup(
-            areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 561, Short.MAX_VALUE)
+                areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 561, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(areaEdicao1);
@@ -48,6 +54,7 @@ public class GUIMazeEditor extends javax.swing.JFrame
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         tbDefault = new javax.swing.JToolBar();
@@ -62,6 +69,27 @@ public class GUIMazeEditor extends javax.swing.JFrame
         btnErase = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         areaEdicao1 = new lpoo.gui.AreaEdicao();
+        jPanel1 = new javax.swing.JPanel();
+        lblDifficulty = new javax.swing.JLabel();
+        lblWidth = new javax.swing.JLabel();
+        lblPlayers = new javax.swing.JLabel();
+        lblNumPlayers = new javax.swing.JLabel();
+        lblNumWidth = new javax.swing.JLabel();
+        lblDimensions = new javax.swing.JLabel();
+        lblHeight = new javax.swing.JLabel();
+        lblDragons = new javax.swing.JLabel();
+        lblDarts = new javax.swing.JLabel();
+        lblNumDragons = new javax.swing.JLabel();
+        lblNumSwords = new javax.swing.JLabel();
+        lblNumHeight = new javax.swing.JLabel();
+        lblDifficultyText = new javax.swing.JLabel();
+        lblNumDarts = new javax.swing.JLabel();
+        lblNumShields = new javax.swing.JLabel();
+        lblSwords = new javax.swing.JLabel();
+        lblEntities = new javax.swing.JLabel();
+        lblShields = new javax.swing.JLabel();
+        lblSwords1 = new javax.swing.JLabel();
+        lblNumShields1 = new javax.swing.JLabel();
         mbDefault = new javax.swing.JMenuBar();
         mnFile = new javax.swing.JMenu();
         btnNew = new javax.swing.JMenuItem();
@@ -80,12 +108,10 @@ public class GUIMazeEditor extends javax.swing.JFrame
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         btnValidate = new javax.swing.JMenuItem();
         mnHelp = new javax.swing.JMenu();
-        btnStats = new javax.swing.JMenuItem();
-        jSeparator5 = new javax.swing.JPopupMenu.Separator();
         btnAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Maze Editor");
+        setTitle("Maze Editor - Untitled");
 
         tbDefault.setRollover(true);
 
@@ -218,16 +244,185 @@ public class GUIMazeEditor extends javax.swing.JFrame
         areaEdicao1.setLayout(areaEdicao1Layout);
         areaEdicao1Layout.setHorizontalGroup(
             areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 717, Short.MAX_VALUE)
+            .addGap(0, 638, Short.MAX_VALUE)
         );
         areaEdicao1Layout.setVerticalGroup(
             areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 561, Short.MAX_VALUE)
+            .addGap(0, 544, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(areaEdicao1);
 
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        lblDifficulty.setFont(lblDifficulty.getFont().deriveFont(lblDifficulty.getFont().getStyle() | java.awt.Font.BOLD));
+        lblDifficulty.setText("Difficulty");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 0);
+        jPanel1.add(lblDifficulty, gridBagConstraints);
+
+        lblWidth.setText("Width");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
+        jPanel1.add(lblWidth, gridBagConstraints);
+
+        lblPlayers.setText("Players");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
+        jPanel1.add(lblPlayers, gridBagConstraints);
+
+        lblNumPlayers.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
+        jPanel1.add(lblNumPlayers, gridBagConstraints);
+
+        lblNumWidth.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
+        jPanel1.add(lblNumWidth, gridBagConstraints);
+
+        lblDimensions.setFont(lblDimensions.getFont().deriveFont(lblDimensions.getFont().getStyle() | java.awt.Font.BOLD));
+        lblDimensions.setText("Dimensions");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 10, 32);
+        jPanel1.add(lblDimensions, gridBagConstraints);
+
+        lblHeight.setText("Height");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
+        jPanel1.add(lblHeight, gridBagConstraints);
+
+        lblDragons.setText("Dragons");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
+        jPanel1.add(lblDragons, gridBagConstraints);
+
+        lblDarts.setText("Darts");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
+        jPanel1.add(lblDarts, gridBagConstraints);
+
+        lblNumDragons.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
+        jPanel1.add(lblNumDragons, gridBagConstraints);
+
+        lblNumSwords.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
+        jPanel1.add(lblNumSwords, gridBagConstraints);
+
+        lblNumHeight.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
+        jPanel1.add(lblNumHeight, gridBagConstraints);
+
+        lblDifficultyText.setText("Easy");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
+        jPanel1.add(lblDifficultyText, gridBagConstraints);
+
+        lblNumDarts.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
+        jPanel1.add(lblNumDarts, gridBagConstraints);
+
+        lblNumShields.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
+        jPanel1.add(lblNumShields, gridBagConstraints);
+
+        lblSwords.setText("Swords");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
+        jPanel1.add(lblSwords, gridBagConstraints);
+
+        lblEntities.setFont(lblEntities.getFont().deriveFont(lblEntities.getFont().getStyle() | java.awt.Font.BOLD));
+        lblEntities.setText("Entities");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
+        jPanel1.add(lblEntities, gridBagConstraints);
+
+        lblShields.setText("Shields");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
+        jPanel1.add(lblShields, gridBagConstraints);
+
+        lblSwords1.setText("Swords");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
+        jPanel1.add(lblSwords1, gridBagConstraints);
+
+        lblNumShields1.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
+        jPanel1.add(lblNumShields1, gridBagConstraints);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.LINE_END);
 
         mnFile.setText("File");
 
@@ -339,17 +534,6 @@ public class GUIMazeEditor extends javax.swing.JFrame
 
         mnHelp.setText("Help");
 
-        btnStats.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        btnStats.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/information.png"))); // NOI18N
-        btnStats.setText("Statistics...");
-        btnStats.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStatsActionPerformed(evt);
-            }
-        });
-        mnHelp.add(btnStats);
-        mnHelp.add(jSeparator5);
-
         btnAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/help.png"))); // NOI18N
         btnAbout.setText("About");
         btnAbout.addActionListener(new java.awt.event.ActionListener() {
@@ -367,7 +551,7 @@ public class GUIMazeEditor extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayerActionPerformed
-            areaEdicao1.setSymbol('H');
+        areaEdicao1.setSymbol('h');
     }//GEN-LAST:event_btnPlayerActionPerformed
 
     private void areaEdicao1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_areaEdicao1MousePressed
@@ -392,39 +576,113 @@ public class GUIMazeEditor extends javax.swing.JFrame
 
     private void btnUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoActionPerformed
         areaEdicao1.undo();
+
     }//GEN-LAST:event_btnUndoActionPerformed
 
     private void btnRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedoActionPerformed
         areaEdicao1.redo();
+        
     }//GEN-LAST:event_btnRedoActionPerformed
 
     private void btnRandomizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRandomizeActionPerformed
         areaEdicao1.generateMaze();
+         Toolkit.getDefaultToolkit().sync();
+         repaint();
     }//GEN-LAST:event_btnRandomizeActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnExitActionPerformed
 
+    private void loadFile() throws FileNotFoundException, IOException, ClassNotFoundException  
+    {
+        final JFileChooser fileChooser = new JFileChooser();
+        int showOpenDialog = fileChooser.showOpenDialog(this);
+        
+        FileInputStream fin;
+        ObjectInputStream oin;
+        
+        if (showOpenDialog != JFileChooser.APPROVE_OPTION) 
+        {
+            return;
+        }
+
+        buffer = fileChooser.getSelectedFile();
+        
+        if (buffer == null)
+        {
+            return;
+        }
+        
+        fin = new FileInputStream(buffer);
+        oin = new ObjectInputStream(fin);
+  
+        setTitle("Maze Builder - " + buffer.getAbsolutePath());
+        
+        areaEdicao1.initializeMaze((Maze) oin.readObject());
+        repaint();
+        fin.close();
+        oin.close();
+    }
+
+    private void saveFile() throws FileNotFoundException, IOException 
+    {
+        FileOutputStream fout;
+        ObjectOutputStream oout;
+                
+        if (buffer == null) 
+        {
+            final JFileChooser fileChooser = new JFileChooser();
+            int showSaveDialog = fileChooser.showSaveDialog(this);
+
+            if (showSaveDialog != JFileChooser.APPROVE_OPTION) 
+            {
+                    return;
+            }
+            
+            buffer = fileChooser.getSelectedFile();
+            setTitle("Maze Builder - " + buffer.getAbsolutePath());
+        }
+
+        fout = new FileOutputStream(buffer);        
+        oout = new ObjectOutputStream(fout);
+        
+        areaEdicao1.writeMaze(oout);
+    }
+
     private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
-        int showOpenDialog = fin.showOpenDialog(this);
+        try
+        {
+            loadFile();
+        } 
+        catch (IOException | ClassNotFoundException ex) 
+        {
+            Logger.getLogger(GUIMazeEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_btnLoadActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if (fout.getSelectedFile() == null)
+        try 
         {
-            fout.showSaveDialog(this);
+            saveFile();
+        }
+        catch (IOException ex) 
+        {
+             Logger.getLogger(GUIMazeEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
-        int showSaveDialog = fout.showSaveDialog(this);
+        
     }//GEN-LAST:event_btnSaveAsActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         GUINewMaze g_msize;
         g_msize = new GUINewMaze(this);
         g_msize.setVisible(true);
+        setTitle("Maze Editor - Untitled");
+        buffer = null;
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnSwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwordActionPerformed
@@ -443,11 +701,6 @@ public class GUIMazeEditor extends javax.swing.JFrame
         GUIAbout guiAbout = new GUIAbout(this);
         guiAbout.setVisible(true);
     }//GEN-LAST:event_btnAboutActionPerformed
-
-    private void btnStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatsActionPerformed
-        GUIStats guiStats = new GUIStats(this, areaEdicao1.getValues());
-        guiStats.setVisible(true);
-    }//GEN-LAST:event_btnStatsActionPerformed
 
     private void btnDoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoorActionPerformed
         areaEdicao1.setSymbol('S');
@@ -474,19 +727,38 @@ public class GUIMazeEditor extends javax.swing.JFrame
     private javax.swing.JMenuItem btnSave;
     private javax.swing.JMenuItem btnSaveAs;
     private javax.swing.JToggleButton btnShield;
-    private javax.swing.JMenuItem btnStats;
     private javax.swing.JToggleButton btnSword;
     private javax.swing.JMenuItem btnUndo;
     private javax.swing.JMenuItem btnValidate;
     private javax.swing.JToggleButton btnWall;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
-    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JLabel lblDarts;
+    private javax.swing.JLabel lblDifficulty;
+    private javax.swing.JLabel lblDifficultyText;
+    private javax.swing.JLabel lblDimensions;
+    private javax.swing.JLabel lblDragons;
+    private javax.swing.JLabel lblEntities;
+    private javax.swing.JLabel lblHeight;
+    private javax.swing.JLabel lblNumDarts;
+    private javax.swing.JLabel lblNumDragons;
+    private javax.swing.JLabel lblNumHeight;
+    private javax.swing.JLabel lblNumPlayers;
+    private javax.swing.JLabel lblNumShields;
+    private javax.swing.JLabel lblNumShields1;
+    private javax.swing.JLabel lblNumSwords;
+    private javax.swing.JLabel lblNumWidth;
+    private javax.swing.JLabel lblPlayers;
+    private javax.swing.JLabel lblShields;
+    private javax.swing.JLabel lblSwords;
+    private javax.swing.JLabel lblSwords1;
+    private javax.swing.JLabel lblWidth;
     private javax.swing.JMenuBar mbDefault;
     private javax.swing.JMenu mnEdit;
     private javax.swing.JMenu mnFile;

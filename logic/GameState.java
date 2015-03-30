@@ -1,7 +1,7 @@
 package lpoo.logic;
 
-import java.util.LinkedList;
-import java.util.Random;
+import java.io.*;
+import java.util.*;
 
 public class GameState
 {
@@ -16,6 +16,28 @@ public class GameState
 	private static int dragonMovement = 1;
 
 	private static transient final Random randomGenerator = new Random();
+
+	public static void read(ObjectInputStream aInputStream) throws ClassNotFoundException, IOException
+	{
+		maze = (Maze) aInputStream.readObject();
+		player = (Hero) aInputStream.readObject();
+		items = (LinkedList<Item>) aInputStream.readObject();
+		dragons = (LinkedList<Dragon>) aInputStream.readObject();
+		gameOver = aInputStream.readBoolean();
+		playerWon = aInputStream.readBoolean();
+		dragonMovement = aInputStream.readInt();
+	}
+
+	public static void write(ObjectOutputStream aOutputStream) throws IOException
+	{
+		aOutputStream.writeObject(maze);
+		aOutputStream.writeObject(player);
+		aOutputStream.writeObject(items);
+		aOutputStream.writeObject(dragons);
+		aOutputStream.writeBoolean(gameOver);
+		aOutputStream.writeBoolean(playerWon);
+		aOutputStream.writeInt(dragonMovement);
+	}
 
 	public static Hero getPlayer()
 	{
@@ -78,29 +100,22 @@ public class GameState
 
 	private static void updateDragons()
 	{
-		for (Dragon dragon : dragons)
-		{
-			updateDragon(dragon);
-
-			if (dragon.getHealth() <= 0)
-			{
-				dragons.remove(dragon);
-			}
-		}
+		dragons.forEach((dragon) -> updateDragon(dragon));
+		dragons.removeIf((dragon) -> dragon.getHealth() < 0);
 	}
 
 	private static void attackDragons()
 	{
-		for (final Dragon dragon : dragons)
+		dragons.forEach((Dragon dragon) -> 
 		{
 			player.attackSword(maze, dragon);
 			dragon.attack(maze, player);
-		}
+		});
 	}
 
 	private static void attackDragonsFire()
 	{
-		dragons.forEach((d) -> d.attackFire(maze, player));
+		dragons.forEach((dragon) -> dragon.attackFire(maze, player));
 	}
 
 	public static Maze getMaze()
@@ -113,12 +128,12 @@ public class GameState
 	// --------------------------------
 	private static void drawDragons()
 	{
-		dragons.forEach((d) -> d.draw(maze));
+		dragons.forEach((dragon) -> dragon.draw(maze));
 	}
 
 	private static void drawItems()
 	{
-		items.forEach((i) -> i.draw(maze));
+		items.forEach((item) -> item.draw(maze));
 	}
 
 	public static void setDragonMovement(int userInput)
@@ -275,16 +290,16 @@ public class GameState
 	public static void initialize(Maze m)
 	{
 		maze = m;
-                playerWon = false;
-                gameOver = false;
+		playerWon = false;
+		gameOver = false;
 		dragons = new LinkedList<>();
 		items = new LinkedList<>();
 		player = new Hero(maze.placeEntity('h'));
 		items.add(new Sword(maze.placeEntity('E')));
 		items.add(new Shield(maze.placeEntity('V')));
 		player.draw(maze);
-                drawDragons();
-                drawItems();
+		drawDragons();
+		drawItems();
 	}
 
 	public static void initializeStatic(Maze m)
@@ -301,6 +316,61 @@ public class GameState
 		items.add(new Shield(shieldPosition));
 		// dragons.add(new Dragon(1, 3));
 		player.draw(maze);
+	}
+
+	public static void initializeCustom(Maze m)
+	{
+		maze = m;
+		items = new LinkedList<>();
+
+		final Point playerPosition = maze.findSymbol('h');
+		final Point swordPosition = maze.findSymbol('E');
+		final Point shieldPosition = maze.findSymbol('V');
+
+		if (playerPosition != null)
+		{
+			player = new Hero(playerPosition);
+		}
+		else
+		{
+			player = new Hero(maze.placeEntity('h'));
+		}
+
+		if (swordPosition != null)
+		{
+			items.add(new Sword(swordPosition));
+		}
+		else
+		{
+			items.add(new Sword(maze.placeEntity('E')));
+		}
+
+		if (shieldPosition != null)
+		{
+			items.add(new Shield(shieldPosition));
+		}
+		else
+		{
+			items.add(new Shield(maze.placeEntity('V')));
+		}
+
+		Point dragonPosition = maze.findSymbol('D');
+
+		dragons = new LinkedList<>();
+
+		while (dragonPosition != null)
+		{
+			dragons.add(new Dragon(dragonPosition));
+			dragonPosition = maze.findSymbol('D');
+		}
+
+		Point dartPosition = maze.findSymbol('*');
+
+		while (dartPosition != null)
+		{
+			items.add(new Dart(dragonPosition));
+			dartPosition = maze.findSymbol('*');
+		}
 	}
 
 	public static final void printMaze()
@@ -345,13 +415,17 @@ public class GameState
 
 	public static void update(Direction direction)
 	{
-		updateDragons();
 		player.move(maze, direction);
+		player.draw(maze);
+
+		drawItems();
+		updateDragons();
+		drawDragons();
+
 		attackDragonsFire();
 		attackDragons();
-		drawItems();
+
 		player.draw(maze);
-		drawDragons();
 
 		if (player.getHealth() <= 0)
 		{

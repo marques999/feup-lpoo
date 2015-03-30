@@ -26,13 +26,13 @@ public final class Point implements Serializable
 		this.y = y;
 	}
 
-	private void readObject(ObjectInputStream aInputStream) throws IOException
+	protected void readObject(ObjectInputStream aInputStream) throws IOException
 	{
 		this.x = aInputStream.readInt();
 		this.y = aInputStream.readInt();
 	}
 
-	private void writeObject(ObjectOutputStream aOutputStream) throws IOException
+	protected void writeObject(ObjectOutputStream aOutputStream) throws IOException
 	{
 		aOutputStream.writeInt(x);
 		aOutputStream.writeInt(y);

@@ -1,18 +1,37 @@
 package lpoo.gui;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import lpoo.logic.Direction;
 import lpoo.logic.GameState;
+import lpoo.logic.Maze;
 import lpoo.logic.RandomMaze;
 
 public class GUIInterface extends JFrame 
 {    
+    private Timer jTimer;
+    
     public GUIInterface() 
     {
-        initComponents();
+        try {
+            initComponents();
+        } catch (Exception ex)
+        {
+            
+        }
         initializeGame();
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/FireDragon_icon.png")));
+      
     }
 
     private void initializeGame()
@@ -32,10 +51,18 @@ public class GUIInterface extends JFrame
         
         pnlPlayfield.initializeMaze(GameState.getMaze());
         pnlPlayfield.setPreferredSize(pnlPlayfield.getWindowSize());
+       
+        checkState();
+        revalidate();
+        pack();
+    }
+    
+    protected void resumeGame()
+    {
+        pnlPlayfield.setPreferredSize(pnlPlayfield.getWindowSize());
         
         checkState();
         revalidate();
-        repaint();
         pack();
     }
 
@@ -78,6 +105,9 @@ public class GUIInterface extends JFrame
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                formKeyReleased(evt);
+            }
         });
 
         lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 13));
@@ -85,6 +115,27 @@ public class GUIInterface extends JFrame
         getContentPane().add(lblStatus, java.awt.BorderLayout.PAGE_END);
 
         pnlPlayfield.setPreferredSize(new java.awt.Dimension(640, 480));
+        pnlPlayfield.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                pnlPlayfieldFocusLost(evt);
+            }
+        });
+        pnlPlayfield.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlPlayfieldMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pnlPlayfieldMouseExited(evt);
+            }
+        });
+        pnlPlayfield.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                pnlPlayfieldKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                pnlPlayfieldKeyTyped(evt);
+            }
+        });
         getContentPane().add(pnlPlayfield, java.awt.BorderLayout.CENTER);
 
         mnGame.setText("Game");
@@ -254,7 +305,7 @@ public class GUIInterface extends JFrame
         lblStatus.setText("OBJECTIVE: " + GameState.getObjective());
 
         if (GameState.gameOver()) 
-        {
+        {            
             if (GameState.playerWon()) 
             {
                 lblStatus.setText("CONGRATULATIONS!");
@@ -267,6 +318,7 @@ public class GUIInterface extends JFrame
                 JOptionPane.showMessageDialog(null, "You were killed by the dragon :(", "Game Over", JOptionPane.PLAIN_MESSAGE);
                
             }
+            
         }
     }
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
@@ -300,11 +352,10 @@ public class GUIInterface extends JFrame
             validKey = true; 
         }
 
-       
         if (validKey)
         {
+            repaint();
             checkState();
-            pnlPlayfield.repaint();
         }
     }//GEN-LAST:event_formKeyPressed
 
@@ -323,24 +374,135 @@ public class GUIInterface extends JFrame
         if (r == JOptionPane.YES_OPTION)
         {
             initializeGame();
-            repaint();
         }
     }//GEN-LAST:event_btnNewActionPerformed
 
+    private void loadState(ObjectInputStream aInputStream) throws IOException, ClassNotFoundException
+    {
+        GameState.read(aInputStream);
+    }
+    
+    private void saveState(ObjectOutputStream aOutputStream) throws IOException
+    {
+        GameState.write(aOutputStream);
+    }
+    
+    private void loadLevel() throws FileNotFoundException, IOException, ClassNotFoundException  
+    {
+        final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run maze files (*.maze)", "maze"));
+        int showOpenDialog = fileChooser.showOpenDialog(this);
+        
+        FileInputStream fin;
+        ObjectInputStream oin;
+        
+        if (showOpenDialog != JFileChooser.APPROVE_OPTION) 
+        {
+            return;
+        }
+
+        final File buffer = fileChooser.getSelectedFile();
+        
+        if (buffer == null)
+        {
+            return;
+        }
+        
+        fin = new FileInputStream(buffer);
+        oin = new ObjectInputStream(fin);
+  
+        Maze newMaze = (Maze) oin.readObject();
+
+        pnlPlayfield.initializeMaze(newMaze);
+        GameState.initializeCustom(newMaze);
+        
+        fin.close();
+        oin.close();
+    }
+    
+    private void loadState() throws FileNotFoundException, IOException, ClassNotFoundException
+    {
+         final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run maze files (*.maze)", "maze"));
+        int showOpenDialog = fileChooser.showOpenDialog(this);
+        
+        FileInputStream fin;
+        ObjectInputStream oin;
+        
+        if (showOpenDialog != JFileChooser.APPROVE_OPTION) 
+        {
+            return;
+        }
+
+        final File buffer = fileChooser.getSelectedFile();
+        
+        if (buffer == null)
+        {
+            return;
+        }
+        
+        fin = new FileInputStream(buffer);
+        oin = new ObjectInputStream(fin);
+  
+        GameState.read(oin);
+        resumeGame();
+        fin.close();
+        oin.close();
+    }
+    
+    private void saveState() throws IOException
+    {
+        FileOutputStream fout;
+        final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run saved games (*.state)", "state"));
+        ObjectOutputStream oout;
+                
+
+            int showSaveDialog = fileChooser.showSaveDialog(this);
+
+            if (showSaveDialog != JFileChooser.APPROVE_OPTION) 
+            {
+                    return;
+            }
+            
+          final File  buffer = fileChooser.getSelectedFile();
+
+        fout = new FileOutputStream(buffer);        
+        oout = new ObjectOutputStream(fout);
+        
+        GameState.write(oout);
+    }
+    
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         getParent().setVisible(true);
     }//GEN-LAST:event_formWindowClosed
 
     private void btnLoadStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadStateActionPerformed
-     
+         try {
+            loadState();
+        } catch (IOException ex) {
+            Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnLoadStateActionPerformed
 
     private void btnSaveStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveStateActionPerformed
-
+        try {
+            saveState();
+        } catch (IOException ex) {
+            Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnSaveStateActionPerformed
 
     private void btnLoadLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadLevelActionPerformed
-  
+        try 
+        {
+            loadLevel();
+        } catch (IOException | ClassNotFoundException ex) 
+        {
+            Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnLoadLevelActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -370,6 +532,30 @@ public class GUIInterface extends JFrame
         repaint();
         pack();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void pnlPlayfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlPlayfieldKeyReleased
+      
+    }//GEN-LAST:event_pnlPlayfieldKeyReleased
+
+    private void pnlPlayfieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlPlayfieldKeyTyped
+ pnlPlayfield.repaint();        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlPlayfieldKeyTyped
+
+    private void pnlPlayfieldMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlPlayfieldMouseEntered
+  
+    }//GEN-LAST:event_pnlPlayfieldMouseEntered
+
+    private void pnlPlayfieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_pnlPlayfieldFocusLost
+   
+    }//GEN-LAST:event_pnlPlayfieldFocusLost
+
+    private void pnlPlayfieldMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlPlayfieldMouseExited
+     
+    }//GEN-LAST:event_pnlPlayfieldMouseExited
+
+    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
+       repaint();
+    }//GEN-LAST:event_formKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnAbout;
