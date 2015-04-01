@@ -64,7 +64,10 @@ public class GameState
 
 	protected static void removeItem(Item item)
 	{
-		items.remove(item);
+		if (items.contains(item))
+                {
+                    items.remove(item);
+                }
 	}
 
 	public static boolean attackDarts(Direction direction)
@@ -101,7 +104,7 @@ public class GameState
 	private static void updateDragons()
 	{
 		dragons.forEach((dragon) -> updateDragon(dragon));
-		dragons.removeIf((dragon) -> dragon.getHealth() < 0);
+		dragons.removeIf((dragon) -> dragon.getHealth() <= 0);
 	}
 
 	private static void attackDragons()
@@ -421,7 +424,6 @@ public class GameState
 		drawItems();
 		updateDragons();
 		drawDragons();
-
 		attackDragonsFire();
 		attackDragons();
 

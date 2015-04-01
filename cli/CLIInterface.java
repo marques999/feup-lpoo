@@ -35,9 +35,11 @@ public class CLIInterface
 	{
 		final String currentObjective = String.format("%-24s", GameState.getObjective());
 		final String numberDragons = String.format("%4d", GameState.getNumberDragons());
-
+                
+                System.out.println("");
 		System.out.println("=====================================================");
-		System.out.println("= OBJECTIVE: " + currentObjective + " DRAGONS: " + numberDragons + " =");
+		System.out.println("= OBJECTIVE: " + currentObjective);
+                System.out.println("= DRAGONS: " + numberDragons);
 		System.out.println("=====================================================");
 	}
 
@@ -154,11 +156,11 @@ public class CLIInterface
 		{
 			if (GameState.playerWon())
 			{
-				System.out.println("CONGRATULATIONS!");
+				System.out.println("Congratulations, you have reached the exit safe and sound :)");
 			}
 			else
 			{
-				System.out.println("--- GAME OVER --- R.I.P HERO :(");
+				System.out.println("You were killed by the dragon :(");
 			}
 		}
 	}

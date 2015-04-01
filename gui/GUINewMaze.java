@@ -85,9 +85,25 @@ public class GUINewMaze extends JDialog
 
 	private void jButton1ActionPerformed(ActionEvent evt) 
 	{
-		((GUIMazeEditor) getParent()).setMazeSize(Integer.parseInt(jFormattedTextField1.getText()), Integer.parseInt(jFormattedTextField2.getText()));
+            int newWidth = Integer.parseInt(jFormattedTextField1.getText());
+            int newHeight = Integer.parseInt(jFormattedTextField2.getText());
 		
-		this.dispose();
+            if (newWidth >= 7 && newHeight >= 7)
+            {
+                if (newWidth % 2 != 0 && newHeight % 2 != 0)
+                {
+                    ((GUIMazeEditor) getParent()).newMaze(newWidth, newHeight);
+                    dispose();
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(this, "Invalid dimensions: width and height must be odd!", "Error",  JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Invalid dimensions: width and height must be greater than or equal to 7.", "Error",  JOptionPane.ERROR_MESSAGE);
+            }
 	}
 
 	private JButton jButton1;

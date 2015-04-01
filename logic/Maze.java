@@ -61,9 +61,9 @@ public class Maze implements Serializable
 
 	protected final void printMaze()
 	{
-		for (int y = 0; y < mazeHeight; y++)
+		for (int y = 0; y < mazeHeight; ++y)
 		{
-			for (int x = 0; x < mazeWidth; x++)
+			for (int x = 0; x < mazeWidth; ++x)
 			{
 				System.out.print(mazeMatrix[y][x] + " ");
 			}
@@ -95,9 +95,9 @@ public class Maze implements Serializable
         
         protected Point findSymbol(char s)
         {
-            for (int y = 0; y < mazeHeight; y++)
+            for (int y = 0; y < mazeHeight; ++y)
             {
-                for (int x = 0; x < mazeWidth; x++)
+                for (int x = 0; x < mazeWidth; ++x)
                 {
                     if (mazeMatrix[y][x] == s)
                     {

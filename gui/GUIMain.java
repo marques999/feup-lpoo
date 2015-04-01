@@ -25,7 +25,7 @@ public class GUIMain extends JFrame
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		getContentPane().add(jButton1, BorderLayout.CENTER);
 		getContentPane().add(jButton2, BorderLayout.PAGE_END);
-		setSize(new java.awt.Dimension(189, 137));
+		setSize(new Dimension(190, 140));
 		setLocationRelativeTo(null);
 	}
 

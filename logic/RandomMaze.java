@@ -13,8 +13,9 @@ public final class RandomMaze extends Maze
 
 		final MazeBuilder m_builder = new MazeBuilder();
 
-		m_builder.setType(1);
-		m_builder.setSize(h);
+		m_builder.setType(MazeBuilder.RANDOM_MAZE);
+		m_builder.setWidth(w);
+                m_builder.setHeight(h);
 		m_builder.generateMaze();
 
 		setExitPosition(m_builder.getExitPosition());

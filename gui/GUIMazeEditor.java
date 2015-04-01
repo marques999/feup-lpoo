@@ -1,56 +1,65 @@
 package lpoo.gui;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import lpoo.logic.Maze;
 
-public class GUIMazeEditor extends javax.swing.JFrame {
-
-    private char btnSymbol;
+public class GUIMazeEditor extends JFrame 
+{
     private File buffer;
 
-    public GUIMazeEditor() {
+    public GUIMazeEditor() 
+    {
         initComponents();
+        updateStats();
+        jScrollPane1.getVerticalScrollBar().setUnitIncrement(24);
+        jScrollPane1.getHorizontalScrollBar().setUnitIncrement(24);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/editor-128x128.png")));
-        btnSymbol = ' ';
     }
 
-    public void setMazeSize(int w, int h) {
+    public void newMaze(int w, int h) 
+    {
         areaEdicao1 = new AreaEdicao(w, h);
-        areaEdicao1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        areaEdicao1.setMinimumSize(new java.awt.Dimension(64, 64));
-        areaEdicao1.setPreferredSize(new java.awt.Dimension(640, 480));
-        areaEdicao1.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                areaEdicao1MousePressed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout areaEdicao1Layout = new javax.swing.GroupLayout(areaEdicao1);
-        areaEdicao1.setLayout(areaEdicao1Layout);
-        areaEdicao1Layout.setHorizontalGroup(
-                areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 717, Short.MAX_VALUE)
-        );
-        areaEdicao1Layout.setVerticalGroup(
-                areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 561, Short.MAX_VALUE)
-        );
-
         jScrollPane1.setViewportView(areaEdicao1);
         buttonGroup1.clearSelection();
     }
 
+    private void updateStats()
+    {
+        lblNumWidth.setText(Integer.toString(areaEdicao1.mazeWidth));
+        lblNumHeight.setText(Integer.toString(areaEdicao1.mazeHeight));
+        lblNumDragons.setText(Integer.toString(areaEdicao1.numDragons));
+        lblNumDarts.setText(Integer.toString(areaEdicao1.numDarts));
+        lblNumDoors.setText(Integer.toString(areaEdicao1.numDoors));
+        lblNumPlayers.setText(Integer.toString(areaEdicao1.numPlayers));
+        lblNumSwords.setText(Integer.toString(areaEdicao1.numSwords));
+        lblNumShields.setText(Integer.toString(areaEdicao1.numShields));
+        
+        String difficultyText = "None";
+        
+        switch (areaEdicao1.getDifficulty())
+        {
+            case 1:
+                difficultyText = "Easy";
+                break;
+            case 2:
+                difficultyText = "Medium";
+                break;
+            case 3:
+                difficultyText = "Hard";
+                break;
+            case 4:
+                difficultyText= "Nightmare";
+                break;
+        }
+
+        lblDifficultyText.setText(difficultyText);
+        jPanel1.repaint();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -88,8 +97,8 @@ public class GUIMazeEditor extends javax.swing.JFrame {
         lblSwords = new javax.swing.JLabel();
         lblEntities = new javax.swing.JLabel();
         lblShields = new javax.swing.JLabel();
-        lblSwords1 = new javax.swing.JLabel();
-        lblNumShields1 = new javax.swing.JLabel();
+        lblDoors = new javax.swing.JLabel();
+        lblNumDoors = new javax.swing.JLabel();
         mbDefault = new javax.swing.JMenuBar();
         mnFile = new javax.swing.JMenu();
         btnNew = new javax.swing.JMenuItem();
@@ -231,12 +240,26 @@ public class GUIMazeEditor extends javax.swing.JFrame {
 
         getContentPane().add(tbDefault, java.awt.BorderLayout.PAGE_START);
 
+        jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jScrollPane1MousePressed(evt);
+            }
+        });
+
         areaEdicao1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         areaEdicao1.setMinimumSize(new java.awt.Dimension(64, 64));
         areaEdicao1.setPreferredSize(new java.awt.Dimension(640, 480));
+        areaEdicao1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                areaEdicao1MouseDragged(evt);
+            }
+        });
         areaEdicao1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 areaEdicao1MousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                areaEdicao1MouseReleased(evt);
             }
         });
 
@@ -275,7 +298,7 @@ public class GUIMazeEditor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
         jPanel1.add(lblWidth, gridBagConstraints);
 
-        lblPlayers.setText("Players");
+        lblPlayers.setText("Darts");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -316,15 +339,15 @@ public class GUIMazeEditor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
         jPanel1.add(lblHeight, gridBagConstraints);
 
-        lblDragons.setText("Dragons");
+        lblDragons.setText("Swords");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
         jPanel1.add(lblDragons, gridBagConstraints);
 
-        lblDarts.setText("Darts");
+        lblDarts.setText("Players");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -380,7 +403,7 @@ public class GUIMazeEditor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
         jPanel1.add(lblNumShields, gridBagConstraints);
 
-        lblSwords.setText("Swords");
+        lblSwords.setText("Dragons");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -406,21 +429,21 @@ public class GUIMazeEditor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
         jPanel1.add(lblShields, gridBagConstraints);
 
-        lblSwords1.setText("Swords");
+        lblDoors.setText("Doors");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblSwords1, gridBagConstraints);
+        jPanel1.add(lblDoors, gridBagConstraints);
 
-        lblNumShields1.setText("0");
+        lblNumDoors.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
-        jPanel1.add(lblNumShields1, gridBagConstraints);
+        jPanel1.add(lblNumDoors, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.LINE_END);
 
@@ -555,7 +578,7 @@ public class GUIMazeEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPlayerActionPerformed
 
     private void areaEdicao1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_areaEdicao1MousePressed
-
+        updateStats();
     }//GEN-LAST:event_areaEdicao1MousePressed
 
     private void btnDragonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDragonActionPerformed
@@ -576,18 +599,16 @@ public class GUIMazeEditor extends javax.swing.JFrame {
 
     private void btnUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoActionPerformed
         areaEdicao1.undo();
-
     }//GEN-LAST:event_btnUndoActionPerformed
 
     private void btnRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedoActionPerformed
         areaEdicao1.redo();
-        
     }//GEN-LAST:event_btnRedoActionPerformed
 
     private void btnRandomizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRandomizeActionPerformed
+        areaEdicao1.erase();
         areaEdicao1.generateMaze();
-         Toolkit.getDefaultToolkit().sync();
-         repaint();
+        updateStats();
     }//GEN-LAST:event_btnRandomizeActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -620,17 +641,18 @@ public class GUIMazeEditor extends javax.swing.JFrame {
         setTitle("Maze Builder - " + buffer.getAbsolutePath());
         
         areaEdicao1.initializeMaze((Maze) oin.readObject());
-        repaint();
+        areaEdicao1.repaint();
+        updateStats();
         fin.close();
         oin.close();
     }
 
-    private void saveFile() throws FileNotFoundException, IOException 
+    private void saveFile(boolean overwrite) throws FileNotFoundException, IOException 
     {
         FileOutputStream fout;
         ObjectOutputStream oout;
                 
-        if (buffer == null) 
+        if (buffer == null || overwrite) 
         {
             final JFileChooser fileChooser = new JFileChooser();
             int showSaveDialog = fileChooser.showSaveDialog(this);
@@ -659,13 +681,12 @@ public class GUIMazeEditor extends javax.swing.JFrame {
         {
             Logger.getLogger(GUIMazeEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }//GEN-LAST:event_btnLoadActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         try 
         {
-            saveFile();
+            saveFile(false);
         }
         catch (IOException ex) 
         {
@@ -674,7 +695,14 @@ public class GUIMazeEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
-        
+        try 
+        {
+            saveFile(true);
+        }
+        catch (IOException ex) 
+        {
+             Logger.getLogger(GUIMazeEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnSaveAsActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
@@ -683,6 +711,7 @@ public class GUIMazeEditor extends javax.swing.JFrame {
         g_msize.setVisible(true);
         setTitle("Maze Editor - Untitled");
         buffer = null;
+        updateStats();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnSwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwordActionPerformed
@@ -691,6 +720,7 @@ public class GUIMazeEditor extends javax.swing.JFrame {
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         areaEdicao1.erase();
+        updateStats();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnEraseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEraseActionPerformed
@@ -709,6 +739,19 @@ public class GUIMazeEditor extends javax.swing.JFrame {
     private void btnValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidateActionPerformed
         areaEdicao1.validateMaze();
     }//GEN-LAST:event_btnValidateActionPerformed
+
+    private void jScrollPane1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jScrollPane1MousePressed
+
+    private void areaEdicao1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_areaEdicao1MouseDragged
+        updateStats();
+    }//GEN-LAST:event_areaEdicao1MouseDragged
+
+    private void areaEdicao1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_areaEdicao1MouseReleased
+        updateStats();
+       
+    }//GEN-LAST:event_areaEdicao1MouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private lpoo.gui.AreaEdicao areaEdicao1;
@@ -743,21 +786,21 @@ public class GUIMazeEditor extends javax.swing.JFrame {
     private javax.swing.JLabel lblDifficulty;
     private javax.swing.JLabel lblDifficultyText;
     private javax.swing.JLabel lblDimensions;
+    private javax.swing.JLabel lblDoors;
     private javax.swing.JLabel lblDragons;
     private javax.swing.JLabel lblEntities;
     private javax.swing.JLabel lblHeight;
     private javax.swing.JLabel lblNumDarts;
+    private javax.swing.JLabel lblNumDoors;
     private javax.swing.JLabel lblNumDragons;
     private javax.swing.JLabel lblNumHeight;
     private javax.swing.JLabel lblNumPlayers;
     private javax.swing.JLabel lblNumShields;
-    private javax.swing.JLabel lblNumShields1;
     private javax.swing.JLabel lblNumSwords;
     private javax.swing.JLabel lblNumWidth;
     private javax.swing.JLabel lblPlayers;
     private javax.swing.JLabel lblShields;
     private javax.swing.JLabel lblSwords;
-    private javax.swing.JLabel lblSwords1;
     private javax.swing.JLabel lblWidth;
     private javax.swing.JMenuBar mbDefault;
     private javax.swing.JMenu mnEdit;

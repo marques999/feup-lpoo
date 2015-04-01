@@ -5,14 +5,17 @@ import java.util.Stack;
 
 public final class MazeBuilder
 {
+        protected static final int STATIC_MAZE = 0;
+        protected static final int RANDOM_MAZE = 1;
 	private final Random rand;
 
 	/**
 	 * Maze Builder Parameters
 	 */
-	private char[][] m_matrix;
-	private int m_size;
-	private int m_type;
+	private char[][] maze;
+	private int mazeWidth;
+        private int mazeHeight;
+	private int mazeType;
 
 	/**
 	 * Random Maze Generation
@@ -22,7 +25,8 @@ public final class MazeBuilder
 	private Stack<Point> m_stack;
 
 	private char[][] visitedCells;
-	private int visitedCellsDimension;
+	private int visitedCellsWidth;
+        private int visitedCellsHeight;
 
 	public MazeBuilder()
 	{
@@ -31,35 +35,45 @@ public final class MazeBuilder
 
 	public char[][] getMatrix()
 	{
-		return m_matrix;
+		return maze;
 	}
 
 	public void setType(int type)
 	{
-		m_type = type;
+		mazeType = type;
 	}
 
-	public void setSize(int size)
+	public void setWidth(int width)
 	{
-		m_size = size;
+		mazeWidth = width;
 	}
+        
+        public void setHeight(int height)
+        {
+                mazeHeight = height;
+        }
 
 	protected void generateMaze()
 	{
-		// static maze
-		if (m_type == 0)
+                if (mazeWidth == 0 || mazeHeight == 0)
+                {
+                    throw new IllegalArgumentException();
+                }
+                
+		if (mazeType == STATIC_MAZE)
 		{
 			generateStaticMaze();
 		}
-
-		// random maze
-		if (m_type == 1)
+                else if (mazeType == RANDOM_MAZE)
 		{
-			// random maze dimensions must be EVEN!
-			if (m_size % 2 != 0)
+			if (mazeWidth % 2 != 0 && mazeHeight % 2 != 0)
 			{
 				generateRandomMaze();
 			}
+                        else
+                        {
+                            throw new IllegalArgumentException();
+                        }
 		}
 	}
 
@@ -70,7 +84,7 @@ public final class MazeBuilder
 
 	private void generateStaticMaze()
 	{
-		m_matrix = new char[][]
+		maze = new char[][]
 		{
 			{ 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' },
 			{ 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X' },
@@ -87,9 +101,10 @@ public final class MazeBuilder
 
 	private void generateRandomMaze()
 	{
-		m_matrix = new char[m_size][m_size];
-		visitedCellsDimension = (m_size - 1) / 2;
-		visitedCells = new char[visitedCellsDimension][visitedCellsDimension];
+		maze = new char[mazeHeight][mazeWidth];
+		visitedCellsWidth = (mazeWidth - 1) / 2;
+                visitedCellsHeight = (mazeHeight - 1) / 2;
+		visitedCells = new char[visitedCellsHeight][visitedCellsWidth];
 		m_stack = new Stack<>();
 		m_guide = new Point(0, 0);
 
@@ -106,19 +121,29 @@ public final class MazeBuilder
 
 	private void initializeMatrix()
 	{
-		for (int y = 0; y < m_size; ++y)
+		for (int y = 0; y < mazeHeight; ++y)
 		{
-			for (int x = 0; x < m_size; ++x)
-			{
-				if (x % 2 != 0 && y % 2 != 0)
+                        if (y % 2 == 0)
+                        {
+                            for (int x = 0; x < mazeWidth; ++x)
+                            {
+                                maze[y][x] = 'X';
+                            }
+                        }
+                        else
+                        {
+                            for (int x = 0; x < mazeWidth; ++x)
+                            {
+				if (x % 2 != 0)
 				{
-					m_matrix[y][x] = ' ';
+					maze[y][x] = ' ';
 				}
 				else
 				{
-					m_matrix[y][x] = 'X';
+					maze[y][x] = 'X';
 				}
-			}
+                            }   
+                        }
 		}
 	}
 
@@ -134,33 +159,33 @@ public final class MazeBuilder
 			initialX = 0;
 			initialY = 0;
 
-			while (m_matrix[initialY][initialX] != ' ')
+			while (maze[initialY][initialX] != ' ')
 			{
-				initialX = 1 + rand.nextInt(m_size - 2);
-				initialY = 1 + rand.nextInt(m_size - 2);
+				initialX = 1 + rand.nextInt(mazeWidth - 2);
+				initialY = 1 + rand.nextInt(mazeHeight - 2);
 			}
 
 			if (isWall(initialX + 1, initialY))
 			{
-				m_matrix[initialY][initialX + 1] = 'S';
+				maze[initialY][initialX + 1] = 'S';
 				m_exit = new Point(initialX + 1, initialY);
 				exitPlaced = true;
 			}
 			else if (isWall(initialX, initialY + 1))
 			{
-				m_matrix[initialY + 1][initialX] = 'S';
+				maze[initialY + 1][initialX] = 'S';
 				m_exit = new Point(initialX, initialY + 1);
 				exitPlaced = true;
 			}
 			else if (isWall(initialX - 1, initialY))
 			{
-				m_matrix[initialY][initialX - 1] = 'S';
+				maze[initialY][initialX - 1] = 'S';
 				m_exit = new Point(initialX - 1, initialY);
 				exitPlaced = true;
 			}
 			else if (isWall(initialX, initialY - 1))
 			{
-				m_matrix[initialY - 1][initialX] = 'S';
+				maze[initialY - 1][initialX] = 'S';
 				m_exit = new Point(initialX, initialY - 1);
 				exitPlaced = true;
 			}
@@ -173,18 +198,18 @@ public final class MazeBuilder
 
 	private void initializeVisitedCells()
 	{
-		for (int y = 0; y < visitedCellsDimension; ++y)
+		for (int y = 0; y < visitedCellsHeight; ++y)
 		{
-			for (int x = 0; x < visitedCellsDimension; ++x)
+			for (int x = 0; x < visitedCellsWidth; ++x)
 			{
-				visitedCells[x][y] = '.';
+				visitedCells[y][x] = '.';
 			}
 		}
 	}
 
 	private boolean isWall(int x, int y)
 	{
-		return x == 0 || x == m_size - 1 || y == 0 || y == m_size - 1;
+		return x == 0 || x == mazeWidth - 1 || y == 0 || y == mazeHeight - 1;
 	}
 
 	private boolean isStuck()
@@ -203,7 +228,7 @@ public final class MazeBuilder
 			canMoveLeft = visitedCells[y][x - 1] != '+';
 		}
 
-		if (x < visitedCellsDimension - 1)
+		if (x < visitedCellsWidth - 1)
 		{
 			canMoveRight = visitedCells[y][x + 1] != '+';
 		}
@@ -213,7 +238,7 @@ public final class MazeBuilder
 			canMoveUp = visitedCells[y - 1][x] != '+';
 		}
 
-		if (y < visitedCellsDimension - 1)
+		if (y < visitedCellsHeight - 1)
 		{
 			canMoveDown = visitedCells[y + 1][x] != '+';
 		}
@@ -273,8 +298,8 @@ public final class MazeBuilder
 			return false;
 		}
 
-		m_matrix[m_guide.y][m_guide.x] = ' ';
-		m_matrix[middle.y][middle.x] = ' ';
+		maze[m_guide.y][m_guide.x] = ' ';
+		maze[middle.y][middle.x] = ' ';
 		m_guide.y = destination.y;
 		m_guide.x = destination.x;
 		visitedCells[newGuide.y][newGuide.x] = '+';

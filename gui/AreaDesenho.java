@@ -16,6 +16,7 @@ public class AreaDesenho extends JPanel
 	private BufferedImage spriteHeroSword;
 	private BufferedImage spriteHeroUnarmed;
 	private BufferedImage spriteDragon;
+        private BufferedImage spriteDragonSleeping;
 	private BufferedImage spriteDoorOpened;
 	private BufferedImage spriteDoorClosed;
 	private BufferedImage spriteDart;
@@ -31,6 +32,7 @@ public class AreaDesenho extends JPanel
 	private BufferedImage resizedHeroSword;
 	private BufferedImage resizedHeroUnarmed;
 	private BufferedImage resizedDragon;
+        private BufferedImage resizedDragonSleeping;
 	private BufferedImage resizedDart;
 	private BufferedImage resizedDoorOpened;
 	private BufferedImage resizedDoorClosed;
@@ -48,12 +50,8 @@ public class AreaDesenho extends JPanel
 	protected int spriteWidth;
 	protected int spriteHeight;
 
-	protected boolean backgroundGenerated = false;
-	protected BufferedImage backgroundImage;
-	protected Graphics backgroundLayer;
-	protected BufferedImage foregroundImage;
-	protected Graphics foregroundLayer;
-
+	private BufferedImage graphics2d;
+	private Graphics graphicsBuffer;
 	private Dimension windowSize;
 
 	public AreaDesenho()
@@ -115,15 +113,13 @@ public class AreaDesenho extends JPanel
 
 		if (mazeWidth != 0 && mazeHeight != 0)
 		{
-			backgroundImage = new BufferedImage(windowSize.width, windowSize.height, BufferedImage.TYPE_INT_ARGB);
-			backgroundLayer = backgroundImage.getGraphics();
-			foregroundImage = new BufferedImage(windowSize.width, windowSize.height, BufferedImage.TYPE_INT_ARGB_PRE);
-			foregroundLayer = foregroundImage.getGraphics();
-			backgroundGenerated = true;
+			graphics2d = new BufferedImage(windowSize.width, windowSize.height, BufferedImage.TYPE_INT_ARGB_PRE);
+			graphicsBuffer = graphics2d.getGraphics();
 		}
 
 		setPreferredSize(windowSize);
 		revalidate();
+                repaint();
 	}
 
 	protected void generateMaze()
@@ -151,6 +147,7 @@ public class AreaDesenho extends JPanel
 
 			spriteDart = ImageIO.read(this.getClass().getResource("/lpoo/res/dart-64x64.png"));
 			spriteDragon = ImageIO.read(this.getClass().getResource("/lpoo/res/dragon-64x64.png"));
+                        spriteDragonSleeping = ImageIO.read(this.getClass().getResource("/lpoo/res/dragon-sleep-64x64.png"));
 			spriteDoorOpened = ImageIO.read(this.getClass().getResource("/lpoo/res/door2-64x64.png"));
 			spriteDoorClosed = ImageIO.read(this.getClass().getResource("/lpoo/res/door1-64x64.png"));
 			spriteFireball = ImageIO.read(this.getClass().getResource("/lpoo/res/fireball-64x64.png"));
@@ -166,7 +163,6 @@ public class AreaDesenho extends JPanel
 		}
 		catch (IOException ex)
 		{
-
 		}
 	}
 
@@ -177,6 +173,7 @@ public class AreaDesenho extends JPanel
 		
 		resizedDart = resizeImage(spriteDart, spriteWidth, spriteHeight);
 		resizedDragon = resizeImage(spriteDragon, spriteWidth, spriteHeight);
+                resizedDragonSleeping = resizeImage(spriteDragonSleeping, spriteWidth, spriteHeight);
 		resizedDoorOpened = resizeImage(spriteDoorOpened, spriteWidth, spriteHeight);
 		resizedDoorClosed = resizeImage(spriteDoorClosed, spriteWidth, spriteHeight);
 		resizedFireball = resizeImage(spriteFireball, spriteWidth, spriteHeight);
@@ -195,7 +192,6 @@ public class AreaDesenho extends JPanel
 
 	protected void readMaze(ObjectInputStream s) throws IOException, ClassNotFoundException
 	{
-
 	}
 
 	protected void writeMaze(ObjectOutputStream s) throws IOException
@@ -211,39 +207,6 @@ public class AreaDesenho extends JPanel
 	protected void writeState(ObjectOutputStream s) throws IOException
 	{
 		writeMaze(s);
-	}
-
-	private void generateTiles()
-	{
-		if (mazeHeight == 0 || mazeWidth == 0)
-		{
-			return;
-		}
-
-		int y = 0;
-
-		for (int i = 0; i < mazeHeight; i++)
-		{
-			int x = 0;
-
-			for (int j = 0; j < mazeWidth; j++)
-			{
-				if (maze.symbolAt(j, i) == 'X')
-				{
-					backgroundLayer.drawImage(resizedWall, x, y, null);
-				}
-				else
-				{
-					backgroundLayer.drawImage(resizedFloor, x, y, null);
-				}
-
-				x += spriteWidth;
-			}
-
-			y += spriteHeight;
-		}
-
-		backgroundGenerated = false;
 	}
 
 	@Override
@@ -262,48 +225,51 @@ public class AreaDesenho extends JPanel
 
 			for (int j = 0; j < mazeWidth; j++)
 			{
-				foregroundLayer.drawImage(resizedFloor, x, y, null);
+				graphicsBuffer.drawImage(resizedFloor, x, y, null);
 
 				switch (maze.symbolAt(j, i))
 				{
 				case 'h':
-					foregroundLayer.drawImage(resizedHeroUnarmed, x, y, null);
+					graphicsBuffer.drawImage(resizedHeroUnarmed, x, y, null);
 					break;
 				case 'H':
-					foregroundLayer.drawImage(resizedHeroShield, x, y, null);
+					graphicsBuffer.drawImage(resizedHeroShield, x, y, null);
 					break;
 				case 'a':
-					foregroundLayer.drawImage(resizedHeroSword, x, y, null);
+					graphicsBuffer.drawImage(resizedHeroSword, x, y, null);
 					break;
 				case 'A':
-					foregroundLayer.drawImage(resizedHero, x, y, null);
+					graphicsBuffer.drawImage(resizedHero, x, y, null);
 					break;
 				case 'X':
-					foregroundLayer.drawImage(resizedWall, x, y, null);
+					graphicsBuffer.drawImage(resizedWall, x, y, null);
 					break;
-				case 'D': case 'd':
-					foregroundLayer.drawImage(resizedDragon, x, y, null);
+				case 'D':
+					graphicsBuffer.drawImage(resizedDragon, x, y, null);
 					break;
+                                case 'd':
+                                        graphicsBuffer.drawImage(resizedDragonSleeping, x, y, null);
+                                        break;
 				case 'S':
-					foregroundLayer.drawImage(resizedDoorClosed, x, y, null);
+					graphicsBuffer.drawImage(resizedDoorClosed, x, y, null);
 					break;
 				case 's':
-					foregroundLayer.drawImage(resizedDoorOpened, x, y, null);
+					graphicsBuffer.drawImage(resizedDoorOpened, x, y, null);
 					break;
 				case 'x':
-					foregroundLayer.drawImage(resizedTombstone, x, y, null);
+					graphicsBuffer.drawImage(resizedTombstone, x, y, null);
 					break;
 				case 'O':
-					foregroundLayer.drawImage(resizedFireball, x, y, null);
+					graphicsBuffer.drawImage(resizedFireball, x, y, null);
 					break;
 				case 'E':
-					foregroundLayer.drawImage(resizedSword, x, y, null);
+					graphicsBuffer.drawImage(resizedSword, x, y, null);
 					break;
 				case '*':
-					foregroundLayer.drawImage(resizedDart, x, y, null);
+					graphicsBuffer.drawImage(resizedDart, x, y, null);
 					break;
 				case 'V':
-					foregroundLayer.drawImage(resizedShield, x, y, null);
+					graphicsBuffer.drawImage(resizedShield, x, y, null);
 					break;
 				}
 
@@ -314,7 +280,6 @@ public class AreaDesenho extends JPanel
 		}
 
 		Toolkit.getDefaultToolkit().sync();
-		g.drawImage(foregroundImage, 0, 0, null);
-
+		g.drawImage(graphics2d, 0, 0, null);
 	}
 }
