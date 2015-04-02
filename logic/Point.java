@@ -8,7 +8,7 @@ public final class Point implements Serializable
 	public int y;
 
 	/**
-	 * @brief default constructor for class 'Point'
+	 * default constructor for class 'Point'
 	 */
 	public Point()
 	{
@@ -16,7 +16,7 @@ public final class Point implements Serializable
 	}
 
 	/**
-	 * @brief constructor with parameters for class 'Point'
+	 * constructor with parameters for class 'Point'
 	 * @param x initial X coordinate
 	 * @param y initial Y coordinate
 	 */
@@ -26,6 +26,12 @@ public final class Point implements Serializable
 		this.y = y;
 	}
 
+        @Override
+        public String toString()
+        {
+            return "(" + x + ", " + y + ")";
+        }
+        
 	protected void readObject(ObjectInputStream aInputStream) throws IOException
 	{
 		this.x = aInputStream.readInt();
@@ -39,9 +45,9 @@ public final class Point implements Serializable
 	}
 
 	/**
-	 * @brief checks two points and their coordinates for equality
+	 * checks two points and their coordinates for equality
 	 * @param o point to be compared
-	 * @return returns 'true' if both points have the same coordinates; 'false' otherwise
+	 * @return 'true' if both points have the same coordinates; 'false' otherwise
 	 */
 	@Override
 	public boolean equals(Object o)

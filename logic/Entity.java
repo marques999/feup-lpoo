@@ -9,7 +9,7 @@ public abstract class Entity implements Serializable
 	private int health;
 
 	/**
-	 * @brief default constructor for class 'Entity'
+	 * @description default constructor for class 'Entity'
 	 * @param pos initial coordinates for Entity's position
 	 * @param health initial Entity's health
 	 */
@@ -20,7 +20,7 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
-	 * @return returns Entity's current position x coordinate
+	 * @return Entity's current position x coordinate
 	 */
 	public final int getX()
 	{
@@ -28,7 +28,7 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
-	 * @return returns Entity's current position y coordinate
+	 * @return Entity's current position y coordinate
 	 */
 	public final int getY()
 	{
@@ -36,7 +36,7 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
-	 * @return returns Entity's current health
+	 * @return Entity's current health
 	 */
 	public final int getHealth()
 	{
@@ -53,7 +53,7 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
-	 * @return returns the Entity's current position
+	 * @return Entity's current position
 	 */
 	public final Point getPosition()
 	{

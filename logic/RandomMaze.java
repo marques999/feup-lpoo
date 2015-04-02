@@ -3,9 +3,9 @@ package lpoo.logic;
 public final class RandomMaze extends Maze
 {
 	/**
-	 * @brief generates a random maze (w x h)
-	 * @param w number of columns
-	 * @param h number of rows
+	 * Generates a random maze (w x h)
+	 * @param w width (number of columns)
+	 * @param h height (number of rows)
 	 */
 	public RandomMaze(int w, int h)
 	{

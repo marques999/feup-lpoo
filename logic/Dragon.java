@@ -6,7 +6,7 @@ public final class Dragon extends Entity
 	private boolean sleeping;
 
 	/**
-	 * @brief default constructor for class 'Dragon'
+	 * default constructor for class 'Dragon'
 	 * @param pos initial coordinates for Dragon's position
 	 */
 	protected Dragon(Point pos)
@@ -17,7 +17,7 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * @brief constructor with parameters for class 'Dragon'
+	 * constructor with parameters for class 'Dragon'
 	 * @param x initial X coordinate for dragon position
 	 * @param y initial Y coordinate for dragon position
 	 */
@@ -27,7 +27,7 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * @return returns 'true' is dragon is asleep; 'false' otherwise
+	 * @return 'true' is dragon is asleep; 'false' otherwise
 	 */
 	public final boolean isSleeping()
 	{
@@ -35,7 +35,7 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * @brief toggles dragon sleep status (puts him to sleep/wakes him up)
+	 * toggles dragon sleep status (puts him to sleep/wakes him up)
 	 */
 	protected void toggleSleep()
 	{
@@ -85,8 +85,8 @@ public final class Dragon extends Entity
 	}
 
 	/**
+         * moves the dragon in the given direction
 	 * @param maze
-	 * @brief move the dragon
 	 * @param direction the direction to move
 	 */
 	@Override
@@ -121,7 +121,7 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * @brief attacks the 'Hero' from close range
+	 * attacks the 'Hero' with close range attacks
 	 * @param player the player entity
 	 */
 	private boolean canAttack(Hero player)
@@ -173,7 +173,7 @@ public final class Dragon extends Entity
 			return false;
 		}
 
-		for (int i = 0; i < 4 && maze.symbolAt(dragonX, dragonY) != 'X'; i++, dragonX += incrementX, dragonY += incrementY)
+		for (int i = 0; i <= 3 && maze.symbolAt(dragonX, dragonY) != 'X'; i++, dragonX += incrementX, dragonY += incrementY)
 		{
 			if (playerX == dragonX && playerY == dragonY)
 			{
@@ -203,7 +203,7 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * @brief draws the dragon on the game board
+	 * draws the dragon at its corresponding position
 	 */
 	@Override
 	protected void draw(Maze maze)

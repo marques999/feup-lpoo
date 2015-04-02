@@ -9,7 +9,7 @@ public final class Hero extends Entity
 	private Item shield = null;
 
 	/**
-	 * @brief default constructor for class 'Hero'
+	 * default constructor for class 'Hero'
 	 * @param pos initial coordinates for Player's position
 	 */
 	protected Hero(Point pos)
@@ -18,7 +18,7 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * @return returns 'true' if the player has the sword; 'false' otherwise
+	 * @return 'true' if the player has the sword; 'false' otherwise
 	 */
 	public final boolean hasSword()
 	{
@@ -34,7 +34,7 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * @return returns 'true' if player has the shield; 'false' otherwise
+	 * @return 'true' if player has the shield; 'false' otherwise
 	 */
 	public final boolean hasShield()
 	{
@@ -81,7 +81,7 @@ public final class Hero extends Entity
 
 			if (target != null)
 			{
-				maze.placeSymbol(positionX, positionY, '*');
+				maze.placeSymbol(positionX, positionY, 'x');
 				target.setHealth(0);
 				dart = null;
 
@@ -95,7 +95,8 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * @brief checks if player can move in specified direction
+	 * checks if player can move in specified direction
+         * 
 	 * @param direction
 	 * @param maze
 	 * @return returns 'true' if player is still alive and can move to the specified direction, 'false' otherwise
@@ -213,9 +214,10 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * @brief checks if player is close enough to attack an enemy dragon
+	 * checks if player is close enough to attack an enemy dragon
+         * 
 	 * @param dragon
-	 * @return returns 'true' if player has the sword and can attack the dragon; 'false' otherwise
+	 * @return 'true' if player has the sword and can attack the dragon; 'false' otherwise
 	 */
 	public final boolean canAttack(Dragon dragon)
 	{

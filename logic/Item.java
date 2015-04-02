@@ -8,7 +8,7 @@ public abstract class Item implements Serializable
 	protected Point pos;
 
 	/**
-	 * @brief default constructor for 'Item' class
+	 * Default constructor for 'Item' class
 	 * @param pos initial coordinates for Item's position
 	 */
 	protected Item(Point pos)

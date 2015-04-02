@@ -3,7 +3,7 @@ package lpoo.logic;
 public final class StaticMaze extends Maze
 {
 	/**
-	 * @brief generates a static maze (10x10)
+	 * Generates a static maze (10x10)
 	 */
 	public StaticMaze()
 	{

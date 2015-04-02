@@ -5,7 +5,7 @@ public final class Shield extends Item
 	private static final long serialVersionUID = -651778258839314342L;
 
 	/**
-	 * @brief default constructor for class 'Shield'
+	 * Default constructor for class 'Shield'
 	 * @param pos initial coordinates for Shield's position
 	 */
 	protected Shield(Point pos)
@@ -14,7 +14,7 @@ public final class Shield extends Item
 	}
 
 	/**
-	 * @brief draws the Shield at its corresponding position
+	 * Draws the Shield at its corresponding position
 	 * @param maze an instance of 'Maze' class
 	 */
 	@Override

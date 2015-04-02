@@ -38,13 +38,13 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 		undoStack = new Stack<>();
 		redoStack = new Stack<>();
 
-		addMouseListener(this);
-		addMouseMotionListener(this);
 		initializeCounters();
 		resetCounters();
 		updateCounters();
 		revalidate();
 		repaint();
+                addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 
 	private void initializeCounters()
@@ -77,7 +77,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 			{
 				switch (maze.symbolAt(j, i))
 				{
-				case 'H':
+				case 'h':
 					++numPlayers;
 					break;
 				case 'D':
@@ -104,7 +104,6 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 	protected void initializeMaze(int w, int h)
 	{
 		super.initializeMaze(w, h);
-
 		initializeCounters();
 		resetCounters();
 	}
@@ -234,7 +233,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 		}
 		else
 		{
-			writeSymbol(x, y, 'H');
+			writeSymbol(x, y, 'h');
 		}
 	}
 
@@ -290,6 +289,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 	{
 		undoStack.add(new LastAction(maze.symbolAt(x, y), s, new Point(x, y)));
 		maze.placeSymbol(x, y, s);
+                repaint();
 	}
 
 	protected void placeSymbol(int x, int y, char s)
@@ -414,7 +414,6 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 		return Math.round(mazeDifficulty + weaponDifficulty + dragonDifficulty);
 	}
 
-
 	@Override
 	public void mouseDragged(MouseEvent me)
 	{
@@ -424,8 +423,6 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 		{
 			redoStack.clear();
 		}
-
-		repaint();
 	}
 
 	@Override
@@ -437,8 +434,6 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 		{
 			redoStack.clear();
 		}
-
-		repaint();
 	}
 
 	@Override

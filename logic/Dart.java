@@ -5,7 +5,7 @@ public final class Dart extends Item
 	private static final long serialVersionUID = 2572702298191276648L;
 
 	/**
-	 * @brief default constructor for class 'Dart'
+	 * Default constructor for class 'Dart'
 	 * @param pos initial coordinates for Dart's position
 	 */
 	protected Dart(Point pos)
@@ -14,7 +14,7 @@ public final class Dart extends Item
 	}
 
 	/**
-	 * @brief draws the Dart at its corresponding position
+	 * Draws the Dart at its corresponding position
 	 * @param maze an instance of 'Maze' class
 	 */
 	@Override

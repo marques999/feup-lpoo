@@ -300,9 +300,7 @@ public class GameState
 		player = new Hero(maze.placeEntity('h'));
 		items.add(new Sword(maze.placeEntity('E')));
 		items.add(new Shield(maze.placeEntity('V')));
-		player.draw(maze);
-		drawDragons();
-		drawItems();
+		drawEverything();
 	}
 
 	public static void initializeStatic(Maze m)
@@ -318,17 +316,27 @@ public class GameState
 		items.add(new Sword(swordPosition));
 		items.add(new Shield(shieldPosition));
 		// dragons.add(new Dragon(1, 3));
-		player.draw(maze);
+		drawEverything();
 	}
+        
+        private static void drawEverything()
+        {
+            player.draw(maze);
+            drawDragons();
+            drawItems();
+        }
 
 	public static void initializeCustom(Maze m)
 	{
 		maze = m;
-		items = new LinkedList<>();
+                items = new LinkedList<>();
 
 		final Point playerPosition = maze.findSymbol('h');
+                System.out.println("Initializing player at position " + playerPosition);
 		final Point swordPosition = maze.findSymbol('E');
+                System.out.println("Initializing sword at position " + swordPosition);
 		final Point shieldPosition = maze.findSymbol('V');
+                System.out.println("Initializing shield at position " + shieldPosition);
 
 		if (playerPosition != null)
 		{
@@ -363,6 +371,7 @@ public class GameState
 
 		while (dragonPosition != null)
 		{
+                        System.out.println("Initializing dragon at position " + dragonPosition);
 			dragons.add(new Dragon(dragonPosition));
 			dragonPosition = maze.findSymbol('D');
 		}
@@ -371,9 +380,12 @@ public class GameState
 
 		while (dartPosition != null)
 		{
-			items.add(new Dart(dragonPosition));
+                        System.out.println("Initializing dart at position " + dartPosition);
+			items.add(new Dart(dartPosition));
 			dartPosition = maze.findSymbol('*');
 		}
+                
+                drawEverything();
 	}
 
 	public static final void printMaze()
