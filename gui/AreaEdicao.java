@@ -193,6 +193,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 				else
 				{
 					writeSymbol(x, y, 'S');
+                                        maze.setExitPosition(new Point(x, y));
 				}
 			}
 			else
@@ -368,9 +369,16 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 		
                 if (numSwords < 1)
 		{
-			dialogMessage += "You must place the sword (darts are optional).";
+			dialogMessage += "You must place the sword (darts are optional).\n";
                         validationSuccessful = false;
 		}
+
+                
+                if (!GUIValidation.checkBoundaries(maze))
+                {
+                    dialogMessage += "Maze boundaries must have exactly one exit and everything else walls.\n";
+                    validationSuccessful = false;
+                }
                 
                 if (validationSuccessful)
                 {

@@ -4,6 +4,8 @@ import java.io.*;
 
 public final class Point implements Serializable
 {
+	private static final long serialVersionUID = -2123191411932878529L;
+	
 	public int x;
 	public int y;
 
@@ -17,6 +19,7 @@ public final class Point implements Serializable
 
 	/**
 	 * constructor with parameters for class 'Point'
+	 * 
 	 * @param x initial X coordinate
 	 * @param y initial Y coordinate
 	 */
@@ -26,26 +29,15 @@ public final class Point implements Serializable
 		this.y = y;
 	}
 
-        @Override
-        public String toString()
-        {
-            return "(" + x + ", " + y + ")";
-        }
-        
-	protected void readObject(ObjectInputStream aInputStream) throws IOException
+	@Override
+	public String toString()
 	{
-		this.x = aInputStream.readInt();
-		this.y = aInputStream.readInt();
-	}
-
-	protected void writeObject(ObjectOutputStream aOutputStream) throws IOException
-	{
-		aOutputStream.writeInt(x);
-		aOutputStream.writeInt(y);
+		return "(" + x + ", " + y + ")";
 	}
 
 	/**
 	 * checks two points and their coordinates for equality
+	 * 
 	 * @param o point to be compared
 	 * @return 'true' if both points have the same coordinates; 'false' otherwise
 	 */

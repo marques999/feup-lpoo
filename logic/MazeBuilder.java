@@ -97,6 +97,8 @@ public final class MazeBuilder
 			{ 'X', ' ', 'X', 'X', ' ', ' ', ' ', ' ', ' ', 'X' },
 			{ 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' },
 		};
+                
+                m_exit = new Point(9, 5);
 	}
 
 	private void generateRandomMaze()
@@ -116,7 +118,7 @@ public final class MazeBuilder
 		while (!m_stack.empty())
 		{
 			generatePath();
-		}
+		} 
 	}
 
 	private void initializeMatrix()

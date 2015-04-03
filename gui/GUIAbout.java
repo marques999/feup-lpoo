@@ -52,7 +52,7 @@ public class GUIAbout extends JDialog
 		lblTitle.setFont(lblTitle.getFont().deriveFont(lblTitle.getFont().getStyle() | Font.BOLD, lblTitle.getFont().getSize() + 3));
 		lblTitle.setText("Maze Run");
 		pnlText.add(lblTitle, new GridBagConstraints());
-		lblVersion.setText("Version 0.66b5");
+		lblVersion.setText("Version 0.70b6");
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;

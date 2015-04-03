@@ -2,8 +2,10 @@ package lpoo.logic;
 
 public final class StaticMaze extends Maze
 {
+	private static final long serialVersionUID = 295455156635188483L;
+
 	/**
-	 * Generates a static maze (10x10)
+	 * generates a static maze (10x10)
 	 */
 	public StaticMaze()
 	{

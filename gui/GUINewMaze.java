@@ -8,10 +8,23 @@ import javax.swing.text.*;
 
 public class GUINewMaze extends JDialog 
 {
+        private int mazeWidth;
+        private int mazeHeight;
+        
 	public GUINewMaze(Frame parent) 
 	{
 		super(parent, true);
 		
+                if (mazeWidth == 0)
+                {
+                    mazeWidth = 11;
+                }
+                
+                if (mazeHeight == 0)
+                {
+                    mazeHeight = 11;
+                }
+                
 		initComponents();
 	}
 
@@ -35,9 +48,9 @@ public class GUINewMaze extends JDialog
 		jButton2.setText("Cancel");
 		jButton2.addActionListener(this::jButton2ActionPerformed);
 		jFormattedTextField1.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(NumberFormat.getIntegerInstance())));
-		jFormattedTextField1.setText("11");
+		jFormattedTextField1.setText(Integer.toString(GUIGlobals.editorWidth));
 		jFormattedTextField2.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(NumberFormat.getIntegerInstance())));
-		jFormattedTextField2.setText("11");
+		jFormattedTextField2.setText(Integer.toString(GUIGlobals.editorHeight));
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 
@@ -93,6 +106,8 @@ public class GUINewMaze extends JDialog
                 if (newWidth % 2 != 0 && newHeight % 2 != 0)
                 {
                     ((GUIMazeEditor) getParent()).newMaze(newWidth, newHeight);
+                    GUIGlobals.editorWidth = newWidth;
+                    GUIGlobals.editorHeight = newHeight;
                     dispose();
                 }
                 else

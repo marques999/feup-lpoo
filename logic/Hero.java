@@ -247,7 +247,7 @@ public final class Hero extends Entity
 
 	/**
 	 * @param maze
-	 * @brief draws a symbol on the screen representing the player
+	 * draws a symbol on the screen representing the player
 	 */
 	@Override
 	protected void draw(Maze maze)

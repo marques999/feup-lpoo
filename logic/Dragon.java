@@ -7,6 +7,7 @@ public final class Dragon extends Entity
 
 	/**
 	 * default constructor for class 'Dragon'
+	 *
 	 * @param pos initial coordinates for Dragon's position
 	 */
 	protected Dragon(Point pos)
@@ -18,6 +19,7 @@ public final class Dragon extends Entity
 
 	/**
 	 * constructor with parameters for class 'Dragon'
+	 *
 	 * @param x initial X coordinate for dragon position
 	 * @param y initial Y coordinate for dragon position
 	 */
@@ -43,8 +45,10 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * @return
-	 * @param maze
+	 * checks if the dragon can move in the given direction
+	 *
+	 * @return 'true' if the dragon is active and the destination cell is not a wall nor an exit, 'false', otherwise
+	 * @param maze game board
 	 * @param direction the direction to move
 	 */
 	protected final boolean validMove(Maze maze, Direction direction)
@@ -85,9 +89,10 @@ public final class Dragon extends Entity
 	}
 
 	/**
-         * moves the dragon in the given direction
-	 * @param maze
-	 * @param direction the direction to move
+	 * makes a valid move in the given direction
+	 *
+	 * @param maze game board
+	 * @param direction the direction to move the dragon
 	 */
 	@Override
 	protected void move(Maze maze, Direction direction)
@@ -121,10 +126,12 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * attacks the 'Hero' with close range attacks
-	 * @param player the player entity
+	 * checks if the dragon can attack the 'Hero' with close range melee attack
+	 *
+	 * @param player the target player entity
+	 * @return 'true' if the dragon is active and the player's position is adjacent to the dragon
 	 */
-	private boolean canAttack(Hero player)
+	protected final boolean canAttack(Hero player)
 	{
 		if (!isActive() || player.getHealth() <= 0 || player.hasSword())
 		{
@@ -141,6 +148,13 @@ public final class Dragon extends Entity
 		return pos.y <= hero.y + 1 && pos.y >= hero.y - 1 && pos.x == hero.x;
 	}
 
+	/**
+	 * checks if the dragon can attack the 'Hero' with fireballs
+	 *
+	 * @param maze
+	 * @param player the target player entity
+	 * @return 'true' is dragon is active and if player is in the line of sight, 'false' otherwise
+	 */
 	protected final boolean canAttackFire(Maze maze, Hero player)
 	{
 		if (!isActive() || player.getHealth() <= 0 || player.hasShield())
@@ -148,25 +162,18 @@ public final class Dragon extends Entity
 			return false;
 		}
 
-		if (canAttack(player))
-		{
-			return false;
-		}
-
-		final int playerX = player.getX();
-		final int playerY = player.getY();
 		int dragonX = pos.x;
 		int dragonY = pos.y;
 		int incrementX = 0;
 		int incrementY = 0;
 
-		if (playerY == pos.y && Math.abs(playerX - pos.x) <= 3)
+		if (player.pos.y == pos.y && Math.abs(player.pos.x - pos.x) <= 3)
 		{
-			incrementX = playerX < pos.x ? -1 : 1;
+			incrementX = player.pos.x < pos.x ? -1 : 1;
 		}
-		else if (playerX == pos.x && Math.abs(playerY - pos.y) <= 3)
+		else if (player.pos.x == pos.x && Math.abs(player.pos.y - pos.y) <= 3)
 		{
-			incrementY = playerY < pos.y ? -1 : 1;
+			incrementY = player.pos.y < pos.y ? -1 : 1;
 		}
 		else
 		{
@@ -175,7 +182,7 @@ public final class Dragon extends Entity
 
 		for (int i = 0; i <= 3 && maze.symbolAt(dragonX, dragonY) != 'X'; i++, dragonX += incrementX, dragonY += incrementY)
 		{
-			if (playerX == dragonX && playerY == dragonY)
+			if (player.pos.x == dragonX && player.pos.y == dragonY)
 			{
 				return true;
 			}
@@ -184,6 +191,12 @@ public final class Dragon extends Entity
 		return false;
 	}
 
+	/**
+	 * attacks the player with short-range melee
+	 *
+	 * @param maze game board
+	 * @param player the target player
+	 */
 	protected final void attack(Maze maze, Hero player)
 	{
 		if (canAttack(player))
@@ -193,6 +206,12 @@ public final class Dragon extends Entity
 		}
 	}
 
+	/**
+	 * attacks the player with long-ranged fireballs
+	 *
+	 * @param maze game board
+	 * @param player the target player
+	 */
 	protected final void attackFire(Maze maze, Hero player)
 	{
 		if (canAttackFire(maze, player))
@@ -204,6 +223,8 @@ public final class Dragon extends Entity
 
 	/**
 	 * draws the dragon at its corresponding position
+	 *
+	 * @param maze game board where the dragon is going to be placed
 	 */
 	@Override
 	protected void draw(Maze maze)
