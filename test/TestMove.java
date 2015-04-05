@@ -1,6 +1,6 @@
 package lpoo.test;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import lpoo.logic.*;
 import org.junit.Test;
 

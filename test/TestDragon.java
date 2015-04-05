@@ -1,6 +1,5 @@
 package lpoo.test;
 
-import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 import lpoo.logic.*;
 import static lpoo.test.TestInterface.moveDragon;
@@ -8,51 +7,34 @@ import org.junit.Test;
 
 public class TestDragon
 {
-
     @Test(timeout = 1000)
     public void test_dragonMoveRandom()
     {
         char[][] m1 =
         {
-            {
-                'X', 'X', 'X', 'X', 'X'
-            },
-            {
-                'X', 'h', ' ', ' ', 'X'
-            },
-            {
-                'X', ' ', 'X', ' ', 'S'
-            },
-            {
-                'X', ' ', ' ', 'D', 'X'
-            },
-            {
-                'X', 'X', 'X', 'X', 'X'
-            }
+            { 'X', 'X', 'X', 'X', 'X' },
+            { 'X', 'h', ' ', ' ', 'X' },
+            { 'X', ' ', 'X', ' ', 'S' },
+            { 'X', ' ', ' ', 'D', 'X' },
+            { 'X', 'X', 'X', 'X', 'X' }
         };
 
         Maze maze = new Maze(5, 5);
         maze.setMatrix(m1);
 
-        boolean movementSuccessful = false;
-
-        for (int i = 0; i < 1000; i++)
+        GameState.initializeCustom(maze);
+        GameState.setDragonMovement(GameState.DRAGON_RANDOM_NOSLEEP);
+        
+        Dragon d = GameState.getDragon();
+        Point oldPosition = new Point(d.getX(), d.getY());
+        
+        for (int i = 0; i < 100; i++)
         {
-            GameState.initializeCustom(maze);
-            GameState.setDragonMovement(1);
             GameState.updateDragons();
 
-            if (GameState.getDragon().getPosition().equals(new Point(3, 2)))
-            {
-                movementSuccessful = true;
-            }
-
-            if (GameState.getDragon().getPosition().equals(new Point(2, 3)))
-            {
-                movementSuccessful = true;
-            }
-
-            assertTrue(movementSuccessful);
+            assertFalse(GameState.getDragon().getPosition().equals(oldPosition));
+            
+            oldPosition = new Point(d.getX(), d.getY());
         }
     }
 
@@ -90,6 +72,7 @@ public class TestDragon
         Dragon d = GameState.placeDragon(dragonPosition);
 
         assertEquals(d.getPosition(), dragonPosition);
+        assertEquals(m.symbolAt(d.getPosition().x, d.getPosition().y), 'D');
 
         moveDragon(d, dragonMoves);
 
@@ -121,8 +104,8 @@ public class TestDragon
         Maze maze = new Maze(5, 5);
         maze.setMatrix(m1);
         GameState.initializeCustom(maze);
-        GameState.setDragonMovement(1);
-
+        GameState.setDragonMovement(GameState.DRAGON_STATIC_SLEEP);
+       
         for (int i = 0; i < 10; i++)
         {
             boolean hasSlept = false;
@@ -135,9 +118,9 @@ public class TestDragon
                 {
                     hasSlept = true;
                 }
-
-                assertTrue(hasSlept);
             }
+            
+            assertTrue(hasSlept);
         }
     }
 }

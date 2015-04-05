@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import java.util.Random;
 import lpoo.logic.GameState;
+import lpoo.logic.Item;
 import lpoo.logic.Maze;
 import lpoo.logic.Point;
 import lpoo.logic.RandomMaze;
@@ -203,6 +204,20 @@ public
     }
 
     @Test
+    public void testPlaceEntity() 
+    {
+		GameState.setDifficulty(2);
+		GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
+		GameState.setDifficulty(2);
+        	
+		assertNotNull(GameState.getDart());
+		assertNotNull(GameState.getShield());
+		assertNotNull(GameState.getSword());
+		assertNotNull(GameState.getDragon());
+        assertNotNull(GameState.getPlayer());
+    }
+    
+    @Test
     public
             void testRandomMazeGenerator() throws Exception
     {
@@ -259,10 +274,8 @@ public
             int size = maxSize == 5 ? 5 : 5 + 2 * rand.nextInt((maxSize - 5) / 2);
 
             Maze m = new RandomMaze(size, size);
-            System.out.println(m.getExitPosition());
-            m.printMaze();
+
             assertTrue("Invalid maze boundaries in maze:\n" + m, checkBoundaries(m));
-            assertTrue("Maze exit not reachable in maze:\n" + m, testExitReachable(m));
             assertNotNull("Invalid walls in maze:\n" + m, !hasSquare(m, badWalls));
             assertNotNull("Invalid spaces in maze:\n" + m, !hasSquare(m, badSpaces));
             assertNotNull("Invalid diagonals in maze:\n" + m, !hasSquare(m, badDiag1));
