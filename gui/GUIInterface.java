@@ -3,8 +3,7 @@ package lpoo.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import lpoo.logic.*;
@@ -12,9 +11,8 @@ import lpoo.logic.*;
 public class GUIInterface extends JFrame
 {
 	private static final long serialVersionUID = 7110803925049276531L;
-	
+
 	private boolean attackModifier;
-	private File customLevel;
 
 	public GUIInterface()
 	{
@@ -26,7 +24,7 @@ public class GUIInterface extends JFrame
 		{
 
 		}
-                
+
 		initializeGame();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/FireDragon_icon.png")));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -91,25 +89,25 @@ public class GUIInterface extends JFrame
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Maze Run");
 		setResizable(false);
-                
+
 		addWindowListener(new WindowAdapter()
 		{
-                        @Override
+			@Override
 			public void windowClosing(WindowEvent evt)
 			{
 				formWindowClosing(evt);
 			}
 		});
-                
+
 		addKeyListener(new KeyAdapter()
 		{
-                        @Override
+			@Override
 			public void keyPressed(KeyEvent evt)
 			{
 				formKeyPressed(evt);
 			}
 
-                        @Override
+			@Override
 			public void keyReleased(KeyEvent evt)
 			{
 				formKeyReleased(evt);
@@ -118,7 +116,7 @@ public class GUIInterface extends JFrame
 
 		lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 13));
 		lblStatus.setText("jLabel1");
-		
+
 		getContentPane().add(lblStatus, BorderLayout.PAGE_END);
 
 		pnlPlayfield.setPreferredSize(new Dimension(640, 480));
@@ -142,7 +140,7 @@ public class GUIInterface extends JFrame
 		btnLoadState.addActionListener(this::btnLoadStateActionPerformed);
 		mnGame.add(btnLoadState);
 		btnSaveState.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-		btnSaveState.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/disk.png"))); 
+		btnSaveState.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/disk.png")));
 		btnSaveState.setText("Save State");
 		btnSaveState.addActionListener(this::btnSaveStateActionPerformed);
 		mnGame.add(btnSaveState);
@@ -293,7 +291,7 @@ public class GUIInterface extends JFrame
 
 		boolean validKey = false;
 		boolean dartsSuccess = false;
-                
+
 		int pressedKey = evt.getKeyCode();
 		if (pressedKey == GUIGlobals.currentKeys[GUIGlobals.keyAction])
 		{
@@ -392,6 +390,10 @@ public class GUIInterface extends JFrame
 				initializeGame();
 			}
 		}
+		else
+		{
+			initializeGame();
+		}
 	}
 
 	private void loadLevel() throws IOException, ClassNotFoundException
@@ -431,7 +433,7 @@ public class GUIInterface extends JFrame
 	private void loadState() throws IOException, ClassNotFoundException
 	{
 		final JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run maze files (*.maze)", "maze"));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run saved games (*.state)", "state"));
 		int showOpenDialog = fileChooser.showOpenDialog(this);
 
 		FileInputStream fin;
@@ -472,7 +474,7 @@ public class GUIInterface extends JFrame
 			return;
 		}
 
-		final File buffer = fileChooser.getSelectedFile();
+		final File buffer = new File(fileChooser.getSelectedFile() + ".state");
 
 		fout = new FileOutputStream(buffer);
 		oout = new ObjectOutputStream(fout);
@@ -548,7 +550,7 @@ public class GUIInterface extends JFrame
 	{
 		applyZoom(-1);
 	}
-	
+
 	private void mnZoom100ActionPerformed(ActionEvent evt)
 	{
 		applyZoom(0);

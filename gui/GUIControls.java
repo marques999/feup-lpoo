@@ -6,10 +6,11 @@ import java.awt.event.*;
 
 public class GUIControls extends JDialog
 {
+	private static final long serialVersionUID = -8149382556518476951L;
+
 	public GUIControls(Frame parent)
 	{
 		super(parent, true);
-
 		initComponents();
 	}
 

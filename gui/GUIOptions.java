@@ -6,6 +6,8 @@ import java.util.*;
 
 public class GUIOptions extends JDialog
 {
+	private static final long serialVersionUID = 6446917038319653114L;
+
 	private int userDifficulty = 1;
 	private int numberDragons = 1;
 	private int dragonMovement = 2;
@@ -16,8 +18,10 @@ public class GUIOptions extends JDialog
 	public GUIOptions(Frame parent)
 	{
 		super(parent, true);
+
 		spriteDragon = new ImageIcon(getClass().getResource("/lpoo/res/dragon-64x64.png"));
 		spriteHero = new ImageIcon(getClass().getResource("/lpoo/res/Knight-concept-art.png"));
+
 		initComponents();
 		setLocationRelativeTo(getParent());
 		loadDefaults();

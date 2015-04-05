@@ -4,7 +4,7 @@ import static java.awt.event.KeyEvent.*;
 import java.io.*;
 import lpoo.logic.GameState;
 
-public class GUIGlobals implements Serializable
+public class GUIGlobals
 {
 	protected static transient final int keyUp = 0;
 	protected static transient final int keyDown = 1;
@@ -15,16 +15,17 @@ public class GUIGlobals implements Serializable
 
 	protected static int dragonDifficulty = GameState.DRAGON_STATIC_NOSLEEP;
 	protected static int userDifficulty = 1;
-        protected static int interfaceZoom = 0;
+	protected static int interfaceZoom = 0;
 	protected static int mazeWidth = 7;
 	protected static int mazeHeight = 7;
-        protected static int editorWidth = 11;
-        protected static int editorHeight = 11;
+	protected static int editorWidth = 11;
+	protected static int editorHeight = 11;
 	protected static int numberDragons = 1;
 	protected static int[] currentKeys = defaultKeys.clone();
 
 	/**
-	 * @brief reads user preferences from a stream
+	 * reads user preferences from a stream
+	 * 
 	 * @param aInputStream objectInputStream to read from
 	 * @throws IOException if stream not found or invalid
 	 * @throws ClassNotFoundException
@@ -32,25 +33,26 @@ public class GUIGlobals implements Serializable
 	protected static void read(ObjectInputStream aInputStream) throws IOException, ClassNotFoundException
 	{
 		dragonDifficulty = aInputStream.readInt();
-                userDifficulty = aInputStream.readInt();
-                numberDragons = aInputStream.readInt();
-                interfaceZoom = aInputStream.readInt();
+		userDifficulty = aInputStream.readInt();
+		numberDragons = aInputStream.readInt();
+		interfaceZoom = aInputStream.readInt();
 		mazeWidth = aInputStream.readInt();
 		mazeHeight = aInputStream.readInt();
 		currentKeys = (int[]) aInputStream.readObject();
 	}
 
 	/**
-	 * @brief writes user preferences to a stream
+	 * writes user preferences to a stream
+	 * 
 	 * @param aOutputStream objectOutputStream to write to
 	 * @throws IOException if stream invalid, insufficient permissions or file not found
 	 */
 	protected static void write(ObjectOutputStream aOutputStream) throws IOException
 	{
 		aOutputStream.writeInt(dragonDifficulty);
-                aOutputStream.writeInt(userDifficulty);
-                aOutputStream.writeInt(numberDragons);
-                aOutputStream.writeInt(interfaceZoom);
+		aOutputStream.writeInt(userDifficulty);
+		aOutputStream.writeInt(numberDragons);
+		aOutputStream.writeInt(interfaceZoom);
 		aOutputStream.writeInt(mazeWidth);
 		aOutputStream.writeInt(mazeHeight);
 		aOutputStream.writeObject(currentKeys);

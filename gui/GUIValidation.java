@@ -5,91 +5,91 @@ import lpoo.logic.Point;
 
 public class GUIValidation
 {
-    protected static boolean checkBoundaries(Maze m)
-    {
-        int mazeWidth = m.getWidth();
-        int mazeHeight = m.getHeight();
-        
-        for (int x = 0; x < mazeWidth; x++)
-        {
-            if (m.symbolAt(x, 0) != 'X' && m.symbolAt(x, 0) != 'S')
-            {
-                return false;
-            }
-            if (m.symbolAt(x, mazeHeight - 1) != 'X' && m.symbolAt(x, mazeHeight - 1) != 'S')
-            {
-                return false;
-            }
-        }
-        
-        for (int y = 0; y < mazeHeight; y++)
-        {
-            if (m.symbolAt(0, y) != 'X' && m.symbolAt(0, y) != 'S')
-            {
-                return false;
-            }
-            if (m.symbolAt(mazeWidth - 1, y) != 'X' && m.symbolAt(mazeWidth - 1, y) != 'S')
-            {
-                return false;
-            }
-        }
-        
-        return true;
-    }
+	protected static boolean checkBoundaries(Maze m)
+	{
+		int mazeWidth = m.getWidth();
+		int mazeHeight = m.getHeight();
 
-    // c) there must exist a path between any blank cell and the maze exit 
-    protected static boolean checkExit(Maze maze)
-    {
-        Point p = maze.getExitPosition();
+		for (int x = 0; x < mazeWidth; x++)
+		{
+			if (m.symbolAt(x, 0) != 'X' && m.symbolAt(x, 0) != 'S')
+			{
+				return false;
+			}
+			if (m.symbolAt(x, mazeHeight - 1) != 'X' && m.symbolAt(x, mazeHeight - 1) != 'S')
+			{
+				return false;
+			}
+		}
 
-        char[][] m = deepClone(maze.getMatrix());
+		for (int y = 0; y < mazeHeight; y++)
+		{
+			if (m.symbolAt(0, y) != 'X' && m.symbolAt(0, y) != 'S')
+			{
+				return false;
+			}
+			if (m.symbolAt(mazeWidth - 1, y) != 'X' && m.symbolAt(mazeWidth - 1, y) != 'S')
+			{
+				return false;
+			}
+		}
 
-        visit(m, p.x, p.y);
+		return true;
+	}
 
-        for (char[] m1 : m)
-        {
-            for (char m2 : m1)
-            {
-                if (m2 != 'X' && m2 != 'V')
-                {
-                    return false;
-                }
-            }
-        }
+	// c) there must exist a path between any blank cell and the maze exit
+	protected static boolean checkExit(Maze maze)
+	{
+		Point p = maze.getExitPosition();
 
-        return true;
-    }
+		char[][] m = deepClone(maze.getMatrix());
 
-    // auxiliary method used by checkExitReachable
-    // marks a cell as visited (V) and proceeds recursively to its neighbors
-    private static void visit(char[][] m, int i, int j)
-    {
-        if (i < 0 || i >= m.length || j < 0 || j >= m[i].length)
-        {
-            return;
-        }
-        
-        if (m[i][j] == 'X' || m[i][j] == 'V')
-        {
-            return;
-        }
-        
-        m[i][j] = 'V';
-        visit(m, i - 1, j);
-        visit(m, i + 1, j);
-        visit(m, i, j - 1);
-        visit(m, i, j + 1);
-    }
+		visit(m, p.x, p.y);
 
-    private static char[][] deepClone(char[][] m)
-    {
-        char[][] c = m.clone();
+		for (char[] m1 : m)
+		{
+			for (char m2 : m1)
+			{
+				if (m2 != 'X' && m2 != 'V')
+				{
+					return false;
+				}
+			}
+		}
 
-        for (int i = 0; i < m.length; i++)
-        {
-            c[i] = m[i].clone();
-        }
+		return true;
+	}
 
-        return c;
-    }
+	// auxiliary method used by checkExitReachable
+	// marks a cell as visited (V) and proceeds recursively to its neighbors
+	private static void visit(char[][] m, int i, int j)
+	{
+		if (i < 0 || i >= m.length || j < 0 || j >= m[i].length)
+		{
+			return;
+		}
+
+		if (m[i][j] == 'X' || m[i][j] == 'V')
+		{
+			return;
+		}
+
+		m[i][j] = 'V';
+		visit(m, i - 1, j);
+		visit(m, i + 1, j);
+		visit(m, i, j - 1);
+		visit(m, i, j + 1);
+	}
+
+	private static char[][] deepClone(char[][] m)
+	{
+		char[][] c = m.clone();
+
+		for (int i = 0; i < m.length; i++)
+		{
+			c[i] = m[i].clone();
+		}
+
+		return c;
+	}
 }

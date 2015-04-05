@@ -7,8 +7,9 @@ import lpoo.logic.Point;
 
 public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotionListener
 {
-	private char m_symbol;
+	private static final long serialVersionUID = -785925844156498848L;
 
+	private char mazeSymbol;
 	private Stack<LastAction> undoStack;
 	private Stack<LastAction> redoStack;
 
@@ -34,7 +35,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 	{
 		super(w, h);
 
-		m_symbol = ' ';
+		mazeSymbol = ' ';
 		undoStack = new Stack<>();
 		redoStack = new Stack<>();
 
@@ -43,7 +44,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 		updateCounters();
 		revalidate();
 		repaint();
-                addMouseListener(this);
+		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
 
@@ -158,7 +159,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 
 	protected void setSymbol(char s)
 	{
-		this.m_symbol = s;
+		this.mazeSymbol = s;
 	}
 
 	private void placeDart(int x, int y)
@@ -193,7 +194,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 				else
 				{
 					writeSymbol(x, y, 'S');
-                                        maze.setExitPosition(new Point(x, y));
+					maze.setExitPosition(new Point(x, y));
 				}
 			}
 			else
@@ -290,7 +291,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 	{
 		undoStack.add(new LastAction(maze.symbolAt(x, y), s, new Point(x, y)));
 		maze.placeSymbol(x, y, s);
-                repaint();
+		repaint();
 	}
 
 	protected void placeSymbol(int x, int y, char s)
@@ -339,61 +340,60 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 	protected boolean validateMaze()
 	{
 		updateCounters();
-                
-                boolean validationSuccessful = true;
-                String dialogMessage = "";
+
+		boolean validationSuccessful = true;
+		String dialogMessage = "";
 
 		if (numPlayers < 1)
 		{
-                        dialogMessage += "You must place the player first.\n";
-                        validationSuccessful = false;
+			dialogMessage += "You must place the player first.\n";
+			validationSuccessful = false;
 		}
-                
+
 		if (numDoors < 1)
 		{
 			dialogMessage += "You must place an exit.\n";
-                        validationSuccessful = false;
+			validationSuccessful = false;
 		}
-                
+
 		if (numDragons < 1)
 		{
 			dialogMessage += "You must place at least one dragon.\n";
-                        validationSuccessful = false;
+			validationSuccessful = false;
 		}
-                
+
 		if (numShields < 1)
 		{
 			dialogMessage += "You must place the shield.\n";
-                        validationSuccessful = false;
-		}
-		
-                if (numSwords < 1)
-		{
-			dialogMessage += "You must place the sword (darts are optional).\n";
-                        validationSuccessful = false;
+			validationSuccessful = false;
 		}
 
-                
-                if (!GUIValidation.checkBoundaries(maze))
-                {
-                    dialogMessage += "Maze boundaries must have exactly one exit and everything else walls.\n";
-                    validationSuccessful = false;
-                }
-                
-                if (validationSuccessful)
-                {
-                    JOptionPane.showMessageDialog(getParent(), "Maze successfully validated!", "Validation results", JOptionPane.OK_OPTION);
-                }
+		if (numSwords < 1)
+		{
+			dialogMessage += "You must place the sword (darts are optional).\n";
+			validationSuccessful = false;
+		}
+
+		if (!GUIValidation.checkBoundaries(maze))
+		{
+			dialogMessage += "Maze boundaries must have exactly one exit and everything else walls.\n";
+			validationSuccessful = false;
+		}
+
+		if (validationSuccessful)
+		{
+			JOptionPane.showMessageDialog(getParent(), "Maze successfully validated!", "Validation results", JOptionPane.OK_OPTION);
+		}
 		else
 		{
-                    JOptionPane.showMessageDialog(getParent(), dialogMessage, "Validation results", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(getParent(), dialogMessage, "Validation results", JOptionPane.ERROR_MESSAGE);
 
 		}
 
 		return validationSuccessful;
 	}
-        
-        protected int getDifficulty()
+
+	protected int getDifficulty()
 	{
 		int mazeDifficulty;
 
@@ -413,8 +413,8 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 		{
 			mazeDifficulty = 4;
 		}
-                
-                mazeDifficulty *= 0.5;
+
+		mazeDifficulty *= 0.5;
 
 		int dragonDifficulty = numDragons / maxDragons;
 		int weaponDifficulty = 1 - (numDarts / maxDarts);
@@ -425,7 +425,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 	@Override
 	public void mouseDragged(MouseEvent me)
 	{
-		placeSymbol(me.getX() / spriteWidth, me.getY() / spriteHeight, m_symbol);
+		placeSymbol(me.getX() / spriteWidth, me.getY() / spriteHeight, mazeSymbol);
 
 		if (!redoStack.empty())
 		{
@@ -436,7 +436,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 	@Override
 	public void mousePressed(MouseEvent me)
 	{
-		placeSymbol(me.getX() / spriteWidth, me.getY() / spriteHeight, m_symbol);
+		placeSymbol(me.getX() / spriteWidth, me.getY() / spriteHeight, mazeSymbol);
 
 		if (!redoStack.empty())
 		{

@@ -11,12 +11,14 @@ import lpoo.logic.RandomMaze;
 
 public class AreaDesenho extends JPanel
 {
+	private static final long serialVersionUID = 1652644943686379111L;
+	
 	private BufferedImage spriteHero;
 	private BufferedImage spriteHeroShield;
 	private BufferedImage spriteHeroSword;
 	private BufferedImage spriteHeroUnarmed;
 	private BufferedImage spriteDragon;
-        private BufferedImage spriteDragonSleeping;
+	private BufferedImage spriteDragonSleeping;
 	private BufferedImage spriteDoorOpened;
 	private BufferedImage spriteDoorClosed;
 	private BufferedImage spriteDart;
@@ -32,7 +34,7 @@ public class AreaDesenho extends JPanel
 	private BufferedImage resizedHeroSword;
 	private BufferedImage resizedHeroUnarmed;
 	private BufferedImage resizedDragon;
-        private BufferedImage resizedDragonSleeping;
+	private BufferedImage resizedDragonSleeping;
 	private BufferedImage resizedDart;
 	private BufferedImage resizedDoorOpened;
 	private BufferedImage resizedDoorClosed;
@@ -80,6 +82,7 @@ public class AreaDesenho extends JPanel
 	{
 		BufferedImage resized = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g = resized.createGraphics();
+
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g.drawImage(img, 0, 0, newWidth, newHeight, 0, 0, img.getWidth(), img.getHeight(), null);
 		g.dispose();
@@ -97,7 +100,7 @@ public class AreaDesenho extends JPanel
 		updateWindow();
 	}
 
-	protected void initializeMaze(Maze m)
+	protected final void initializeMaze(Maze m)
 	{
 		maze = m;
 		mazeWidth = m.getWidth();
@@ -119,7 +122,7 @@ public class AreaDesenho extends JPanel
 
 		setPreferredSize(windowSize);
 		revalidate();
-                repaint();
+		repaint();
 	}
 
 	protected void generateMaze()
@@ -131,9 +134,9 @@ public class AreaDesenho extends JPanel
 	{
 		char[][] newMatrix = new char[mazeHeight][mazeWidth];
 
-		for (char[] r : newMatrix)
+		for (char[] row : newMatrix)
 		{
-			Arrays.fill(r, ' ');
+			Arrays.fill(row, ' ');
 		}
 
 		maze.setMatrix(newMatrix);
@@ -144,10 +147,9 @@ public class AreaDesenho extends JPanel
 	{
 		try
 		{
-
 			spriteDart = ImageIO.read(this.getClass().getResource("/lpoo/res/dart-64x64.png"));
 			spriteDragon = ImageIO.read(this.getClass().getResource("/lpoo/res/dragon-64x64.png"));
-                        spriteDragonSleeping = ImageIO.read(this.getClass().getResource("/lpoo/res/dragon-sleep-64x64.png"));
+			spriteDragonSleeping = ImageIO.read(this.getClass().getResource("/lpoo/res/dragon-sleep-64x64.png"));
 			spriteDoorOpened = ImageIO.read(this.getClass().getResource("/lpoo/res/door2-64x64.png"));
 			spriteDoorClosed = ImageIO.read(this.getClass().getResource("/lpoo/res/door1-64x64.png"));
 			spriteFireball = ImageIO.read(this.getClass().getResource("/lpoo/res/fireball-64x64.png"));
@@ -166,14 +168,14 @@ public class AreaDesenho extends JPanel
 		}
 	}
 
-	protected void scaleSprites(int w, int h)
+	protected final void scaleSprites(int w, int h)
 	{
 		spriteWidth = w;
 		spriteHeight = h;
-		
+
 		resizedDart = resizeImage(spriteDart, spriteWidth, spriteHeight);
 		resizedDragon = resizeImage(spriteDragon, spriteWidth, spriteHeight);
-                resizedDragonSleeping = resizeImage(spriteDragonSleeping, spriteWidth, spriteHeight);
+		resizedDragonSleeping = resizeImage(spriteDragonSleeping, spriteWidth, spriteHeight);
 		resizedDoorOpened = resizeImage(spriteDoorOpened, spriteWidth, spriteHeight);
 		resizedDoorClosed = resizeImage(spriteDoorClosed, spriteWidth, spriteHeight);
 		resizedFireball = resizeImage(spriteFireball, spriteWidth, spriteHeight);
@@ -210,7 +212,7 @@ public class AreaDesenho extends JPanel
 	}
 
 	@Override
-	public void paintComponent(Graphics g)
+	public final void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
 
@@ -247,9 +249,9 @@ public class AreaDesenho extends JPanel
 				case 'D':
 					graphicsBuffer.drawImage(resizedDragon, x, y, null);
 					break;
-                                case 'd':
-                                        graphicsBuffer.drawImage(resizedDragonSleeping, x, y, null);
-                                        break;
+				case 'd':
+					graphicsBuffer.drawImage(resizedDragonSleeping, x, y, null);
+					break;
 				case 'S':
 					graphicsBuffer.drawImage(resizedDoorClosed, x, y, null);
 					break;
