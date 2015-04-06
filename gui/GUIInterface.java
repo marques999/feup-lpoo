@@ -3,7 +3,6 @@ package lpoo.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import lpoo.logic.*;
@@ -16,18 +15,8 @@ public class GUIInterface extends JFrame
 
 	public GUIInterface()
 	{
-		try
-		{
-			initComponents();
-		}
-		catch (Exception ex)
-		{
-
-		}
-
+		initComponents();
 		initializeGame();
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/FireDragon_icon.png")));
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		applyZoom(GUIGlobals.interfaceZoom);
 		attackModifier = false;
 	}
@@ -54,7 +43,6 @@ public class GUIInterface extends JFrame
 	{
 		pnlPlayfield.setPreferredSize(pnlPlayfield.getWindowSize());
 		pnlPlayfield.repaint();
-
 		checkState();
 		revalidate();
 		pack();
@@ -86,10 +74,11 @@ public class GUIInterface extends JFrame
 		mnHelp = new JMenu();
 		btnAbout = new JMenuItem();
 
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setTitle("Maze Run");
+                setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/FireDragon_icon.png")));
+                setTitle("Maze Run");
 		setResizable(false);
-
+		
 		addWindowListener(new WindowAdapter()
 		{
 			@Override
@@ -114,7 +103,7 @@ public class GUIInterface extends JFrame
 			}
 		});
 
-		lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 13));
+		lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 13));
 		lblStatus.setText("jLabel1");
 
 		getContentPane().add(lblStatus, BorderLayout.PAGE_END);
@@ -206,39 +195,32 @@ public class GUIInterface extends JFrame
 	}
 
 	private void confirmExit()
-	{
-		int r = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit without saving?", "Exit", JOptionPane.YES_NO_OPTION);
-
-		if (r != JOptionPane.OK_OPTION)
+        {
+                if (!GameState.gameOver())
 		{
-			return;
-		}
+                        int r = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit your current game?", "Exit", JOptionPane.YES_NO_OPTION);
 
+                        if (r != JOptionPane.OK_OPTION)
+                        {
+                                return;
+                        }
+                }
+		
 		File buffer = new File("User Settings");
-		FileOutputStream fout = null;
-		ObjectOutputStream oout = null;
+		FileOutputStream fout;
+		ObjectOutputStream oout;
 
 		try
 		{
 			fout = new FileOutputStream(buffer);
 			oout = new ObjectOutputStream(fout);
 			GUIGlobals.write(oout);
+                        oout.close();
+			fout.close();
 		}
 		catch (IOException ex)
 		{
-			Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		finally
-		{
-			try
-			{
-				oout.close();
-				fout.close();
-			}
-			catch (IOException ex)
-			{
-				Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
-			}
+                        GUIGlobals.abort(ex, this);
 		}
 
 		System.exit(0);
@@ -383,9 +365,7 @@ public class GUIInterface extends JFrame
 	{
 		if (!GameState.gameOver())
 		{
-			int r = JOptionPane.showConfirmDialog(this, "Are you sure you want to start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
-
-			if (r == JOptionPane.YES_OPTION)
+			if (JOptionPane.showConfirmDialog(this, "Are you sure you want to start a new game?", "New Game", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 			{
 				initializeGame();
 			}
@@ -396,17 +376,15 @@ public class GUIInterface extends JFrame
 		}
 	}
 
-	private void loadLevel() throws IOException, ClassNotFoundException
+	private void loadLevel()
 	{
-		final JFileChooser fileChooser = new JFileChooser();
+		JFileChooser fileChooser = new JFileChooser();
+                FileInputStream fin;
+		ObjectInputStream oin;
+                
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run maze files (*.maze)", "maze"));
 
-		int showOpenDialog = fileChooser.showOpenDialog(this);
-
-		FileInputStream fin;
-		ObjectInputStream oin;
-
-		if (showOpenDialog != JFileChooser.APPROVE_OPTION)
+		if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
 		{
 			return;
 		}
@@ -418,28 +396,35 @@ public class GUIInterface extends JFrame
 			return;
 		}
 
-		fin = new FileInputStream(buffer);
-		oin = new ObjectInputStream(fin);
-		Maze newMaze = (Maze) oin.readObject();
-
-		pnlPlayfield.initializeMaze(newMaze);
-		GameState.initializeCustom(newMaze);
-		GameState.setDragonMovement(GUIGlobals.dragonDifficulty);
-		resumeGame();
-		fin.close();
-		oin.close();
+		try 
+                {
+                    fin = new FileInputStream(buffer);
+                    oin = new ObjectInputStream(fin);
+                    
+                    Maze newMaze = (Maze) oin.readObject();
+                    
+                    pnlPlayfield.initializeMaze(newMaze);
+                    GameState.initializeCustom(newMaze);
+                    GameState.setDragonMovement(GUIGlobals.dragonDifficulty);
+                    resumeGame();
+                    fin.close();
+                    oin.close();
+                }
+                catch (IOException | ClassNotFoundException ex)
+                {
+                    GUIGlobals.abort(ex, this);
+                }
 	}
 
-	private void loadState() throws IOException, ClassNotFoundException
+	private void loadState()
 	{
-		final JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run saved games (*.state)", "state"));
-		int showOpenDialog = fileChooser.showOpenDialog(this);
-
-		FileInputStream fin;
+		JFileChooser fileChooser = new JFileChooser();
+                FileInputStream fin;
 		ObjectInputStream oin;
+                
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run saved games (*.state)", "state"));
 
-		if (showOpenDialog != JFileChooser.APPROVE_OPTION)
+		if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
 		{
 			return;
 		}
@@ -451,72 +436,64 @@ public class GUIInterface extends JFrame
 			return;
 		}
 
-		fin = new FileInputStream(buffer);
-		oin = new ObjectInputStream(fin);
-
-		GameState.read(oin);
-		resumeGame();
-		oin.close();
-		fin.close();
+		try
+                {
+                    fin = new FileInputStream(buffer);
+                    oin = new ObjectInputStream(fin);
+                    GameState.read(oin);
+                    pnlPlayfield.initializeMaze(GameState.getMaze());
+                    resumeGame();
+                    oin.close();
+                    fin.close();
+                }
+                catch (IOException | ClassNotFoundException ex)
+                {
+                    GUIGlobals.abort(ex, this);
+                }
 	}
-
-	private void saveState() throws IOException
+        
+	private void saveState()
 	{
 		FileOutputStream fout;
-		final JFileChooser fileChooser = new JFileChooser();
+                ObjectOutputStream oout;
+		JFileChooser fileChooser = new JFileChooser();
+                
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run saved games (*.state)", "state"));
-		ObjectOutputStream oout;
-
-		int showSaveDialog = fileChooser.showSaveDialog(this);
-
-		if (showSaveDialog != JFileChooser.APPROVE_OPTION)
+		
+		if (fileChooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
 		{
 			return;
 		}
 
 		final File buffer = new File(fileChooser.getSelectedFile() + ".state");
 
-		fout = new FileOutputStream(buffer);
-		oout = new ObjectOutputStream(fout);
-		GameState.write(oout);
-		oout.close();
-		fout.close();
+		try 
+                {
+                    fout = new FileOutputStream(buffer);
+                    oout = new ObjectOutputStream(fout);
+                    GameState.write(oout);
+                    oout.close();
+                    fout.close();
+                }
+		catch (IOException ex)
+                {
+                    GUIGlobals.abort(ex, this);
+                }
 	}
 
 	private void btnLoadStateActionPerformed(ActionEvent evt)
 	{
-		try
-		{
-			loadState();
-		}
-		catch (IOException | ClassNotFoundException ex)
-		{
-			Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
-		}
+                loadState();
 	}
 
 	private void btnSaveStateActionPerformed(ActionEvent evt)
 	{
-		try
-		{
-			saveState();
-		}
-		catch (IOException ex)
-		{
-			Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		saveState();
 	}
 
 	private void btnLoadLevelActionPerformed(ActionEvent evt)
 	{
-		try
-		{
-			loadLevel();
-		}
-		catch (IOException | ClassNotFoundException ex)
-		{
-			Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
-		}
+                loadLevel();
 	}
 
 	private void applyZoom(int zoom)
@@ -524,19 +501,19 @@ public class GUIInterface extends JFrame
 		switch (zoom)
 		{
 		case -1: // 24x24
-			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 10));
+			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 10));
 			pnlPlayfield.scaleSprites(24, 24);
 			break;
 		case 0: // 32x32
+                        lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 13));
 			pnlPlayfield.scaleSprites(32, 32);
-			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 13));
 			break;
 		case 1: // 48x48
-			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 15));
+			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 15));
 			pnlPlayfield.scaleSprites(48, 48);
 			break;
 		case 2: // 64x64
-			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | java.awt.Font.BOLD, 17));
+			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 17));
 			pnlPlayfield.scaleSprites(64, 64);
 			break;
 		}

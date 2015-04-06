@@ -2,6 +2,7 @@ package lpoo.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.*;
 
 public class GUIOptions extends JDialog
@@ -23,7 +24,6 @@ public class GUIOptions extends JDialog
 		spriteHero = new ImageIcon(getClass().getResource("/lpoo/res/Knight-concept-art.png"));
 
 		initComponents();
-		setLocationRelativeTo(getParent());
 		loadDefaults();
 	}
 
@@ -110,9 +110,9 @@ public class GUIOptions extends JDialog
 		pnlCustom = new JPanel();
 		rbGameCustom = new JRadioButton();
 		lblX = new JLabel();
-		spnWidth = new javax.swing.JSpinner();
-		spnHeight = new javax.swing.JSpinner();
-		pnlButtons = new javax.swing.JPanel();
+		spnWidth = new JSpinner();
+		spnHeight = new JSpinner();
+		pnlButtons = new JPanel();
 		btnStart = new JButton();
 		btnCancel = new JButton();
 		lblDifficulty = new JLabel();
@@ -122,11 +122,12 @@ public class GUIOptions extends JDialog
 		pnlHero = new JPanel();
 		lblHero = new JLabel();
 
-		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-		setTitle("Preferences");
 		setAutoRequestFocus(false);
 		setBackground(Color.WHITE);
+                setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+                setLocationRelativeTo(getParent());
 		setResizable(false);
+                setTitle("Preferences");
 		getContentPane().setLayout(new GridBagLayout());
 
 		jSplitPane1.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -236,14 +237,14 @@ public class GUIOptions extends JDialog
 		btnCancel.addActionListener(this::jButton2ActionPerformed);
 		pnlButtons.add(btnCancel);
 
-		gridBagConstraints = new java.awt.GridBagConstraints();
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 12;
 		gridBagConstraints.ipady = 1;
-		gridBagConstraints.insets = new java.awt.Insets(16, 0, 16, 0);
+		gridBagConstraints.insets = new Insets(16, 0, 16, 0);
 
 		pnlSelect.add(pnlButtons, gridBagConstraints);
-		lblDifficulty.setFont(lblDifficulty.getFont().deriveFont(lblDifficulty.getFont().getStyle() | java.awt.Font.BOLD));
+		lblDifficulty.setFont(lblDifficulty.getFont().deriveFont(lblDifficulty.getFont().getStyle() | Font.BOLD));
 		lblDifficulty.setText("Select dragon difficulty:");
 
 		gridBagConstraints = new GridBagConstraints();
@@ -268,14 +269,21 @@ public class GUIOptions extends JDialog
 		cmbNumber.setEnabled(false);
 		cmbNumber.addActionListener(this::cmbNumberActionPerformed);
 
-		gridBagConstraints = new java.awt.GridBagConstraints();
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 10;
-		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 
 		pnlSelect.add(cmbNumber, gridBagConstraints);
-		cmbDifficulty.setModel(new DefaultComboBoxModel(new String[] { "Beginner (static, random sleep)", "Easy (static, doesn't sleep)",
-				"Medium (random, random sleep)", "Hard (random, doesn't sleep)" }));
+                
+		cmbDifficulty.setModel(new DefaultComboBoxModel(new String[] 
+                {
+                        "Beginner (static, random sleep)",
+                        "Easy (static, doesn't sleep)",
+                        "Medium (random, random sleep)", 
+                        "Hard (random, doesn't sleep)" 
+                }));
+                
 		cmbDifficulty.addActionListener(this::cmbDifficultyActionPerformed);
 
 		gridBagConstraints = new GridBagConstraints();
@@ -295,58 +303,55 @@ public class GUIOptions extends JDialog
 		lblHero.setIcon(spriteHero);
 		pnlHero.add(lblHero);
 
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new Insets(0, 4, 0, 4);
 		getContentPane().add(pnlHero, gridBagConstraints);
 		pack();
 	}
-
-	private void rbGameBeginnerActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		cmbNumber.setEnabled(false);
+        
+        private void disableCustom()
+        {
+            	cmbNumber.setEnabled(false);
 		spnWidth.setEnabled(false);
 		spnHeight.setEnabled(false);
+        }
+
+	private void rbGameBeginnerActionPerformed(ActionEvent evt)
+	{
+		disableCustom();
 		userDifficulty = 1;
 		visibleDragons(1);
 	}
 
-	private void rbGameEasyActionPerformed(java.awt.event.ActionEvent evt)
+	private void rbGameEasyActionPerformed(ActionEvent evt)
 	{
-		cmbNumber.setEnabled(false);
-		spnWidth.setEnabled(false);
-		spnHeight.setEnabled(false);
+		disableCustom();
 		userDifficulty = 2;
 		visibleDragons(2);
 	}
 
-	private void rbGameMediumActionPerformed(java.awt.event.ActionEvent evt)
+	private void rbGameMediumActionPerformed(ActionEvent evt)
 	{
-		cmbNumber.setEnabled(false);
-		spnWidth.setEnabled(false);
-		spnHeight.setEnabled(false);
+		disableCustom();
 		userDifficulty = 3;
 		visibleDragons(3);
 	}
 
-	private void rbGameHardActionPerformed(java.awt.event.ActionEvent evt)
+	private void rbGameHardActionPerformed(ActionEvent evt)
 	{
-		cmbNumber.setEnabled(false);
-		spnWidth.setEnabled(false);
-		spnHeight.setEnabled(false);
+		disableCustom();
 		userDifficulty = 4;
 		visibleDragons(6);
 	}
 
-	private void rbGameNightmareActionPerformed(java.awt.event.ActionEvent evt)
+	private void rbGameNightmareActionPerformed(ActionEvent evt)
 	{
-		cmbNumber.setEnabled(false);
-		spnWidth.setEnabled(false);
-		spnHeight.setEnabled(false);
+		disableCustom();
 		userDifficulty = 5;
 		visibleDragons(12);
 	}
-
-	private void btnStartActionPerformed(java.awt.event.ActionEvent evt)
+        
+	private void btnStartActionPerformed(ActionEvent evt)
 	{
 		GUIGlobals.userDifficulty = userDifficulty;
 		GUIGlobals.dragonDifficulty = dragonMovement;
@@ -362,19 +367,19 @@ public class GUIOptions extends JDialog
 		dispose();
 	}
 
-	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt)
+	private void jButton2ActionPerformed(ActionEvent evt)
 	{
 		setVisible(false);
 		dispose();
 	}
 
-	private void cmbNumberActionPerformed(java.awt.event.ActionEvent evt)
+	private void cmbNumberActionPerformed(ActionEvent evt)
 	{
 		numberDragons = cmbNumber.getSelectedIndex() + 1;
 		visibleDragons(numberDragons);
 	}
 
-	private void rbGameCustomActionPerformed(java.awt.event.ActionEvent evt)
+	private void rbGameCustomActionPerformed(ActionEvent evt)
 	{
 		cmbNumber.setEnabled(true);
 		spnWidth.setEnabled(true);
@@ -384,7 +389,7 @@ public class GUIOptions extends JDialog
 		visibleDragons(numberDragons);
 	}
 
-	private void cmbDifficultyActionPerformed(java.awt.event.ActionEvent evt)
+	private void cmbDifficultyActionPerformed(ActionEvent evt)
 	{
 		dragonMovement = cmbDifficulty.getSelectedIndex() + 1;
 	}

@@ -33,7 +33,6 @@ public class GUIAbout extends JDialog
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("About");
-		setBounds(new Rectangle(0, 0, 0, 0));
 		setResizable(false);
 		setSize(new Dimension(400, 300));
 		getContentPane().setLayout(new GridBagLayout());
@@ -50,9 +49,9 @@ public class GUIAbout extends JDialog
 
 		pnlText.setLayout(new GridBagLayout());
 		lblTitle.setFont(lblTitle.getFont().deriveFont(lblTitle.getFont().getStyle() | Font.BOLD, lblTitle.getFont().getSize() + 3));
-		lblTitle.setText("Maze Run");
+		lblTitle.setText("WOW !! 7/4 IS BIRTHDAY !!");
 		pnlText.add(lblTitle, new GridBagConstraints());
-		lblVersion.setText("Version 0.70b6");
+		lblVersion.setText("CONGURATURATIONS !! PLEASE GOOD JOB.");
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;

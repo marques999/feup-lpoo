@@ -163,9 +163,9 @@ public class Maze implements Serializable
 	 * 
 	 * @param s
 	 * @return coordinates of the first occurence in the maze, 'null' if symbol was not found
-	 * @see placeEntity, placeSymbol
+	 * @see placeEntity placeSymbol
 	 */
-	protected Point findSymbol(char s)
+	public Point findSymbol(char s, boolean updateMaze)
 	{
 		for (int y = 0; y < mazeHeight; ++y)
 		{
@@ -173,7 +173,11 @@ public class Maze implements Serializable
 			{
 				if (mazeMatrix[y][x] == s)
 				{
-					clearSymbol(x, y);
+					if (updateMaze)
+					{
+						clearSymbol(x, y);
+					}
+					
 					return new Point(x, y);
 				}
 			}
@@ -188,7 +192,7 @@ public class Maze implements Serializable
 	 * @param s symbol representing the 'Entity' to be placed
 	 * @return
 	 */
-	protected final Point placeEntity(char s)
+	protected final Point placeEntity(char mazeSymbol, boolean updateMaze)
 	{
 		int initialX = 0;
 		int initialY = 0;
@@ -199,7 +203,10 @@ public class Maze implements Serializable
 			initialY = 1 + mazeRandom.nextInt(mazeHeight - 2);
 		}
 
-		placeSymbol(initialX, initialY, s);
+		if (updateMaze)
+			{
+			placeSymbol(initialX, initialY, mazeSymbol);
+			}
 
 		return new Point(initialX, initialY);
 	}

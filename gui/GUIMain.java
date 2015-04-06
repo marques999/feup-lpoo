@@ -7,9 +7,9 @@ import java.io.*;
 
 public class GUIMain extends JFrame
 {
-	private static final long serialVersionUID = 3529558414915895966L;
-	
-	public GUIMain()
+    private static final long serialVersionUID = 3529558414915895966L;
+
+    public GUIMain()
     {
         initComponents();
     }
@@ -46,7 +46,7 @@ public class GUIMain extends JFrame
         setVisible(false);
     }
 
-    public static void main(String args[]) throws IOException, ClassNotFoundException
+    public static void main(String args[])
     {
         try
         {
@@ -54,23 +54,30 @@ public class GUIMain extends JFrame
         }
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex)
         {
+            GUIGlobals.abort(ex, null);
         }
 
         FileInputStream fin;
         ObjectInputStream oin;
-        
+
         final File buffer = new File("User Settings");
 
         if (buffer.exists())
         {
-            fin = new FileInputStream(buffer);
-            oin = new ObjectInputStream(fin);
-            
-            GUIGlobals.read(oin);
-            oin.close();
-            fin.close();
+            try
+            {
+                fin = new FileInputStream(buffer);
+                oin = new ObjectInputStream(fin);
+                GUIGlobals.read(oin);
+                oin.close();
+                fin.close();
+            }
+            catch (IOException | ClassNotFoundException ex)
+            {
+                    GUIGlobals.abort(ex, null);
+            }
         }
-        
+
         EventQueue.invokeLater(() ->
         {
             new GUIMain().setVisible(true);

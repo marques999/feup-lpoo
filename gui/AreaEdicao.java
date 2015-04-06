@@ -3,16 +3,17 @@ package lpoo.gui;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import lpoo.logic.GameState;
 import lpoo.logic.Point;
 
 public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotionListener
 {
 	private static final long serialVersionUID = -785925844156498848L;
 
-	private char mazeSymbol;
 	private Stack<LastAction> undoStack;
 	private Stack<LastAction> redoStack;
-
+        
+	private char mazeSymbol;
 	private int maxDragons;
 	private int maxDarts;
 	private int maxDoors;
@@ -218,7 +219,17 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 			}
 			else
 			{
-				writeSymbol(x, y, 'D');
+				Point playerPosition = maze.findSymbol('h', false);
+				Point dragonPosition = maze.findSymbol('D', false);
+				
+				if (GameState.validateDragon(playerPosition, dragonPosition))
+				{
+					writeSymbol(x, y, 'D');
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(getParent(), "Dragons must be 3 units far from the p layer!", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 		else
@@ -229,13 +240,20 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 
 	private void placeHero(int x, int y)
 	{
-		if (numPlayers >= maxPlayers)
+		if (numPlayers < maxPlayers)
 		{
-			JOptionPane.showMessageDialog(getParent(), "Number of players must not be greater than 1!", "Error", JOptionPane.ERROR_MESSAGE);
+			if (maze.isWall(x,y))
+			{
+				JOptionPane.showMessageDialog(getParent(), "Player must not be placed on maze borders!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				writeSymbol(x, y, 'h');
+			}
 		}
 		else
 		{
-			writeSymbol(x, y, 'h');
+			JOptionPane.showMessageDialog(getParent(), "Number of players must not be greater than 1!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -339,9 +357,10 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 
 	protected boolean validateMaze()
 	{
+                boolean validationSuccessful = true;
+                
 		updateCounters();
-
-		boolean validationSuccessful = true;
+		
 		String dialogMessage = "";
 
 		if (numPlayers < 1)
@@ -382,7 +401,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 
 		if (validationSuccessful)
 		{
-			JOptionPane.showMessageDialog(getParent(), "Maze successfully validated!", "Validation results", JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(getParent(), "Maze validated successfully!", "Validation results", JOptionPane.INFORMATION_MESSAGE);
 		}
 		else
 		{

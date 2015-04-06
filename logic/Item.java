@@ -19,7 +19,7 @@ public abstract class Item implements Serializable
 	}
 
 	/**
-	 * @return Item's current position x coordinate
+         * gets Item's current position x coordinate
 	 */
 	public final int getX()
 	{
@@ -27,7 +27,7 @@ public abstract class Item implements Serializable
 	}
 
 	/**
-	 * @return Item's current position y coordinate
+         * gets Item's current position y coordinate
 	 */
 	public final int getY()
 	{
@@ -35,7 +35,7 @@ public abstract class Item implements Serializable
 	}
 
 	/**
-	 * @return Item's current position
+         * gets Item's current position coordinates
 	 */
 	public final Point getPosition()
 	{

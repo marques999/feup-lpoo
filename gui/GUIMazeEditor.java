@@ -1,811 +1,799 @@
 package lpoo.gui;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import lpoo.logic.Maze;
 
-public class GUIMazeEditor extends JFrame 
+public class GUIMazeEditor extends JFrame
 {
-    private File buffer;
-
-    public GUIMazeEditor() 
-    {
-        initComponents();
-        updateStats();
-        jScrollPane1.getVerticalScrollBar().setUnitIncrement(24);
-        jScrollPane1.getHorizontalScrollBar().setUnitIncrement(24);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/editor-128x128.png")));
-    }
-
-    public void newMaze(int w, int h) 
-    {
-        areaEdicao1 = new AreaEdicao(w, h);
-        jScrollPane1.setViewportView(areaEdicao1);
-        buttonGroup1.clearSelection();
-    }
-
-    private void updateStats()
-    {
-        lblNumWidth.setText(Integer.toString(areaEdicao1.mazeWidth));
-        lblNumHeight.setText(Integer.toString(areaEdicao1.mazeHeight));
-        lblNumDragons.setText(Integer.toString(areaEdicao1.numDragons));
-        lblNumDarts.setText(Integer.toString(areaEdicao1.numDarts));
-        lblNumDoors.setText(Integer.toString(areaEdicao1.numDoors));
-        lblNumPlayers.setText(Integer.toString(areaEdicao1.numPlayers));
-        lblNumSwords.setText(Integer.toString(areaEdicao1.numSwords));
-        lblNumShields.setText(Integer.toString(areaEdicao1.numShields));
-        
-        String difficultyText = "None";
-        
-        switch (areaEdicao1.getDifficulty())
-        {
-            case 1:
-                difficultyText = "Easy";
-                break;
-            case 2:
-                difficultyText = "Medium";
-                break;
-            case 3:
-                difficultyText = "Hard";
-                break;
-            case 4:
-                difficultyText= "Nightmare";
-                break;
-        }
-
-        lblDifficultyText.setText(difficultyText);
-        jPanel1.repaint();
-    }
-    
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
-
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        tbDefault = new javax.swing.JToolBar();
-        btnWall = new javax.swing.JToggleButton();
-        btnPlayer = new javax.swing.JToggleButton();
-        btnDragon = new javax.swing.JToggleButton();
-        btnDoor = new javax.swing.JToggleButton();
-        btnDart = new javax.swing.JToggleButton();
-        btnShield = new javax.swing.JToggleButton();
-        btnSword = new javax.swing.JToggleButton();
-        jSeparator4 = new javax.swing.JToolBar.Separator();
-        btnErase = new javax.swing.JToggleButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        areaEdicao1 = new lpoo.gui.AreaEdicao();
-        jPanel1 = new javax.swing.JPanel();
-        lblDifficulty = new javax.swing.JLabel();
-        lblWidth = new javax.swing.JLabel();
-        lblPlayers = new javax.swing.JLabel();
-        lblNumPlayers = new javax.swing.JLabel();
-        lblNumWidth = new javax.swing.JLabel();
-        lblDimensions = new javax.swing.JLabel();
-        lblHeight = new javax.swing.JLabel();
-        lblDragons = new javax.swing.JLabel();
-        lblDarts = new javax.swing.JLabel();
-        lblNumDragons = new javax.swing.JLabel();
-        lblNumSwords = new javax.swing.JLabel();
-        lblNumHeight = new javax.swing.JLabel();
-        lblDifficultyText = new javax.swing.JLabel();
-        lblNumDarts = new javax.swing.JLabel();
-        lblNumShields = new javax.swing.JLabel();
-        lblSwords = new javax.swing.JLabel();
-        lblEntities = new javax.swing.JLabel();
-        lblShields = new javax.swing.JLabel();
-        lblDoors = new javax.swing.JLabel();
-        lblNumDoors = new javax.swing.JLabel();
-        mbDefault = new javax.swing.JMenuBar();
-        mnFile = new javax.swing.JMenu();
-        btnNew = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
-        btnLoad = new javax.swing.JMenuItem();
-        btnSave = new javax.swing.JMenuItem();
-        btnSaveAs = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        btnExit = new javax.swing.JMenuItem();
-        mnEdit = new javax.swing.JMenu();
-        btnUndo = new javax.swing.JMenuItem();
-        btnRedo = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        btnClear = new javax.swing.JMenuItem();
-        btnRandomize = new javax.swing.JMenuItem();
-        jSeparator6 = new javax.swing.JPopupMenu.Separator();
-        btnValidate = new javax.swing.JMenuItem();
-        mnHelp = new javax.swing.JMenu();
-        btnAbout = new javax.swing.JMenuItem();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Maze Editor - Untitled");
-
-        tbDefault.setRollover(true);
-
-        btnWall.setBackground(new java.awt.Color(255, 153, 102));
-        buttonGroup1.add(btnWall);
-        btnWall.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/wall-32x32.png"))); // NOI18N
-        btnWall.setText("Wall");
-        btnWall.setFocusable(false);
-        btnWall.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnWall.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnWall.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnWall.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnWallActionPerformed(evt);
-            }
-        });
-        tbDefault.add(btnWall);
-
-        buttonGroup1.add(btnPlayer);
-        btnPlayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/hero-32x32.png"))); // NOI18N
-        btnPlayer.setText("Player");
-        btnPlayer.setFocusable(false);
-        btnPlayer.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnPlayer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPlayer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPlayer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPlayerActionPerformed(evt);
-            }
-        });
-        tbDefault.add(btnPlayer);
-
-        buttonGroup1.add(btnDragon);
-        btnDragon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/dragon-32x32.png"))); // NOI18N
-        btnDragon.setText("Dragon");
-        btnDragon.setFocusable(false);
-        btnDragon.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnDragon.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnDragon.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnDragon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDragonActionPerformed(evt);
-            }
-        });
-        tbDefault.add(btnDragon);
-
-        buttonGroup1.add(btnDoor);
-        btnDoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/door1-32x32.png"))); // NOI18N
-        btnDoor.setText("Door");
-        btnDoor.setFocusable(false);
-        btnDoor.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnDoor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnDoor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnDoor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDoorActionPerformed(evt);
-            }
-        });
-        tbDefault.add(btnDoor);
-
-        buttonGroup1.add(btnDart);
-        btnDart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/dart-32x32.png"))); // NOI18N
-        btnDart.setText("Dart");
-        btnDart.setFocusable(false);
-        btnDart.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnDart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnDart.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnDart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDartActionPerformed(evt);
-            }
-        });
-        tbDefault.add(btnDart);
-
-        buttonGroup1.add(btnShield);
-        btnShield.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/shield-32x32.png"))); // NOI18N
-        btnShield.setText("Shield");
-        btnShield.setFocusable(false);
-        btnShield.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnShield.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnShield.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnShield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnShieldActionPerformed(evt);
-            }
-        });
-        tbDefault.add(btnShield);
-
-        buttonGroup1.add(btnSword);
-        btnSword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/sword-32x32.png"))); // NOI18N
-        btnSword.setText("Sword");
-        btnSword.setFocusable(false);
-        btnSword.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnSword.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSword.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSwordActionPerformed(evt);
-            }
-        });
-        tbDefault.add(btnSword);
-        tbDefault.add(jSeparator4);
-
-        buttonGroup1.add(btnErase);
-        btnErase.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/eraser-32x32.png"))); // NOI18N
-        btnErase.setText("Erase");
-        btnErase.setFocusable(false);
-        btnErase.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnErase.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnErase.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnErase.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEraseActionPerformed(evt);
-            }
-        });
-        tbDefault.add(btnErase);
-
-        getContentPane().add(tbDefault, java.awt.BorderLayout.PAGE_START);
-
-        jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jScrollPane1MousePressed(evt);
-            }
-        });
-
-        areaEdicao1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        areaEdicao1.setMinimumSize(new java.awt.Dimension(64, 64));
-        areaEdicao1.setPreferredSize(new java.awt.Dimension(640, 480));
-        areaEdicao1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                areaEdicao1MouseDragged(evt);
-            }
-        });
-        areaEdicao1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                areaEdicao1MousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                areaEdicao1MouseReleased(evt);
-            }
-        });
-
-        javax.swing.GroupLayout areaEdicao1Layout = new javax.swing.GroupLayout(areaEdicao1);
-        areaEdicao1.setLayout(areaEdicao1Layout);
-        areaEdicao1Layout.setHorizontalGroup(
-            areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 638, Short.MAX_VALUE)
-        );
-        areaEdicao1Layout.setVerticalGroup(
-            areaEdicao1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 544, Short.MAX_VALUE)
-        );
-
-        jScrollPane1.setViewportView(areaEdicao1);
-
-        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        lblDifficulty.setFont(lblDifficulty.getFont().deriveFont(lblDifficulty.getFont().getStyle() | java.awt.Font.BOLD));
-        lblDifficulty.setText("Difficulty");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 0);
-        jPanel1.add(lblDifficulty, gridBagConstraints);
-
-        lblWidth.setText("Width");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblWidth, gridBagConstraints);
-
-        lblPlayers.setText("Darts");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblPlayers, gridBagConstraints);
-
-        lblNumPlayers.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
-        jPanel1.add(lblNumPlayers, gridBagConstraints);
-
-        lblNumWidth.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
-        jPanel1.add(lblNumWidth, gridBagConstraints);
-
-        lblDimensions.setFont(lblDimensions.getFont().deriveFont(lblDimensions.getFont().getStyle() | java.awt.Font.BOLD));
-        lblDimensions.setText("Dimensions");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 10, 32);
-        jPanel1.add(lblDimensions, gridBagConstraints);
-
-        lblHeight.setText("Height");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblHeight, gridBagConstraints);
-
-        lblDragons.setText("Swords");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblDragons, gridBagConstraints);
-
-        lblDarts.setText("Players");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblDarts, gridBagConstraints);
-
-        lblNumDragons.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
-        jPanel1.add(lblNumDragons, gridBagConstraints);
-
-        lblNumSwords.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
-        jPanel1.add(lblNumSwords, gridBagConstraints);
-
-        lblNumHeight.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
-        jPanel1.add(lblNumHeight, gridBagConstraints);
-
-        lblDifficultyText.setText("Easy");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblDifficultyText, gridBagConstraints);
-
-        lblNumDarts.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
-        jPanel1.add(lblNumDarts, gridBagConstraints);
-
-        lblNumShields.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
-        jPanel1.add(lblNumShields, gridBagConstraints);
-
-        lblSwords.setText("Dragons");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblSwords, gridBagConstraints);
-
-        lblEntities.setFont(lblEntities.getFont().deriveFont(lblEntities.getFont().getStyle() | java.awt.Font.BOLD));
-        lblEntities.setText("Entities");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
-        jPanel1.add(lblEntities, gridBagConstraints);
-
-        lblShields.setText("Shields");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblShields, gridBagConstraints);
-
-        lblDoors.setText("Doors");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 0);
-        jPanel1.add(lblDoors, gridBagConstraints);
-
-        lblNumDoors.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 12);
-        jPanel1.add(lblNumDoors, gridBagConstraints);
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.LINE_END);
-
-        mnFile.setText("File");
-
-        btnNew.setText("New");
-        btnNew.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNewActionPerformed(evt);
-            }
-        });
-        mnFile.add(btnNew);
-        mnFile.add(jSeparator3);
-
-        btnLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        btnLoad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/folder.png"))); // NOI18N
-        btnLoad.setText("Load");
-        btnLoad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoadActionPerformed(evt);
-            }
-        });
-        mnFile.add(btnLoad);
-
-        btnSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/disk.png"))); // NOI18N
-        btnSave.setText("Save");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-        mnFile.add(btnSave);
-
-        btnSaveAs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/disk_multiple.png"))); // NOI18N
-        btnSaveAs.setText("Save As...");
-        btnSaveAs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveAsActionPerformed(evt);
-            }
-        });
-        mnFile.add(btnSaveAs);
-        mnFile.add(jSeparator2);
-
-        btnExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/door_open.png"))); // NOI18N
-        btnExit.setText("Exit");
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExitActionPerformed(evt);
-            }
-        });
-        mnFile.add(btnExit);
-
-        mbDefault.add(mnFile);
-
-        mnEdit.setText("Edit");
-
-        btnUndo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
-        btnUndo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/arrow_undo.png"))); // NOI18N
-        btnUndo.setText("Undo");
-        btnUndo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUndoActionPerformed(evt);
-            }
-        });
-        mnEdit.add(btnUndo);
-
-        btnRedo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
-        btnRedo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/arrow_redo.png"))); // NOI18N
-        btnRedo.setText("Redo");
-        btnRedo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRedoActionPerformed(evt);
-            }
-        });
-        mnEdit.add(btnRedo);
-        mnEdit.add(jSeparator1);
-
-        btnClear.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
-        btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/bomb.png"))); // NOI18N
-        btnClear.setText("Clear");
-        btnClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearActionPerformed(evt);
-            }
-        });
-        mnEdit.add(btnClear);
-
-        btnRandomize.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        btnRandomize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/hourglass.png"))); // NOI18N
-        btnRandomize.setText("Randomize...");
-        btnRandomize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRandomizeActionPerformed(evt);
-            }
-        });
-        mnEdit.add(btnRandomize);
-        mnEdit.add(jSeparator6);
-
-        btnValidate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/tick.png"))); // NOI18N
-        btnValidate.setText("Validate");
-        btnValidate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnValidateActionPerformed(evt);
-            }
-        });
-        mnEdit.add(btnValidate);
-
-        mbDefault.add(mnEdit);
-
-        mnHelp.setText("Help");
-
-        btnAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lpoo/res/help.png"))); // NOI18N
-        btnAbout.setText("About");
-        btnAbout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAboutActionPerformed(evt);
-            }
-        });
-        mnHelp.add(btnAbout);
-
-        mbDefault.add(mnHelp);
-
-        setJMenuBar(mbDefault);
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btnPlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayerActionPerformed
-        areaEdicao1.setSymbol('h');
-    }//GEN-LAST:event_btnPlayerActionPerformed
-
-    private void areaEdicao1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_areaEdicao1MousePressed
-        updateStats();
-    }//GEN-LAST:event_areaEdicao1MousePressed
-
-    private void btnDragonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDragonActionPerformed
-        areaEdicao1.setSymbol('D');
-    }//GEN-LAST:event_btnDragonActionPerformed
-
-    private void btnShieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShieldActionPerformed
-        areaEdicao1.setSymbol('V');
-    }//GEN-LAST:event_btnShieldActionPerformed
-
-    private void btnDartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDartActionPerformed
-        areaEdicao1.setSymbol('*');
-    }//GEN-LAST:event_btnDartActionPerformed
-
-    private void btnWallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWallActionPerformed
-        areaEdicao1.setSymbol('X');
-    }//GEN-LAST:event_btnWallActionPerformed
-
-    private void btnUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoActionPerformed
-        areaEdicao1.undo();
-    }//GEN-LAST:event_btnUndoActionPerformed
-
-    private void btnRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedoActionPerformed
-        areaEdicao1.redo();
-    }//GEN-LAST:event_btnRedoActionPerformed
-
-    private void btnRandomizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRandomizeActionPerformed
-        areaEdicao1.erase();
-        areaEdicao1.generateMaze();
-        updateStats();
-    }//GEN-LAST:event_btnRandomizeActionPerformed
-
-    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnExitActionPerformed
-
-    private void loadFile() throws FileNotFoundException, IOException, ClassNotFoundException  
-    {
-        final JFileChooser fileChooser = new JFileChooser();
-        int showOpenDialog = fileChooser.showOpenDialog(this);
-        
-        FileInputStream fin;
-        ObjectInputStream oin;
-        
-        if (showOpenDialog != JFileChooser.APPROVE_OPTION) 
-        {
-            return;
-        }
-
-        buffer = fileChooser.getSelectedFile();
-        
-        if (buffer == null)
-        {
-            return;
-        }
-        
-        fin = new FileInputStream(buffer);
-        oin = new ObjectInputStream(fin);
-  
-        setTitle("Maze Builder - " + buffer.getAbsolutePath());
-        
-        areaEdicao1.initializeMaze((Maze) oin.readObject());
-        areaEdicao1.repaint();
-        updateStats();
-        fin.close();
-        oin.close();
-    }
-
-    private void saveFile(boolean overwrite) throws FileNotFoundException, IOException 
-    {
-        FileOutputStream fout;
-        ObjectOutputStream oout;
+	private static final long serialVersionUID = -8875055031584070730L;
+	
+	private File buffer;
+
+	public GUIMazeEditor()
+	{
+		initComponents();
+		updateStats();
+	}
+
+	public void newMaze(int w, int h)
+	{
+		areaEdicao1 = new AreaEdicao(w, h);
+		pnlEditor.setViewportView(areaEdicao1);
+		buttonGroup1.clearSelection();
+	}
+
+	private void updateStats()
+	{
+		lblNumWidth.setText(Integer.toString(areaEdicao1.mazeWidth));
+		lblNumHeight.setText(Integer.toString(areaEdicao1.mazeHeight));
+		lblNumDragons.setText(Integer.toString(areaEdicao1.numDragons));
+		lblNumDarts.setText(Integer.toString(areaEdicao1.numDarts));
+		lblNumDoors.setText(Integer.toString(areaEdicao1.numDoors));
+		lblNumPlayers.setText(Integer.toString(areaEdicao1.numPlayers));
+		lblNumSwords.setText(Integer.toString(areaEdicao1.numSwords));
+		lblNumShields.setText(Integer.toString(areaEdicao1.numShields));
+
+		String difficultyText = "None";
+
+		switch (areaEdicao1.getDifficulty())
+		{
+		case 1:
+			difficultyText = "Easy";
+			break;
+		case 2:
+			difficultyText = "Medium";
+			break;
+		case 3:
+			difficultyText = "Hard";
+			break;
+		case 4:
+			difficultyText = "Nightmare";
+			break;
+		}
+
+		lblDifficultyText.setText(difficultyText);
+		pnlStats.repaint();
+	}
+
+	private void initComponents()
+	{
+		GridBagConstraints gridBagConstraints;
+
+		buttonGroup1 = new ButtonGroup();
+		tbDefault = new JToolBar();
+		btnWall = new JToggleButton();
+		btnPlayer = new JToggleButton();
+		btnDragon = new JToggleButton();
+		btnDoor = new JToggleButton();
+		btnDart = new JToggleButton();
+		btnShield = new JToggleButton();
+		btnSword = new JToggleButton();
+		jSeparator4 = new JToolBar.Separator();
+		btnErase = new JToggleButton();
+		pnlEditor = new JScrollPane();
+		areaEdicao1 = new AreaEdicao();
+		pnlStats = new JPanel();
+		lblDifficulty = new JLabel();
+		lblWidth = new JLabel();
+		lblPlayers = new JLabel();
+		lblNumPlayers = new JLabel();
+		lblNumWidth = new JLabel();
+		lblDimensions = new JLabel();
+		lblHeight = new JLabel();
+		lblDragons = new JLabel();
+		lblDarts = new JLabel();
+		lblNumDragons = new JLabel();
+		lblNumSwords = new JLabel();
+		lblNumHeight = new JLabel();
+		lblDifficultyText = new JLabel();
+		lblNumDarts = new JLabel();
+		lblNumShields = new JLabel();
+		lblSwords = new JLabel();
+		lblEntities = new JLabel();
+		lblShields = new JLabel();
+		lblDoors = new JLabel();
+		lblNumDoors = new JLabel();
+		mbDefault = new JMenuBar();
+		mnFile = new JMenu();
+		btnNew = new JMenuItem();
+		jSeparator3 = new JPopupMenu.Separator();
+		btnLoad = new JMenuItem();
+		btnSave = new JMenuItem();
+		btnSaveAs = new JMenuItem();
+		jSeparator2 = new JPopupMenu.Separator();
+		btnExit = new JMenuItem();
+		mnEdit = new JMenu();
+		btnUndo = new JMenuItem();
+		btnRedo = new JMenuItem();
+		jSeparator1 = new JPopupMenu.Separator();
+		btnClear = new JMenuItem();
+		btnRandomize = new JMenuItem();
+		jSeparator6 = new JPopupMenu.Separator();
+		btnValidate = new JMenuItem();
+		mnHelp = new JMenu();
+		btnAbout = new JMenuItem();
+
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+                setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/editor-128x128.png")));
+		setTitle("Maze Editor - Untitled");
+
+		addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent evt)
+			{
+				formWindowClosing(evt);
+			}
+		});
+
+		tbDefault.setRollover(true);
+		btnWall.setBackground(new Color(255, 150, 100));
+		buttonGroup1.add(btnWall);
+		btnWall.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/wall-32x32.png")));
+		btnWall.setText("Wall");
+		btnWall.setFocusable(false);
+		btnWall.setHorizontalAlignment(SwingConstants.TRAILING);
+		btnWall.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnWall.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnWall.addActionListener(this::btnWallActionPerformed);
+		tbDefault.add(btnWall);
+		buttonGroup1.add(btnPlayer);
+		btnPlayer.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/hero-32x32.png")));
+		btnPlayer.setText("Player");
+		btnPlayer.setFocusable(false);
+		btnPlayer.setHorizontalAlignment(SwingConstants.TRAILING);
+		btnPlayer.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnPlayer.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnPlayer.addActionListener(this::btnPlayerActionPerformed);
+		tbDefault.add(btnPlayer);
+		buttonGroup1.add(btnDragon);
+		btnDragon.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/dragon-32x32.png")));
+		btnDragon.setText("Dragon");
+		btnDragon.setFocusable(false);
+		btnDragon.setHorizontalAlignment(SwingConstants.TRAILING);
+		btnDragon.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnDragon.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnDragon.addActionListener(this::btnDragonActionPerformed);
+		tbDefault.add(btnDragon);
+		buttonGroup1.add(btnDoor);
+		btnDoor.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/door1-32x32.png")));
+		btnDoor.setText("Door");
+		btnDoor.setFocusable(false);
+		btnDoor.setHorizontalAlignment(SwingConstants.TRAILING);
+		btnDoor.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnDoor.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnDoor.addActionListener(this::btnDoorActionPerformed);
+		tbDefault.add(btnDoor);
+		buttonGroup1.add(btnDart);
+		btnDart.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/dart-32x32.png")));
+		btnDart.setText("Dart");
+		btnDart.setFocusable(false);
+		btnDart.setHorizontalAlignment(SwingConstants.TRAILING);
+		btnDart.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnDart.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnDart.addActionListener(this::btnDartActionPerformed);
+		tbDefault.add(btnDart);
+		buttonGroup1.add(btnShield);
+		btnShield.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/shield-32x32.png")));
+		btnShield.setText("Shield");
+		btnShield.setFocusable(false);
+		btnShield.setHorizontalAlignment(SwingConstants.TRAILING);
+		btnShield.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnShield.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnShield.addActionListener(this::btnShieldActionPerformed);
+		tbDefault.add(btnShield);
+		buttonGroup1.add(btnSword);
+		btnSword.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/sword-32x32.png")));
+		btnSword.setText("Sword");
+		btnSword.setFocusable(false);
+		btnSword.setHorizontalAlignment(SwingConstants.TRAILING);
+		btnSword.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnSword.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnSword.addActionListener(this::btnSwordActionPerformed);
+		tbDefault.add(btnSword);
+		tbDefault.add(jSeparator4);
+		buttonGroup1.add(btnErase);
+		btnErase.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/eraser-32x32.png")));
+		btnErase.setText("Erase");
+		btnErase.setFocusable(false);
+		btnErase.setHorizontalAlignment(SwingConstants.TRAILING);
+		btnErase.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnErase.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnErase.addActionListener(this::btnEraseActionPerformed);
+		tbDefault.add(btnErase);
+
+		getContentPane().add(tbDefault, BorderLayout.PAGE_START);
+
+		pnlEditor.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent evt)
+			{
+				pnlEditorMousePressed(evt);
+			}
+		});
+
+		areaEdicao1.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+		areaEdicao1.setMinimumSize(new Dimension(64, 64));
+		areaEdicao1.setPreferredSize(new Dimension(640, 480));
+
+		areaEdicao1.addMouseMotionListener(new MouseMotionAdapter()
+		{
+			@Override
+			public void mouseDragged(MouseEvent evt)
+			{
+				areaEdicao1MouseDragged(evt);
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent evt)
+			{
+				areaEdicao1MouseMoved(evt);
+			}
+		});
+
+		areaEdicao1.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent evt)
+			{
+				areaEdicao1MousePressed(evt);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent evt)
+			{
+				areaEdicao1MouseReleased(evt);
+			}
+		});
+
+		GroupLayout areaEdicao1Layout = new GroupLayout(areaEdicao1);
+
+		areaEdicao1.setLayout(areaEdicao1Layout);
+
+		areaEdicao1Layout.setHorizontalGroup(areaEdicao1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 638, Short.MAX_VALUE));
+		areaEdicao1Layout.setVerticalGroup(areaEdicao1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 544, Short.MAX_VALUE));
+
+		pnlEditor.setViewportView(areaEdicao1);
+                pnlEditor.getVerticalScrollBar().setUnitIncrement(24);
+		pnlEditor.getHorizontalScrollBar().setUnitIncrement(24);
                 
-        if (buffer == null || overwrite) 
-        {
-            final JFileChooser fileChooser = new JFileChooser();
-            int showSaveDialog = fileChooser.showSaveDialog(this);
+		getContentPane().add(pnlEditor, BorderLayout.CENTER);
 
-            if (showSaveDialog != JFileChooser.APPROVE_OPTION) 
-            {
-                    return;
-            }
-            
-            buffer = fileChooser.getSelectedFile();
-            setTitle("Maze Builder - " + buffer.getAbsolutePath());
-        }
+		pnlStats.setDoubleBuffered(false);
+		pnlStats.setFocusable(false);
+		pnlStats.setRequestFocusEnabled(false);
+		pnlStats.setVerifyInputWhenFocusTarget(false);
+		pnlStats.setLayout(new GridBagLayout());
+		lblDifficulty.setFont(lblDifficulty.getFont().deriveFont(lblDifficulty.getFont().getStyle() | Font.BOLD));
+		lblDifficulty.setText("Difficulty");
 
-        fout = new FileOutputStream(buffer);        
-        oout = new ObjectOutputStream(fout);
-        
-        areaEdicao1.writeMaze(oout);
-    }
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 10;
+		gridBagConstraints.gridwidth = 2;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(10, 12, 10, 0);
 
-    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
-        try
-        {
-            loadFile();
-        } 
-        catch (IOException | ClassNotFoundException ex) 
-        {
-            Logger.getLogger(GUIMazeEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnLoadActionPerformed
+		pnlStats.add(lblDifficulty, gridBagConstraints);
+		lblWidth.setText("Width");
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        try 
-        {
-            saveFile(false);
-        }
-        catch (IOException ex) 
-        {
-             Logger.getLogger(GUIMazeEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnSaveActionPerformed
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
 
-    private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
-        try 
-        {
-            saveFile(true);
-        }
-        catch (IOException ex) 
-        {
-             Logger.getLogger(GUIMazeEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnSaveAsActionPerformed
+		pnlStats.add(lblWidth, gridBagConstraints);
+		lblPlayers.setText("Darts");
 
-    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        GUINewMaze g_msize;
-        g_msize = new GUINewMaze(this);
-        g_msize.setVisible(true);
-        setTitle("Maze Editor - Untitled");
-        buffer = null;
-        updateStats();
-    }//GEN-LAST:event_btnNewActionPerformed
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 7;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
 
-    private void btnSwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwordActionPerformed
-        areaEdicao1.setSymbol('E');
-    }//GEN-LAST:event_btnSwordActionPerformed
+		pnlStats.add(lblPlayers, gridBagConstraints);
+		lblNumPlayers.setText("0");
 
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        areaEdicao1.erase();
-        updateStats();
-    }//GEN-LAST:event_btnClearActionPerformed
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 4;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+		gridBagConstraints.insets = new Insets(0, 0, 0, 12);
 
-    private void btnEraseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEraseActionPerformed
-        areaEdicao1.setSymbol(' ');
-    }//GEN-LAST:event_btnEraseActionPerformed
+		pnlStats.add(lblNumPlayers, gridBagConstraints);
+		lblNumWidth.setText("0");
 
-    private void btnAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutActionPerformed
-        GUIAbout guiAbout = new GUIAbout(this);
-        guiAbout.setVisible(true);
-    }//GEN-LAST:event_btnAboutActionPerformed
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 1;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+		gridBagConstraints.insets = new Insets(0, 0, 0, 12);
 
-    private void btnDoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoorActionPerformed
-        areaEdicao1.setSymbol('S');
-    }//GEN-LAST:event_btnDoorActionPerformed
+		pnlStats.add(lblNumWidth, gridBagConstraints);
+		lblDimensions.setFont(lblDimensions.getFont().deriveFont(lblDimensions.getFont().getStyle() | Font.BOLD));
+		lblDimensions.setText("Dimensions");
 
-    private void btnValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidateActionPerformed
-        areaEdicao1.validateMaze();
-    }//GEN-LAST:event_btnValidateActionPerformed
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.gridwidth = 2;
+		gridBagConstraints.insets = new Insets(0, 12, 10, 32);
 
-    private void jScrollPane1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jScrollPane1MousePressed
+		pnlStats.add(lblDimensions, gridBagConstraints);
+		lblHeight.setText("Height");
 
-    private void areaEdicao1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_areaEdicao1MouseDragged
-        updateStats();
-    }//GEN-LAST:event_areaEdicao1MouseDragged
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 2;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
 
-    private void areaEdicao1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_areaEdicao1MouseReleased
-        updateStats();
-       
-    }//GEN-LAST:event_areaEdicao1MouseReleased
+		pnlStats.add(lblHeight, gridBagConstraints);
+		lblDragons.setText("Swords");
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private lpoo.gui.AreaEdicao areaEdicao1;
-    private javax.swing.JMenuItem btnAbout;
-    private javax.swing.JMenuItem btnClear;
-    private javax.swing.JToggleButton btnDart;
-    private javax.swing.JToggleButton btnDoor;
-    private javax.swing.JToggleButton btnDragon;
-    private javax.swing.JToggleButton btnErase;
-    private javax.swing.JMenuItem btnExit;
-    private javax.swing.JMenuItem btnLoad;
-    private javax.swing.JMenuItem btnNew;
-    private javax.swing.JToggleButton btnPlayer;
-    private javax.swing.JMenuItem btnRandomize;
-    private javax.swing.JMenuItem btnRedo;
-    private javax.swing.JMenuItem btnSave;
-    private javax.swing.JMenuItem btnSaveAs;
-    private javax.swing.JToggleButton btnShield;
-    private javax.swing.JToggleButton btnSword;
-    private javax.swing.JMenuItem btnUndo;
-    private javax.swing.JMenuItem btnValidate;
-    private javax.swing.JToggleButton btnWall;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JPopupMenu.Separator jSeparator3;
-    private javax.swing.JToolBar.Separator jSeparator4;
-    private javax.swing.JPopupMenu.Separator jSeparator6;
-    private javax.swing.JLabel lblDarts;
-    private javax.swing.JLabel lblDifficulty;
-    private javax.swing.JLabel lblDifficultyText;
-    private javax.swing.JLabel lblDimensions;
-    private javax.swing.JLabel lblDoors;
-    private javax.swing.JLabel lblDragons;
-    private javax.swing.JLabel lblEntities;
-    private javax.swing.JLabel lblHeight;
-    private javax.swing.JLabel lblNumDarts;
-    private javax.swing.JLabel lblNumDoors;
-    private javax.swing.JLabel lblNumDragons;
-    private javax.swing.JLabel lblNumHeight;
-    private javax.swing.JLabel lblNumPlayers;
-    private javax.swing.JLabel lblNumShields;
-    private javax.swing.JLabel lblNumSwords;
-    private javax.swing.JLabel lblNumWidth;
-    private javax.swing.JLabel lblPlayers;
-    private javax.swing.JLabel lblShields;
-    private javax.swing.JLabel lblSwords;
-    private javax.swing.JLabel lblWidth;
-    private javax.swing.JMenuBar mbDefault;
-    private javax.swing.JMenu mnEdit;
-    private javax.swing.JMenu mnFile;
-    private javax.swing.JMenu mnHelp;
-    private javax.swing.JToolBar tbDefault;
-    // End of variables declaration//GEN-END:variables
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 6;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
+
+		pnlStats.add(lblDragons, gridBagConstraints);
+		lblDarts.setText("Players");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 4;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
+
+		pnlStats.add(lblDarts, gridBagConstraints);
+		lblNumDragons.setText("0");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 5;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+		gridBagConstraints.insets = new Insets(0, 0, 0, 12);
+
+		pnlStats.add(lblNumDragons, gridBagConstraints);
+		lblNumSwords.setText("0");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 6;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+		gridBagConstraints.insets = new Insets(0, 0, 0, 12);
+
+		pnlStats.add(lblNumSwords, gridBagConstraints);
+		lblNumHeight.setText("0");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 2;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+		gridBagConstraints.insets = new Insets(0, 0, 0, 12);
+
+		pnlStats.add(lblNumHeight, gridBagConstraints);
+		lblDifficultyText.setText("Easy");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 11;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
+                
+		pnlStats.add(lblDifficultyText, gridBagConstraints);
+		lblNumDarts.setText("0");
+                
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 7;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+		gridBagConstraints.insets = new Insets(0, 0, 0, 12);
+                
+		pnlStats.add(lblNumDarts, gridBagConstraints);
+		lblNumShields.setText("0");
+                
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 9;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+		gridBagConstraints.insets = new Insets(0, 0, 0, 12);
+
+		pnlStats.add(lblNumShields, gridBagConstraints);
+		lblSwords.setText("Dragons");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 5;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
+
+		pnlStats.add(lblSwords, gridBagConstraints);
+		lblEntities.setFont(lblEntities.getFont().deriveFont(lblEntities.getFont().getStyle() | Font.BOLD));
+		lblEntities.setText("Entities");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 3;
+		gridBagConstraints.gridwidth = 2;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(10, 10, 10, 0);
+
+		pnlStats.add(lblEntities, gridBagConstraints);
+		lblShields.setText("Shields");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 9;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
+
+		pnlStats.add(lblShields, gridBagConstraints);
+		lblDoors.setText("Doors");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 8;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
+
+		pnlStats.add(lblDoors, gridBagConstraints);
+		lblNumDoors.setText("0");
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 8;
+		gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+		gridBagConstraints.insets = new Insets(0, 0, 0, 12);
+
+		pnlStats.add(lblNumDoors, gridBagConstraints);
+
+		getContentPane().add(pnlStats, BorderLayout.LINE_END);
+
+		mnFile.setText("File");
+		btnNew.setText("New");
+		btnNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+		btnNew.addActionListener(this::btnNewActionPerformed);
+		mnFile.add(btnNew);
+		mnFile.add(jSeparator3);
+		btnLoad.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+		btnLoad.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/folder.png")));
+		btnLoad.setText("Load");
+		btnLoad.addActionListener(this::btnLoadActionPerformed);
+		mnFile.add(btnLoad);
+		btnSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+		btnSave.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/disk.png")));
+		btnSave.setText("Save");
+		btnSave.addActionListener(this::btnSaveActionPerformed);
+		mnFile.add(btnSave);
+		btnSaveAs.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/disk_multiple.png")));
+		btnSaveAs.setText("Save As...");
+		btnSaveAs.addActionListener(this::btnSaveAsActionPerformed);
+		mnFile.add(btnSaveAs);
+		mnFile.add(jSeparator2);
+		btnExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
+		btnExit.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/door_open.png")));
+		btnExit.setText("Exit");
+		btnExit.addActionListener(this::btnExitActionPerformed);
+		mnFile.add(btnExit);
+		mbDefault.add(mnFile);
+		mnEdit.setText("Edit");
+		btnUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
+		btnUndo.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/arrow_undo.png")));
+		btnUndo.setText("Undo");
+		btnUndo.addActionListener(this::btnUndoActionPerformed);
+		mnEdit.add(btnUndo);
+		btnRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK));
+		btnRedo.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/arrow_redo.png")));
+		btnRedo.setText("Redo");
+		btnRedo.addActionListener(this::btnRedoActionPerformed);
+		mnEdit.add(btnRedo);
+		mnEdit.add(jSeparator1);
+		btnClear.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
+		btnClear.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/bomb.png")));
+		btnClear.setText("Clear");
+		btnClear.addActionListener(this::btnClearActionPerformed);
+		mnEdit.add(btnClear);
+		btnRandomize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
+		btnRandomize.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/hourglass.png")));
+		btnRandomize.setText("Randomize...");
+		btnRandomize.addActionListener(this::btnRandomizeActionPerformed);
+		mnEdit.add(btnRandomize);
+		mnEdit.add(jSeparator6);
+		btnValidate.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/tick.png")));
+		btnValidate.setText("Validate");
+		btnValidate.addActionListener(this::btnValidateActionPerformed);
+		mnEdit.add(btnValidate);
+		mbDefault.add(mnEdit);
+		mnHelp.setText("Help");
+		btnAbout.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/help.png")));
+		btnAbout.setText("About");
+		btnAbout.addActionListener(this::btnAboutActionPerformed);
+		mnHelp.add(btnAbout);
+		mbDefault.add(mnHelp);
+
+		setJMenuBar(mbDefault);
+		pack();
+	}
+
+	private void areaEdicao1MousePressed(MouseEvent evt)
+	{
+		updateStats();
+	}
+
+	private void btnPlayerActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.setSymbol('h');
+	}
+
+	private void btnDragonActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.setSymbol('D');
+	}
+
+	private void btnShieldActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.setSymbol('V');
+	}
+
+	private void btnDartActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.setSymbol('*');
+	}
+
+	private void btnWallActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.setSymbol('X');
+	}
+
+	private void btnSwordActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.setSymbol('E');
+	}
+
+	private void btnEraseActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.setSymbol(' ');
+	}
+
+	private void btnUndoActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.undo();
+	}
+
+	private void btnRedoActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.redo();
+	}
+
+	private void btnRandomizeActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.erase();
+		areaEdicao1.generateMaze();
+		updateStats();
+	}
+
+	private void btnExitActionPerformed(ActionEvent evt)
+	{
+		confirmExit();
+	}
+
+	private boolean loadFile()
+	{
+                FileInputStream fin;
+                ObjectInputStream oin;
+		JFileChooser fileChooser = new JFileChooser();
+
+		if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
+		{
+			return false;
+		}
+
+		buffer = fileChooser.getSelectedFile();
+
+		if (buffer == null)
+		{
+			return false;
+		}
+
+		try
+		{
+			fin = new FileInputStream(buffer);
+			oin = new ObjectInputStream(fin);
+			setTitle("Maze Builder - " + buffer.getAbsolutePath());
+			areaEdicao1.initializeMaze((Maze) oin.readObject());
+			areaEdicao1.repaint();
+			updateStats();
+			fin.close();
+			oin.close();
+		}
+		catch (IOException | ClassNotFoundException ex)
+		{
+                        GUIGlobals.abort(ex, this);
+		}
+
+		return true;
+	}
+
+	private boolean saveFile(boolean overwrite)
+	{
+		FileOutputStream fout;
+		ObjectOutputStream oout;
+
+		if (buffer == null || overwrite)
+		{
+			JFileChooser fileChooser = new JFileChooser();
+
+			if (fileChooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
+			{
+				return false;
+			}
+
+			buffer = fileChooser.getSelectedFile();
+			setTitle("Maze Builder - " + buffer.getAbsolutePath());
+		}
+
+		try
+		{
+			fout = new FileOutputStream(buffer);
+			oout = new ObjectOutputStream(fout);
+			areaEdicao1.writeMaze(oout);
+			fout.close();
+			oout.close();
+		}
+		catch (IOException ex)
+		{
+                        GUIGlobals.abort(ex, this);
+		}
+
+		return true;
+	}
+
+	private void btnLoadActionPerformed(ActionEvent evt)
+	{
+		loadFile();
+	}
+
+	private void btnSaveActionPerformed(ActionEvent evt)
+	{
+		saveFile(false);
+	}
+
+	private void btnSaveAsActionPerformed(ActionEvent evt)
+	{
+		saveFile(true);
+	}
+
+	private void btnNewActionPerformed(ActionEvent evt)
+	{
+		GUINewMaze g_msize;
+		g_msize = new GUINewMaze(this);
+		g_msize.setVisible(true);
+                newMaze(GUIGlobals.editorWidth, GUIGlobals.editorHeight);
+		setTitle("Maze Editor - Untitled");
+		buffer = null;
+		updateStats();
+	}
+
+	private void btnClearActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.erase();
+		updateStats();
+	}
+
+	private void btnAboutActionPerformed(ActionEvent evt)
+	{
+		GUIAbout guiAbout = new GUIAbout(this);
+		guiAbout.setVisible(true);
+	}
+
+	private void btnDoorActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.setSymbol('S');
+	}
+
+	private void btnValidateActionPerformed(ActionEvent evt)
+	{
+		areaEdicao1.validateMaze();
+	}
+
+	private void pnlEditorMousePressed(MouseEvent evt)
+	{
+
+	}
+
+	private void areaEdicao1MouseDragged(MouseEvent evt)
+	{
+
+	}
+
+	private void areaEdicao1MouseReleased(MouseEvent evt)
+	{
+
+	}
+
+	private void areaEdicao1MouseMoved(MouseEvent evt)
+	{
+
+	}
+
+	private void confirmExit()
+	{
+		int r = JOptionPane.showConfirmDialog(this, "Do you want to save your changes before exiting?", "Exit", JOptionPane.YES_NO_OPTION);
+
+		if (r == JOptionPane.YES_OPTION)
+		{
+			if (!saveFile(false))
+			{
+				return;
+			}
+		}
+
+		System.exit(0);
+	}
+
+	private void formWindowClosing(WindowEvent evt)
+	{
+		confirmExit();
+	}
+
+	private AreaEdicao areaEdicao1;
+	private JMenuItem btnAbout;
+	private JMenuItem btnClear;
+	private JToggleButton btnDart;
+	private JToggleButton btnDoor;
+	private JToggleButton btnDragon;
+	private JToggleButton btnErase;
+	private JMenuItem btnExit;
+	private JMenuItem btnLoad;
+	private JMenuItem btnNew;
+	private JToggleButton btnPlayer;
+	private JMenuItem btnRandomize;
+	private JMenuItem btnRedo;
+	private JMenuItem btnSave;
+	private JMenuItem btnSaveAs;
+	private JToggleButton btnShield;
+	private JToggleButton btnSword;
+	private JMenuItem btnUndo;
+	private JMenuItem btnValidate;
+	private JToggleButton btnWall;
+	private ButtonGroup buttonGroup1;
+	private JPopupMenu.Separator jSeparator1;
+	private JPopupMenu.Separator jSeparator2;
+	private JPopupMenu.Separator jSeparator3;
+	private JToolBar.Separator jSeparator4;
+	private JPopupMenu.Separator jSeparator6;
+	private JLabel lblDarts;
+	private JLabel lblDifficulty;
+	private JLabel lblDifficultyText;
+	private JLabel lblDimensions;
+	private JLabel lblDoors;
+	private JLabel lblDragons;
+	private JLabel lblEntities;
+	private JLabel lblHeight;
+	private JLabel lblNumDarts;
+	private JLabel lblNumDoors;
+	private JLabel lblNumDragons;
+	private JLabel lblNumHeight;
+	private JLabel lblNumPlayers;
+	private JLabel lblNumShields;
+	private JLabel lblNumSwords;
+	private JLabel lblNumWidth;
+	private JLabel lblPlayers;
+	private JLabel lblShields;
+	private JLabel lblSwords;
+	private JLabel lblWidth;
+	private JMenuBar mbDefault;
+	private JMenu mnEdit;
+	private JMenu mnFile;
+	private JMenu mnHelp;
+	private JScrollPane pnlEditor;
+	private JPanel pnlStats;
+	private JToolBar tbDefault;
 }

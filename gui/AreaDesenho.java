@@ -165,6 +165,8 @@ public class AreaDesenho extends JPanel
 		}
 		catch (IOException ex)
 		{
+			JOptionPane.showMessageDialog(this, "Spite initialization failed!", "Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
 		}
 	}
 
@@ -246,7 +248,7 @@ public class AreaDesenho extends JPanel
 				case 'X':
 					graphicsBuffer.drawImage(resizedWall, x, y, null);
 					break;
-				case 'D':
+				case 'D': case 'F':
 					graphicsBuffer.drawImage(resizedDragon, x, y, null);
 					break;
 				case 'd':

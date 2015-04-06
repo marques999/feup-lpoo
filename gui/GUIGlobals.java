@@ -2,6 +2,10 @@ package lpoo.gui;
 
 import static java.awt.event.KeyEvent.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import lpoo.logic.GameState;
 
 public class GUIGlobals
@@ -57,4 +61,11 @@ public class GUIGlobals
 		aOutputStream.writeInt(mazeHeight);
 		aOutputStream.writeObject(currentKeys);
 	}
+        
+        protected static void abort(Exception ex, JFrame parent)
+        {
+            JOptionPane.showMessageDialog(parent, "Exception thrown:\n" + ex.getLocalizedMessage() + ".\nThe program will now exit...", "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(0);
+        }
 }

@@ -22,6 +22,8 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
+         * gets Entity's current position x coordinate
+         * 
 	 * @return Entity's current position x coordinate
 	 */
 	public final int getX()
@@ -30,6 +32,8 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
+         * gets Entity's current position y coordinate
+         * 
 	 * @return Entity's current position y coordinate
 	 */
 	public final int getY()
@@ -37,7 +41,19 @@ public abstract class Entity implements Serializable
 		return pos.y;
 	}
 
+        /**
+         * gets entity's current position coordinates
+         * 
+	 * @return Entity's current position
+	 */
+	public final Point getPosition()
+	{
+		return pos;
+	}
+        
 	/**
+         * gets Entity's current health
+         * 
 	 * @return Entity's current health
 	 */
 	public final int getHealth()
@@ -53,14 +69,6 @@ public abstract class Entity implements Serializable
 	protected void setHealth(int health)
 	{
 		this.health = health;
-	}
-
-	/**
-	 * @return Entity's current position
-	 */
-	public final Point getPosition()
-	{
-		return pos;
 	}
 
 	/**

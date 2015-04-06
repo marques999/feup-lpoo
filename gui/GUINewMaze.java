@@ -10,23 +10,9 @@ public class GUINewMaze extends JDialog
 {
 	private static final long serialVersionUID = 1470018550773975078L;
 	
-	private int mazeWidth;
-	private int mazeHeight;
-
 	public GUINewMaze(Frame parent)
 	{
 		super(parent, true);
-
-		if (mazeWidth == 0)
-		{
-			mazeWidth = 11;
-		}
-
-		if (mazeHeight == 0)
-		{
-			mazeHeight = 11;
-		}
-
 		initComponents();
 	}
 
@@ -40,7 +26,7 @@ public class GUINewMaze extends JDialog
 		jFormattedTextField2 = new JFormattedTextField();
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle("New Maze");
+		setTitle("New maze");
 		setResizable(false);
 
 		jLabel1.setText("Enter maze size:");
@@ -107,7 +93,6 @@ public class GUINewMaze extends JDialog
 		{
 			if (newWidth % 2 != 0 && newHeight % 2 != 0)
 			{
-				((GUIMazeEditor) getParent()).newMaze(newWidth, newHeight);
 				GUIGlobals.editorWidth = newWidth;
 				GUIGlobals.editorHeight = newHeight;
 				dispose();

@@ -18,7 +18,9 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * @return 'true' if the player has the sword; 'false' otherwise
+         * checks if the player has a sword
+         * 
+	 * @return 'true' if player has the sword; 'false' otherwise
 	 */
 	public final boolean hasSword()
 	{
@@ -26,7 +28,9 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * @return returns 'true' if the player has darts; 'false' otherwise
+         * checks if the player has darts
+         * 
+	 * @return returns 'true' if player has darts; 'false' otherwise
 	 */
 	public final boolean hasDarts()
 	{
@@ -34,6 +38,8 @@ public final class Hero extends Entity
 	}
 
 	/**
+         * checks if the player has a shield
+         * 
 	 * @return 'true' if player has the shield; 'false' otherwise
 	 */
 	public final boolean hasShield()
@@ -41,6 +47,13 @@ public final class Hero extends Entity
 		return shield != null;
 	}
 
+        /**
+         * attacks a single dragon with darts
+         * 
+         * @param maze
+         * @param direction
+         * @return returns 'true' if the attack was successful (target found), 'false' otherwise
+         */
 	public boolean attackDarts(Maze maze, Direction direction)
 	{
 		if (!hasDarts())
