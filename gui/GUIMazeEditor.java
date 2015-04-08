@@ -4,12 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import lpoo.logic.Maze;
 
 public class GUIMazeEditor extends JFrame
 {
 	private static final long serialVersionUID = -8875055031584070730L;
-	
+
 	private File buffer;
 
 	public GUIMazeEditor()
@@ -117,7 +118,7 @@ public class GUIMazeEditor extends JFrame
 		btnAbout = new JMenuItem();
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-                setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/editor-128x128.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/editor-128x128.png")));
 		setTitle("Maze Editor - Untitled");
 
 		addWindowListener(new WindowAdapter()
@@ -207,33 +208,9 @@ public class GUIMazeEditor extends JFrame
 
 		getContentPane().add(tbDefault, BorderLayout.PAGE_START);
 
-		pnlEditor.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent evt)
-			{
-				pnlEditorMousePressed(evt);
-			}
-		});
-
 		areaEdicao1.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		areaEdicao1.setMinimumSize(new Dimension(64, 64));
 		areaEdicao1.setPreferredSize(new Dimension(640, 480));
-
-		areaEdicao1.addMouseMotionListener(new MouseMotionAdapter()
-		{
-			@Override
-			public void mouseDragged(MouseEvent evt)
-			{
-				areaEdicao1MouseDragged(evt);
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent evt)
-			{
-				areaEdicao1MouseMoved(evt);
-			}
-		});
 
 		areaEdicao1.addMouseListener(new MouseAdapter()
 		{
@@ -241,12 +218,6 @@ public class GUIMazeEditor extends JFrame
 			public void mousePressed(MouseEvent evt)
 			{
 				areaEdicao1MousePressed(evt);
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent evt)
-			{
-				areaEdicao1MouseReleased(evt);
 			}
 		});
 
@@ -258,9 +229,9 @@ public class GUIMazeEditor extends JFrame
 		areaEdicao1Layout.setVerticalGroup(areaEdicao1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 544, Short.MAX_VALUE));
 
 		pnlEditor.setViewportView(areaEdicao1);
-                pnlEditor.getVerticalScrollBar().setUnitIncrement(24);
+		pnlEditor.getVerticalScrollBar().setUnitIncrement(24);
 		pnlEditor.getHorizontalScrollBar().setUnitIncrement(24);
-                
+
 		getContentPane().add(pnlEditor, BorderLayout.CENTER);
 
 		pnlStats.setDoubleBuffered(false);
@@ -386,19 +357,19 @@ public class GUIMazeEditor extends JFrame
 		gridBagConstraints.gridy = 11;
 		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
 		gridBagConstraints.insets = new Insets(0, 12, 0, 0);
-                
+
 		pnlStats.add(lblDifficultyText, gridBagConstraints);
 		lblNumDarts.setText("0");
-                
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 7;
 		gridBagConstraints.anchor = GridBagConstraints.LINE_END;
 		gridBagConstraints.insets = new Insets(0, 0, 0, 12);
-                
+
 		pnlStats.add(lblNumDarts, gridBagConstraints);
 		lblNumShields.setText("0");
-                
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 9;
@@ -586,9 +557,10 @@ public class GUIMazeEditor extends JFrame
 
 	private boolean loadFile()
 	{
-                FileInputStream fin;
-                ObjectInputStream oin;
+		FileInputStream fin;
+		ObjectInputStream oin;
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run maze files (*.maze)", "maze"));
 
 		if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
 		{
@@ -615,7 +587,7 @@ public class GUIMazeEditor extends JFrame
 		}
 		catch (IOException | ClassNotFoundException ex)
 		{
-                        GUIGlobals.abort(ex, this);
+			GUIGlobals.abort(ex, this);
 		}
 
 		return true;
@@ -629,13 +601,14 @@ public class GUIMazeEditor extends JFrame
 		if (buffer == null || overwrite)
 		{
 			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run maze files (*.maze)", "maze"));
 
 			if (fileChooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
 			{
 				return false;
 			}
 
-			buffer = fileChooser.getSelectedFile();
+			buffer = new File(fileChooser.getSelectedFile() + ".maze");
 			setTitle("Maze Builder - " + buffer.getAbsolutePath());
 		}
 
@@ -649,7 +622,7 @@ public class GUIMazeEditor extends JFrame
 		}
 		catch (IOException ex)
 		{
-                        GUIGlobals.abort(ex, this);
+			GUIGlobals.abort(ex, this);
 		}
 
 		return true;
@@ -675,7 +648,7 @@ public class GUIMazeEditor extends JFrame
 		GUINewMaze g_msize;
 		g_msize = new GUINewMaze(this);
 		g_msize.setVisible(true);
-                newMaze(GUIGlobals.editorWidth, GUIGlobals.editorHeight);
+		newMaze(GUIGlobals.editorWidth, GUIGlobals.editorHeight);
 		setTitle("Maze Editor - Untitled");
 		buffer = null;
 		updateStats();
@@ -701,26 +674,6 @@ public class GUIMazeEditor extends JFrame
 	private void btnValidateActionPerformed(ActionEvent evt)
 	{
 		areaEdicao1.validateMaze();
-	}
-
-	private void pnlEditorMousePressed(MouseEvent evt)
-	{
-
-	}
-
-	private void areaEdicao1MouseDragged(MouseEvent evt)
-	{
-
-	}
-
-	private void areaEdicao1MouseReleased(MouseEvent evt)
-	{
-
-	}
-
-	private void areaEdicao1MouseMoved(MouseEvent evt)
-	{
-
 	}
 
 	private void confirmExit()

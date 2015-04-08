@@ -12,6 +12,7 @@ public class GUIInterface extends JFrame
 	private static final long serialVersionUID = 7110803925049276531L;
 
 	private boolean attackModifier;
+	private Maze initialState;
 
 	public GUIInterface()
 	{
@@ -41,11 +42,31 @@ public class GUIInterface extends JFrame
 
 	protected void resumeGame()
 	{
+		cloneMaze();
 		pnlPlayfield.setPreferredSize(pnlPlayfield.getWindowSize());
 		pnlPlayfield.repaint();
 		checkState();
 		revalidate();
 		pack();
+	}
+
+	private void restartGame()
+	{
+		pnlPlayfield.initializeMaze(initialState);
+		GameState.initializeCustom(initialState);
+		resumeGame();
+	}
+	
+	private void cloneMaze()
+	{
+		try
+		{
+			initialState = GameState.getMaze().clone();
+		}
+		catch (CloneNotSupportedException ex)
+		{
+			GUIGlobals.abort(ex, this);
+		}
 	}
 
 	private void initComponents()
@@ -73,12 +94,14 @@ public class GUIInterface extends JFrame
 		btnPreferences = new JMenuItem();
 		mnHelp = new JMenu();
 		btnAbout = new JMenuItem();
+		btnRestart = new JMenuItem();
 
-                setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/FireDragon_icon.png")));
-                setTitle("Maze Run");
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/FireDragon_icon.png")));
+		setLocationRelativeTo(null);
+		setTitle("Maze Run");
 		setResizable(false);
-		
+
 		addWindowListener(new WindowAdapter()
 		{
 			@Override
@@ -117,9 +140,14 @@ public class GUIInterface extends JFrame
 		btnNew.setText("New Game");
 		btnNew.addActionListener(this::btnNewActionPerformed);
 		mnGame.add(btnNew);
+		btnRestart.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
+		btnRestart.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/arrow_rotate.png")));
+		btnRestart.setText("Restart");
+		btnRestart.addActionListener(this::btnRestartActionPerformed);
+		mnGame.add(btnRestart);
 		btnLoadLevel.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.CTRL_MASK));
 		btnLoadLevel.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/world.png")));
-		btnLoadLevel.setText("Load...");
+		btnLoadLevel.setText("Load maze...");
 		btnLoadLevel.addActionListener(this::btnLoadLevelActionPerformed);
 		mnGame.add(btnLoadLevel);
 		mnGame.add(jSeparator2);
@@ -143,18 +171,22 @@ public class GUIInterface extends JFrame
 		mnOptions.setText("Options");
 		mnZoom.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/magnifier.png")));
 		mnZoom.setText("Zoom");
+		mnZoom75.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_MASK));
 		mnZoom75.setText("75%");
 		buttonGroup1.add(mnZoom75);
 		mnZoom75.addActionListener(this::mnZoom75ActionPerformed);
 		mnZoom.add(mnZoom75);
+		mnZoom100.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_MASK));
 		mnZoom100.setText("100%");
 		buttonGroup1.add(mnZoom100);
 		mnZoom100.addActionListener(this::mnZoom100ActionPerformed);
 		mnZoom.add(mnZoom100);
+		mnZoom150.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_MASK));
 		mnZoom150.setText("150%");
 		buttonGroup1.add(mnZoom150);
 		mnZoom150.addActionListener(this::mnZoom150ActionPerformed);
 		mnZoom.add(mnZoom150);
+		mnZoom200.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_MASK));
 		mnZoom200.setText("200%");
 		buttonGroup1.add(mnZoom200);
 		mnZoom200.addActionListener(this::mnZoom200ActionPerformed);
@@ -162,10 +194,12 @@ public class GUIInterface extends JFrame
 		mnOptions.add(mnZoom);
 		mnOptions.add(jSeparator3);
 		btnControls.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/joystick.png")));
+		btnControls.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
 		btnControls.setText("Controls");
 		btnControls.addActionListener(this::btnControlsActionPerformed);
 		mnOptions.add(btnControls);
 		btnPreferences.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/wrench.png")));
+		btnPreferences.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
 		btnPreferences.setText("Preferences");
 		btnPreferences.addActionListener(this::btnPreferencesActionPerformed);
 		mnOptions.add(btnPreferences);
@@ -195,35 +229,40 @@ public class GUIInterface extends JFrame
 	}
 
 	private void confirmExit()
-        {
-                if (!GameState.gameOver())
+	{
+		if (!GameState.gameOver())
 		{
-                        int r = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit your current game?", "Exit", JOptionPane.YES_NO_OPTION);
+			String confirmationMessage = "Are you sure you want to quit your current game?";
 
-                        if (r != JOptionPane.OK_OPTION)
-                        {
-                                return;
-                        }
-                }
-		
-		File buffer = new File("User Settings");
+			if (JOptionPane.showConfirmDialog(this, confirmationMessage, "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+			{
+				saveSettings();
+				System.exit(0);
+			}
+		}
+		else
+		{
+			System.exit(0);
+		}
+	}
+
+	private void saveSettings()
+	{
 		FileOutputStream fout;
 		ObjectOutputStream oout;
 
 		try
 		{
-			fout = new FileOutputStream(buffer);
+			fout = new FileOutputStream("User Settings");
 			oout = new ObjectOutputStream(fout);
 			GUIGlobals.write(oout);
-                        oout.close();
+			oout.close();
 			fout.close();
 		}
 		catch (IOException ex)
 		{
-                        GUIGlobals.abort(ex, this);
+			GUIGlobals.abort(ex, this);
 		}
-
-		System.exit(0);
 	}
 
 	private void btnAboutActionPerformed(ActionEvent evt)
@@ -237,15 +276,25 @@ public class GUIInterface extends JFrame
 		confirmExit();
 	}
 
+	private void btnRestartActionPerformed(ActionEvent evt)
+	{
+		restartGame();
+	}
+
+	private String printDarts()
+	{
+		return String.format("Darts: %02d | Dragons: %02d | ", GameState.getNumberDarts(), GameState.getNumberDragons());
+	}
+	
 	private void checkState()
 	{
 		if (attackModifier)
 		{
-			lblStatus.setText("Please select a direction (ESC to cancel):");
+			lblStatus.setText(printDarts() + "Please select a direction (Up, Down, Left, Right, ESC to cancel):");
 		}
 		else
 		{
-			lblStatus.setText("OBJECTIVE: " + GameState.getObjective());
+			lblStatus.setText(printDarts() + "OBJECTIVE: " + GameState.getObjective());
 		}
 
 		if (GameState.gameOver())
@@ -253,12 +302,12 @@ public class GUIInterface extends JFrame
 			if (GameState.playerWon())
 			{
 				lblStatus.setText("CONGRATULATIONS!");
-				JOptionPane.showMessageDialog(null, "Congratulations! You have reached the exit safe and sound :)", "Player Wins", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Congratulations! You have reached the exit safe and sound :)", "Player Wins", JOptionPane.PLAIN_MESSAGE);
 			}
 			else
 			{
 				lblStatus.setText("GAME OVER");
-				JOptionPane.showMessageDialog(null, "You were killed by the dragon :(", "Game Over", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(this, "You were killed by the dragon :(", "Game Over", JOptionPane.WARNING_MESSAGE);
 			}
 
 		}
@@ -365,23 +414,20 @@ public class GUIInterface extends JFrame
 	{
 		if (!GameState.gameOver())
 		{
-			if (JOptionPane.showConfirmDialog(this, "Are you sure you want to start a new game?", "New Game", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+			if (JOptionPane.showConfirmDialog(this, "Are you sure you want to start a new game?", "New Game", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
 			{
-				initializeGame();
+				return;
 			}
 		}
-		else
-		{
-			initializeGame();
-		}
+
+		initializeGame();
 	}
 
 	private void loadLevel()
 	{
-		JFileChooser fileChooser = new JFileChooser();
-                FileInputStream fin;
+		FileInputStream fin;
 		ObjectInputStream oin;
-                
+		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run maze files (*.maze)", "maze"));
 
 		if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
@@ -389,39 +435,29 @@ public class GUIInterface extends JFrame
 			return;
 		}
 
-		final File buffer = fileChooser.getSelectedFile();
-
-		if (buffer == null)
+		try
 		{
-			return;
+			fin = new FileInputStream(fileChooser.getSelectedFile());
+			oin = new ObjectInputStream(fin);
+			Maze newMaze = (Maze) oin.readObject();
+			pnlPlayfield.initializeMaze(newMaze);
+			GameState.initializeCustom(newMaze);
+			GameState.setDragonMovement(GUIGlobals.dragonDifficulty);
+			resumeGame();
+			fin.close();
+			oin.close();
 		}
-
-		try 
-                {
-                    fin = new FileInputStream(buffer);
-                    oin = new ObjectInputStream(fin);
-                    
-                    Maze newMaze = (Maze) oin.readObject();
-                    
-                    pnlPlayfield.initializeMaze(newMaze);
-                    GameState.initializeCustom(newMaze);
-                    GameState.setDragonMovement(GUIGlobals.dragonDifficulty);
-                    resumeGame();
-                    fin.close();
-                    oin.close();
-                }
-                catch (IOException | ClassNotFoundException ex)
-                {
-                    GUIGlobals.abort(ex, this);
-                }
+		catch (IOException | ClassNotFoundException ex)
+		{
+			GUIGlobals.abort(ex, this);
+		}
 	}
 
 	private void loadState()
 	{
-		JFileChooser fileChooser = new JFileChooser();
-                FileInputStream fin;
+		FileInputStream fin;
 		ObjectInputStream oin;
-                
+		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run saved games (*.state)", "state"));
 
 		if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
@@ -429,61 +465,51 @@ public class GUIInterface extends JFrame
 			return;
 		}
 
-		final File buffer = fileChooser.getSelectedFile();
-
-		if (buffer == null)
-		{
-			return;
-		}
-
 		try
-                {
-                    fin = new FileInputStream(buffer);
-                    oin = new ObjectInputStream(fin);
-                    GameState.read(oin);
-                    pnlPlayfield.initializeMaze(GameState.getMaze());
-                    resumeGame();
-                    oin.close();
-                    fin.close();
-                }
-                catch (IOException | ClassNotFoundException ex)
-                {
-                    GUIGlobals.abort(ex, this);
-                }
+		{
+			fin = new FileInputStream(fileChooser.getSelectedFile());
+			oin = new ObjectInputStream(fin);
+			GameState.read(oin);
+			pnlPlayfield.initializeMaze(GameState.getMaze());
+			resumeGame();
+			oin.close();
+			fin.close();
+		}
+		catch (IOException | ClassNotFoundException ex)
+		{
+			GUIGlobals.abort(ex, this);
+		}
 	}
-        
+
 	private void saveState()
 	{
 		FileOutputStream fout;
-                ObjectOutputStream oout;
+		ObjectOutputStream oout;
 		JFileChooser fileChooser = new JFileChooser();
-                
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Maze Run saved games (*.state)", "state"));
-		
+
 		if (fileChooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
 		{
 			return;
 		}
 
-		final File buffer = new File(fileChooser.getSelectedFile() + ".state");
-
-		try 
-                {
-                    fout = new FileOutputStream(buffer);
-                    oout = new ObjectOutputStream(fout);
-                    GameState.write(oout);
-                    oout.close();
-                    fout.close();
-                }
+		try
+		{
+			fout = new FileOutputStream(fileChooser.getSelectedFile() + ".state");
+			oout = new ObjectOutputStream(fout);
+			GameState.write(oout);
+			oout.close();
+			fout.close();
+		}
 		catch (IOException ex)
-                {
-                    GUIGlobals.abort(ex, this);
-                }
+		{
+			GUIGlobals.abort(ex, this);
+		}
 	}
 
 	private void btnLoadStateActionPerformed(ActionEvent evt)
 	{
-                loadState();
+		loadState();
 	}
 
 	private void btnSaveStateActionPerformed(ActionEvent evt)
@@ -493,7 +519,7 @@ public class GUIInterface extends JFrame
 
 	private void btnLoadLevelActionPerformed(ActionEvent evt)
 	{
-                loadLevel();
+		loadLevel();
 	}
 
 	private void applyZoom(int zoom)
@@ -501,19 +527,19 @@ public class GUIInterface extends JFrame
 		switch (zoom)
 		{
 		case -1: // 24x24
-			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 10));
+			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 9));
 			pnlPlayfield.scaleSprites(24, 24);
 			break;
 		case 0: // 32x32
-                        lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 13));
+			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 12));
 			pnlPlayfield.scaleSprites(32, 32);
 			break;
 		case 1: // 48x48
-			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 15));
+			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 14));
 			pnlPlayfield.scaleSprites(48, 48);
 			break;
 		case 2: // 64x64
-			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 17));
+			lblStatus.setFont(lblStatus.getFont().deriveFont(lblStatus.getFont().getStyle() | Font.BOLD, 16));
 			pnlPlayfield.scaleSprites(64, 64);
 			break;
 		}
@@ -560,6 +586,7 @@ public class GUIInterface extends JFrame
 	private JMenuItem btnLoadState;
 	private JMenuItem btnNew;
 	private JMenuItem btnPreferences;
+	private JMenuItem btnRestart;
 	private JMenuItem btnSaveState;
 	private ButtonGroup buttonGroup1;
 	private JPopupMenu.Separator jSeparator1;

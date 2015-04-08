@@ -9,6 +9,9 @@ import javax.swing.text.*;
 public class GUINewMaze extends JDialog
 {
 	private static final long serialVersionUID = 1470018550773975078L;
+	private static final String messageTitle = "Error";
+	private static final String messageEvenSize = "Invalid dimensions: width and height must be odd!";
+	private static final String messageInvalidSize = "Invalid dimensions: width and height must be greater than or equal to 7.";
 	
 	public GUINewMaze(Frame parent)
 	{
@@ -81,7 +84,7 @@ public class GUINewMaze extends JDialog
 
 	private void jButton2ActionPerformed(ActionEvent evt)
 	{
-		this.dispose();
+		dispose();
 	}
 
 	private void jButton1ActionPerformed(ActionEvent evt)
@@ -99,12 +102,12 @@ public class GUINewMaze extends JDialog
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(this, "Invalid dimensions: width and height must be odd!", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, messageEvenSize, messageTitle, JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(this, "Invalid dimensions: width and height must be greater than or equal to 7.", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, messageInvalidSize, messageTitle, JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

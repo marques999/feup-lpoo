@@ -12,7 +12,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 
 	private Stack<LastAction> undoStack;
 	private Stack<LastAction> redoStack;
-        
+
 	private char mazeSymbol;
 	private int maxDragons;
 	private int maxDarts;
@@ -221,14 +221,14 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 			{
 				Point playerPosition = maze.findSymbol('h', false);
 				Point dragonPosition = maze.findSymbol('D', false);
-				
+
 				if (GameState.validateDragon(playerPosition, dragonPosition))
 				{
 					writeSymbol(x, y, 'D');
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(getParent(), "Dragons must be 3 units far from the p layer!", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(getParent(), "Dragons must be 3 units far from the player!", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
@@ -242,7 +242,7 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 	{
 		if (numPlayers < maxPlayers)
 		{
-			if (maze.isWall(x,y))
+			if (maze.isWall(x, y))
 			{
 				JOptionPane.showMessageDialog(getParent(), "Player must not be placed on maze borders!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
@@ -357,10 +357,10 @@ public class AreaEdicao extends AreaDesenho implements MouseListener, MouseMotio
 
 	protected boolean validateMaze()
 	{
-                boolean validationSuccessful = true;
-                
+		boolean validationSuccessful = true;
+
 		updateCounters();
-		
+
 		String dialogMessage = "";
 
 		if (numPlayers < 1)

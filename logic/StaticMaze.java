@@ -15,7 +15,7 @@ public final class StaticMaze extends Maze
 
 		m_builder.setType(MazeBuilder.STATIC_MAZE);
 		m_builder.setWidth(10);
-                m_builder.setHeight(10);
+		m_builder.setHeight(10);
 		m_builder.generateMaze();
 
 		setExitPosition(m_builder.getExitPosition());

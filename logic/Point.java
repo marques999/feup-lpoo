@@ -19,7 +19,6 @@ public final class Point implements Serializable
 
 	/**
 	 * constructor with parameters for class 'Point'
-	 * 
 	 * @param x initial X coordinate
 	 * @param y initial Y coordinate
 	 */
@@ -29,6 +28,10 @@ public final class Point implements Serializable
 		this.y = y;
 	}
 
+        /**
+         * converts the point's coordinates to String
+         * @return a formatted, user-friendly string containing the point's current coordinates
+         */
 	@Override
 	public String toString()
 	{
@@ -37,8 +40,7 @@ public final class Point implements Serializable
 
 	/**
 	 * checks two points and their coordinates for equality
-	 * 
-	 * @param o point to be compared
+	 * @param o an object containing the point to be compared
 	 * @return 'true' if both points have the same coordinates; 'false' otherwise
 	 */
 	@Override

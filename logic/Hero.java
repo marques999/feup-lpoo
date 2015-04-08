@@ -4,8 +4,8 @@ public final class Hero extends Entity
 {
 	private static final long serialVersionUID = -24716147576324592L;
 
+	private int numberDarts = 0;
 	private Item sword = null;
-	private Item dart = null;
 	private Item shield = null;
 
 	/**
@@ -18,8 +18,7 @@ public final class Hero extends Entity
 	}
 
 	/**
-         * checks if the player has a sword
-         * 
+	 * checks if the player has picked up the sword
 	 * @return 'true' if player has the sword; 'false' otherwise
 	 */
 	public final boolean hasSword()
@@ -28,18 +27,21 @@ public final class Hero extends Entity
 	}
 
 	/**
-         * checks if the player has darts
-         * 
+	 * checks if the player has picked up darts
 	 * @return returns 'true' if player has darts; 'false' otherwise
 	 */
 	public final boolean hasDarts()
 	{
-		return dart != null;
+		return numberDarts > 0;
+	}
+
+	protected final int getNumberDarts()
+	{
+		return numberDarts;
 	}
 
 	/**
-         * checks if the player has a shield
-         * 
+	 * checks if the player has picked up the shield
 	 * @return 'true' if player has the shield; 'false' otherwise
 	 */
 	public final boolean hasShield()
@@ -47,13 +49,12 @@ public final class Hero extends Entity
 		return shield != null;
 	}
 
-        /**
-         * attacks a single dragon with darts
-         * 
-         * @param maze
-         * @param direction
-         * @return returns 'true' if the attack was successful (target found), 'false' otherwise
-         */
+	/**
+	 * attacks an enemy dragon with darts (long-ranged weapon)
+	 * @param maze an object containing the board matrix
+	 * @param direction the direction given by the user
+	 * @return returns 'true' if the target was in range and the attack was successful, 'false' otherwise
+	 */
 	public boolean attackDarts(Maze maze, Direction direction)
 	{
 		if (!hasDarts())
@@ -96,22 +97,21 @@ public final class Hero extends Entity
 			{
 				maze.placeSymbol(positionX, positionY, 'x');
 				target.setHealth(0);
-				dart = null;
+				numberDarts--;
 
 				return true;
 			}
 		}
 
-		dart = null;
+		numberDarts--;
 
 		return false;
 	}
 
 	/**
 	 * checks if player can move in specified direction
-         * 
-	 * @param direction
-	 * @param maze
+	 * @param direction the direction given by the user
+	 * @param maze a Maze object containing the board matrix
 	 * @return returns 'true' if player is still alive and can move to the specified direction, 'false' otherwise
 	 */
 	public final boolean validMove(Maze maze, Direction direction)
@@ -148,6 +148,11 @@ public final class Hero extends Entity
 		return maze.symbolAt(newPosition.x, newPosition.y) != 'X';
 	}
 
+	/**
+	 * checks if there is an item at the given position
+	 * @param maze an object containing the board matrix
+	 * @param pos coordinates for the possible location of an item
+	 */
 	public void pickItem(Maze maze, Point pos)
 	{
 		Item itemPicked = null;
@@ -177,15 +182,17 @@ public final class Hero extends Entity
 			}
 			else if (itemPicked instanceof Dart)
 			{
-				if (!hasDarts())
-				{
-					GameState.removeItem(itemPicked);
-					dart = itemPicked;
-				}
+				GameState.removeItem(itemPicked);
+				numberDarts++;
 			}
 		}
 	}
 
+	/**
+	 * moves the player around the maze given a direction
+	 * @param direction the direction given by the user
+	 * @param maze an object containing the board matrix
+	 */
 	@Override
 	public void move(Maze maze, Direction direction)
 	{
@@ -227,9 +234,8 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * checks if player is close enough to attack an enemy dragon
-         * 
-	 * @param dragon
+	 * checks if the player is close enough to attack an enemy dragon
+	 * @param dragon an object that represents the enemy dragon
 	 * @return 'true' if player has the sword and can attack the dragon; 'false' otherwise
 	 */
 	public final boolean canAttack(Dragon dragon)
@@ -249,6 +255,11 @@ public final class Hero extends Entity
 		return pos.y <= dpos.y + 1 && pos.y >= dpos.y - 1 && pos.x == dpos.x;
 	}
 
+	/**
+	 * attacks an enemy dragon with the sword (close-ranged weapon)
+	 * @param maze an object that represents the game board
+	 * @param dragon an object that represents the enemy dragon
+	 */
 	public final void attackSword(Maze maze, Dragon dragon)
 	{
 		if (canAttack(dragon))
@@ -259,8 +270,8 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * @param maze
-	 * draws a symbol on the screen representing the player
+	 * draws a symbol on the screen representing the player entity
+	 * @param maze an object containing the game board
 	 */
 	@Override
 	protected void draw(Maze maze)

@@ -5,13 +5,12 @@ import java.io.*;
 public abstract class Entity implements Serializable
 {
 	private static final long serialVersionUID = -2963466833758950373L;
-	
+
 	protected Point pos;
 	private int health;
 
 	/**
-	 * default constructor for class 'Entity'
-	 *
+	 * default constructor for 'Entity' class
 	 * @param pos initial coordinates for Entity's position
 	 * @param health initial Entity's health
 	 */
@@ -22,9 +21,8 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
-         * gets Entity's current position x coordinate
-         * 
-	 * @return Entity's current position x coordinate
+	 * gets entity's current position x coordinate
+	 * @return entity's current position x coordinate
 	 */
 	public final int getX()
 	{
@@ -32,29 +30,26 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
-         * gets Entity's current position y coordinate
-         * 
-	 * @return Entity's current position y coordinate
+	 * gets entity's current position y coordinate
+	 * @return entity's current position y coordinate
 	 */
 	public final int getY()
 	{
 		return pos.y;
 	}
 
-        /**
-         * gets entity's current position coordinates
-         * 
-	 * @return Entity's current position
+	/**
+	 * gets entity's current position
+	 * @return entity's current position
 	 */
 	public final Point getPosition()
 	{
 		return pos;
 	}
-        
+
 	/**
-         * gets Entity's current health
-         * 
-	 * @return Entity's current health
+	 * gets entity's current health
+	 * @return entity's current health
 	 */
 	public final int getHealth()
 	{
@@ -62,8 +57,7 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
-	 * changes Entity's current health
-	 *
+	 * changes entity's current health
 	 * @param health new value for entity's health
 	 */
 	protected void setHealth(int health)
@@ -72,10 +66,15 @@ public abstract class Entity implements Serializable
 	}
 
 	/**
-	 * draws the Entity at its corresponding position
-	 *
-	 * @param maze
+	 * draws the Entity at its corresponding position on the board matrix
+	 * @param maze an object containing the board matrix
 	 */
 	protected abstract void draw(Maze maze);
+
+	/**
+	 * moves the entity around the maze given a direction
+	 * @param direction the direction given by the user
+	 * @param maze an object containing the board matrix
+	 */
 	protected abstract void move(Maze maze, Direction direction);
 }

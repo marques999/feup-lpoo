@@ -6,8 +6,7 @@ public final class Shield extends Item
 
 	/**
 	 * default constructor for class 'Shield'
-         * 
-	 * @param pos initial coordinates for Shield's position
+	 * @param pos coordinates for shield's initial position
 	 */
 	protected Shield(Point pos)
 	{
@@ -15,9 +14,8 @@ public final class Shield extends Item
 	}
 
 	/**
-	 * draws the Shield at its corresponding position
-         * 
-	 * @param maze an instance of 'Maze' class
+	 * draws the shield at its corresponding position on the board matrix
+	 * @param maze an object containing the board matrix
 	 */
 	@Override
 	protected final void draw(Maze maze)

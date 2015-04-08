@@ -12,7 +12,7 @@ import lpoo.logic.RandomMaze;
 public class AreaDesenho extends JPanel
 {
 	private static final long serialVersionUID = 1652644943686379111L;
-	
+
 	private BufferedImage spriteHero;
 	private BufferedImage spriteHeroShield;
 	private BufferedImage spriteHeroSword;
@@ -90,10 +90,10 @@ public class AreaDesenho extends JPanel
 		return resized;
 	}
 
-	protected void initializeMaze(int w, int h)
+	protected void initializeMaze(int newWidth, int newHeight)
 	{
-		mazeWidth = w;
-		mazeHeight = h;
+		mazeWidth = newWidth;
+		mazeHeight = newHeight;
 		mazeCells = mazeWidth * mazeHeight;
 		maze = new Maze(mazeWidth, mazeHeight);
 
@@ -165,8 +165,7 @@ public class AreaDesenho extends JPanel
 		}
 		catch (IOException ex)
 		{
-			JOptionPane.showMessageDialog(this, "Spite initialization failed!", "Error", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
+			GUIGlobals.abort(ex, null);
 		}
 	}
 
@@ -194,23 +193,9 @@ public class AreaDesenho extends JPanel
 		updateWindow();
 	}
 
-	protected void readMaze(ObjectInputStream s) throws IOException, ClassNotFoundException
-	{
-	}
-
 	protected void writeMaze(ObjectOutputStream s) throws IOException
 	{
 		s.writeObject(maze);
-	}
-
-	protected void readState(ObjectInputStream s) throws IOException, ClassNotFoundException
-	{
-		readMaze(s);
-	}
-
-	protected void writeState(ObjectOutputStream s) throws IOException
-	{
-		writeMaze(s);
 	}
 
 	@Override

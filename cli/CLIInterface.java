@@ -33,14 +33,17 @@ public class CLIInterface
 
 	private static void showObjectives()
 	{
-		final String currentObjective = String.format("%-24s", GameState.getObjective());
-		final String numberDragons = String.format("%4d", GameState.getNumberDragons());
-                
-                System.out.println("");
-		System.out.println("=====================================================");
-		System.out.println("= OBJECTIVE: " + currentObjective);
-                System.out.println("= DRAGONS: " + numberDragons);
-		System.out.println("=====================================================");
+		final String currentObjective = String.format("%-36s", GameState.getObjective());
+		final String numberDragons = String.format("%-38d", GameState.getNumberDragons());
+		final String numberDarts = String.format("%-40d", GameState.getNumberDarts());
+
+		System.out.println("");
+		System.out.println("====================================================");
+		System.out.println("= OBJECTIVE : " + currentObjective + " =");
+		System.out.println("= DRAGONS : " + numberDragons + " =");
+		System.out.println("= DARTS : " + numberDarts + " =");
+		System.out.println("====================================================");
+		System.out.println("");
 	}
 
 	private static void selectDragon()
@@ -68,7 +71,7 @@ public class CLIInterface
 
 	private static char readChar()
 	{
-		System.out.print("Enter a key to move the character : ");
+		System.out.print("\nPlease enter a movement key (W, S, A, D) : ");
 
 		return in.next().charAt(0);
 	}
@@ -91,66 +94,76 @@ public class CLIInterface
 		selectMaze();
 		selectDragon();
 
-		boolean dartFailed;
-
 		while (!GameState.gameOver())
 		{
-			dartFailed = false;
+			boolean dartFailed = false;
+			boolean dartThrown = false;
+
 			showObjectives();
 			GameState.printMaze();
 
 			switch (readChar())
 			{
-			case 'W':
-			case 'w':
+			case 'W': case 'w':
 				GameState.update(Direction.UP);
+				dartThrown = false;
 				break;
-			case 'S':
-			case 's':
+			case 'S': case 's':
 				GameState.update(Direction.DOWN);
+				dartThrown = false;
 				break;
-			case 'A':
-			case 'a':
+			case 'A': case 'a':
 				GameState.update(Direction.LEFT);
+				dartThrown = false;
 				break;
-			case 'D':
-			case 'd':
+			case 'D': case 'd':
 				GameState.update(Direction.RIGHT);
+				dartThrown = false;
 				break;
 			case '8':
 				dartFailed = !GameState.attackDarts(Direction.UP);
+				dartThrown = true;
 				GameState.update(Direction.NONE);
 				break;
 			case '2':
 				dartFailed = !GameState.attackDarts(Direction.DOWN);
+				dartThrown = true;
 				GameState.update(Direction.NONE);
 				break;
 			case '4':
 				dartFailed = !GameState.attackDarts(Direction.LEFT);
+				dartThrown = true;
 				GameState.update(Direction.NONE);
 				break;
 			case '6':
 				dartFailed = !GameState.attackDarts(Direction.RIGHT);
+				dartThrown = true;
 				GameState.update(Direction.NONE);
 				break;
 			}
 
-			if (dartFailed)
+			if (dartThrown)
 			{
-				System.out.println("");
-				System.out.println("*******************************");
-				System.out.println("*        MISSED TARGET        *");
-				System.out.println("*******************************");
-				System.out.println("");
-				System.in.read();
+				displayMessage(dartFailed ? "MISSED TARGET" : "ATTACK SUCCESSFUL!");
 			}
 		}
 
 		GameState.printMaze();
-		displayMessage();
+		displayGameOver();
 	}
 
-	private static void displayMessage()
+	private static void displayMessage(String msg) throws IOException
+	{
+		final String formattedMessage = String.format("%s-28", msg);
+
+		System.out.println("");
+		System.out.println("********************************");
+		System.out.println("* " + formattedMessage + " *");
+		System.out.println("********************************");
+		System.in.read();
+	}
+
+	private static void displayGameOver()
 	{
 		if (GameState.gameOver())
 		{

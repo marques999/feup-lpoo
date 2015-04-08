@@ -7,8 +7,7 @@ public final class Dragon extends Entity
 
 	/**
 	 * default constructor for class 'Dragon'
-	 *
-	 * @param pos initial coordinates for Dragon's position
+	 * @param pos coordinates for Dragon's initial position
 	 */
 	protected Dragon(Point pos)
 	{
@@ -19,9 +18,8 @@ public final class Dragon extends Entity
 
 	/**
 	 * constructor with parameters for class 'Dragon'
-	 *
-	 * @param x initial X coordinate for dragon position
-	 * @param y initial Y coordinate for dragon position
+	 * @param x X coordinate for dragon's initial position
+	 * @param y Y coordinate for dragon's initial position
 	 */
 	protected Dragon(int x, int y)
 	{
@@ -89,9 +87,8 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * makes a valid move in the given direction
-	 *
-	 * @param maze game board
+	 * moves the dragon in the given direction
+	 * @param maze an object containing the board matrix
 	 * @param direction the direction to move the dragon
 	 */
 	@Override
@@ -150,10 +147,9 @@ public final class Dragon extends Entity
 
 	/**
 	 * checks if the dragon can attack the 'Hero' with fireballs
-	 *
-	 * @param maze
+	 * @param maze an object containing the board matrix
 	 * @param player the target player entity
-	 * @return 'true' is dragon is active and if player is in the line of sight, 'false' otherwise
+	 * @return 'true' is dragon is active and player is in the line of sight, 'false' otherwise
 	 */
 	protected final boolean canAttackFire(Maze maze, Hero player)
 	{
@@ -192,9 +188,8 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * attacks the player with short-range melee
-	 *
-	 * @param maze game board
+	 * attacks the player with claws (short-ranged attack)
+	 * @param maze an object containing the board matrix
 	 * @param player the target player
 	 */
 	protected final void attack(Maze maze, Hero player)
@@ -207,9 +202,8 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * attacks the player with long-ranged fireballs
-	 *
-	 * @param maze game board
+	 * attacks the player with fireballs (long-ranged weapon)
+	 * @param maze an object containing the board matrix
 	 * @param player the target player
 	 */
 	protected final void attackFire(Maze maze, Hero player)
@@ -222,9 +216,8 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * draws the dragon at its corresponding position
-	 *
-	 * @param maze game board where the dragon is going to be placed
+	 * draws the dragon at its corresponding position on the board matrix
+	 * @param maze an object containing the board matrix
 	 */
 	@Override
 	protected void draw(Maze maze)

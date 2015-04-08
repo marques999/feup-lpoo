@@ -6,7 +6,6 @@ public final class RandomMaze extends Maze
 
 	/**
 	 * generates a random maze (w x h)
-	 *
 	 * @param w width (number of columns)
 	 * @param h height (number of rows)
 	 */

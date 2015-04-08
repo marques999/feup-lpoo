@@ -3,29 +3,28 @@ package lpoo.logic;
 import java.io.Serializable;
 import java.util.Random;
 
-public class Maze implements Serializable
+public class Maze implements Cloneable, Serializable
 {
 	private static final long serialVersionUID = 7550516997964463999L;
 
+	private char[][] maze;
+	private Point mazeExit;
 	private final int mazeWidth;
 	private final int mazeHeight;
 	private final Random mazeRandom;
-	private Point mazeExit;
-	private char[][] mazeMatrix;
 
 	/**
-	 * default constructor for 'Maze'
-	 * 
+	 * default constructor for 'Maze' class
 	 * @param w initial maze width (number of columns)
 	 * @param h initial maze height (number of rows)
 	 */
 	public Maze(int w, int h)
 	{
-		mazeMatrix = new char[h][w];
+		maze = new char[h][w];
 		mazeRandom = new Random();
 		mazeWidth = w;
 		mazeHeight = h;
-                mazeExit = new Point(0, 0);
+		mazeExit = new Point(0, 0);
 	}
 
 	/**
@@ -41,17 +40,16 @@ public class Maze implements Serializable
 	 */
 	public char[][] getMatrix()
 	{
-		return mazeMatrix;
+		return maze;
 	}
 
 	/**
 	 * replaces the current maze matrix with a given one
-	 * 
 	 * @param m new two-dimensional matrix representing the maze
 	 */
 	public void setMatrix(char[][] m)
 	{
-		mazeMatrix = m;
+		maze = m;
 	}
 
 	/**
@@ -79,8 +77,7 @@ public class Maze implements Serializable
 	}
 
 	/**
-	 * checks if the given cell coordinates are on the maze border
-	 * 
+	 * checks if the given cell coordinates are maze borders
 	 * @param x maze cell X coordinate
 	 * @param y maze cell Y coordinate
 	 * @return 'true' if given cell belongs to the maze border, 'false' otherwise
@@ -92,10 +89,9 @@ public class Maze implements Serializable
 
 	/**
 	 * checks if the given cell coordinates are maze corners
-	 * 
 	 * @param x maze cell X coordinate
 	 * @param y maze cell Y coordinate
-	 * @return 'true' i given cell is a maze corner, 'false' otherwise
+	 * @return 'true' if given cell is a maze corner, 'false' otherwise
 	 */
 	public final boolean isCorner(int x, int y)
 	{
@@ -107,11 +103,11 @@ public class Maze implements Serializable
 	 */
 	public final void printMaze()
 	{
-		for (int y = 0; y < mazeHeight; ++y)
+		for (char[] row : maze)
 		{
-			for (int x = 0; x < mazeWidth; ++x)
+			for (char column : row)
 			{
-				System.out.print(mazeMatrix[y][x] + " ");
+				System.out.print(column + " ");
 			}
 
 			System.out.println("");
@@ -125,12 +121,11 @@ public class Maze implements Serializable
 	 */
 	public final char symbolAt(int x, int y)
 	{
-		return mazeMatrix[y][x];
+		return maze[y][x];
 	}
 
 	/**
 	 * removes the symbol
-	 * 
 	 * @param x maze cell X coordinate
 	 * @param y maze cell Y coordinate
 	 */
@@ -138,32 +133,29 @@ public class Maze implements Serializable
 	{
 		if (x >= 0 && x < mazeWidth && y >= 0 && y < mazeHeight)
 		{
-			mazeMatrix[y][x] = ' ';
+			maze[y][x] = ' ';
 		}
 	}
 
 	/**
 	 * replaces the symbol
-	 * 
 	 * @param x maze cell X coordinate
 	 * @param y maze cell Y coordinate
 	 * @param s new symbol
-	 * @see clearSymbol
 	 */
 	public void placeSymbol(int x, int y, char s)
 	{
 		if (x >= 0 && x < mazeWidth && y >= 0 && y < mazeHeight)
 		{
-			mazeMatrix[y][x] = s;
+			maze[y][x] = s;
 		}
 	}
 
 	/**
 	 * given a symbol,
-	 * 
 	 * @param s
+	 * @param updateMaze
 	 * @return coordinates of the first occurence in the maze, 'null' if symbol was not found
-	 * @see placeEntity placeSymbol
 	 */
 	public Point findSymbol(char s, boolean updateMaze)
 	{
@@ -171,13 +163,13 @@ public class Maze implements Serializable
 		{
 			for (int x = 0; x < mazeWidth; ++x)
 			{
-				if (mazeMatrix[y][x] == s)
+				if (maze[y][x] == s)
 				{
 					if (updateMaze)
 					{
 						clearSymbol(x, y);
 					}
-					
+
 					return new Point(x, y);
 				}
 			}
@@ -188,8 +180,8 @@ public class Maze implements Serializable
 
 	/**
 	 * randomly places an entity (or item) on the maze matrix
-	 * 
-	 * @param s symbol representing the 'Entity' to be placed
+	 * @param mazeSymbol
+	 * @param updateMaze
 	 * @return
 	 */
 	protected final Point placeEntity(char mazeSymbol, boolean updateMaze)
@@ -197,17 +189,37 @@ public class Maze implements Serializable
 		int initialX = 0;
 		int initialY = 0;
 
-		while (mazeMatrix[initialY][initialX] != ' ')
+		while (maze[initialY][initialX] != ' ')
 		{
 			initialX = 1 + mazeRandom.nextInt(mazeWidth - 2);
 			initialY = 1 + mazeRandom.nextInt(mazeHeight - 2);
 		}
 
 		if (updateMaze)
-			{
+		{
 			placeSymbol(initialX, initialY, mazeSymbol);
-			}
+		}
 
 		return new Point(initialX, initialY);
+	}
+
+	@Override
+	public Maze clone() throws CloneNotSupportedException
+	{
+		super.clone();
+
+		Maze newCopy = new Maze(mazeWidth, mazeHeight);
+		newCopy.mazeExit = new Point(mazeExit.x, mazeExit.y);
+		
+		char[][] newMaze = maze.clone();
+
+		for (int i = 0; i < maze.length; i++)
+		{
+			newMaze[i] = maze[i].clone();
+		}
+
+		newCopy.maze = newMaze;
+		
+		return newCopy;
 	}
 }

@@ -2,10 +2,7 @@ package lpoo.gui;
 
 import static java.awt.event.KeyEvent.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import lpoo.logic.GameState;
 
 public class GUIGlobals
@@ -29,7 +26,6 @@ public class GUIGlobals
 
 	/**
 	 * reads user preferences from a stream
-	 * 
 	 * @param aInputStream objectInputStream to read from
 	 * @throws IOException if stream not found or invalid
 	 * @throws ClassNotFoundException
@@ -47,7 +43,6 @@ public class GUIGlobals
 
 	/**
 	 * writes user preferences to a stream
-	 * 
 	 * @param aOutputStream objectOutputStream to write to
 	 * @throws IOException if stream invalid, insufficient permissions or file not found
 	 */
@@ -61,11 +56,10 @@ public class GUIGlobals
 		aOutputStream.writeInt(mazeHeight);
 		aOutputStream.writeObject(currentKeys);
 	}
-        
-        protected static void abort(Exception ex, JFrame parent)
-        {
-            JOptionPane.showMessageDialog(parent, "Exception thrown:\n" + ex.getLocalizedMessage() + ".\nThe program will now exit...", "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(GUIInterface.class.getName()).log(Level.SEVERE, null, ex);
-            System.exit(0);
-        }
+
+	protected static void abort(Exception ex, JFrame parent)
+	{
+		JOptionPane.showMessageDialog(parent, "Exception thrown:\n" + ex.getLocalizedMessage() + ".\nThe program will now exit...", "Error", JOptionPane.ERROR_MESSAGE);
+		System.exit(0);
+	}
 }

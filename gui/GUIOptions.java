@@ -125,7 +125,6 @@ public class GUIOptions extends JDialog
 		setAutoRequestFocus(false);
 		setBackground(Color.WHITE);
                 setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-                setLocationRelativeTo(getParent());
 		setResizable(false);
                 setTitle("Preferences");
 		getContentPane().setLayout(new GridBagLayout());
@@ -307,6 +306,7 @@ public class GUIOptions extends JDialog
 		gridBagConstraints.insets = new Insets(0, 4, 0, 4);
 		getContentPane().add(pnlHero, gridBagConstraints);
 		pack();
+                setLocationRelativeTo(null);
 	}
         
         private void disableCustom()

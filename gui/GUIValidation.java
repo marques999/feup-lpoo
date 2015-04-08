@@ -9,7 +9,7 @@ public class GUIValidation
 	{
 		int mazeWidth = m.getWidth();
 		int mazeHeight = m.getHeight();
-                boolean foundExit = false;
+		boolean foundExit = false;
 
 		for (int x = 0; x < mazeWidth; x++)
 		{
@@ -17,18 +17,13 @@ public class GUIValidation
 			{
 				return false;
 			}
-                        
+
 			if (m.symbolAt(x, mazeHeight - 1) != 'X' && m.symbolAt(x, mazeHeight - 1) != 'S')
 			{
 				return false;
 			}
 
-                        if (m.symbolAt(x, 0) == 'S')
-			{
-				foundExit = true;
-			}
-                        
-			if (m.symbolAt(x, mazeHeight - 1) == 'S')
+			if (m.symbolAt(x, 0) == 'S' || m.symbolAt(x, mazeHeight - 1) == 'S')
 			{
 				foundExit = true;
 			}
@@ -40,18 +35,13 @@ public class GUIValidation
 			{
 				return false;
 			}
-                        
+
 			if (m.symbolAt(mazeWidth - 1, y) != 'X' && m.symbolAt(mazeWidth - 1, y) != 'S')
 			{
 				return false;
 			}
-                        
-                        if (m.symbolAt(0, y) == 'S')
-			{
-				foundExit = true;
-			}
-                        
-			if (m.symbolAt(mazeWidth - 1, y) == 'S')
+
+			if (m.symbolAt(0, y) == 'S' || m.symbolAt(mazeWidth - 1, y) == 'S')
 			{
 				foundExit = true;
 			}
@@ -60,7 +50,6 @@ public class GUIValidation
 		return foundExit;
 	}
 
-	// c) there must exist a path between any blank cell and the maze exit
 	protected static boolean checkExit(Maze maze)
 	{
 		Point p = maze.getExitPosition();
@@ -83,8 +72,6 @@ public class GUIValidation
 		return true;
 	}
 
-	// auxiliary method used by checkExitReachable
-	// marks a cell as visited (V) and proceeds recursively to its neighbors
 	private static void visit(char[][] m, int i, int j)
 	{
 		if (i < 0 || i >= m.length || j < 0 || j >= m[i].length)

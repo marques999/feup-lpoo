@@ -5,8 +5,8 @@ import java.util.Stack;
 
 public final class MazeBuilder
 {
-        protected static final int STATIC_MAZE = 0;
-        protected static final int RANDOM_MAZE = 1;
+	protected static final int STATIC_MAZE = 0;
+	protected static final int RANDOM_MAZE = 1;
 	private final Random rand;
 
 	/**
@@ -14,7 +14,7 @@ public final class MazeBuilder
 	 */
 	private char[][] maze;
 	private int mazeWidth;
-        private int mazeHeight;
+	private int mazeHeight;
 	private int mazeType;
 
 	/**
@@ -26,7 +26,7 @@ public final class MazeBuilder
 
 	private char[][] visitedCells;
 	private int visitedCellsWidth;
-        private int visitedCellsHeight;
+	private int visitedCellsHeight;
 
 	public MazeBuilder()
 	{
@@ -47,33 +47,33 @@ public final class MazeBuilder
 	{
 		mazeWidth = width;
 	}
-        
-        public void setHeight(int height)
-        {
-                mazeHeight = height;
-        }
+
+	public void setHeight(int height)
+	{
+		mazeHeight = height;
+	}
 
 	protected void generateMaze()
 	{
-                if (mazeWidth == 0 || mazeHeight == 0)
-                {
-                    throw new IllegalArgumentException();
-                }
-                
+		if (mazeWidth == 0 || mazeHeight == 0)
+		{
+			throw new IllegalArgumentException();
+		}
+
 		if (mazeType == STATIC_MAZE)
 		{
 			generateStaticMaze();
 		}
-                else if (mazeType == RANDOM_MAZE)
+		else if (mazeType == RANDOM_MAZE)
 		{
 			if (mazeWidth % 2 != 0 && mazeHeight % 2 != 0)
 			{
 				generateRandomMaze();
 			}
-                        else
-                        {
-                            throw new IllegalArgumentException();
-                        }
+			else
+			{
+				throw new IllegalArgumentException();
+			}
 		}
 	}
 
@@ -84,8 +84,8 @@ public final class MazeBuilder
 
 	private void generateStaticMaze()
 	{
-		maze = new char[][]
-		{
+		maze = new char[][] 
+		{ 
 			{ 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' },
 			{ 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X' },
 			{ 'X', ' ', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X' },
@@ -97,15 +97,15 @@ public final class MazeBuilder
 			{ 'X', ' ', 'X', 'X', ' ', ' ', ' ', ' ', ' ', 'X' },
 			{ 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' },
 		};
-                
-                m_exit = new Point(9, 5);
+
+		m_exit = new Point(9, 5);
 	}
 
 	private void generateRandomMaze()
 	{
 		maze = new char[mazeHeight][mazeWidth];
 		visitedCellsWidth = (mazeWidth - 1) / 2;
-                visitedCellsHeight = (mazeHeight - 1) / 2;
+		visitedCellsHeight = (mazeHeight - 1) / 2;
 		visitedCells = new char[visitedCellsHeight][visitedCellsWidth];
 		m_stack = new Stack<>();
 		m_guide = new Point(0, 0);
@@ -118,34 +118,34 @@ public final class MazeBuilder
 		while (!m_stack.empty())
 		{
 			generatePath();
-		} 
+		}
 	}
 
 	private void initializeMatrix()
 	{
 		for (int y = 0; y < mazeHeight; ++y)
 		{
-                        if (y % 2 == 0)
-                        {
-                            for (int x = 0; x < mazeWidth; ++x)
-                            {
-                                maze[y][x] = 'X';
-                            }
-                        }
-                        else
-                        {
-                            for (int x = 0; x < mazeWidth; ++x)
-                            {
-				if (x % 2 != 0)
-				{
-					maze[y][x] = ' ';
-				}
-				else
+			if (y % 2 == 0)
+			{
+				for (int x = 0; x < mazeWidth; ++x)
 				{
 					maze[y][x] = 'X';
 				}
-                            }   
-                        }
+			}
+			else
+			{
+				for (int x = 0; x < mazeWidth; ++x)
+				{
+					if (x % 2 != 0)
+					{
+						maze[y][x] = ' ';
+					}
+					else
+					{
+						maze[y][x] = 'X';
+					}
+				}
+			}
 		}
 	}
 
