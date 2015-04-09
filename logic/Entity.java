@@ -58,11 +58,11 @@ public abstract class Entity implements Serializable
 
 	/**
 	 * changes entity's current health
-	 * @param health new value for entity's health
+	 * @param hp new value for entity's health
 	 */
-	protected void setHealth(int health)
+	protected void setHealth(int hp)
 	{
-		this.health = health;
+		health = hp;
 	}
 
 	/**

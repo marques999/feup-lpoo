@@ -17,16 +17,6 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * constructor with parameters for class 'Dragon'
-	 * @param x X coordinate for dragon's initial position
-	 * @param y Y coordinate for dragon's initial position
-	 */
-	protected Dragon(int x, int y)
-	{
-		this(new Point(x, y));
-	}
-
-	/**
 	 * @return 'true' is dragon is asleep; 'false' otherwise
 	 */
 	public final boolean isSleeping()

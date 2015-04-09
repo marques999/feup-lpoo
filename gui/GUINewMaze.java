@@ -2,9 +2,7 @@ package lpoo.gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.*;
 import javax.swing.*;
-import javax.swing.text.*;
 
 public class GUINewMaze extends JDialog
 {
@@ -12,7 +10,7 @@ public class GUINewMaze extends JDialog
 	private static final String messageTitle = "Error";
 	private static final String messageEvenSize = "Invalid dimensions: width and height must be odd!";
 	private static final String messageInvalidSize = "Invalid dimensions: width and height must be greater than or equal to 7.";
-	
+
 	public GUINewMaze(Frame parent)
 	{
 		super(parent, true);
@@ -21,70 +19,52 @@ public class GUINewMaze extends JDialog
 
 	private void initComponents()
 	{
-		jLabel1 = new JLabel();
-		jLabel2 = new JLabel();
+		GridBagConstraints gridBagConstraints;
+
+		jPanel1 = new JPanel();
 		jButton1 = new JButton();
 		jButton2 = new JButton();
+		jPanel2 = new JPanel();
+		jLabel1 = new JLabel();
 		jFormattedTextField1 = new JFormattedTextField();
+		jLabel2 = new JLabel();
 		jFormattedTextField2 = new JFormattedTextField();
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("New maze");
 		setResizable(false);
+		getContentPane().setLayout(new GridBagLayout());
 
-		jLabel1.setText("Enter maze size:");
-		jLabel2.setText("x");
-		jButton1.setText("Create maze");
+		jPanel1.setLayout(new FlowLayout(FlowLayout.CENTER, 8, 8));
+		jButton1.setText("Create");
 		jButton1.addActionListener(this::jButton1ActionPerformed);
+		jPanel1.add(jButton1);
 		jButton2.setText("Cancel");
 		jButton2.addActionListener(this::jButton2ActionPerformed);
-		jFormattedTextField1.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(NumberFormat.getIntegerInstance())));
+		jPanel1.add(jButton2);
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		gridBagConstraints.insets = new Insets(4, 8, 1, 8);
+		getContentPane().add(jPanel1, gridBagConstraints);
+
+		jLabel1.setText("Enter maze size: ");
+		jPanel2.add(jLabel1);
 		jFormattedTextField1.setText(Integer.toString(GUIGlobals.editorWidth));
-		jFormattedTextField2.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(NumberFormat.getIntegerInstance())));
+		jFormattedTextField1.setPreferredSize(new Dimension(32, 20));
+		jPanel2.add(jFormattedTextField1);
+		jLabel2.setText("x");
+		jPanel2.add(jLabel2);
 		jFormattedTextField2.setText(Integer.toString(GUIGlobals.editorHeight));
+		jFormattedTextField2.setPreferredSize(new Dimension(32, 20));
+		jPanel2.add(jFormattedTextField2);
 
-		GroupLayout layout = new GroupLayout(getContentPane());
-
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-				.addContainerGap()
-				.addComponent(jLabel1)
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-				.addComponent(jFormattedTextField1, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-				.addComponent(jLabel2, GroupLayout.PREFERRED_SIZE, 8, GroupLayout.PREFERRED_SIZE).addGap(2, 2, 2)
-				.addComponent(jFormattedTextField2, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(jButton1)
-				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-				.addComponent(jButton2)
-				.addContainerGap()));
-
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-				.addContainerGap()
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-				.addComponent(jLabel1)
-				.addComponent(jLabel2)
-				.addComponent(jFormattedTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(jFormattedTextField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18, 18, 18)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-				.addComponent(jButton2)
-				.addComponent(jButton1))
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-
-		getContentPane().setLayout(layout);
-		getRootPane().setDefaultButton(jButton1);
-		pack();
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new Insets(4, 8, 0, 8);
+		getContentPane().add(jPanel2, gridBagConstraints);
+		setSize(new Dimension(210, 120));
 		setLocationRelativeTo(getParent());
-	}
-
-	private void jButton2ActionPerformed(ActionEvent evt)
-	{
-		dispose();
 	}
 
 	private void jButton1ActionPerformed(ActionEvent evt)
@@ -111,10 +91,17 @@ public class GUINewMaze extends JDialog
 		}
 	}
 
+	private void jButton2ActionPerformed(ActionEvent evt)
+	{
+		dispose();
+	}
+
 	private JButton jButton1;
 	private JButton jButton2;
 	private JFormattedTextField jFormattedTextField1;
 	private JFormattedTextField jFormattedTextField2;
 	private JLabel jLabel1;
 	private JLabel jLabel2;
+	private JPanel jPanel1;
+	private JPanel jPanel2;
 }
