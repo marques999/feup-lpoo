@@ -6,10 +6,8 @@ import org.junit.Test;
 
 public class TestInterface extends TestCase
 {
-	public static boolean movePlayer(char[] seq)
+	public static void movePlayer(char[] seq)
 	{
-		boolean returnValue = true;
-
 		for (char input : seq)
 		{
 			switch (input)
@@ -28,8 +26,6 @@ public class TestInterface extends TestCase
 				break;
 			}
 		}
-
-		return returnValue;
 	}
 
 	public static void moveDragon(Dragon dragon, char[] seq)
@@ -57,15 +53,15 @@ public class TestInterface extends TestCase
 	@Test
 	public void test_3a_killedByDragon()
 	{
-		Maze m = new StaticMaze();
-		Point dragonPosition = new Point(1, 3);
+		final Maze m = new StaticMaze();
+		final Point dragonPosition = new Point(1, 3);
 
 		GameState.initializeStatic(m);
 		GameState.setDragonMovement(-1);
 		GameState.placeDragon(dragonPosition);
 		GameState.update(Direction.DOWN);
 
-		Hero p = GameState.getPlayer();
+		final Hero p = GameState.getPlayer();
 
 		assertEquals(0, p.getHealth());
 		assertTrue(GameState.gameOver());

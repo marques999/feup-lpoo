@@ -81,11 +81,6 @@ public class TestItems
 				{ 'X', 'X', 'X', 'X', 'X' }
 			};
 
-			char dragonMoves[] = 
-			{
-				'a', 'd', 'w', 'w', 'w', 
-			};
-
 			Maze maze = new Maze(5, 5);
 			maze.setMatrix(initialMaze);
 

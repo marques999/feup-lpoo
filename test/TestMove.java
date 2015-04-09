@@ -36,7 +36,6 @@ public class TestMove
         assertTrue(initialPosition.equals(p.getPosition()));
 
         GameState.update(Direction.RIGHT);
-        p = GameState.getPlayer();
 
         assertTrue(newPosition.equals(p.getPosition()));
     }
@@ -57,14 +56,11 @@ public class TestMove
         GameState.update(Direction.UP);
         GameState.update(Direction.UP);
         GameState.update(Direction.UP);
-        
-        p = GameState.getPlayer();
-        
+                
         assertTrue(initialPosition.equals(p.getPosition()));
-        GameState.update(Direction.LEFT);
-        GameState.update(Direction.LEFT);
         
-        p = GameState.getPlayer();
+        GameState.update(Direction.LEFT);
+        GameState.update(Direction.LEFT);
         
         assertTrue(initialPosition.equals(p.getPosition()));
     }

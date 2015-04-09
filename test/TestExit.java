@@ -1,9 +1,6 @@
 package lpoo.test;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
 import static lpoo.test.TestInterface.movePlayer;
+import static org.junit.Assert.*;
 import lpoo.logic.*;
 import org.junit.Test;
 
@@ -19,25 +16,25 @@ import org.junit.Test;
 	7   X       X   X       X       X       X
 	8   X   E   X   X                       X
 	9   X   X   X   X   X   X   X   X   X   X
-*/
+ */
 
 public class TestExit
 {
 	@Test
 	public void test_reachExit()
 	{
-		char playerMoves[] = 
-		{
-			/* herói apanha espada e escudo */
-			'd', 'd', 'd', 's', 's', 's', 's', 'a', 'a', 'a', 's', 's', 's',
-			/* herói move-se em direcção ao dragão, atacando-o */
-			'w', 'w', 'w', 'd', 'd', 'd', 'd', 'd', 'd',
-			/* herói desloca-se para a saída */
-			's', 's', 's', 'd', 'd', 'w', 'w', 'w' 
-		};
+		final char playerMoves[] =
+			{
+				/* herói apanha espada e escudo */
+				'd', 'd', 'd', 's', 's', 's', 's', 'a', 'a', 'a', 's', 's', 's',
+				/* herói move-se em direcção ao dragão, atacando-o */
+				'w', 'w', 'w', 'd', 'd', 'd', 'd', 'd', 'd',
+				/* herói desloca-se para a saída */
+				's', 's', 's', 'd', 'd', 'w', 'w', 'w'
+			};
 
-		Maze m = new StaticMaze();
-		Point exitPosition = new Point(9, 5);
+		final Maze m = new StaticMaze();
+		final Point exitPosition = new Point(9, 5);
 
 		GameState.initializeStatic(m);
 		GameState.setDragonMovement(2);
@@ -47,11 +44,11 @@ public class TestExit
 
 		movePlayer(playerMoves);
 
-		Point playerPosition = new Point(8, 5);
+		final Point playerPosition = new Point(8, 5);
 
 		assertTrue(GameState.canExit());
 
-		Hero p = GameState.getPlayer();
+		final Hero p = GameState.getPlayer();
 
 		assertEquals(p.getPosition(), playerPosition);
 
@@ -64,20 +61,20 @@ public class TestExit
 	@Test
 	public void test_reachExitIncomplete()
 	{
-		char playerMoves[] = 
+		final char playerMoves[] =
 		{
-			's', 's', 's', 's', 'd', 'd', 'd', 's', 's', 
+			's', 's', 's', 's', 'd', 'd', 'd', 's', 's',
 			's', 'd', 'd', 'd', 'd', 'w', 'w', 'w', 'a',
 		};
 
-		Maze m = new StaticMaze();
+		final Maze m = new StaticMaze();
 
 		GameState.initializeStatic(m);
 		GameState.setDragonMovement(-1);
 		movePlayer(playerMoves);
 
-		Point exitPosition = new Point(9, 5);
-		Point playerPosition = new Point(8, 5);
+		final Point exitPosition = new Point(9, 5);
+		final Point playerPosition = new Point(8, 5);
 
 		Hero p = GameState.getPlayer();
 
