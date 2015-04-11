@@ -8,12 +8,13 @@ public class GUINewMaze extends JDialog
 {
 	private static final long serialVersionUID = 1470018550773975078L;
 	private static final String messageTitle = "Error";
-	private static final String messageEvenSize = "Invalid dimensions: width and height must be odd!";
-	private static final String messageInvalidSize = "Invalid dimensions: width and height must be greater than or equal to 7.";
+	private static final String messageEvenSize = "Invalid dimensions: maze width and height must be odd!";
+	private static final String messageInvalidSize = "Invalid dimensions: maze width and height must be greater than or equal to 7.";
 
 	public GUINewMaze(Frame parent)
 	{
 		super(parent, true);
+		
 		initComponents();
 	}
 

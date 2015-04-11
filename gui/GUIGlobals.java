@@ -27,7 +27,7 @@ public class GUIGlobals
 	/**
 	 * reads user preferences from a stream
 	 * @param aInputStream objectInputStream to read from
-	 * @throws IOException if stream not found or invalid
+	 * @throws IOException if stream invalid, insufficient permissions or file not found
 	 * @throws ClassNotFoundException
 	 */
 	protected static void read(ObjectInputStream aInputStream) throws IOException, ClassNotFoundException
@@ -59,7 +59,12 @@ public class GUIGlobals
 
 	protected static void abort(Exception ex, JFrame parent)
 	{
-		JOptionPane.showMessageDialog(parent, "Exception thrown:\n" + ex.getLocalizedMessage() + ".\nThe program will now exit...", "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(parent, ex.getLocalizedMessage() + ".\nThe program will now exit...", "Critical Error", JOptionPane.ERROR_MESSAGE);
 		System.exit(0);
+	}
+
+	protected static void warn(Exception ex, JFrame parent)
+	{
+		JOptionPane.showMessageDialog(parent, ex.getLocalizedMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
 	}
 }

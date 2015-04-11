@@ -56,14 +56,14 @@ public class GUIInterface extends JFrame
 		GameState.initializeCustom(initialState);
 		resumeGame();
 	}
-	
+
 	private void cloneMaze()
 	{
 		try
 		{
 			initialState = GameState.getMaze().clone();
 		}
-		catch (CloneNotSupportedException ex)
+		catch (final CloneNotSupportedException ex)
 		{
 			GUIGlobals.abort(ex, this);
 		}
@@ -96,7 +96,7 @@ public class GUIInterface extends JFrame
 		btnAbout = new JMenuItem();
 		btnRestart = new JMenuItem();
 
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/lpoo/res/FireDragon_icon.png")));
 		setLocationRelativeTo(null);
 		setTitle("Maze Run");
@@ -232,7 +232,7 @@ public class GUIInterface extends JFrame
 	{
 		if (!GameState.gameOver())
 		{
-			String confirmationMessage = "Are you sure you want to quit your current game?";
+			final String confirmationMessage = "Are you sure you want to quit your current game?";
 
 			if (JOptionPane.showConfirmDialog(this, confirmationMessage, "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 			{
@@ -259,9 +259,9 @@ public class GUIInterface extends JFrame
 			oout.close();
 			fout.close();
 		}
-		catch (IOException ex)
+		catch (final IOException ex)
 		{
-			GUIGlobals.abort(ex, this);
+			GUIGlobals.warn(ex, this);
 		}
 	}
 
@@ -285,7 +285,7 @@ public class GUIInterface extends JFrame
 	{
 		return String.format("Darts: %02d | Dragons: %02d | ", GameState.getNumberDarts(), GameState.getNumberDragons());
 	}
-	
+
 	private void checkState()
 	{
 		if (attackModifier)
@@ -449,7 +449,7 @@ public class GUIInterface extends JFrame
 		}
 		catch (IOException | ClassNotFoundException ex)
 		{
-			GUIGlobals.abort(ex, this);
+			GUIGlobals.warn(ex, this);
 		}
 	}
 
@@ -477,7 +477,7 @@ public class GUIInterface extends JFrame
 		}
 		catch (IOException | ClassNotFoundException ex)
 		{
-			GUIGlobals.abort(ex, this);
+			GUIGlobals.warn(ex, this);
 		}
 	}
 
@@ -501,9 +501,9 @@ public class GUIInterface extends JFrame
 			oout.close();
 			fout.close();
 		}
-		catch (IOException ex)
+		catch (final IOException ex)
 		{
-			GUIGlobals.abort(ex, this);
+			GUIGlobals.warn(ex, this);
 		}
 	}
 

@@ -30,12 +30,18 @@ public class GUIOptions extends JDialog
 	private void loadDefaults()
 	{
 		userDifficulty = GUIGlobals.userDifficulty;
+		spnWidth.setValue(GUIGlobals.mazeWidth);
+		spnHeight.setValue(GUIGlobals.mazeHeight);
+		cmbNumber.setSelectedIndex(GUIGlobals.numberDragons - 1);
 
 		switch (userDifficulty)
 		{
 		case -1:
 			rbGameCustom.setSelected(true);
 			numberDragons = GUIGlobals.numberDragons;
+			spnWidth.setEnabled(true);
+			spnHeight.setEnabled(true);
+			cmbNumber.setEnabled(true);
 			break;
 		case 1:
 			rbGameBeginner.setSelected(true);
@@ -57,17 +63,6 @@ public class GUIOptions extends JDialog
 			rbGameNightmare.setSelected(true);
 			numberDragons = 12;
 			break;
-		}
-
-		spnWidth.setValue((Integer) GUIGlobals.mazeWidth);
-		spnHeight.setValue((Integer) GUIGlobals.mazeHeight);
-		cmbNumber.setSelectedIndex(GUIGlobals.numberDragons - 1);
-
-		if (userDifficulty == -1)
-		{
-			spnWidth.setEnabled(true);
-			spnHeight.setEnabled(true);
-			cmbNumber.setEnabled(true);
 		}
 
 		dragonMovement = GUIGlobals.dragonDifficulty;
@@ -117,22 +112,21 @@ public class GUIOptions extends JDialog
 		btnCancel = new JButton();
 		lblDifficulty = new JLabel();
 		lblNumber = new JLabel();
-		cmbNumber = new JComboBox();
-		cmbDifficulty = new JComboBox();
+		cmbNumber = new JComboBox<>();
+		cmbDifficulty = new JComboBox<>();
 		pnlHero = new JPanel();
 		lblHero = new JLabel();
 
-		setAutoRequestFocus(false);
 		setBackground(Color.WHITE);
-                setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		setResizable(false);
-                setTitle("Preferences");
+		setTitle("Preferences");
 		getContentPane().setLayout(new GridBagLayout());
 
 		jSplitPane1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		pnlDragons.setLayout(new GridLayout(4, 3));
 
-		for (JLabel lblDragon : lblDragons)
+		for (final JLabel lblDragon : lblDragons)
 		{
 			lblDragon.setIcon(spriteDragon);
 			pnlDragons.add(lblDragon);
@@ -264,7 +258,12 @@ public class GUIOptions extends JDialog
 		gridBagConstraints.insets = new Insets(8, 0, 8, 0);
 
 		pnlSelect.add(lblNumber, gridBagConstraints);
-		cmbNumber.setModel(new DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+
+		cmbNumber.setModel(new DefaultComboBoxModel<>(new String[]
+		{
+			"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
+		}));
+
 		cmbNumber.setEnabled(false);
 		cmbNumber.addActionListener(this::cmbNumberActionPerformed);
 
@@ -274,15 +273,15 @@ public class GUIOptions extends JDialog
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 
 		pnlSelect.add(cmbNumber, gridBagConstraints);
-                
-		cmbDifficulty.setModel(new DefaultComboBoxModel(new String[] 
-                {
-                        "Beginner (static, random sleep)",
-                        "Easy (static, doesn't sleep)",
-                        "Medium (random, random sleep)", 
-                        "Hard (random, doesn't sleep)" 
-                }));
-                
+
+		cmbDifficulty.setModel(new DefaultComboBoxModel<>(new String[]
+		{
+			"Beginner (static, random sleep)",
+			"Easy (static, doesn't sleep)",
+			"Medium (random, random sleep)",
+			"Hard (random, doesn't sleep)"
+		}));
+
 		cmbDifficulty.addActionListener(this::cmbDifficultyActionPerformed);
 
 		gridBagConstraints = new GridBagConstraints();
@@ -306,15 +305,15 @@ public class GUIOptions extends JDialog
 		gridBagConstraints.insets = new Insets(0, 4, 0, 4);
 		getContentPane().add(pnlHero, gridBagConstraints);
 		pack();
-                setLocationRelativeTo(null);
+		setLocationRelativeTo(null);
 	}
-        
-        private void disableCustom()
-        {
-            	cmbNumber.setEnabled(false);
+
+	private void disableCustom()
+	{
+		cmbNumber.setEnabled(false);
 		spnWidth.setEnabled(false);
 		spnHeight.setEnabled(false);
-        }
+	}
 
 	private void rbGameBeginnerActionPerformed(ActionEvent evt)
 	{
@@ -350,7 +349,7 @@ public class GUIOptions extends JDialog
 		userDifficulty = 5;
 		visibleDragons(12);
 	}
-        
+
 	private void btnStartActionPerformed(ActionEvent evt)
 	{
 		GUIGlobals.userDifficulty = userDifficulty;
@@ -363,13 +362,11 @@ public class GUIOptions extends JDialog
 			GUIGlobals.mazeHeight = (Integer) spnHeight.getValue();
 		}
 
-		setVisible(false);
 		dispose();
 	}
 
 	private void jButton2ActionPerformed(ActionEvent evt)
 	{
-		setVisible(false);
 		dispose();
 	}
 
@@ -398,8 +395,8 @@ public class GUIOptions extends JDialog
 	private ButtonGroup buttonGroup1;
 	private JButton btnStart;
 	private JButton btnCancel;
-	private JComboBox cmbDifficulty;
-	private JComboBox cmbNumber;
+	private JComboBox<String> cmbDifficulty;
+	private JComboBox<String> cmbNumber;
 	private JSplitPane jSplitPane1;
 	private JLabel lblDifficulty;
 	private JLabel lblHero;

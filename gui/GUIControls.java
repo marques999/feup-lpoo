@@ -173,7 +173,7 @@ public class GUIControls extends JDialog
 
 		getContentPane().add(jPanel2, BorderLayout.PAGE_END);
 		setResizable(false);
-		setSize(new Dimension(244, 257));
+		setSize(new Dimension(245, 260));
 		setLocationRelativeTo(getParent());
 	}
 
@@ -238,13 +238,11 @@ public class GUIControls extends JDialog
 	private void btnApplyActionPerformed(ActionEvent evt)
 	{
 		GUIGlobals.currentKeys = defaultKeys;
-		setVisible(false);
 		dispose();
 	}
 
 	private void btnCancelActionPerformed(ActionEvent evt)
 	{
-		setVisible(false);
 		dispose();
 	}
 

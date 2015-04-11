@@ -52,15 +52,14 @@ public class GUIValidation
 
 	protected static boolean checkExit(Maze maze)
 	{
-		Point p = maze.getExitPosition();
-
-		char[][] m = deepClone(maze.getMatrix());
+		final Point p = maze.getExitPosition();
+		final char[][] m = deepClone(maze.getMatrix());
 
 		visit(m, p.x, p.y);
 
-		for (char[] m1 : m)
+		for (final char[] m1 : m)
 		{
-			for (char m2 : m1)
+			for (final char m2 : m1)
 			{
 				if (m2 != 'X' && m2 != 'V')
 				{
@@ -93,7 +92,7 @@ public class GUIValidation
 
 	private static char[][] deepClone(char[][] m)
 	{
-		char[][] c = m.clone();
+		final char[][] c = m.clone();
 
 		for (int i = 0; i < m.length; i++)
 		{

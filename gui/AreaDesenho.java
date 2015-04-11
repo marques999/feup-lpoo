@@ -68,11 +68,6 @@ public class AreaDesenho extends JPanel
 		initializeMaze(w, h);
 	}
 
-	protected void setMaze(Maze m)
-	{
-		maze = m;
-	}
-
 	protected Dimension getWindowSize()
 	{
 		return windowSize;
@@ -80,8 +75,8 @@ public class AreaDesenho extends JPanel
 
 	private BufferedImage resizeImage(BufferedImage img, int newWidth, int newHeight)
 	{
-		BufferedImage resized = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_4BYTE_ABGR);
-		Graphics2D g = resized.createGraphics();
+		final BufferedImage resized = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_4BYTE_ABGR);
+		final Graphics2D g = resized.createGraphics();
 
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g.drawImage(img, 0, 0, newWidth, newHeight, 0, 0, img.getWidth(), img.getHeight(), null);
@@ -132,9 +127,9 @@ public class AreaDesenho extends JPanel
 
 	protected void erase()
 	{
-		char[][] newMatrix = new char[mazeHeight][mazeWidth];
+		final char[][] newMatrix = new char[mazeHeight][mazeWidth];
 
-		for (char[] row : newMatrix)
+		for (final char[] row : newMatrix)
 		{
 			Arrays.fill(row, ' ');
 		}
@@ -163,7 +158,7 @@ public class AreaDesenho extends JPanel
 			spriteTombstone = ImageIO.read(getClass().getResource("/lpoo/res/tombstone-64x64.png"));
 			spriteWall = ImageIO.read(getClass().getResource("/lpoo/res/wall-64x64.png"));
 		}
-		catch (IOException ex)
+		catch (final IOException ex)
 		{
 			GUIGlobals.abort(ex, null);
 		}

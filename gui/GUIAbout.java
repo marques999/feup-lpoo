@@ -49,9 +49,9 @@ public class GUIAbout extends JDialog
 
 		pnlText.setLayout(new GridBagLayout());
 		lblTitle.setFont(lblTitle.getFont().deriveFont(lblTitle.getFont().getStyle() | Font.BOLD, lblTitle.getFont().getSize() + 3));
-		lblTitle.setText("WOW !! 7/4 IS BIRTHDAY !!");
+		lblTitle.setText("Maze Run");
 		pnlText.add(lblTitle, new GridBagConstraints());
-		lblVersion.setText("CONGURATURATIONS !! PLEASE GOOD JOB.");
+		lblVersion.setText("Version 1.00 - FINAL -");
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;

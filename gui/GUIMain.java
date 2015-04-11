@@ -1,14 +1,14 @@
 package lpoo.gui;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 import java.io.*;
 import lpoo.cli.CLIInterface;
 
 public class GUIMain extends JFrame
 {
-	private static final long serialVersionUID = 3529558414915895966L;
+	private static final long serialVersionUID = -3154907517184624651L;
 
 	public GUIMain()
 	{
@@ -17,41 +17,83 @@ public class GUIMain extends JFrame
 
 	private void initComponents()
 	{
-		btnStartGUI = new JButton();
-		btnStartEditor = new JButton();
-		btnStartCLI = new JButton();
-		btnStartGUI.setText("Play Game");
-		btnStartGUI.addActionListener(this::btnStartGUIActionPerformed);
-		btnStartCLI.setText("CLI Interface");
-		btnStartCLI.addActionListener(this::btnStartCLIActionPerformed);
-		btnStartEditor.setText("Maze Editor");
-		btnStartEditor.addActionListener(this::btnStartEditorActionPerformed);
+		btnCLI = new JButton();
+		btnPlay = new JButton();
+		btnEditor = new JButton();
+		btnQuit = new JButton();
+		lblTitle = new JLabel();
+		lblKnight = new JLabel();
 
-		setTitle("Maze Run");
-		setResizable(false);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		getContentPane().add(btnStartGUI, BorderLayout.NORTH);
-		getContentPane().add(btnStartCLI, BorderLayout.CENTER);
-		getContentPane().add(btnStartEditor, BorderLayout.PAGE_END);
-		setSize(new Dimension(190, 140));
+		setTitle("Main Menu");
+		setResizable(false);
+
+		btnCLI.setText("CLI");
+		btnCLI.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnCLI.addActionListener(this::btnCLIActionPerformed);
+		btnPlay.setText("Play Game");
+		btnPlay.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnPlay.setRequestFocusEnabled(false);
+		btnPlay.addActionListener(this::btnPlayActionPerformed);
+		btnEditor.setText("Maze Editor");
+		btnEditor.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnEditor.addActionListener(this::btnEditorActionPerformed);
+		btnQuit.setText("Quit");
+		btnQuit.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnQuit.addActionListener(this::btnQuitActionPerformed);
+		lblTitle.setFont(lblTitle.getFont().deriveFont(lblTitle.getFont().getStyle() | Font.BOLD, lblTitle.getFont().getSize() + 13));
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setText("Maze Run");
+		lblKnight.setIcon(new ImageIcon(getClass().getResource("/lpoo/res/Knight-concept-art.png")));
+
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+		
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+				.addGap(32, 32, 32)
+				.addComponent(lblKnight)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+				.addComponent(btnPlay, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGroup(layout.createSequentialGroup()
+				.addGap(10, 10, 10)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+				.addComponent(btnEditor, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(btnQuit, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(btnCLI, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)))
+				.addComponent(lblTitle, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE))
+				.addGap(128, 128, 128)));
+
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+				.addGap(24, 24, 24)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addComponent(lblKnight).addContainerGap(24, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+				.addComponent(lblTitle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGap(37, 37, 37)
+				.addComponent(btnPlay, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addComponent(btnCLI, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+				.addComponent(btnEditor, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+				.addComponent(btnQuit, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+				.addGap(55, 55, 55)))));
+
+		pack();
 		setLocationRelativeTo(null);
 	}
 
-	private void btnStartGUIActionPerformed(ActionEvent evt)
+	private void btnPlayActionPerformed(ActionEvent evt)
 	{
 		setVisible(false);
 		GUIInterface guiInterface = new GUIInterface();
 		guiInterface.setVisible(true);
 	}
 
-	private void btnStartEditorActionPerformed(ActionEvent evt)
-	{
-		setVisible(false);
-		GUIMazeEditor guiMazeEditor = new GUIMazeEditor();
-		guiMazeEditor.setVisible(true);
-	}
-
-	private void btnStartCLIActionPerformed(ActionEvent evt)
+	private void btnCLIActionPerformed(ActionEvent evt)
 	{
 		try
 		{
@@ -62,6 +104,18 @@ public class GUIMain extends JFrame
 		{
 			GUIGlobals.abort(ex, this);
 		}
+	}
+
+	private void btnEditorActionPerformed(ActionEvent evt)
+	{
+		setVisible(false);
+		GUIMazeEditor guiMazeEditor = new GUIMazeEditor();
+		guiMazeEditor.setVisible(true);
+	}
+
+	private void btnQuitActionPerformed(ActionEvent evt)
+	{
+		dispose();
 	}
 
 	public static void main(String args[])
@@ -101,7 +155,10 @@ public class GUIMain extends JFrame
 		});
 	}
 
-	private JButton btnStartGUI;
-	private JButton btnStartEditor;
-	private JButton btnStartCLI;
+	private JButton btnCLI;
+	private JButton btnEditor;
+	private JButton btnPlay;
+	private JButton btnQuit;
+	private JLabel lblKnight;
+	private JLabel lblTitle;
 }
