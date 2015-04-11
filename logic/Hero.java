@@ -35,6 +35,10 @@ public final class Hero extends Entity
 		return numberDarts > 0;
 	}
 
+	/**
+	 * gets the number of darts owned by the player
+	 * @return returns the number of darts owned by the player
+	 */
 	protected final int getNumberDarts()
 	{
 		return numberDarts;
@@ -51,9 +55,9 @@ public final class Hero extends Entity
 
 	/**
 	 * attacks an enemy dragon with darts (long-ranged weapon)
-	 * @param maze an object containing the board matrix
 	 * @param direction the direction given by the user
-	 * @return returns 'true' if the target was in range and the attack was successful, 'false' otherwise
+	 * @param maze an object containing the game board
+	 * @return returns 'true' if the target was in player's range and the attack was successful, 'false' otherwise
 	 */
 	public boolean attackDarts(Maze maze, Direction direction)
 	{
@@ -109,9 +113,9 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * checks if player can move in specified direction
+	 * checks if the player can move in a given direction
 	 * @param direction the direction given by the user
-	 * @param maze a Maze object containing the board matrix
+	 * @param maze an object containing the game board
 	 * @return returns 'true' if player is still alive and can move to the specified direction, 'false' otherwise
 	 */
 	public final boolean validMove(Maze maze, Direction direction)
@@ -149,8 +153,8 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * checks if there is an item at the given position
-	 * @param maze an object containing the board matrix
+	 * checks if there is an item that can be picked up at a given position
+	 * @param maze an object containing the game board
 	 * @param pos coordinates for the possible location of an item
 	 */
 	public void pickItem(Maze maze, Point pos)
@@ -191,7 +195,7 @@ public final class Hero extends Entity
 	/**
 	 * moves the player around the maze given a direction
 	 * @param direction the direction given by the user
-	 * @param maze an object containing the board matrix
+	 * @param maze an object containing the game board
 	 */
 	@Override
 	public void move(Maze maze, Direction direction)
@@ -257,7 +261,7 @@ public final class Hero extends Entity
 
 	/**
 	 * attacks an enemy dragon with the sword (close-ranged weapon)
-	 * @param maze an object that represents the game board
+	 * @param maze an object containing the game board
 	 * @param dragon an object that represents the enemy dragon
 	 */
 	public final void attackSword(Maze maze, Dragon dragon)
@@ -270,7 +274,7 @@ public final class Hero extends Entity
 	}
 
 	/**
-	 * draws a symbol on the screen representing the player entity
+	 * draws the player at its corresponding position on the game board
 	 * @param maze an object containing the game board
 	 */
 	@Override

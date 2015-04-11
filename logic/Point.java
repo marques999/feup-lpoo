@@ -5,7 +5,7 @@ import java.io.*;
 public final class Point implements Serializable
 {
 	private static final long serialVersionUID = -2123191411932878529L;
-	
+
 	public int x;
 	public int y;
 
@@ -28,10 +28,10 @@ public final class Point implements Serializable
 		this.y = y;
 	}
 
-        /**
-         * converts the point's coordinates to String
-         * @return a formatted, user-friendly string containing the point's current coordinates
-         */
+	/**
+	 * converts point coordinates to a more user-friendly string representation
+	 * @return returns a formatted string containing the point's current coordinates
+	 */
 	@Override
 	public String toString()
 	{
@@ -39,9 +39,9 @@ public final class Point implements Serializable
 	}
 
 	/**
-	 * checks two points and their coordinates for equality
-	 * @param o an object containing the point to be compared
-	 * @return 'true' if both points have the same coordinates; 'false' otherwise
+	 * checks whether two points and their coordinates are equal
+	 * @param o an object containing a second point to be compared with the first
+	 * @return returns 'true' if both given points have the same coordinates; 'false' otherwise
 	 */
 	@Override
 	public boolean equals(Object o)

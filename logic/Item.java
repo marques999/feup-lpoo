@@ -9,8 +9,8 @@ public abstract class Item implements Serializable
 	protected Point pos;
 
 	/**
-	 * default constructor for 'Item' class
-	 * @param pos initial coordinates for Item's position
+	 * default constructor for class 'Item'
+	 * @param pos initial coordinates for item's position
 	 */
 	protected Item(Point pos)
 	{
@@ -45,8 +45,8 @@ public abstract class Item implements Serializable
 	}
 
 	/**
-	 * draws item at its corresponding position on the board matrix
-	 * @param maze an object containing the board matrix
+	 * draws an item at its corresponding position on the game board
+	 * @param maze an object containing the game board
 	 */
 	protected abstract void draw(Maze maze);
 }

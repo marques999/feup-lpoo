@@ -4,24 +4,36 @@ public final class Dragon extends Entity
 {
 	private static final long serialVersionUID = -5875613832655200186L;
 	private boolean sleeping;
+	private Fireball fireball;
 
 	/**
 	 * default constructor for class 'Dragon'
-	 * @param pos coordinates for Dragon's initial position
+	 * @param pos initial coordinates for dragon's position
 	 */
 	protected Dragon(Point pos)
 	{
 		super(pos, 100);
 
 		sleeping = false;
+		fireball = null;
 	}
 
 	/**
+	 * checks if the dragon is sleeping
 	 * @return 'true' is dragon is asleep; 'false' otherwise
 	 */
 	public final boolean isSleeping()
 	{
 		return sleeping;
+	}
+
+	/**
+	 * checks if the fireball thrown by the dragon is still moving
+	 * @return returns 'true' if the fireball exists
+	 */
+	public final boolean hasFireball()
+	{
+		return fireball != null;
 	}
 
 	/**
@@ -33,19 +45,13 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * checks if the dragon can move in the given direction
-	 *
+	 * checks if the dragon can move in a given direction
 	 * @return 'true' if the dragon is active and the destination cell is not a wall nor an exit, 'false', otherwise
-	 * @param maze game board
-	 * @param direction the direction to move
+	 * @param maze an object containing the game board
+	 * @param direction the direction to move the dragon
 	 */
 	protected final boolean validMove(Maze maze, Direction direction)
 	{
-		if (getHealth() <= 0)
-		{
-			return false;
-		}
-
 		final Point newPosition = new Point();
 
 		switch (direction)
@@ -70,15 +76,14 @@ public final class Dragon extends Entity
 			return false;
 		}
 
-		final boolean isNotWall = maze.symbolAt(newPosition.x, newPosition.y) != 'X';
-		final boolean isNotExit = maze.symbolAt(newPosition.x, newPosition.y) != 'S';
+		final char mazeSymbol = maze.symbolAt(newPosition.x, newPosition.y);
 
-		return isNotWall && isNotExit;
+		return mazeSymbol != 'X' && mazeSymbol != 'S';
 	}
 
 	/**
-	 * moves the dragon in the given direction
-	 * @param maze an object containing the board matrix
+	 * makes a valid move in a given direction
+	 * @param maze an object containing the game board
 	 * @param direction the direction to move the dragon
 	 */
 	@Override
@@ -90,37 +95,52 @@ public final class Dragon extends Entity
 
 			if (direction == Direction.UP)
 			{
-				pos.y--;
+				if (maze.symbolAt(pos.x, pos.y - 1) != 'D' && maze.symbolAt(pos.x, pos.y - 1) != 'd')
+				{
+					pos.y--;
+				}
 			}
 			else if (direction == Direction.DOWN)
 			{
-				pos.y++;
+				if (maze.symbolAt(pos.x, pos.y + 1) != 'D' && maze.symbolAt(pos.x, pos.y + 1) != 'd')
+				{
+					pos.y++;
+				}
 			}
 			else if (direction == Direction.LEFT)
 			{
-				pos.x--;
+				if (maze.symbolAt(pos.x - 1, pos.y) != 'D' && maze.symbolAt(pos.x - 1, pos.y) != 'd')
+				{
+					pos.x--;
+				}
 			}
 			else if (direction == Direction.RIGHT)
 			{
-				pos.x++;
+				if (maze.symbolAt(pos.x + 1, pos.y) != 'D' && maze.symbolAt(pos.x + 1, pos.y) != 'd')
+				{
+					pos.x++;
+				}
 			}
 		}
 	}
 
+	/**
+	 * checks if the dragon is active and ready to attack
+	 * @return returns 'true' if the dragon is still alive and is not sleeping
+	 */
 	private boolean isActive()
 	{
-		return getHealth() > 0 && !sleeping;
+		return getHealth() > 0 && !isSleeping();
 	}
 
 	/**
-	 * checks if the dragon can attack the 'Hero' with close range melee attack
-	 *
+	 * checks if the dragon can attack the player with close range attack
 	 * @param player the target player entity
 	 * @return 'true' if the dragon is active and the player's position is adjacent to the dragon
 	 */
 	protected final boolean canAttack(Hero player)
 	{
-		if (!isActive() || player.getHealth() <= 0 || player.hasSword())
+		if (!isActive() || player == null || player.getHealth() <= 0 || player.hasSword())
 		{
 			return false;
 		}
@@ -136,50 +156,68 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * checks if the dragon can attack the 'Hero' with fireballs
-	 * @param maze an object containing the board matrix
-	 * @param player the target player entity
-	 * @return 'true' is dragon is active and player is in the line of sight, 'false' otherwise
+	 * checks if the dragon can throw a fireball at the player
+	 * @param maze an object containing the game board
+	 * @param player an entity representing the player
+	 * @return 'true' is dragon is active and player is in sight, 'false' otherwise
 	 */
-	protected final boolean canAttackFire(Maze maze, Hero player)
+	protected final boolean throwFireball(Maze maze, Hero player)
 	{
-		if (!isActive() || player.getHealth() <= 0 || player.hasShield())
+		if (hasFireball())
 		{
 			return false;
 		}
 
-		int dragonX = pos.x;
-		int dragonY = pos.y;
-		int incrementX = 0;
-		int incrementY = 0;
+		if (!isActive() || player == null || player.getHealth() <= 0)
+		{
+			return false;
+		}
+
+		final Point fireballPosition = new Point(pos.x, pos.y);
+
+		fireball = new Fireball(fireballPosition);
 
 		if (player.pos.y == pos.y && Math.abs(player.pos.x - pos.x) <= 3)
 		{
-			incrementX = player.pos.x < pos.x ? -1 : 1;
+			fireball.setDirection(player.pos.x < pos.x ? Direction.LEFT : Direction.RIGHT);
 		}
 		else if (player.pos.x == pos.x && Math.abs(player.pos.y - pos.y) <= 3)
 		{
-			incrementY = player.pos.y < pos.y ? -1 : 1;
+			fireball.setDirection(player.pos.x < pos.x ? Direction.UP : Direction.DOWN);
 		}
 		else
 		{
 			return false;
 		}
 
-		for (int i = 0; i <= 3 && maze.symbolAt(dragonX, dragonY) != 'X'; i++, dragonX += incrementX, dragonY += incrementY)
+		return true;
+	}
+
+	protected void updateFireball(Maze maze, Hero player)
+	{
+		if (!hasFireball())
 		{
-			if (player.pos.x == dragonX && player.pos.y == dragonY)
-			{
-				return true;
-			}
+			return;
 		}
 
-		return false;
+		if (fireball.move(maze))
+		{
+			if (fireball.getPosition().equals(player.getPosition()) && !player.hasShield())
+			{
+				maze.placeSymbol(player.getX(), player.getY(), 'O');
+				player.setHealth(0);
+			}
+		}
+		else
+		{
+			maze.clearSymbol(fireball.getX(), fireball.getY());
+			fireball = null;
+		}
 	}
 
 	/**
-	 * attacks the player with claws (short-ranged attack)
-	 * @param maze an object containing the board matrix
+	 * attacks the player with short-range attack (claws)
+	 * @param maze an object containing the game board
 	 * @param player the target player
 	 */
 	protected final void attack(Maze maze, Hero player)
@@ -192,22 +230,8 @@ public final class Dragon extends Entity
 	}
 
 	/**
-	 * attacks the player with fireballs (long-ranged weapon)
-	 * @param maze an object containing the board matrix
-	 * @param player the target player
-	 */
-	protected final void attackFire(Maze maze, Hero player)
-	{
-		if (canAttackFire(maze, player))
-		{
-			maze.placeSymbol(player.getX(), player.getY(), 'O');
-			player.setHealth(0);
-		}
-	}
-
-	/**
-	 * draws the dragon at its corresponding position on the board matrix
-	 * @param maze an object containing the board matrix
+	 * draws the dragon at its corresponding position on the game board
+	 * @param maze an object containing the game board
 	 */
 	@Override
 	protected void draw(Maze maze)

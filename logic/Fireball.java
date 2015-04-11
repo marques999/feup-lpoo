@@ -3,12 +3,11 @@ package lpoo.logic;
 public final class Fireball extends Entity
 {
 	private static final long serialVersionUID = -2177424718408922946L;
-
 	private Direction direction;
 
 	/**
-	 * default constructor for class 'Dart'
-	 * @param pos initial coordinates for Dart's position
+	 * default constructor for class 'Fireball'
+	 * @param pos initial coordinates for fireball's position
 	 */
 	protected Fireball(Point pos)
 	{
@@ -17,21 +16,29 @@ public final class Fireball extends Entity
 		direction = Direction.NONE;
 	}
 
+	/**
+	 * gets fireball's current direction
+	 * @return returns fireball's current direction
+	 */
 	protected Direction getDirection()
 	{
 		return direction;
 	}
 
-	protected void setDirection(Direction d)
+	/**
+	 * sets or changes the fireball's direction
+	 * @param newDirection new direction
+	 */
+	protected void setDirection(Direction newDirection)
 	{
-		direction = d;
+		direction = newDirection;
 	}
 
-	protected boolean validMove(Maze maze, Direction d)
+	private boolean validMove(Maze maze, Direction newDirection)
 	{
 		final Point newPosition = new Point();
 
-		switch (d)
+		switch (newDirection)
 		{
 		case UP:
 			newPosition.x = pos.x;
@@ -53,15 +60,14 @@ public final class Fireball extends Entity
 			return false;
 		}
 
-		final boolean isNotWall = maze.symbolAt(newPosition.x, newPosition.y) != 'X';
-		final boolean isNotExit = maze.symbolAt(newPosition.x, newPosition.y) != 'S';
+		final char mazeSymbol = maze.symbolAt(newPosition.x, newPosition.y);
 
-		return isNotWall && isNotExit;
+		return mazeSymbol != 'X' && mazeSymbol != 'd' && mazeSymbol != 'D' && mazeSymbol != 'S';
 	}
 
 	/**
-	 * draws the Dart at its corresponding position
-	 * @param maze an instance of 'Maze' class
+	 * draws the Dart at its corresponding position on the game board
+	 * @param maze an object containing the game board
 	 */
 	@Override
 	protected final void draw(Maze maze)
@@ -75,29 +81,37 @@ public final class Fireball extends Entity
 		}
 	}
 
-	private void reset()
-	{
-		setDirection(Direction.NONE);
-		setHealth(0);
-	}
-
-	protected void move(Maze maze)
-	{
-		move(maze, Direction.NONE);
-	}
-
-	@Override
-	protected void move(Maze maze, Direction d)
+	/**
+	 * @param maze an object containing the game board
+	 * @return returns 'true' if the last movement was successful, 'false' otherwise
+	 */
+	protected boolean move(Maze maze)
 	{
 		if (!validMove(maze, direction))
 		{
-			reset();
+			return false;
 		}
 
 		if (getHealth() <= 0)
 		{
-			return;
+			return false;
 		}
+
+		move(maze, Direction.NONE);
+		draw(maze);
+
+		return true;
+	}
+
+	/**
+	 * makes a valid move in a given direction
+	 * @param maze an object containing the game board
+	 * @param unused (unused)
+	 */
+	@Override
+	protected void move(Maze maze, Direction unused)
+	{
+		maze.clearSymbol(pos.x, pos.y);
 
 		switch (direction)
 		{
@@ -117,7 +131,6 @@ public final class Fireball extends Entity
 			return;
 		}
 
-		maze.clearSymbol(pos.x, pos.y);
 		setHealth(getHealth() - 1);
 	}
 }

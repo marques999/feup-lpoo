@@ -5,7 +5,7 @@ public final class Sword extends Item
 	private static final long serialVersionUID = 2899571387359273422L;
 
 	/**
-	 * default constructor for 'Sword' class
+	 * default constructor for class 'Sword'
 	 * @param pos coordinates for sword's initial position
 	 */
 	protected Sword(Point pos)
@@ -14,8 +14,8 @@ public final class Sword extends Item
 	}
 
 	/**
-	 * draws the sword at its corresponding position on the board matrix
-	 * @param maze an object containing the board matrix
+	 * draws the sword at its corresponding position on the game board
+	 * @param maze an object containing the game board
 	 */
 	@Override
 	protected final void draw(Maze maze)

@@ -14,7 +14,7 @@ public class Maze implements Cloneable, Serializable
 	private final Random mazeRandom;
 
 	/**
-	 * default constructor for 'Maze' class
+	 * default constructor for class 'Maze'
 	 * @param w initial maze width (number of columns)
 	 * @param h initial maze height (number of rows)
 	 */
@@ -36,7 +36,7 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
-	 * @return a two-dimensional matrix representing the maze
+	 * @return returns a two-dimensional matrix representing a maze
 	 */
 	public char[][] getMatrix()
 	{
@@ -44,8 +44,8 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
-	 * replaces the current maze matrix with a given one
-	 * @param m new two-dimensional matrix representing the maze
+	 * replaces the current board matrix with a given one
+	 * @param m new two-dimensional matrix representing a maze
 	 */
 	public void setMatrix(char[][] m)
 	{
@@ -53,7 +53,7 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
-	 * @return the current exit coordinates
+	 * @return returns position of the current exit
 	 */
 	public Point getExitPosition()
 	{
@@ -61,7 +61,7 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
-	 * @return maze width (number of columns)
+	 * @return returns the maze width (number of columns)
 	 */
 	public int getWidth()
 	{
@@ -69,7 +69,7 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
-	 * @return maze height (number of rows)
+	 * @return returns the maze height (number of rows)
 	 */
 	public int getHeight()
 	{
@@ -77,10 +77,10 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
-	 * checks if the given cell coordinates are maze borders
+	 * checks if position (x,y) is a maze border
 	 * @param x maze cell X coordinate
 	 * @param y maze cell Y coordinate
-	 * @return 'true' if given cell belongs to the maze border, 'false' otherwise
+	 * @return 'true' if given positions belongs to the maze border, 'false' otherwise
 	 */
 	public final boolean isWall(int x, int y)
 	{
@@ -88,10 +88,10 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
-	 * checks if the given cell coordinates are maze corners
+	 * checks if position (x,y) is a maze corner
 	 * @param x maze cell X coordinate
 	 * @param y maze cell Y coordinate
-	 * @return 'true' if given cell is a maze corner, 'false' otherwise
+	 * @return 'true' if given position is a maze corner, 'false' otherwise
 	 */
 	public final boolean isCorner(int x, int y)
 	{
@@ -115,17 +115,23 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
+	 * gets the symbol at position (x,y)
 	 * @param x maze cell X coordinate
 	 * @param y maze cell Y coordinate
-	 * @return
+	 * @return returns the symbol found at position (x,y), ' ' character otherwise
 	 */
 	public final char symbolAt(int x, int y)
 	{
-		return maze[y][x];
+		if (x >= 0 && x < mazeWidth && y >= 0 && y < mazeHeight)
+		{
+			return maze[y][x];
+		}
+
+		return ' ';
 	}
 
 	/**
-	 * removes the symbol
+	 * removes the symbol at position (x,y)
 	 * @param x maze cell X coordinate
 	 * @param y maze cell Y coordinate
 	 */
@@ -138,7 +144,7 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
-	 * replaces the symbol
+	 * replaces the symbol at position (x,y) with a new symbol
 	 * @param x maze cell X coordinate
 	 * @param y maze cell Y coordinate
 	 * @param s new symbol
@@ -152,18 +158,18 @@ public class Maze implements Cloneable, Serializable
 	}
 
 	/**
-	 * given a symbol,
-	 * @param s
-	 * @param updateMaze
+	 * finds the first occurrence of an entity (or item) on the maze
+	 * @param foundSymbol the symbol to be found
+	 * @param updateMaze whether the maze should or not be updated - 'true' (finds and removes symbol from matrix), 'false' (finds only, matrix unchanged)
 	 * @return coordinates of the first occurence in the maze, 'null' if symbol was not found
 	 */
-	public Point findSymbol(char s, boolean updateMaze)
+	public Point findSymbol(char foundSymbol, boolean updateMaze)
 	{
 		for (int y = 0; y < mazeHeight; ++y)
 		{
 			for (int x = 0; x < mazeWidth; ++x)
 			{
-				if (maze[y][x] == s)
+				if (maze[y][x] == foundSymbol)
 				{
 					if (updateMaze)
 					{
@@ -180,9 +186,9 @@ public class Maze implements Cloneable, Serializable
 
 	/**
 	 * randomly places an entity (or item) on the maze matrix
-	 * @param mazeSymbol
-	 * @param updateMaze
-	 * @return
+	 * @param mazeSymbol the symbol to be placed on the maze
+	 * @param updateMaze whether the maze should or not be updated - 'true' (inserts symbol into matrix), 'false' (matrix unchanged)
+	 * @return returns the coordinates where the entity was placed
 	 */
 	protected final Point placeEntity(char mazeSymbol, boolean updateMaze)
 	{
@@ -203,6 +209,10 @@ public class Maze implements Cloneable, Serializable
 		return new Point(initialX, initialY);
 	}
 
+	/**
+	 * creates a deep clone (copy) of the current maze object
+	 * @throws CloneNotSupportedException if an object doesn't implement the clone method
+	 */
 	@Override
 	public Maze clone() throws CloneNotSupportedException
 	{
@@ -210,7 +220,7 @@ public class Maze implements Cloneable, Serializable
 
 		Maze newCopy = new Maze(mazeWidth, mazeHeight);
 		newCopy.mazeExit = new Point(mazeExit.x, mazeExit.y);
-		
+
 		char[][] newMaze = maze.clone();
 
 		for (int i = 0; i < maze.length; i++)
@@ -219,7 +229,7 @@ public class Maze implements Cloneable, Serializable
 		}
 
 		newCopy.maze = newMaze;
-		
+
 		return newCopy;
 	}
 }

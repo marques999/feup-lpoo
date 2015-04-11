@@ -28,31 +28,53 @@ public final class MazeBuilder
 	private int visitedCellsWidth;
 	private int visitedCellsHeight;
 
+	/**
+	 * default constructor for class 'MazeBuilder'
+	 */
 	public MazeBuilder()
 	{
 		rand = new Random();
 	}
 
+	/**
+	 * gets a matrix of symbols representing the game board
+	 * @return returns a matrix representing the game board
+	 */
 	public char[][] getMatrix()
 	{
 		return maze;
 	}
 
+	/**
+	 * sets or changes the maze type attribute
+	 * @param type new maze type
+	 */
 	public void setType(int type)
 	{
 		mazeType = type;
 	}
 
+	/**
+	 * sets or changes the maze width attribute
+	 * @param width new maze width
+	 */
 	public void setWidth(int width)
 	{
 		mazeWidth = width;
 	}
 
+	/**
+	 * sets or changes the maze height attribute
+	 * @param height new maze height
+	 */
 	public void setHeight(int height)
 	{
 		mazeHeight = height;
 	}
 
+	/**
+	 * generates a maze given the options
+	 */
 	protected void generateMaze()
 	{
 		if (mazeWidth == 0 || mazeHeight == 0)
@@ -77,11 +99,18 @@ public final class MazeBuilder
 		}
 	}
 
+	/**
+	 * gets the maze exit position coordinates
+	 * @return returns the exit position coordinates
+	 */
 	protected Point getExitPosition()
 	{
 		return m_exit;
 	}
 
+	/**
+	 * generates a static maze (10 x 10)
+	 */
 	private void generateStaticMaze()
 	{
 		maze = new char[][] 
@@ -101,6 +130,9 @@ public final class MazeBuilder
 		m_exit = new Point(9, 5);
 	}
 
+	/**
+	 * generates a random maze (mazeWidth x mazeHeight)
+	 */
 	private void generateRandomMaze()
 	{
 		maze = new char[mazeHeight][mazeWidth];

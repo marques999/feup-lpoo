@@ -14,8 +14,8 @@ public final class Shield extends Item
 	}
 
 	/**
-	 * draws the shield at its corresponding position on the board matrix
-	 * @param maze an object containing the board matrix
+	 * draws the shield at its corresponding position on the game board
+	 * @param maze an object containing the game board
 	 */
 	@Override
 	protected final void draw(Maze maze)
