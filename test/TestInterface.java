@@ -8,7 +8,7 @@ public class TestInterface extends TestCase
 {
 	public static void movePlayer(char[] seq)
 	{
-		for (char input : seq)
+		for (final char input : seq)
 		{
 			switch (input)
 			{
@@ -30,7 +30,7 @@ public class TestInterface extends TestCase
 
 	public static void moveDragon(Dragon dragon, char[] seq)
 	{
-		for (char input : seq)
+		for (final char input : seq)
 		{
 			switch (input)
 			{
@@ -50,20 +50,41 @@ public class TestInterface extends TestCase
 		}
 	}
 
+	/*
+	-   0   1   2   3   4   5   6   7   8   9
+	0   X   X   X   X   X   X   X   X   X   X
+	1   X   H       V                       X
+	2   X       X   X       X       X       X
+	3   X       X   X       X       X       X
+	4   X       X   X       X   D   X       X
+	5   X                           X       S
+	6   X       X   X       X       X       X
+	7   X       X   X       X       X       X
+	8   X   E   X   X                       X
+	9   X   X   X   X   X   X   X   X   X   X
+	 */
+
 	@Test
-	public void test_3a_killedByDragon()
+	public void test_dragonAttack()
 	{
+		final char playerMoves[] =
+		{
+			's', 's', 's', 's', 'd', 'd', 'd', 'd', 'd'
+		};
+
 		final Maze m = new StaticMaze();
-		final Point dragonPosition = new Point(1, 3);
 
 		GameState.initializeStatic(m);
-		GameState.setDragonMovement(-1);
-		GameState.placeDragon(dragonPosition);
-		GameState.update(Direction.DOWN);
+		GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
+
+		assertEquals(GameState.getNumberDragons(), 1);
+
+		TestInterface.movePlayer(playerMoves);
 
 		final Hero p = GameState.getPlayer();
 
 		assertEquals(0, p.getHealth());
+		assertFalse(GameState.playerWon());
 		assertTrue(GameState.gameOver());
 	}
 }

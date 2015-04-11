@@ -1,16 +1,25 @@
 package lpoo.test;
 
-import lpoo.logic.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import lpoo.logic.Direction;
+import lpoo.logic.Dragon;
+import lpoo.logic.GameState;
+import lpoo.logic.Hero;
+import lpoo.logic.Item;
+import lpoo.logic.Maze;
+import lpoo.logic.Point;
+import lpoo.logic.StaticMaze;
 import org.junit.Test;
-import static lpoo.test.TestInterface.movePlayer;
-import static org.junit.Assert.*;
 
 public class TestItems
 {
-	@Test
+	@Test(timeout = 1000)
 	public void test_pickupShield()
 	{
-		char[][] m1 = 
+		final char[][] m1 =
 		{
 			{ 'X', 'X', 'X', 'X', 'X' },
 			{ 'X', 'h', ' ', 'V', 'X' },
@@ -19,14 +28,14 @@ public class TestItems
 			{ 'X', 'X', 'X', 'X', 'X' }
 		};
 
-		Maze maze = new Maze(5, 5);
+		final Maze maze = new Maze(5, 5);
+		
 		maze.setMatrix(m1);
-
 		GameState.initializeCustom(maze);
 		GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
 
-		Item s = GameState.getShield();
-		Point shieldPosition = new Point(3, 1);
+		final Item s = GameState.getShield();
+		final Point shieldPosition = new Point(3, 1);
 
 		assertNull(GameState.getSword());
 
@@ -36,83 +45,83 @@ public class TestItems
 		assertEquals(shieldPosition, s.getPosition());
 		assertNull(GameState.getShield());
 
-		Hero p = GameState.getPlayer();
+		final Hero p = GameState.getPlayer();
 
 		assertEquals(shieldPosition, p.getPosition());
 		assertTrue(p.hasShield());
 	}
 
-	@Test
+	@Test(timeout = 1000)
 	public void test_pickupSword()
 	{
-		char playerMoves[] = 
+		final char playerMoves[] =
 		{
-			'w', 'd', 'd', 'd', 's', 's', 's', 
+			'w', 'd', 'd', 'd', 's', 's', 's',
 			's', 'a', 'a', 'a', 's', 's', 's'
 		};
 
-		Maze m = new StaticMaze();
+		final Maze m = new StaticMaze();
 
 		GameState.initializeStatic(m);
 		GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
 
-		Item s = GameState.getSword();
-		Point swordPosition = new Point(s.getX(), s.getY());
+		final Item s = GameState.getSword();
+		final Point swordPosition = new Point(s.getX(), s.getY());
 
 		assertTrue(swordPosition.equals(s.getPosition()));
 
-		movePlayer(playerMoves);
+		TestInterface.movePlayer(playerMoves);
 
-		Hero p = GameState.getPlayer();
+		final Hero p = GameState.getPlayer();
 
 		assertEquals(p.getPosition(), swordPosition);
 		assertTrue(p.hasSword());
 	}
-	
-	@Test
+
+	@Test(timeout = 1000)
 	public void test_dragonOverlap()
 	{
-		char[][] initialMaze = 
-			{
-				{ 'X', 'X', 'X', 'X', 'X' },
-				{ 'X', 'h', ' ', 'E', 'X' },
-				{ 'X', ' ', 'X', 'V', 'S' },
-				{ 'X', ' ', '*', 'D', 'X' },
-				{ 'X', 'X', 'X', 'X', 'X' }
-			};
+		final char[][] initialMaze =
+		{
+			{ 'X', 'X', 'X', 'X', 'X' },
+			{ 'X', 'h', ' ', 'E', 'X' },
+			{ 'X', ' ', 'X', 'V', 'S' },
+			{ 'X', ' ', '*', 'D', 'X' },
+			{ 'X', 'X', 'X', 'X', 'X' }
+		};
 
-			Maze maze = new Maze(5, 5);
-			maze.setMatrix(initialMaze);
+		final Maze maze = new Maze(5, 5);
+		
+		maze.setMatrix(initialMaze);
+		GameState.initializeCustom(maze);
+		GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
 
-			GameState.initializeCustom(maze);
-			GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
-			
-			Dragon d = GameState.getDragon();
-			
-			GameState.moveDragon(d, Direction.LEFT);
-			GameState.update(Direction.NONE);
-			
-			assertEquals(d.getPosition(), GameState.getDart().getPosition());
-			assertEquals(maze.symbolAt(d.getX(), d.getY()), 'F');
-			
-			GameState.moveDragon(d, Direction.RIGHT);
-			GameState.moveDragon(d, Direction.UP);
-			GameState.update(Direction.NONE);
-			
-			assertEquals(d.getPosition(), GameState.getShield().getPosition());
-			assertEquals(maze.symbolAt(d.getX(), d.getY()), 'F');
-			
-			GameState.moveDragon(d, Direction.UP);
-			GameState.update(Direction.NONE);
-			
-			assertEquals(d.getPosition(), GameState.getSword().getPosition());
-			assertEquals(maze.symbolAt(d.getX(), d.getY()), 'F');
+		final Dragon d = GameState.getDragon();
+
+		GameState.moveDragon(d, Direction.LEFT);
+		GameState.update(Direction.NONE);
+
+		assertEquals(d.getPosition(), GameState.getDart().getPosition());
+		assertEquals(maze.symbolAt(d.getX(), d.getY()), 'F');
+
+		GameState.moveDragon(d, Direction.RIGHT);
+		GameState.moveDragon(d, Direction.UP);
+		GameState.update(Direction.NONE);
+
+		assertEquals(d.getPosition(), GameState.getShield().getPosition());
+		assertEquals(maze.symbolAt(d.getX(), d.getY()), 'F');
+
+		GameState.moveDragon(d, Direction.UP);
+		GameState.update(Direction.NONE);
+
+		assertEquals(d.getPosition(), GameState.getSword().getPosition());
+		assertEquals(maze.symbolAt(d.getX(), d.getY()), 'F');
 	}
 
-	@Test
+	@Test(timeout = 1000)
 	public void test_pickupDarts()
 	{
-		char[][] initialMaze = 
+		final char[][] initialMaze =
 		{
 			{ 'X', 'X', 'X', 'X', 'X' },
 			{ 'X', 'h', ' ', ' ', 'X' },
@@ -121,33 +130,33 @@ public class TestItems
 			{ 'X', 'X', 'X', 'X', 'X' }
 		};
 
-		char playerMoves[] = 
+		final char playerMoves[] =
 		{
-			'd', 'd', 's', 's', 'a', 
+			'd', 'd', 's', 's', 'a',
 		};
 
-		Maze maze = new Maze(5, 5);
+		final Maze maze = new Maze(5, 5);
+		
 		maze.setMatrix(initialMaze);
-
 		GameState.initializeCustom(maze);
 		GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
 
-		Item s = GameState.getDart();
-		Point dartPosition = new Point(2, 3);
+		final Item s = GameState.getDart();
+		final Point dartPosition = new Point(2, 3);
 
 		assertNull(GameState.getSword());
 		assertEquals(dartPosition, s.getPosition());
 
-		movePlayer(playerMoves);
+		TestInterface.movePlayer(playerMoves);
 
-		Hero p = GameState.getPlayer();
+		final Hero p = GameState.getPlayer();
 
 		assertEquals(dartPosition, p.getPosition());
 		assertNull(GameState.getDart());
 		assertTrue(p.hasDarts());
 	}
-	
-    /*
+
+	/*
 	-   0   1   2   3   4   5   6   7   8   9
 	0   X   X   X   X   X   X   X   X   X   X
 	1   X   H       V                       X
@@ -159,40 +168,37 @@ public class TestItems
 	7   X       X   X       X       X       X
 	8   X   E   X   X                       X
 	9   X   X   X   X   X   X   X   X   X   X
-     */
-    
-    @Test
-    public void test_attackSword()
-    {
-        char playerMoves[] =
-        {
-        	/* apanhar escudo */
-            'd', 'd', 'd', 
-            /* apanhar espada */
-            's', 's', 's', 's', 'a', 'a', 'a', 's', 's', 's', 
-            /* seguir em direcção ao dragão */
-            'w', 'w', 'w', 'd', 'd', 'd', 'd', 'd'
-        };
+	 */
 
-        Maze m = new StaticMaze();
+	@Test(timeout = 1000)
+	public void test_attackSword()
+	{
+		final char playerMoves[] =
+		{
+			'd', 'd', 'd', 's', 's', 's', 's',
+			'a', 'a', 'a', 's', 's', 's', 'w',
+			'w', 'w', 'd', 'd', 'd', 'd', 'd'
+		};
 
-        GameState.initializeStatic(m);
-        GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
+		final Maze m = new StaticMaze();
 
-        Dragon d = GameState.getDragon();
-        
-        assertEquals(d.getHealth(), 100);
-        
-        movePlayer(playerMoves);
-        
-        assertEquals(d.getHealth(), 0);
-        
-        GameState.updateDragons();
-        
-        assertNull(GameState.getDragon());
-    }
-    
-    /*
+		GameState.initializeStatic(m);
+		GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
+
+		final Dragon d = GameState.getDragon();
+
+		assertEquals(d.getHealth(), 100);
+
+		TestInterface.movePlayer(playerMoves);
+
+		assertEquals(d.getHealth(), 0);
+
+		GameState.updateDragons();
+
+		assertNull(GameState.getDragon());
+	}
+
+	/*
 	-   0   1   2   3   4   5   6   7   8   9
 	0   X   X   X   X   X   X   X   X   X   X
 	1   X   H       V                       X
@@ -204,56 +210,56 @@ public class TestItems
 	7   X       X   X       X       X       X
 	8   X   E   X   X   *                   X
 	9   X   X   X   X   X   X   X   X   X   X
-     */
-    
-    @Test
-    public void test_attackDarts()
-    {
-        char playerMoves1[] =
-        {
-        	/* apanhar escudo */
-        	'd', 'd', 
-            /* apanhar primeiro dardo */
-        	'd', 's', 's', 
-        	/* apanhar espada */
-        	's', 's', 'a', 'a', 'a', 's', 's', 's', 
-        	/* seguir em direcção ao dragão */
-        	'w', 'w', 'w', 'd', 'd', 'd',
-        };
-        
-        char playerMoves2[] =
-        	{
-        		/* apanhar segundo dardo */
-        		's',  's', 's', 'd', 'd'
-        	};
+	 */
 
-        Maze m = new StaticMaze();
+	@Test(timeout = 1000)
+	public void test_attackDarts()
+	{
+		final char playerMoves1[] =
+		{
+			/* apanhar escudo */
+			'd', 'd',
+			/* apanhar primeiro dardo */
+			'd', 's', 's',
+			/* apanhar espada */
+			's', 's', 'a', 'a', 'a', 's', 's', 's',
+			/* seguir em direcção ao dragão */
+			'w', 'w', 'w', 'd', 'd', 'd',
+		};
 
-        Point dartPosition1 = new Point(4, 3);
-        Point dartPosition2 = new Point(4, 8);
-        Point dragonPosition = new Point(6, 4);
+		final char playerMoves2[] =
+		{
+			/* apanhar segundo dardo */
+			's',  's', 's', 'd', 'd'
+		};
 
-        GameState.initializeStatic(m);
-        GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
-        GameState.placeDart(dartPosition1);
-        GameState.placeDart(dartPosition2);
-        GameState.placeDragon(dragonPosition);
+		final Maze m = new StaticMaze();
+		final Point dartPosition1 = new Point(4, 3);
+		final Point dartPosition2 = new Point(4, 8);
+		final Point dragonPosition = new Point(6, 4);
 
-        assertFalse(GameState.attackDarts(Direction.RIGHT));
+		GameState.initializeStatic(m);
+		GameState.setDragonMovement(GameState.DRAGON_STATIC_NOSLEEP);
+		GameState.placeDart(dartPosition1);
+		GameState.placeDart(dartPosition2);
+		GameState.placeDragon(dragonPosition);
 
-        movePlayer(playerMoves1);
+		assertFalse(GameState.attackDarts(Direction.RIGHT));
 
-        Hero p = GameState.getPlayer();
+		TestInterface.movePlayer(playerMoves1);
 
-        assertTrue(p.hasDarts());
-        assertFalse(GameState.attackDarts(Direction.DOWN));
-        assertFalse(p.hasDarts());
+		final Hero p = GameState.getPlayer();
 
-        movePlayer(playerMoves2);
-        
-        assertTrue(p.hasDarts());
-        assertTrue(GameState.attackDarts(Direction.UP));
-        assertEquals(GameState.getDragon().getHealth(), 0);
-        assertFalse(p.hasDarts());
-    }
+		assertTrue(p.hasDarts());
+		assertEquals(GameState.getNumberDarts(), 1);
+		assertFalse(GameState.attackDarts(Direction.DOWN));
+		assertFalse(p.hasDarts());
+
+		TestInterface.movePlayer(playerMoves2);
+
+		assertTrue(p.hasDarts());
+		assertTrue(GameState.attackDarts(Direction.UP));
+		assertEquals(GameState.getDragon().getHealth(), 0);
+		assertFalse(p.hasDarts());
+	}
 }
