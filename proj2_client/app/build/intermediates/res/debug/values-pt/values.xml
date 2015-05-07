@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/MARQUES/Documents/Android%20Studio/lpoo_proj2_client/app/src/main/res/values-pt/arrays.xml -->
+    <eat-comment/>
+    <string-array name="color_array">
+        <item>Vermelho</item>
+        <item>Laranja</item>
+        <item>Amarelo</item>
+        <item>Verde</item>
+        <item>Azul</item>
+        <item>Roxo</item>
+        <item>Rosa</item>
+        <item>Preto</item>
+    </string-array>
+    <!-- From: file:/C:/Users/MARQUES/Documents/Android%20Studio/lpoo_proj2_client/app/src/main/res/values-pt/strings.xml -->
+    <eat-comment/>
+    <string name="action_settings">Definições</string>
+    <string name="button_connect">Ligar</string>
+    <string name="button_exit">Sair</string>
+    <string name="hello_world">Olá MUNDO!</string>
+    <string name="ingame_score">Pontuação</string>
+    <string name="ingame_serve">Serviço</string>
+    <string name="menu_color">Cor</string>
+    <string name="menu_connect">Ligar ao servidor</string>
+    <string name="menu_hostip">Endereço IP</string>
+    <string name="menu_port">Porta</string>
+    <string name="menu_preferences">Opções</string>
+    <string name="menu_username">Nome</string>
+    <string name="msg_lose">Perdeste :(</string>
+    <string name="msg_win">Ganhaste!</string>
+</resources>

@@ -1,0 +1,46 @@
+gfx_laserBeam.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+endBackground
+  rotate: false
+  xy: 2, 52
+  size: 46, 64
+  orig: 64, 64
+  offset: 9, 0
+  index: -1
+endOverlay
+  rotate: false
+  xy: 50, 52
+  size: 6, 64
+  orig: 64, 64
+  offset: 29, 0
+  index: -1
+middleBackground
+  rotate: false
+  xy: 2, 118
+  size: 46, 64
+  orig: 64, 64
+  offset: 9, 0
+  index: -1
+middleOverlay
+  rotate: false
+  xy: 50, 118
+  size: 6, 64
+  orig: 64, 64
+  offset: 29, 0
+  index: -1
+startBackground
+  rotate: true
+  xy: 2, 2
+  size: 48, 56
+  orig: 64, 64
+  offset: 8, 8
+  index: -1
+startOverlay
+  rotate: true
+  xy: 2, 184
+  size: 16, 40
+  orig: 64, 64
+  offset: 24, 24
+  index: -1
