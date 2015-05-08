@@ -2,6 +2,7 @@ package com.mygdx.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.gui.MainMenu;
 
 public class DesktopLauncher
@@ -14,6 +15,6 @@ public class DesktopLauncher
 		config.width = 480;
 		config.height = 800;
 
-		new LwjglApplication(new MainMenu(), config);
+		new LwjglApplication(new MyGdxGame(), config);
 	}
 }

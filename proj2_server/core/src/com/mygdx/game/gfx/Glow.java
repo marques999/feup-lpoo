@@ -3,15 +3,11 @@ package com.mygdx.game.gfx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.MathUtils;
 
-/**
- * Created by MARQUES on 03-05-2015.
- */
 public class Glow
 {
 	private Color laserColor;
@@ -22,7 +18,6 @@ public class Glow
 	private AtlasRegion middleBackground;
 	private AtlasRegion end;
 	private AtlasRegion endBackground;
-
 
 	public Glow()
 	{
@@ -39,8 +34,7 @@ public class Glow
 		s.end();
 		s.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
 		s.begin();
-
-}
+	}
 
 	private float[] generateMesh(float[] vertices, TextureAtlas.AtlasRegion region, int scale, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, float alpha)
 	{
@@ -51,12 +45,9 @@ public class Glow
 
 		float color = laserColor.toFloatBits();
 		float colorE;
-
 		int idx = 0;
-
 		final float worldOriginX = x + originX;
 		final float worldOriginY = y + originY;
-
 		float fx = -originX;
 		float fy = -originY;
 		float fx2 = width - originX;
@@ -78,7 +69,6 @@ public class Glow
 		final float p3y = fy2;
 		final float p4x = fx2;
 		final float p4y = fy;
-
 		float Fx1;
 		float Fy1;
 		float Fx2;
@@ -118,13 +108,11 @@ public class Glow
 		float y1 = Fy1 + worldOriginY;
 		float x2 = Fx2 + worldOriginX;
 		float y2 = Fy2 + worldOriginY;
-
 		float scaleX2 = ((Fx2 - Fx1) / scale);
 		float scaleY2 = ((Fy2 - Fy1) / scale);
 		float scaleX3 = ((Fx3 - Fx4) / scale);
 		float scaleY3 = ((Fy3 - Fy4) / scale);
 		float scaleAlpha = (laserColor.a - (laserColor.a * alpha)) / scale;
-
 		float x3 = x1;
 		float y3 = y1;
 		float x4 = x2;
@@ -145,11 +133,9 @@ public class Glow
 			y3 = Fy4 + scaleY3 * i + worldOriginY;
 			x4 = Fx4 + scaleX3 * (i - 1) + worldOriginX;
 			y4 = Fy4 + scaleY3 * (i - 1) + worldOriginY;
-
 			color = laserColor.toFloatBits();
 			laserColor.a -= scaleAlpha;
 			colorE = laserColor.toFloatBits();
-
 			vertices[idx++] = x1;
 			vertices[idx++] = y1;
 			vertices[idx++] = color;

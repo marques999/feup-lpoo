@@ -4,73 +4,97 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
-enum Song
-{
-	M_OVERWORLD, M_UNDERGROUNDS, M_LOST, M_CLEAR, M_NONE
-}
-
 public class AudioManager
 {
-	private static Music overworld = Gdx.audio.newMusic(Gdx.files.internal("data/audio/soundtracks/Overworld.ogg"));
-	private static Music undergrounds = Gdx.audio.newMusic(Gdx.files.internal("data/audio/soundtracks/Undergrounds.ogg"));
-	private static Music lifelost = Gdx.audio.newMusic(Gdx.files.internal("data/audio/soundtracks/Life Lost.ogg"));
-	private static Music finish = Gdx.audio.newMusic(Gdx.files.internal("data/audio/soundtracks/Course Clear.ogg"));
+	private static float _volume = 1.0f;
 
-	private static Music currentMusic;
+	private static Music[] _playlist =
+	{
+		Gdx.audio.newMusic(Gdx.files.internal("core/assets/velveeta.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("core/assets/daisukiss.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("core/assets/gangnam.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("core/assets/gameover.ogg"))
+	};
 
-	public static Sound jump = Gdx.audio.newSound(Gdx.files.internal("data/audio/sfx/jump.ogg"));
-	public static Sound stomp = Gdx.audio.newSound(Gdx.files.internal("data/audio/sfx/stomp.ogg"));
-	public static Sound bump = Gdx.audio.newSound(Gdx.files.internal("data/audio/sfx/bump.ogg"));
-	public static Sound flag = Gdx.audio.newSound(Gdx.files.internal("data/audio/sfx/flagpole.ogg"));
-	public static Sound powerDown = Gdx.audio.newSound(Gdx.files.internal("data/audio/sfx/PowerDown.ogg"));
-	public static Sound powerUp = Gdx.audio.newSound(Gdx.files.internal("data/audio/sfx/PowerUp.ogg"));
+	private static Music _song = _playlist[0];
+	private static Song _songTitle = Song.THEME_NONE;
 
-	public static Song currentSong = Song.M_NONE;
+	private static Sound[] _sounds =
+	{
+		Gdx.audio.newSound(Gdx.files.internal("core/assets/dadada.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("core/assets/dadada.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("core/assets/dadada.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("core/assets/dadada.ogg")),
+	};
 
 	public static void playSong(Song songName, boolean looping)
 	{
-		switch (songName)
+		if (_song.isPlaying())
 		{
-			case M_OVERWORLD:
-				currentSong = Song.M_OVERWORLD;
-				currentMusic = overworld;
-				break;
-			case M_UNDERGROUNDS:
-				currentSong = Song.M_UNDERGROUNDS;
-				currentMusic = undergrounds;
-				break;
-			case M_LOST:
-				currentSong = Song.M_LOST;
-				currentMusic = lifelost;
-				break;
-			case M_CLEAR:
-				currentSong = Song.M_CLEAR;
-				currentMusic = finish;
+			_song.stop();
 		}
 
-		currentMusic.setLooping(looping);
-		currentMusic.play();
+		switch (songName)
+		{
+			case THEME_MAIN_MENU:
+				_songTitle = Song.THEME_MAIN_MENU;
+				_song = _playlist[0];
+				break;
+			case THEME_A:
+				_songTitle = Song.THEME_A;
+				_song = _playlist[1];
+				break;
+			case THEME_B:
+				_songTitle = Song.THEME_B;
+				_song = _playlist[2];
+				break;
+			case THEME_GAME_OVER:
+				_songTitle = Song.THEME_GAME_OVER;
+				_song = _playlist[3];
+		}
+
+		_song.setLooping(looping);
+		_song.play();
 	}
 
-	public static Music getSong()
+	public static void playSound(SFX soundName)
 	{
-		return currentMusic;
+		switch (soundName)
+		{
+			case SFX_MENU_CLICK:
+				 _sounds[0].play(_volume);
+				break;
+			case SFX_MENU_HOVER:
+				_sounds[1].play(_volume);
+				break;
+			case SFX_PUCK_HIT:
+				_sounds[2].play(_volume);
+				break;
+			case SFX_GOAL:
+				_sounds[3].play(_volume);
+				break;
+		}
 	}
 
 	public static void stopSong()
 	{
-		if(currentMusic != null)
+		if(_song != null)
 		{
-			currentMusic.stop();
+			_song.stop();
+			_songTitle = Song.THEME_NONE;
 		}
 	}
 
 	public static void dispose()
 	{
-		overworld.dispose();
-		undergrounds.dispose();
-		currentMusic.dispose();
-		jump.dispose();
-		stomp.dispose();
+		for (Music m : _playlist)
+		{
+			m.dispose();
+		}
+
+		for (Sound s :_sounds)
+		{
+			s.dispose();
+		}
 	}
 }
