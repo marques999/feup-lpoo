@@ -13,11 +13,11 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = 'my-gdx-game'
-        gdxVersion = '1.5.6'
-        roboVMVersion = '1.0.0'
+        appName = 'lpoo_proj2_server'
+        gdxVersion = '1.6.0'
+        roboVMVersion = '1.2.0'
         box2DLightsVersion = '1.3'
-        ashleyVersion = '1.3.1'
+        ashleyVersion = '1.4.0'
         aiVersion = '1.5.0'
     }
 
@@ -37,9 +37,6 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
     }
 }
 
@@ -50,8 +47,6 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
     }
 }
 
