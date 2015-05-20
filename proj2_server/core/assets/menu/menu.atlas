@@ -1,0 +1,20 @@
+
+menu.png
+size: 512,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+button_hover
+  rotate: false
+  xy: 2, 2
+  size: 216, 49
+  orig: 216, 49
+  offset: 0, 0
+  index: -1
+button_normal
+  rotate: false
+  xy: 220, 2
+  size: 216, 49
+  orig: 216, 49
+  offset: 0, 0
+  index: -1

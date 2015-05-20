@@ -1,11 +1,11 @@
 package lpoo.proj2.gui;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import java.util.Observable;
+import java.util.Observer;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import lpoo.proj2.audio.AudioManager;
+import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.Song;
 import lpoo.proj2.logic.Goal;
 import lpoo.proj2.logic.Paddle;
@@ -22,20 +22,23 @@ import lpoo.proj2.logic.Puck;
 
 public class GUIGame extends GUIScreen
 {
-	public GUIGame(Game parent)
+	public GUIGame(AirHockey parent)
 	{
 		super(parent);
-	
+		Gdx.input.setInputProcessor(this);
 		texture = new Texture(Gdx.files.internal("gfx/ball_red.png"));
-		texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		texture.setFilter(Texture.TextureFilter.Linear,
+				Texture.TextureFilter.Linear);
 		sprite = new Sprite(texture);
 		sprite.setOrigin(0, 0);
 		sprite.setSize(480 / 8, 480 / 8);
 		mGoal = new Goal(200, 150, Color.RED);
 		p1Paddle = new Paddle(200, 150, Color.RED);
 		p2Paddle = new Paddle(400, 150, Color.BLUE);
+		p1Score = 0;
+		p2Score = 1;
 		batch = new SpriteBatch();
-		
+		_bgmusic = Song.THEME_B;
 	}
 
 	SpriteBatch batch;
@@ -45,12 +48,50 @@ public class GUIGame extends GUIScreen
 	private Goal mGoal;
 	private float posX;
 	private float posY;
-
+	private int p1Score;
+	private int p2Score;
 	private Paddle p1Paddle;
 	private Paddle p2Paddle;
-    private Puck pPuck;
+	private Puck pPuck;
 	private Texture texture;
 	private Sprite sprite;
+	private StreakListener sl = new StreakListener();
+
+	private class StreakListener
+	{
+		private int p1Streak = 0;
+		private int p2Streak = 0;
+		
+		public void update(final String arg)
+		{
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					if (arg.equals("p1"))
+					{
+						p1Streak++;
+						p2Streak = 0;
+					}
+					else if (arg.equals("p2"))
+					{
+						p2Streak++;
+						p1Streak = 0;
+					}
+					else
+					{
+						
+					}
+					if (p1Score == 2)
+					{
+						System.out.println("HOLY SHIT!");
+					}
+
+				}
+			}).start();
+		}
+	}
 
 	@Override
 	public void render(float delta)
@@ -65,19 +106,21 @@ public class GUIGame extends GUIScreen
 	}
 
 	@Override
-	public boolean keyDown(int keycode)
+	public boolean keyDown(int mKeycode)
 	{
+		switch (mKeycode)
+		{
+		case Input.Keys.SPACE:
+			((AirHockey) _parent).switchTo(1);
+			break;
+		}
 		return false;
 	}
 
 	@Override
-	public boolean keyUp(int mKeyCode)
+	public boolean keyUp(int mKeycode)
 	{
-		switch (mKeyCode)
-		{
-			case Input.Keys.M:
-				break;
-		}
+
 		return false;
 	}
 
@@ -91,7 +134,8 @@ public class GUIGame extends GUIScreen
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
 		p1Paddle.move(screenX, screenY);
-
+		p1Score++;
+		sl.update("p1");
 		return true;
 	}
 

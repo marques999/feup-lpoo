@@ -1,0 +1,32 @@
+{
+    "com.badlogic.gdx.graphics.g2d.BitmapFont": 
+    {
+        "comicsans26": { "file": "menu/comicsans.fnt" },
+        "orange96": { "file": "menu/orange.fnt" },
+    },
+    
+    "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": 
+    { 
+        "default": 
+        { 
+			"up": "button_normal", 
+			"down": "button_hover", 
+			"over": "button_hover", 
+			"pressedOffsetY": -4,
+			"font": comicsans26,
+		}
+    },
+    
+    "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": 
+    {
+        "default": { "font": orange96 },
+    },
+    
+    "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle":
+    {
+		"default":
+		{
+			
+		},
+    },
+}

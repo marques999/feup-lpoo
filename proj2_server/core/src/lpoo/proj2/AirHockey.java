@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import lpoo.proj2.audio.AudioManager;
-import lpoo.proj2.audio.Song;
 import lpoo.proj2.gui.GUIGame;
 import lpoo.proj2.gui.GUIMainMenu;
 import lpoo.proj2.gui.GUIOptions;
@@ -15,10 +14,10 @@ import com.badlogic.gdx.Gdx;
 
 public class AirHockey extends Game
 {
-	GUIScreen _current;
-	
+	private GUIScreen _current;
 	private ArrayList<GUIScreen> _menus;
-	private Stack<GUIScreen> _stack;
+	private Stack<Integer> _stack;
+	private AudioManager _am;
 	
 	public AirHockey()
 	{
@@ -29,14 +28,15 @@ public class AirHockey extends Game
 	public void create()
 	{
 		_menus = new ArrayList<GUIScreen>();
-		_stack = new Stack<GUIScreen>();
+		_stack = new Stack<Integer>();
 		_menus.add(new GUIGame(this));
 		_menus.add(new GUIMainMenu(this));
-		_menus.add(new GUIOptions(this));
-		switchTo(0);
+	//	_menus.add(new GUIOptions(this));
+		_am = AudioManager.getInstance();
+		switchTo(1);
 	}
 	
-	protected void switchTo(int i)
+	public void switchTo(int i)
 	{
 		if (_current != null)
 		{
@@ -44,10 +44,10 @@ public class AirHockey extends Game
 		}
 		
 		_current = _menus.get(i);
-		_stack.push(_current);
+		_stack.push(i);
 		Gdx.input.setInputProcessor(_current);
 		setScreen(_current);
-		AudioManager.playSong(Song.THEME_MAIN_MENU, true);
+		_am.playSong(_current.getSong(), true);
 		_current.show();
 	}
 
@@ -55,6 +55,5 @@ public class AirHockey extends Game
 	public void render()
 	{
 		super.render();
-		_current.render(0);;
 	}
 }

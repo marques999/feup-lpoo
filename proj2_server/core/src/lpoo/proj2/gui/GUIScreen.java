@@ -1,5 +1,8 @@
 package lpoo.proj2.gui;
 
+import lpoo.proj2.AirHockey;
+import lpoo.proj2.audio.Song;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -7,11 +10,18 @@ import com.badlogic.gdx.Screen;
 
 public abstract class GUIScreen implements Screen, InputProcessor
 {
-	protected Game _parent;
-
-	public GUIScreen(Game parent)
+	protected AirHockey _parent;
+	protected Song _bgmusic;
+	
+	public GUIScreen(AirHockey parent)
 	{
+		this._bgmusic = Song.THEME_NONE;
 		this._parent = parent;
+	}
+	
+	public Song getSong()
+	{
+		return _bgmusic;
 	}
 
 	@Override
