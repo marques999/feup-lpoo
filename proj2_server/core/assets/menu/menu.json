@@ -50,6 +50,7 @@
 			"checkboxOn": "checkbox_checked", 
 			"checkboxOver": "checkbox_hover", 
 			"font": comicsans26,
+			"fontColor": "white",
 		}
     },
     

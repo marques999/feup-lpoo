@@ -20,31 +20,38 @@ public class AudioManager
 		return instance;
 	}
 
-	private final Music[] playlist = {
-			Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_main.ogg")),
-			Gdx.audio.newMusic(Gdx.files.internal("audio/daisukiss.ogg")),
-			Gdx.audio.newMusic(Gdx.files.internal("audio/gangnam.ogg")),
-			Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_splash.ogg")) };
+	private final Music[] playlist = 
+	{
+		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_main.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("audio/daisukiss.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("audio/gangnam.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_splash.ogg")) 
+	};
 
 	private Music currentSong = null;
 	private Song currentSongName = Song.THEME_NONE;
 
-	private final Sound[] sfx = {
-			Gdx.audio.newSound(Gdx.files.internal("audio/menu_click.mp3")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/menu_select.mp3")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/dadada.ogg")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/dadada.ogg")), };
+	private final Sound[] sfx = 
+	{
+		Gdx.audio.newSound(Gdx.files.internal("audio/menu_click.mp3")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/menu_select.mp3")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/goal.mp3")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/pause.mp3")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/puck_hit.mp3")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/puck_place.mp3")),
+	};
 
 	private final Sound[] special =
-		{
-			Gdx.audio.newSound(Gdx.files.internal("audio/doublekill.ogg")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/firstblood.ogg")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/godlike.ogg")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/hattrick.ogg")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/holyshit.ogg")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/killingspree.ogg")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/prepare.ogg")),
-			Gdx.audio.newSound(Gdx.files.internal("audio/rampage.ogg")) };
+	{
+		Gdx.audio.newSound(Gdx.files.internal("audio/doublekill.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/firstblood.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/godlike.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/hattrick.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/holyshit.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/killingspree.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/prepare.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/rampage.ogg")) 
+	};
 
 	public final float getSFXVolume()
 	{

@@ -36,6 +36,8 @@ public class GUIMainMenu extends GUIScreen
 	private TextButton btnPreferences = new TextButton("Preferences", styleMenuButton);
 	private TextButton btnCredits = new TextButton("Credits", styleMenuButton);
 	private TextButton btnExit = new TextButton("Exit", styleMenuButton);
+	
+	private ParallaxWidget parallax = new ParallaxWidget("menu/parallax.png", 0.4f, "menu/parallax_front.png", 0.2f);
 
 	public GUIMainMenu(AirHockey parent)
 	{
@@ -74,7 +76,8 @@ public class GUIMainMenu extends GUIScreen
 		
 		stage.act();
 		batch.begin();
-		batch.draw(texture, 0, 0, 480, 800);
+		parallax.updateScroll(10.0f);
+		parallax.draw(batch, 0.5f);
 		batch.end();
 		stage.draw();
 	}
