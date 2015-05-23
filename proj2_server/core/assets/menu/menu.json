@@ -1,7 +1,16 @@
 {
+	"com.badlogic.gdx.graphics.Color": 
+	{
+		"green": { hex: "0096a0ff" }, 
+		"white": { a: 1, b: 1, g: 1, r: 1 }, 
+		"red": { a: 1, b: 0, g: 0, r: 1 }, 
+		"black": { a: 1, b: 0, g: 0, r: 0 },
+	}, 
+
     "com.badlogic.gdx.graphics.g2d.BitmapFont": 
     {
         "comicsans26": { "file": "menu/comicsans.fnt" },
+        "bebasbold": { "file" : "menu/bebasbold.fnt" },
         "orange96": { "file": "menu/orange.fnt" },
     },
     
@@ -12,21 +21,44 @@
 			"up": "button_normal", 
 			"down": "button_hover", 
 			"over": "button_hover", 
-			"pressedOffsetY": -4,
 			"font": comicsans26,
-		}
+			"fontColor": green,
+		},
+		
+		"menuLabel": 
+		{ 
+			"up": "button_normal", 
+			"down": "button_hover", 
+			"over": "button_hover", 
+			"pressedOffsetY": -2,
+			"font": bebasbold,
+		 },
     },
     
     "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": 
     {
         "default": { "font": orange96 },
+        "gradientLabel": { "font" : bebasbold },
+        "smallLabel": { "font": comicsans26 },
+    },
+    
+    "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": 
+    {
+        "default":
+        { 
+			"checkboxOff": "checkbox_normal", 
+			"checkboxOn": "checkbox_checked", 
+			"checkboxOver": "checkbox_hover", 
+			"font": comicsans26,
+		}
     },
     
     "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle":
     {
-		"default":
+		"default-horizontal":
 		{
-			
+			"background": "slider",
+			"knob": "slider_knob",
 		},
     },
 }

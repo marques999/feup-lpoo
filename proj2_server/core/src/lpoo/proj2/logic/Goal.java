@@ -1,35 +1,17 @@
 package lpoo.proj2.logic;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Goal extends Entity
 {
-	private Color _color;
-	private ShapeRenderer _renderer;
-
-	public Goal(float x, float y, Color color)
+	public Goal(float x, float y, World world)
 	{
-		super(x, y);
-
-		_color = color;
-		_renderer = new ShapeRenderer();
-	}
-
-	public Goal(float x, float y)
-	{
-		this(x, y, Color.WHITE);
+		super(x, y, world);
 	}
 
 	@Override
-	public void draw(SpriteBatch sb)
+	public void draw(final SpriteBatch sb)
 	{
-		_renderer.begin(ShapeRenderer.ShapeType.Filled);
-		_renderer.setColor(_color);
-		_renderer.rectLine(x, y, x, y + height, 1.0f);
-		_renderer.rectLine(x, y + height, x + width, y + height, 1.0f);
-		_renderer.rectLine(x + width, y, x + width, y + height, 1.0f);
-		_renderer.end();
 	}
 }

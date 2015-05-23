@@ -6,163 +6,167 @@ import com.badlogic.gdx.audio.Sound;
 
 public class AudioManager
 {
-	private float _musicvolume = 1.0f;
-	private float _sfxvolume = 1.0f;
-	private static AudioManager _instance;
-	
+	private static AudioManager instance;
+	private float musicVolume = 1.0f;
+	private float sfxVolume = 1.0f;
+
 	public static AudioManager getInstance()
 	{
-		if (_instance == null)
+		if (instance == null)
 		{
-			_instance = new AudioManager();
-		}
-		
-		return _instance;
-	}
-	
-	private Music[] _playlist = 
-	{
-		Gdx.audio.newMusic(Gdx.files.internal("audio/velveeta.ogg")),
-		Gdx.audio.newMusic(Gdx.files.internal("audio/daisukiss.ogg")),
-		Gdx.audio.newMusic(Gdx.files.internal("audio/gangnam.ogg")),
-		Gdx.audio.newMusic(Gdx.files.internal("audio/gameover.ogg")) 
-	};
-
-	private Music _song = null;
-
-	private Sound[] _sounds = 
-	{
-		Gdx.audio.newSound(Gdx.files.internal("audio/menu_click.mp3")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/menu_select.mp3")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/dadada.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/dadada.ogg")), 
-	};
-	
-	private Sound[] _special =
-	{
-		Gdx.audio.newSound(Gdx.files.internal("audio/doublekill.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/firstblood.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/godlike.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/hattrick.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/holyshit.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/killingspree.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/prepare.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/rampage.ogg"))
-	};
-
-	public float getSFXVolume()
-	{
-		return _sfxvolume;
-	}
-	
-	public float getMusicVolume()
-	{
-		return _musicvolume;
-	}
-	
-	public void setSFXVolume(float sfxVolume)
-	{
-		_sfxvolume = sfxVolume;
-	}
-	
-	public void setMusicVolume(float musicVolume)
-	{
-		_musicvolume = musicVolume;
-	}
-	
-	public void playSong(Song songName, boolean looping)
-	{
-		if (_song != null && _song.isPlaying())
-		{
-			_song.stop();
+			instance = new AudioManager();
 		}
 
-		switch (songName)
-		{
-		case THEME_MAIN_MENU:
-			_song = _playlist[0];
-			break;
-		case THEME_A:
-			_song = _playlist[1];
-			break;
-		case THEME_B:
-			_song = _playlist[2];
-			break;
-		case THEME_GAME_OVER:
-			_song = _playlist[3];
-			break;
-		case THEME_NONE:
-			_song.stop();
-			_song = null;
-			break;
-		}
-
-		_song.setLooping(looping);
-		_song.setVolume(_musicvolume);
-		_song.play();
+		return instance;
 	}
-	
-	public void playSpecial(Special soundName)
+
+	private final Music[] playlist = {
+			Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_main.ogg")),
+			Gdx.audio.newMusic(Gdx.files.internal("audio/daisukiss.ogg")),
+			Gdx.audio.newMusic(Gdx.files.internal("audio/gangnam.ogg")),
+			Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_splash.ogg")) };
+
+	private Music currentSong = null;
+	private Song currentSongName = Song.THEME_NONE;
+
+	private final Sound[] sfx = {
+			Gdx.audio.newSound(Gdx.files.internal("audio/menu_click.mp3")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/menu_select.mp3")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/dadada.ogg")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/dadada.ogg")), };
+
+	private final Sound[] special =
+		{
+			Gdx.audio.newSound(Gdx.files.internal("audio/doublekill.ogg")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/firstblood.ogg")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/godlike.ogg")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/hattrick.ogg")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/holyshit.ogg")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/killingspree.ogg")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/prepare.ogg")),
+			Gdx.audio.newSound(Gdx.files.internal("audio/rampage.ogg")) };
+
+	public final float getSFXVolume()
+	{
+		return this.sfxVolume;
+	}
+
+	public final float getMusicVolume()
+	{
+		return this.musicVolume;
+	}
+
+	public void setSFXVolume(final float sfxVolume)
+	{
+		this.sfxVolume = sfxVolume;
+	}
+
+	public void setMusicVolume(final float musicVolume)
+	{
+		this.musicVolume = musicVolume;
+	}
+
+	public void playSong(final Song songName, final boolean looping)
+	{
+		if (currentSongName == songName)
+		{
+			currentSong.setVolume(musicVolume);
+		}
+		else
+		{
+			stopSong();
+
+			switch (songName)
+			{
+			case THEME_MAIN_MENU:
+				currentSong = playlist[0];
+				break;
+			case THEME_A:
+				currentSong = playlist[1];
+				break;
+			case THEME_B:
+				currentSong = playlist[2];
+				break;
+			case THEME_GAME_OVER:
+				currentSong = playlist[3];
+				break;
+			case THEME_NONE:
+				currentSong.stop();
+				currentSong = null;
+				break;
+			}
+
+			if (currentSong != null)
+			{
+				currentSongName = songName;
+				currentSong.setLooping(looping);
+				currentSong.setVolume(musicVolume);
+				currentSong.play();
+			}
+		}
+	}
+
+	public final void playSpecial(final Special soundName)
 	{
 		switch (soundName)
 		{
 		case QUAKE_DOUBLEKILL:
-			_special[0].play(_sfxvolume);
+			special[0].play(sfxVolume);
 			break;
 		case QUAKE_FIRSTBLOOD:
-			_special[1].play(_sfxvolume);
+			special[1].play(sfxVolume);
 			break;
 		case QUAKE_GODLIKE:
-			_special[2].play(_sfxvolume);
+			special[2].play(sfxVolume);
 			break;
 		case QUAKE_HATTRICK:
-			_special[3].play(_sfxvolume);
+			special[3].play(sfxVolume);
 			break;
 		case QUAKE_HOLYSHIT:
-			_special[4].play(_sfxvolume);
+			special[4].play(sfxVolume);
 			break;
 		case QUAKE_KILLINGSPREE:
-			_special[5].play(_sfxvolume);
+			special[5].play(sfxVolume);
 			break;
 		case QUAKE_PREPARE:
-			_special[6].play(_sfxvolume);
+			special[6].play(sfxVolume);
 			break;
 		case QUAKE_RAMPAGE:
-			_special[7].play(_sfxvolume);
+			special[7].play(sfxVolume);
 			break;
 		}
 	}
 
-	public void playSound(SFX soundName)
+	public final void playSound(final SFX soundName)
 	{
 		switch (soundName)
 		{
 		case MENU_CLICK:
-			_sounds[0].play(_sfxvolume);
+			sfx[0].play(sfxVolume);
 			break;
 		case MENU_SELECT:
-			_sounds[1].play(_sfxvolume);
+			sfx[1].play(sfxVolume);
 			break;
 		case SFX_PUCK_HIT:
-			_sounds[2].play(_sfxvolume);
+			sfx[2].play(sfxVolume);
 			break;
 		case SFX_GOAL:
-			_sounds[3].play(_sfxvolume);
+			sfx[3].play(sfxVolume);
 			break;
 		}
 	}
 
 	public void stopSong()
 	{
-		if (_song != null && _song.isPlaying())
+		if (currentSong != null && currentSong.isPlaying())
 		{
-			_song.stop();
+			currentSong.stop();
 		}
 	}
 
 	public void dispose()
 	{
-		for (Music m : _playlist)
+		for (final Music m : playlist)
 		{
 			if (m != null)
 			{
@@ -170,17 +174,25 @@ public class AudioManager
 			}
 		}
 
-		for (Sound s : _sounds)
+		for (final Sound s : sfx)
 		{
 			if (s != null)
 			{
 				s.dispose();
 			}
 		}
-		
-		if (_song != null)
+
+		for (final Sound s : special)
 		{
-			_song.dispose();
+			if (s != null)
+			{
+				s.dispose();
+			}
+		}
+
+		if (currentSong != null)
+		{
+			currentSong.dispose();
 		}
 	}
 }

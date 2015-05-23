@@ -5,52 +5,59 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.World;
 
-public class Paddle extends Entity
-{
-	private Texture _texture;
-	private Sprite _sprite;
-
-	public Paddle(float x, float y, Color color)
+public class Paddle extends Entity implements DynamicEntity
+{	
+	public Paddle(float x, float y, Color color, World world)
 	{
-		super(x, y);
-
-		if (color == Color.RED)
+		super(x, y, world);
+		
+		if (color == Color.GREEN)
 		{
-			_texture = new Texture(Gdx.files.internal("gfx/paddle_red.png"));
-		}
-		else if (color == Color.GREEN)
-		{
-			_texture = new Texture(Gdx.files.internal("gfx/paddle_green.png"));
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_green.png")));
 		}
 		else if (color == Color.BLUE)
 		{
-			_texture = new Texture(Gdx.files.internal("gfx/paddle_blue.png"));
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_blue.png")));
 		}
 		else if (color == Color.YELLOW)
 		{
-			_texture = new Texture(Gdx.files.internal("gfx/paddle_yellow.png"));
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_yellow.png")));
 		}
 		else
 		{
-			_texture = new Texture(Gdx.files.internal("gfx/paddle_red.png"));
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_red.png")));
 		}
 
-		_sprite = new Sprite(_texture);
-		_sprite.setCenter(x, y);
-		_sprite.setScale(0.5f, 0.5f);
+		sprite.setCenter(x, y);
+		sprite.setScale(0.5f, 0.5f);
+		setSize(sprite.getWidth(), sprite.getHeight());
+	}
+	
+	public Paddle(float x, float y, World world)
+	{
+		this(x, y, Color.RED, world);
 	}
 
-	public void move(float newX, float newY)
+	public boolean move(float x, float y)
 	{
-		x = newX;
-		y = Gdx.graphics.getHeight() - newY;
-		_sprite.setCenter(x, y);
+		this.x = x;
+		this.y = Gdx.graphics.getHeight() - y;
+		
+		return true;
 	}
 
 	@Override
 	public void draw(SpriteBatch sb)
 	{
-		_sprite.draw(sb);
+		sprite.setCenter(x, y);
+		sprite.draw(sb);
+	}
+
+	@Override
+	public boolean collide(Entity entity)
+	{
+		return false;
 	}
 }

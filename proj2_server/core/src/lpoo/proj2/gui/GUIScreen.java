@@ -1,75 +1,78 @@
 package lpoo.proj2.gui;
 
 import lpoo.proj2.AirHockey;
+import lpoo.proj2.audio.AudioManager;
 import lpoo.proj2.audio.Song;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class GUIScreen implements Screen, InputProcessor
 {
-	protected AirHockey _parent;
-	protected Song _bgmusic;
-	
-	public GUIScreen(AirHockey parent)
+	protected AirHockey parent;
+	protected SpriteBatch batch;
+	protected AudioManager audio;
+	protected Song bgmusic;
+
+	public GUIScreen(final AirHockey parent)
 	{
-		this._bgmusic = Song.THEME_NONE;
-		this._parent = parent;
+		this.bgmusic = Song.THEME_NONE;
+		this.audio = AudioManager.getInstance();
+		this.parent = parent;
+		this.batch = new SpriteBatch();
 	}
-	
-	public Song getSong()
+
+	public final Song getSong()
 	{
-		return _bgmusic;
+		return this.bgmusic;
 	}
 
 	@Override
-	public boolean keyDown(int keycode)
-	{
-		System.out.println("THSISIIIIISIS");
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int keycode)
-	{
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character)
+	public boolean keyDown(final int keycode)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button)
-	{
-		
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button)
+	public boolean keyUp(final int keycode)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer)
+	public boolean keyTyped(final char character)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY)
+	public boolean touchDown(final int screenX, final int screenY, final int pointer, final int button)
+	{
+
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(final int screenX, final int screenY, final int pointer, final int button)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean scrolled(int amount)
+	public boolean touchDragged(final int screenX, final int screenY, final int pointer)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(final int screenX, final int screenY)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(final int amount)
 	{
 		return false;
 	}
@@ -80,12 +83,12 @@ public abstract class GUIScreen implements Screen, InputProcessor
 	}
 
 	@Override
-	public void render(float delta)
+	public void render(final float delta)
 	{
 	}
 
 	@Override
-	public void resize(int width, int height)
+	public void resize(final int width, final int height)
 	{
 	}
 
@@ -107,5 +110,6 @@ public abstract class GUIScreen implements Screen, InputProcessor
 	@Override
 	public void dispose()
 	{
+		batch.dispose();
 	}
 }

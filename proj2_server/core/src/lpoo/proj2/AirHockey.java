@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import lpoo.proj2.audio.AudioManager;
+import lpoo.proj2.gui.GUICredits;
+import lpoo.proj2.gui.GUIDifficulty;
 import lpoo.proj2.gui.GUIGame;
 import lpoo.proj2.gui.GUIMainMenu;
 import lpoo.proj2.gui.GUIOptions;
@@ -18,10 +20,9 @@ public class AirHockey extends Game
 	private ArrayList<GUIScreen> _menus;
 	private Stack<Integer> _stack;
 	private AudioManager _am;
-	
+
 	public AirHockey()
 	{
-		
 	}
 
 	@Override
@@ -31,18 +32,20 @@ public class AirHockey extends Game
 		_stack = new Stack<Integer>();
 		_menus.add(new GUIGame(this));
 		_menus.add(new GUIMainMenu(this));
-	//	_menus.add(new GUIOptions(this));
+		_menus.add(new GUIOptions(this));
+		_menus.add(new GUIDifficulty(this));
+		_menus.add(new GUICredits(this));
 		_am = AudioManager.getInstance();
 		switchTo(1);
 	}
-	
-	public void switchTo(int i)
+
+	public void switchTo(final int i)
 	{
 		if (_current != null)
 		{
 			_current.hide();
 		}
-		
+
 		_current = _menus.get(i);
 		_stack.push(i);
 		Gdx.input.setInputProcessor(_current);
