@@ -2,27 +2,27 @@ package lpoo.proj2.logic;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public abstract class Entity
 {
 	protected float x;
 	protected float y;
 	protected Sprite sprite;
-	protected World world;
+	protected Body body;
+	protected BodyDef bodyDef;
+	protected Fixture fixture;
+	protected FixtureDef fixtureDef;
 	private float width;
 	private float height;
 
-	public Entity(float x, float y, World world)
+	public Entity(float x, float y)
 	{
 		this.x = x;
 		this.y = y;
-		this.world = world;
-	}
-
-	public Entity(float x, float y)
-	{
-		this(x, y, null);
 	}
 
 	public final float getX()
@@ -39,6 +39,17 @@ public abstract class Entity
 	{
 		this.x = x;
 		this.y = y;
+	}
+	
+	protected void setBody(Body body, BodyDef bodyDef)
+	{
+		this.body = body;
+		this.bodyDef = bodyDef;
+	}
+	
+	protected void setFixture(Fixture fixture)
+	{
+		this.fixture = fixture;
 	}
 
 	protected void setSize(final float width, final float height)
@@ -67,5 +78,12 @@ public abstract class Entity
 		this.sprite = sprite;
 	}
 
-	public abstract void draw(SpriteBatch sb);
+	public void draw(SpriteBatch sb)
+	{
+		sprite.setCenter(x, y);
+		sprite.draw(sb);
+	}
+	
+
+	public abstract boolean move(float x, float y);
 }

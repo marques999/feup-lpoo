@@ -1,17 +1,17 @@
 package lpoo.proj2.logic;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.World;
-
 public class Goal extends Entity
 {
-	public Goal(float x, float y, World world)
+	protected Goal(float x, float y, float width, float height)
 	{
-		super(x, y, world);
+		super(x, y);
+		setSize(width, height);
 	}
 
 	@Override
-	public void draw(final SpriteBatch sb)
+	public boolean move(float x, float y)
 	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

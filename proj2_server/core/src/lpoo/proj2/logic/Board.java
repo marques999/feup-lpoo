@@ -1,22 +1,19 @@
 package lpoo.proj2.logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
 
 public class Board
 {
-    private Paddle p1Paddle;
-    private Paddle p2Paddle;
+    private Entity p1Paddle;
+    private Entity p2Paddle;
     private Goal p1Goal;
     private Goal p2Goal;
+    private EntityFactory factory;
     private Puck puck;
     private World world;
     private ArrayList<Wall> walls = new ArrayList<Wall>();
@@ -26,25 +23,12 @@ public class Board
     {
         gravity = new Vector2(0.0f, 0.0f);
         world = new World(gravity, true);
-        p1Paddle = new Paddle(0.0f, 0.0f, Color.RED, world);
-        p2Paddle = new Paddle(1.0f, 1.0f, Color.BLUE, world);
-        p1Goal = new Goal(0.0f, 0.0f, world);
-        p2Goal = new Goal(1.0f, 1.0f, world);
-        puck = new Puck(30.0f, 30.0f, Color.RED, world);
-    }
-
-    public void initialize()
-    {
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-
-		BodyDef wallDef = new BodyDef();
-        EdgeShape wallEdge = new EdgeShape();
-        FixtureDef wallFixture = new FixtureDef();
-
-        wallDef.type = BodyDef.BodyType.StaticBody;
-        wallDef.position.set(0, 0);
-        wallEdge.set(-screenWidth / 2, -screenHeight / 2, screenWidth / 2, screenHeight / 2);
+        factory = new EntityFactory(world);
+		puck = factory.createPuck(Color.RED);
+		p1Paddle = factory.createP1Paddle(Color.GREEN);
+		p2Paddle = factory.createP2Paddle(Color.YELLOW);
+        p1Goal = factory.createP1Goal();
+        p2Goal = factory.createP2Goal();
     }
 
     public void draw(SpriteBatch sb)

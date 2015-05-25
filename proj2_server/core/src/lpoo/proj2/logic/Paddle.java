@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class Paddle extends Entity implements DynamicEntity
 {	
-	public Paddle(float x, float y, Color color, World world)
+	protected Paddle(float x, float y, Color color)
 	{
-		super(x, y, world);
+		super(x, y);
 		
 		if (color == Color.GREEN)
 		{
@@ -33,11 +32,6 @@ public class Paddle extends Entity implements DynamicEntity
 		sprite.setCenter(x, y);
 		sprite.setScale(0.5f, 0.5f);
 		setSize(sprite.getWidth(), sprite.getHeight());
-	}
-	
-	public Paddle(float x, float y, World world)
-	{
-		this(x, y, Color.RED, world);
 	}
 
 	public boolean move(float x, float y)

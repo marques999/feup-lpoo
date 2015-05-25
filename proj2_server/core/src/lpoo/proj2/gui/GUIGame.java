@@ -3,6 +3,8 @@ package lpoo.proj2.gui;
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.Song;
 import lpoo.proj2.audio.Special;
+import lpoo.proj2.logic.Entity;
+import lpoo.proj2.logic.EntityFactory;
 import lpoo.proj2.logic.Paddle;
 import lpoo.proj2.logic.Puck;
 
@@ -17,22 +19,24 @@ public class GUIGame extends GUIScreen
 {
 	private final World world;
 	private final Vector2 gravity;
-
+	private final EntityFactory factory;
+	
 	public GUIGame(final AirHockey parent)
 	{
 		super(parent);
 
 		gravity = new Vector2(0.0f, 0.0f);
 		world = new World(gravity, true);
+		factory = new EntityFactory(world);
 		Gdx.input.setInputProcessor(this);
-		pPuck = new Puck(100, 200, Color.RED, world);
-		p1Paddle = new Paddle(200, 150, Color.RED, null);
-		p2Paddle = new Paddle(400, 150, Color.BLUE, null);
+		pPuck = factory.createPuck(Color.RED);
+		p1Paddle = factory.createP1Paddle(Color.GREEN);
+		p2Paddle = factory.createP2Paddle(Color.YELLOW);
 		bgmusic = Song.THEME_B;
 	}
 
-	private final Paddle p1Paddle;
-	private final Paddle p2Paddle;
+	private final Entity p1Paddle;
+	private final Entity p2Paddle;
 	private final Puck pPuck;
 	private final ScoreListener sl = new ScoreListener();
 
@@ -52,11 +56,13 @@ public class GUIGame extends GUIScreen
 			{
 				audio.playSpecial(Special.QUAKE_FIRSTBLOOD);
 				p1FirstBlood = false;
-			} else if (p2FirstBlood)
+			} 
+			else if (p2FirstBlood)
 			{
 				audio.playSpecial(Special.QUAKE_FIRSTBLOOD);
 				p2FirstBlood = false;
-			} else
+			} 
+			else
 			{
 				final int highestStreak = Math.max(p1Streak, p2Streak);
 
