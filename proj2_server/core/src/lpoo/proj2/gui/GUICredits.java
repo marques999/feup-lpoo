@@ -74,7 +74,6 @@ public class GUICredits extends GUIScreen
 	{
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
 		stage.act();
 		batch.begin();
 		batch.draw(_bg, 0, 0, 480, 800);

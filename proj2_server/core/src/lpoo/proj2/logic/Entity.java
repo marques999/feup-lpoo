@@ -81,6 +81,7 @@ public abstract class Entity
 	protected void setSprite(final Sprite sprite)
 	{
 		this.sprite = sprite;
+		this.sprite.setCenter(x, y);
 		this.width = sprite.getWidth() * sprite.getScaleX();
 		this.height = sprite.getHeight() * sprite.getScaleY();
 		this.xMin = this.width / 2;
@@ -94,7 +95,6 @@ public abstract class Entity
 		sprite.setCenter(x, y);
 		sprite.draw(sb);
 	}
-	
 
 	public abstract boolean move(float x, float y);
 }

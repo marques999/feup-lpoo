@@ -30,8 +30,6 @@ public class Puck extends Entity implements DynamicEntity
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_red.png")));
 		}
 
-		sprite.setCenter(x, y);
-		sprite.setScale(0.5f, 0.5f);
 		setSprite(sprite);
 	}
 

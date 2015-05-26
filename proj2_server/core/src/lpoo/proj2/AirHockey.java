@@ -22,9 +22,27 @@ public class AirHockey extends Game
 	private ArrayList<GUIScreen> _menus;
 	private Stack<Integer> _stack;
 	private AudioManager _am;
+	private boolean _multiplayer = false;
 
 	public AirHockey()
 	{
+	}
+	
+	public boolean isMultiplayer()
+	{
+		return _multiplayer;
+	}
+	
+	public void startMultiplayer()
+	{
+		_multiplayer = true;
+		switchTo(3);
+	}
+	
+	public void startSingleplayer()
+	{
+		_multiplayer = false;
+		switchTo(3);
 	}
 
 	private Preferences preferences;
@@ -43,7 +61,7 @@ public class AirHockey extends Game
 	{
 		if (preferences == null)
 		{
-				preferences = Gdx.app.getPreferences("Air Hockey.gdx");
+			preferences = Gdx.app.getPreferences("Air Hockey.gdx");
 		}
 	}
 
@@ -133,7 +151,7 @@ public class AirHockey extends Game
 		_current.show();
 		setScreen(_current);
 		_am.playSong(_current.getSong(), true);
-
+		preferences.flush();
 	}
 
 	@Override

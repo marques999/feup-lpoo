@@ -11,7 +11,6 @@ public class Goal extends Entity
 	@Override
 	public boolean move(float x, float y)
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

@@ -9,11 +9,9 @@ public class Wall extends Entity
 		super(x, y);
 	}
 
-
 	@Override
 	public boolean move(float x, float y)
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

@@ -103,7 +103,7 @@ public class AudioManager
 			case THEME_B:
 				currentSong = playlist[2];
 				break;
-			case THEME_GAME_OVER:
+			case THEME_SPLASH:
 				currentSong = playlist[3];
 				break;
 			case THEME_SELECT:

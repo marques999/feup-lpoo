@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GUIMainMenu extends GUIScreen
 {
@@ -36,10 +37,8 @@ public class GUIMainMenu extends GUIScreen
 	private TextButton btnPreferences = new TextButton("Preferences", styleMenuButton);
 	private TextButton btnCredits = new TextButton("Credits", styleMenuButton);
 	private TextButton btnExit = new TextButton("Exit", styleMenuButton);
-	
-	private ParallaxWidget parallax = new ParallaxWidget("menu/parallax.png", 0.4f, "menu/parallax_front.png", 0.2f);
 
-	public GUIMainMenu(AirHockey parent)
+	public GUIMainMenu(final AirHockey parent)
 	{
 		super(parent);
 
@@ -53,17 +52,55 @@ public class GUIMainMenu extends GUIScreen
 		table.setFillParent(true);
 		stage.addActor(table);
 		bgmusic = Song.THEME_MAIN_MENU;
-		btnSingleplayer.addListener(new MenuListener(0, SFX.MENU_SELECT, SFX.MENU_CLICK));
-		btnMultiplayer.addListener(new MenuListener(3, SFX.MENU_SELECT, SFX.MENU_CLICK));
+		
+		btnSingleplayer.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(final InputEvent event, final float x, final float y)
+			{
+				audio.playSound(SFX.MENU_CLICK);
+				parent.startSingleplayer();
+			}
+
+			@Override
+			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			{
+				audio.playSound(SFX.MENU_SELECT);
+			}
+		});
+		
+		btnMultiplayer.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(final InputEvent event, final float x, final float y)
+			{
+				audio.playSound(SFX.MENU_CLICK);
+				parent.startMultiplayer();
+			}
+
+			@Override
+			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			{
+				audio.playSound(SFX.MENU_SELECT);
+			}
+		});
+
 		btnPreferences.addListener(new MenuListener(2, SFX.MENU_SELECT, SFX.MENU_CLICK));
-		btnCredits.addListener(new MenuListener(4, SFX.MENU_CLICK, SFX.MENU_CLICK));
+		btnCredits.addListener(new MenuListener(4, SFX.MENU_SELECT, SFX.MENU_CLICK));
 		
 		btnExit.addListener(new ClickListener()
 		{
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
+				audio.playSound(SFX.MENU_CLICK);
 				Gdx.app.exit();
+			}
+			
+			@Override
+			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			{
+				audio.playSound(SFX.MENU_SELECT);
 			}
 		});
 	}
@@ -73,11 +110,9 @@ public class GUIMainMenu extends GUIScreen
 	{
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
 		stage.act();
 		batch.begin();
-		parallax.updateScroll(10.0f);
-		parallax.draw(batch, 0.5f);
+		batch.draw(texture, 0, 0, texture.getWidth(), texture.getHeight());
 		batch.end();
 		stage.draw();
 	}
@@ -85,6 +120,7 @@ public class GUIMainMenu extends GUIScreen
 	@Override
 	public void resize(int width, int height)
 	{
+		  stage.getViewport().update(width, height);
 	}
 	
 	private class MenuListener extends ClickListener

@@ -20,21 +20,21 @@ button_normal
   index: -1
 checkbox_checked
   rotate: false
-  xy: 622, 27
+  xy: 724, 27
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 checkbox_hover
   rotate: false
-  xy: 648, 27
+  xy: 750, 27
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 checkbox_normal
   rotate: false
-  xy: 674, 27
+  xy: 776, 27
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
@@ -48,8 +48,22 @@ slider
   index: -1
 slider_knob
   rotate: false
-  xy: 588, 19
+  xy: 690, 19
   size: 32, 32
   orig: 32, 32
+  offset: 0, 0
+  index: -1
+volume_hover
+  rotate: false
+  xy: 588, 2
+  size: 49, 49
+  orig: 49, 49
+  offset: 0, 0
+  index: -1
+volume_normal
+  rotate: false
+  xy: 639, 2
+  size: 49, 49
+  orig: 49, 49
   offset: 0, 0
   index: -1

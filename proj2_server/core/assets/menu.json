@@ -22,6 +22,7 @@
 			"down": "button_hover", 
 			"over": "button_hover", 
 			"font": comicsans26,
+			"pressedOffsetY": -2,
 			"fontColor": green,
 		},
 		
@@ -33,6 +34,26 @@
 			"pressedOffsetY": -2,
 			"font": bebasbold,
 		 },
+		 
+		"toggle": 
+		{ 
+			"up": "button_normal", 
+			"down": "button_hover", 
+			"checked": "button_hover", 
+			"over": "button_hover", 
+			"font": comicsans26,
+			"fontColor": green,
+		 },
+    },
+    
+    "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle":
+    {
+		"default":
+		{
+			"up": "volume_normal", 
+			"down": "volume_hover", 
+			"over": "volume_hover", 
+		},
     },
     
     "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": 
