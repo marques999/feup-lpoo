@@ -79,7 +79,6 @@ public class GUISelect extends GUIScreen
 	{
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
 		stage.act();
 		batch.begin();
 		batch.draw(background, 0, 0, 480, 800);
@@ -90,6 +89,7 @@ public class GUISelect extends GUIScreen
 	@Override
 	public void resize(int width, int height)
 	{
+		stage.getViewport().update(width, height);
 	}
 	
 	private class MenuListener extends ClickListener

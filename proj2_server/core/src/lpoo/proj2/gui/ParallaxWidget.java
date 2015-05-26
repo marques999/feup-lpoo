@@ -43,7 +43,7 @@ public class ParallaxWidget extends Widget
 		scrollAmounts[1] = value * scrollFactors[1];
 	}
 
-	private void drawLayer(final Batch batch, final int index)
+	private void drawLayer(final Batch batch, int index)
 	{
 		final float x = getX();
 		final float y = getY();

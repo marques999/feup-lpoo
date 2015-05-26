@@ -84,6 +84,7 @@ public class GUICredits extends GUIScreen
 	@Override
 	public void resize(int width, int height)
 	{
+		stage.getViewport().update(width, height);
 	}
 	
 	private class MenuListener extends ClickListener

@@ -130,7 +130,7 @@ public class GUIOptions extends GUIScreen
 		btnCancel.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(final InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 				audio.setMusicVolume(oldMusicVolume);
@@ -139,7 +139,7 @@ public class GUIOptions extends GUIScreen
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(final InputEvent event, float x, float y, int pointer, final Actor fromActor)
 			{
 				audio.playSound(SFX.MENU_SELECT);
 			}
@@ -249,6 +249,7 @@ public class GUIOptions extends GUIScreen
 	@Override
 	public void resize(final int width, final int height)
 	{
+		stage.getViewport().update(width, height);
 	}
 
 	@Override

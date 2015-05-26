@@ -23,6 +23,7 @@ public class AirHockey extends Game
 	private Stack<Integer> _stack;
 	private AudioManager _am;
 	private boolean _multiplayer = false;
+	private int _mode = 1;
 
 	public AirHockey()
 	{
