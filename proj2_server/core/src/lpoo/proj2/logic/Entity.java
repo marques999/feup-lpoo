@@ -1,5 +1,6 @@
 package lpoo.proj2.logic;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -11,7 +12,11 @@ public abstract class Entity
 {
 	protected float x;
 	protected float y;
-	protected Sprite sprite;
+	protected float xMin;
+	protected float yMin;
+	protected float xMax;
+	protected float yMax;
+	private Sprite sprite;
 	protected Body body;
 	protected BodyDef bodyDef;
 	protected Fixture fixture;
@@ -76,6 +81,12 @@ public abstract class Entity
 	protected void setSprite(final Sprite sprite)
 	{
 		this.sprite = sprite;
+		this.width = sprite.getWidth() * sprite.getScaleX();
+		this.height = sprite.getHeight() * sprite.getScaleY();
+		this.xMin = this.width / 2;
+		this.yMin = this.height / 2;
+		this.xMax = Gdx.graphics.getWidth() - this.xMin;
+		this.yMax = Gdx.graphics.getHeight() - this.yMin;
 	}
 
 	public void draw(SpriteBatch sb)

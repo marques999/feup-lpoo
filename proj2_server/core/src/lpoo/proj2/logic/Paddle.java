@@ -12,6 +12,8 @@ public class Paddle extends Entity implements DynamicEntity
 	{
 		super(x, y);
 		
+		Sprite sprite;
+		
 		if (color == Color.GREEN)
 		{
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_green.png")));
@@ -31,22 +33,35 @@ public class Paddle extends Entity implements DynamicEntity
 
 		sprite.setCenter(x, y);
 		sprite.setScale(0.5f, 0.5f);
-		setSize(sprite.getWidth(), sprite.getHeight());
+		setSprite(sprite);
 	}
 
 	public boolean move(float x, float y)
 	{
-		this.x = x;
+		this.x = x; 
 		this.y = Gdx.graphics.getHeight() - y;
 		
-		return true;
-	}
+		if (x < xMin)
+		{
+			this.x = xMin;
+		}
+		
+		if (x > xMax)
+		{
+			this.x = xMax;
+		}
+		
+		if (y > yMax)
+		{
+			this.y = Gdx.graphics.getHeight() - yMax;
+		}
+		
+		if (y < yMin)
+		{
+			this.y = Gdx.graphics.getHeight() - yMin;
+		}
 
-	@Override
-	public void draw(SpriteBatch sb)
-	{
-		sprite.setCenter(x, y);
-		sprite.draw(sb);
+		return true;
 	}
 
 	@Override

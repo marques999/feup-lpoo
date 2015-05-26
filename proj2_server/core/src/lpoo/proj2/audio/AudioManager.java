@@ -25,7 +25,9 @@ public class AudioManager
 		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_main.ogg")),
 		Gdx.audio.newMusic(Gdx.files.internal("audio/daisukiss.ogg")),
 		Gdx.audio.newMusic(Gdx.files.internal("audio/gangnam.ogg")),
-		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_splash.ogg")) 
+		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_splash.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_select.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_credits.ogg")),
 	};
 
 	private Music currentSong = null;
@@ -77,7 +79,14 @@ public class AudioManager
 	{
 		if (currentSongName == songName)
 		{
-			currentSong.setVolume(musicVolume);
+			if (currentSong.isPlaying())
+			{
+				currentSong.setVolume(musicVolume);
+			}
+			else
+			{
+				currentSong.play();
+			}
 		}
 		else
 		{
@@ -96,6 +105,12 @@ public class AudioManager
 				break;
 			case THEME_GAME_OVER:
 				currentSong = playlist[3];
+				break;
+			case THEME_SELECT:
+				currentSong = playlist[4];
+				break;
+			case THEME_CREDITS:
+				currentSong = playlist[5];
 				break;
 			case THEME_NONE:
 				currentSong.stop();
@@ -144,7 +159,7 @@ public class AudioManager
 		}
 	}
 
-	public final void playSound(final SFX soundName)
+	public final void playSound(SFX soundName)
 	{
 		switch (soundName)
 		{
@@ -154,11 +169,17 @@ public class AudioManager
 		case MENU_SELECT:
 			sfx[1].play(sfxVolume);
 			break;
-		case SFX_PUCK_HIT:
+		case SFX_GOAL:
 			sfx[2].play(sfxVolume);
 			break;
-		case SFX_GOAL:
+		case SFX_PAUSE:
 			sfx[3].play(sfxVolume);
+			break;
+		case SFX_PUCK_HIT:
+			sfx[4].play(sfxVolume);
+			break;
+		case SFX_PUCK_PLACE:
+			sfx[5].play(sfxVolume);
 			break;
 		}
 	}

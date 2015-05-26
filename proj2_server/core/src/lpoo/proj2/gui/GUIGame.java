@@ -5,7 +5,6 @@ import lpoo.proj2.audio.Song;
 import lpoo.proj2.audio.Special;
 import lpoo.proj2.logic.Entity;
 import lpoo.proj2.logic.EntityFactory;
-import lpoo.proj2.logic.Paddle;
 import lpoo.proj2.logic.Puck;
 
 import com.badlogic.gdx.Gdx;

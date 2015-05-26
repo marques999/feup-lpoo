@@ -10,6 +10,8 @@ public class Puck extends Entity implements DynamicEntity
 	public Puck(float x, float y, Color color)
 	{
 		super(x, y);
+		
+		Sprite sprite;
 
 		if (color == Color.GREEN)
 		{
@@ -30,6 +32,7 @@ public class Puck extends Entity implements DynamicEntity
 
 		sprite.setCenter(x, y);
 		sprite.setScale(0.5f, 0.5f);
+		setSprite(sprite);
 	}
 
 	@Override

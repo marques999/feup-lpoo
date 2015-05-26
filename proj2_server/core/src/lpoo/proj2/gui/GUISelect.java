@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,52 +19,43 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class GUICredits extends GUIScreen
+public class GUISelect extends GUIScreen
 {
 	private Stage stage = new Stage();
 	private Table table = new Table();
-	private Texture _bg = new Texture(Gdx.files.internal("menu/bg_credits.png"));
-	private TextureAtlas _buttons = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
-	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), _buttons);
+	private Texture background = new Texture(Gdx.files.internal("menu/bg_select.png"));
+	private TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
+	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
 	
-	private LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
-	private LabelStyle styleGradientLabel = new LabelStyle(skin.get("gradientLabel", LabelStyle.class));
-	private LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
-	private Label lblPhysics = new Label("Physics", styleGradientLabel);
-	private Label lblMusic = new Label("Music", styleGradientLabel);
-	private Label lblMarkMothersbaugh = new Label("Mark Mothersbaugh", styleSmallLabel);
-	private Label lblCrashBandicoot = new Label("Crash Bandicoot 3: Warped", styleSmallLabel);
-	private Label lblWarpRoom = new Label("Warp Room", styleSmallLabel);
-	private Label lblDiogoMarques = new Label("Diogo Marques", styleSmallLabel);
-	private Label lblPedroMelo = new Label("Pedro Melo", styleSmallLabel);
-	private Label lblTaito = new Label("Taito", styleSmallLabel);
-	private Label lblChaseHQ = new Label("Chase H.Q.", styleSmallLabel);
-	private Label lblRoundStart = new Label("Round Start (X68000)", styleSmallLabel);
-	private Label lblTitle = new Label("Credits", styleDefaultLabel);
+	private LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
+	private Label lblTitle = new Label("Multiplayer", styleTitleLabel);
 	
 	private TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
+	private TextButton btnMode1 = new TextButton("BEST OF 5", styleButton);
+	private TextButton btnMode2 = new TextButton("BEST OF 10", styleButton);
+	private TextButton btnMode3 = new TextButton("FIRST TO 20", styleButton);
+	private TextButton btnMode4 = new TextButton("PUCK ATTACK", styleButton);
 	private TextButton btnBack = new TextButton("< BACK", styleButton);
 
-	public GUICredits(AirHockey parent)
+	public GUISelect(AirHockey parent)
 	{
 		super(parent);
 
-		table.add(lblTitle).padBottom(32).row();
-		table.add(lblMusic).padBottom(16).row();
-		table.add(lblWarpRoom).padBottom(8).row();
-		table.add(lblMarkMothersbaugh).padBottom(8).row();
-		table.add(lblCrashBandicoot).padBottom(32).row();
-		table.add(lblRoundStart).padBottom(8).row();
-		table.add(lblTaito).padBottom(8).row();
-		table.add(lblChaseHQ).padBottom(32).row();
-		table.add(lblPhysics).padBottom(16).row();
-		table.add(lblDiogoMarques).padBottom(8).row();
-		table.add(lblPedroMelo).padBottom(16).row();
+		table.add(lblTitle).padBottom(64).row();
+		table.defaults().size(216, 49).padBottom(16);
+		table.add(btnMode1).row();
+		table.add(btnMode2).row();
+		table.add(btnMode3).row();
+		table.add(btnMode4).row();
 		table.setFillParent(true);
 		stage.addActor(table);
-		btnBack.setPosition(48, 30);
+		btnBack.setPosition(36, 32);
 		stage.addActor(btnBack);
-		bgmusic = Song.THEME_CREDITS;
+		bgmusic = Song.THEME_SELECT;
+		btnMode1.addListener(new MenuListener(0, SFX.MENU_SELECT, SFX.MENU_CLICK));
+		btnMode2.addListener(new MenuListener(0, SFX.MENU_SELECT, SFX.MENU_CLICK));
+		btnMode3.addListener(new MenuListener(2, SFX.MENU_SELECT, SFX.MENU_CLICK));
+		btnMode4.addListener(new MenuListener(2, SFX.MENU_SELECT, SFX.MENU_CLICK));
 		btnBack.addListener(new MenuListener(1, SFX.MENU_SELECT, SFX.MENU_CLICK));
 	}
 
@@ -77,7 +67,7 @@ public class GUICredits extends GUIScreen
 		
 		stage.act();
 		batch.begin();
-		batch.draw(_bg, 0, 0, 480, 800);
+		batch.draw(background, 0, 0, 480, 800);
 		batch.end();
 		stage.draw();
 	}
@@ -118,9 +108,6 @@ public class GUICredits extends GUIScreen
 	public void show()
 	{
 		Gdx.input.setInputProcessor(stage);
-		table.getActions().clear();
-		table.setPosition(0.0f, 0.0f);
-		table.addAction(Actions.moveBy(0.0f, 800.0f, 12));
 	}
 
 	@Override
