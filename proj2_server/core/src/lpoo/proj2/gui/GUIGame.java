@@ -1,12 +1,15 @@
 package lpoo.proj2.gui;
 
+import java.util.ArrayList;
+
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
 import lpoo.proj2.audio.Special;
-import lpoo.proj2.logic.Entity;
 import lpoo.proj2.logic.EntityFactory;
+import lpoo.proj2.logic.Paddle;
 import lpoo.proj2.logic.Puck;
+import lpoo.proj2.logic.Wall;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -25,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GUIGame extends GUIScreen
 {
@@ -55,11 +59,9 @@ public class GUIGame extends GUIScreen
 		gravity = new Vector2(0.0f, 0.0f);
 		world = new World(gravity, true);
 		factory = new EntityFactory(world);
-		pPuck = factory.createPuck(Color.RED);
-		p1Paddle = factory.createP1Paddle(Color.GREEN);
-		p2Paddle = factory.createP2Paddle(Color.YELLOW);
-		bgmusic = Song.THEME_B;
-		
+		bgmusic = Song.THEME_NONE;
+		walls = new ArrayList<Wall>();
+	
 		tablePaused.setFillParent(true);
 		tablePaused.defaults().padBottom(16);
 		tablePaused.add(lblPaused).row();
@@ -119,17 +121,23 @@ public class GUIGame extends GUIScreen
 				audio.playSound(SFX.MENU_SELECT);
 			}
 		});
+		
+		walls.add(new Wall(0, 0, 32, Gdx.graphics.getHeight() / 2, Color.RED));
+		walls.add(new Wall(0, Gdx.graphics.getHeight() / 2, 32, Gdx.graphics.getHeight() / 2, Color.BLUE));
+		walls.add(new Wall(Gdx.graphics.getWidth() - 32, 0, 32, Gdx.graphics.getHeight() / 2, Color.RED));
+		walls.add(new Wall(Gdx.graphics.getWidth() - 32,  Gdx.graphics.getHeight() / 2, 32, Gdx.graphics.getHeight() / 2, Color.BLUE));
 	}
 
-	private final Entity p1Paddle;
-	private final Entity p2Paddle;
-	private final Puck pPuck;
+	private Paddle p1Paddle;
+	private Paddle p2Paddle;
+	private Puck pPuck;
+	private ArrayList<Wall> walls;
 	private final ScoreListener sl = new ScoreListener();
 	
 	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-	private final Stage stagePause = new Stage();
-	private final Stage stageConfirm = new Stage();
+	private final Stage stagePause = new Stage(new FitViewport(480,800));
+	private final Stage stageConfirm = new Stage(new FitViewport(480,800));
 	private final Table tableExit = new Table();
 	private final Table tablePaused = new Table();
 	
@@ -237,23 +245,52 @@ public class GUIGame extends GUIScreen
 		Gdx.gl.glClearColor(0.420f, 0.533f, 1.000f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		batch.begin();
-		
+		switch (state)
+		{
+		case RUNNING:
+			p1Paddle.update(delta);
+			pPuck.update(delta);
+			p1Paddle.collides(p2Paddle);
+			pPuck.collides(p1Paddle);
+			pPuck.collides(p2Paddle);
+			
+			for (Wall wall : walls)
+			{
+				if (pPuck.collides(wall))
+				{
+					audio.playSound(SFX.SFX_PUCK_HIT);
+				}
+			}
+			
+			break;
+		case PAUSED:
+			stagePause.act();
+			break;
+		case EXIT:
+			stageConfirm.act();
+			break;
 
-			p1Paddle.draw(batch);
-			pPuck.draw(batch);
-			p2Paddle.draw(batch);
+		}
+		
+		batch.begin();
 		
 		if (state == State.PAUSED)
 		{
-			stagePause.act();
 			stagePause.draw();
 		}
 		else if (state == State.EXIT)
 		{
-			stageConfirm.act();
 			stageConfirm.draw();
 		}
+				
+		p1Paddle.draw(batch);
+		p2Paddle.draw(batch);
+	
+		for (Wall wall : walls)
+		{
+			wall.draw(batch);
+		}
+		pPuck.draw(batch);
 
 		batch.end();
 	}
@@ -319,6 +356,9 @@ public class GUIGame extends GUIScreen
 	public void show()
 	{
 		state = State.RUNNING;
+		pPuck = factory.createPuck(Color.RED);
+		p1Paddle = factory.createP1Paddle(Color.RED);
+		p2Paddle = factory.createP2Paddle(Color.BLUE);
 		Gdx.input.setInputProcessor(this);
 	}
 

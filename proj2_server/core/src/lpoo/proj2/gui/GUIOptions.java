@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GUIOptions extends GUIScreen
 {
@@ -235,7 +236,7 @@ public class GUIOptions extends GUIScreen
 		});
 	}
 
-	private final Stage stage = new Stage();
+	private final Stage stage = new Stage(new FitViewport(480,800));
 
 	@Override
 	public void render(final float delta)

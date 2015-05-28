@@ -1,16 +1,9 @@
 package lpoo.proj2.logic;
 
-public class Goal extends Entity
+public class Goal extends StaticEntity
 {
 	protected Goal(float x, float y, float width, float height)
 	{
 		super(x, y);
-		setSize(width, height);
-	}
-
-	@Override
-	public boolean move(float x, float y)
-	{
-		return false;
 	}
 }

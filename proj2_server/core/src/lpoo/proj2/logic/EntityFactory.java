@@ -27,7 +27,7 @@ public class EntityFactory
 		FixtureDef fixtureDef = new FixtureDef();
 		
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.position.set(puck.x, puck.y);
+		bodyDef.position.set(puck.getX(), puck.getY());
 		shape.setRadius(0.50f);
 		fixtureDef.shape = shape;
 		fixtureDef.density = 1;
@@ -43,10 +43,10 @@ public class EntityFactory
 		return puck;
 	}
 	
-	private Entity createPaddle(float x, float y, Color color)
+	private Paddle createPaddle(float x, float y, Color color)
 	{
 		CircleShape shape = new CircleShape();
-		Entity paddle = new Paddle(x, y, color);
+		Paddle paddle = new Paddle(x, y, color);
 		BodyDef bodyDef = new BodyDef();
 		FixtureDef fixtureDef = new FixtureDef();
 		
@@ -101,12 +101,12 @@ public class EntityFactory
 		return createGoal(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight());
 	}
 	
-	public Entity createP1Paddle(Color color)
+	public Paddle createP1Paddle(Color color)
 	{
 		return createPaddle(Gdx.graphics.getWidth() / 2, 64, color);
 	}
 	
-	public Entity createP2Paddle(Color color)
+	public Paddle createP2Paddle(Color color)
 	{
 		return createPaddle(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 64, color);
 	}

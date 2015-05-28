@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GUIMainMenu extends GUIScreen
 {
-	private Stage stage = new Stage();
+	private Stage stage = new Stage(new FitViewport(480,800));
 	private Table table = new Table();
 	private Texture texture = new Texture(Gdx.files.internal("menu/bg.png"));
 	private TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));

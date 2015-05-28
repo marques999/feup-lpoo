@@ -3,6 +3,7 @@ package lpoo.proj2.logic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -10,12 +11,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public abstract class Entity
 {
-	protected float x;
-	protected float y;
-	protected float xMin;
-	protected float yMin;
-	protected float xMax;
-	protected float yMax;
+	protected Vector2 pos;
+	protected Vector2 old;
+	protected Bounds bounds;
 	private Sprite sprite;
 	protected Body body;
 	protected BodyDef bodyDef;
@@ -26,24 +24,41 @@ public abstract class Entity
 
 	public Entity(float x, float y)
 	{
-		this.x = x;
-		this.y = y;
+		this(x, y, 0.0f, 0.0f);
+	}
+	
+	public Entity(float x, float y, float w, float h)
+	{
+		bounds = new Bounds(0.0f, 0.0f, 0.0f, 0.0f);
+		width = w;
+		height = h;
+		pos = new Vector2(x, y);
+		old = new Vector2(x, y);
 	}
 
 	public final float getX()
 	{
-		return this.x;
+		return pos.x;
 	}
 
 	public final float getY()
 	{
-		return this.y;
+		return pos.y;
+	}
+	
+	public void setX(float x)
+	{
+		pos.x = x;
+	}
+	
+	public void setY(float y)
+	{
+		pos.y = y;
 	}
 
 	protected void setPosition(final float x, final float y)
 	{
-		this.x = x;
-		this.y = y;
+		pos.set(x, y);
 	}
 	
 	protected void setBody(Body body, BodyDef bodyDef)
@@ -65,36 +80,34 @@ public abstract class Entity
 
 	public final float getWidth()
 	{
-		return this.width;
+		return width;
 	}
 
 	public final float getHeight()
 	{
-		return this.height;
+		return height;
 	}
 
 	public final Sprite getSprite()
 	{
-		return this.sprite;
+		return sprite;
 	}
 
 	protected void setSprite(final Sprite sprite)
 	{
 		this.sprite = sprite;
-		this.sprite.setCenter(x, y);
+		this.sprite.setCenter(pos.x, pos.y);
 		this.width = sprite.getWidth() * sprite.getScaleX();
 		this.height = sprite.getHeight() * sprite.getScaleY();
-		this.xMin = this.width / 2;
-		this.yMin = this.height / 2;
-		this.xMax = Gdx.graphics.getWidth() - this.xMin;
-		this.yMax = Gdx.graphics.getHeight() - this.yMin;
+		this.bounds.minX = this.width / 2;
+		this.bounds.minY = this.height / 2;
+		this.bounds.maxX = Gdx.graphics.getWidth() - this.bounds.minX;
+		this.bounds.maxY = Gdx.graphics.getHeight() - this.bounds.minY;
 	}
 
 	public void draw(SpriteBatch sb)
 	{
-		sprite.setCenter(x, y);
+		sprite.setCenter(pos.x, pos.y);
 		sprite.draw(sb);
 	}
-
-	public abstract boolean move(float x, float y);
 }
