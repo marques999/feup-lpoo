@@ -9,6 +9,7 @@ import lpoo.proj2.audio.Special;
 import lpoo.proj2.logic.EntityFactory;
 import lpoo.proj2.logic.Paddle;
 import lpoo.proj2.logic.Puck;
+import lpoo.proj2.logic.GameRules;
 import lpoo.proj2.logic.Wall;
 
 import com.badlogic.gdx.Gdx;
@@ -16,8 +17,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -28,12 +27,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GUIGame extends GUIScreen
 {
-	private final World world;
-	private final Vector2 gravity;
 	private final EntityFactory factory;
 	
 	private enum State
@@ -56,9 +52,7 @@ public class GUIGame extends GUIScreen
 		super(parent);
 
 		state = State.RUNNING;
-		gravity = new Vector2(0.0f, 0.0f);
-		world = new World(gravity, true);
-		factory = new EntityFactory(world);
+		factory = new EntityFactory();
 		bgmusic = Song.THEME_NONE;
 		walls = new ArrayList<Wall>();
 	
@@ -136,8 +130,8 @@ public class GUIGame extends GUIScreen
 	
 	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-	private final Stage stagePause = new Stage(new FitViewport(480,800));
-	private final Stage stageConfirm = new Stage(new FitViewport(480,800));
+	private final Stage stagePause = new Stage();
+	private final Stage stageConfirm = new Stage();
 	private final Table tableExit = new Table();
 	private final Table tablePaused = new Table();
 	
@@ -174,9 +168,7 @@ public class GUIGame extends GUIScreen
 			} 
 			else
 			{
-				final int highestStreak = Math.max(p1Streak, p2Streak);
-
-				switch (highestStreak)
+				switch (Math.max(p1Streak, p2Streak))
 				{
 				case 2:
 					audio.playSpecial(Special.QUAKE_DOUBLEKILL);
@@ -311,7 +303,6 @@ public class GUIGame extends GUIScreen
 	@Override
 	public boolean keyUp(final int mKeycode)
 	{
-
 		return false;
 	}
 

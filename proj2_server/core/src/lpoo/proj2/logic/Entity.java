@@ -26,7 +26,7 @@ public abstract class Entity
 	{
 		this(x, y, 0.0f, 0.0f);
 	}
-	
+
 	public Entity(float x, float y, float w, float h)
 	{
 		bounds = new Bounds(0.0f, 0.0f, 0.0f, 0.0f);
@@ -45,12 +45,12 @@ public abstract class Entity
 	{
 		return pos.y;
 	}
-	
+
 	public void setX(float x)
 	{
 		pos.x = x;
 	}
-	
+
 	public void setY(float y)
 	{
 		pos.y = y;
@@ -60,13 +60,13 @@ public abstract class Entity
 	{
 		pos.set(x, y);
 	}
-	
+
 	protected void setBody(Body body, BodyDef bodyDef)
 	{
 		this.body = body;
 		this.bodyDef = bodyDef;
 	}
-	
+
 	protected void setFixture(Fixture fixture)
 	{
 		this.fixture = fixture;

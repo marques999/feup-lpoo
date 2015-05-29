@@ -18,11 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GUIMainMenu extends GUIScreen
 {
-	private Stage stage = new Stage(new FitViewport(480,800));
+	private Stage stage = new Stage();
 	private Table table = new Table();
 	private Texture texture = new Texture(Gdx.files.internal("menu/bg.png"));
 	private TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));

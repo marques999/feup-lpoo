@@ -18,11 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GUISelect extends GUIScreen
 {
-	private Stage stage = new Stage(new FitViewport(480,800));
+	private Stage stage = new Stage();
 	private Table table = new Table();
 	private Texture background = new Texture(Gdx.files.internal("menu/bg_select.png"));
 	private TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
@@ -34,7 +33,7 @@ public class GUISelect extends GUIScreen
 	private TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
 	private TextButton btnMode1 = new TextButton("BEST OF 5", styleButton);
 	private TextButton btnMode2 = new TextButton("BEST OF 10", styleButton);
-	private TextButton btnMode3 = new TextButton("FIRST TO 20", styleButton);
+	private TextButton btnMode3 = new TextButton("FIRST TO 15", styleButton);
 	private TextButton btnMode4 = new TextButton("PUCK ATTACK", styleButton);
 	private TextButton btnBack = new TextButton("< BACK", styleButton);
 

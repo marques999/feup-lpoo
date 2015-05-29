@@ -4,6 +4,6 @@ public class Goal extends StaticEntity
 {
 	protected Goal(float x, float y, float width, float height)
 	{
-		super(x, y);
+		super(x, y, width, height);
 	}
 }
