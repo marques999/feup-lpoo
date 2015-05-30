@@ -1,13 +1,8 @@
 package lpoo.proj2.logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-
 import java.util.ArrayList;
-
 import lpoo.proj2.audio.AudioManager;
 import lpoo.proj2.audio.SFX;
 
@@ -20,59 +15,91 @@ public class GameBoard
 	private Goal p1Goal;
 	private Goal p2Goal;
 	private EntityFactory factory;
-	private Puck puck;
+	private Player players[];
+	private ArrayList<Puck> pucks = new ArrayList<Puck>();
 	private ArrayList<Wall> walls = new ArrayList<Wall>();
 	protected boolean multiplayer = false;
 
-	public GameBoard()
+	public GameBoard(Player[] players, GameRules rules)
 	{
-		audio = AudioManager.getInstance();
-		factory = new EntityFactory();
-		initialize();
+		this.rules = rules;
+		this.players = players;
+		this.audio = AudioManager.getInstance();
+		this.factory = new EntityFactory();
+		this.initialize();
 	}
-	
+
 	private void initialize()
 	{
-		rules = new RulesBest5();
-		puck = factory.createPuck(Color.RED);
-		p1Paddle = factory.createP1Paddle(Color.RED);
-		p2Paddle = factory.createP2Paddle(Color.BLUE);
+		if (rules instanceof RulesAttack)
+		{
+			for (int i = 0; i < rules.numberPucks(); i++)
+			{
+				pucks.add(factory.createRandomPuck(Color.RED));
+			}
+		}
+		else
+		{
+			pucks.add(factory.createSinglePuck(Color.RED));
+		}
+
+		walls.addAll(factory.createP1Walls(players[0].getColor()));
+		walls.addAll(factory.createP2Walls(players[1].getColor()));
+		p1Paddle = factory.createP1Paddle(players[0].getColor());
+		p2Paddle = factory.createP2Paddle(players[1].getColor());
 		p1Goal = factory.createP1Goal();
 		p2Goal = factory.createP2Goal();
-		walls = new ArrayList<Wall>();
-		walls.add(new Wall(0, 0, 32, Gdx.graphics.getHeight() / 2, Color.RED));
-		walls.add(new Wall(0, Gdx.graphics.getHeight() / 2, 32, Gdx.graphics.getHeight() / 2, Color.BLUE));
-		walls.add(new Wall(Gdx.graphics.getWidth() - 32, 0, 32, Gdx.graphics.getHeight() / 2, Color.RED));
-		walls.add(new Wall(Gdx.graphics.getWidth() - 32,  Gdx.graphics.getHeight() / 2, 32, Gdx.graphics.getHeight() / 2, Color.BLUE));
 	}
 
 	public void update(float delta)
 	{
 		p1Paddle.update(delta);
-		puck.update(delta);
+
+		for (Puck puck : pucks)
+		{
+			puck.update(delta);
+			puck.collides(p1Paddle);
+			puck.collides(p2Paddle);
+		}
+
 		p1Paddle.collides(p2Paddle);
-		puck.collides(p1Paddle);
-		puck.collides(p2Paddle);
-		
+
 		for (Wall wall : walls)
 		{
-			if (puck.collides(wall))
+			for (Puck puck : pucks)
 			{
-				audio.playSound(SFX.SFX_PUCK_HIT);
+				if (puck.collides(wall))
+				{
+					audio.playSound(SFX.SFX_PUCK_HIT);
+				}
 			}
 		}
 	}
-	
+
+	public void movePaddle(int paddleId, float x, float y)
+	{
+		p1Paddle.move(x, y);
+
+		if (paddleId == 0)
+		{
+			rules.p1Score();
+		}
+	}
+
 	public void draw(SpriteBatch sb)
 	{
 		p1Paddle.draw(sb);
 		p2Paddle.draw(sb);
-	
+		p1Goal.draw(sb);
+		p2Goal.draw(sb);
 		for (Wall wall : walls)
 		{
 			wall.draw(sb);
 		}
-		
-		puck.draw(sb);
+
+		for (Puck puck : pucks)
+		{
+			puck.draw(sb);
+		}
 	}
 }

@@ -6,13 +6,18 @@ import lpoo.proj2.audio.Special;
 public abstract class GameRules
 {
 	protected Player players[];
+	private boolean p1FirstBlood;
+	private boolean p2FirstBlood;
 	private ScoreThread runner;
 	private AudioManager audio;
 
-	public GameRules()
+	public GameRules(Player[] players)
 	{
-		players = new Player[2];
-		audio = AudioManager.getInstance();
+		this.players = players;
+		this.p1FirstBlood = false;
+		this.p2FirstBlood = false;
+		this.runner = new ScoreThread();
+		this.audio = AudioManager.getInstance();
 	}
 
 	private class ScoreThread implements Runnable
@@ -20,13 +25,15 @@ public abstract class GameRules
 		@Override
 		public void run()
 		{
-			if (players[0].firstBlood())
+			if (p1FirstBlood)
 			{
 				audio.playSpecial(Special.QUAKE_FIRSTBLOOD);
+				p1FirstBlood = false;
 			}
-			else if (players[1].firstBlood())
+			else if (p2FirstBlood)
 			{
 				audio.playSpecial(Special.QUAKE_FIRSTBLOOD);
+				p2FirstBlood = false;
 			}
 			else
 			{
@@ -57,19 +64,35 @@ public abstract class GameRules
 
 	public void p1Score()
 	{
+		if (players[0].getScore() == 0 && players[1].getScore() == 0)
+		{
+			p1FirstBlood = true;
+		}
+
 		players[0].score();
 		players[1].resetStreak();
+
 		new Thread(runner).start();
 	}
 
 	public void p2Goal()
 	{
+		if (players[0].getScore() == 0 && players[1].getScore() == 0)
+		{
+			p2FirstBlood = true;
+		}
+
 		players[1].score();
 		players[0].resetStreak();
+
 		new Thread(runner).start();
 	}
 
+	public abstract int numberPucks();
+
 	public abstract boolean checkOver();
+
 	public abstract boolean checkLast();
+
 	public abstract boolean checkTie();
 }

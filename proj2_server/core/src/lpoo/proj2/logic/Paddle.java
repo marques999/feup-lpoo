@@ -24,23 +24,19 @@ public class Paddle extends DynamicEntity
 
 		if (color == Color.GREEN)
 		{
-			sprite = new Sprite(new Texture(
-					Gdx.files.internal("gfx/paddle_green.png")));
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_green.png")));
 		}
 		else if (color == Color.BLUE)
 		{
-			sprite = new Sprite(new Texture(
-					Gdx.files.internal("gfx/paddle_blue.png")));
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_blue.png")));
 		}
 		else if (color == Color.YELLOW)
 		{
-			sprite = new Sprite(new Texture(
-					Gdx.files.internal("gfx/paddle_yellow.png")));
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_yellow.png")));
 		}
 		else
 		{
-			sprite = new Sprite(new Texture(
-					Gdx.files.internal("gfx/paddle_red.png")));
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_red.png")));
 		}
 
 		setSprite(sprite);
@@ -79,7 +75,6 @@ public class Paddle extends DynamicEntity
 
 		old.x = getX();
 		old.y = getY();
-
 	}
 
 	@Override
@@ -106,6 +101,7 @@ public class Paddle extends DynamicEntity
 		{
 			return Intersector.overlaps(bounding, puck.bounding);
 		}
+
 		return false;
 	}
 
@@ -119,6 +115,7 @@ public class Paddle extends DynamicEntity
 		{
 			return Intersector.overlaps(bounding, wall.bounding);
 		}
+
 		return false;
 	}
 }

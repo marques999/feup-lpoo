@@ -11,7 +11,6 @@ public class DesktopLauncher
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 480;
 		config.height = 800;
-		config.vSyncEnabled = true;
 		config.fullscreen = false;
 		new LwjglApplication(new AirHockey(), config);
 	}

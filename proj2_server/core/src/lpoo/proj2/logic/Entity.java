@@ -4,10 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public abstract class Entity
 {
@@ -15,10 +11,6 @@ public abstract class Entity
 	protected Vector2 old;
 	protected Bounds bounds;
 	private Sprite sprite;
-	protected Body body;
-	protected BodyDef bodyDef;
-	protected Fixture fixture;
-	protected FixtureDef fixtureDef;
 	private float width;
 	private float height;
 
@@ -59,17 +51,6 @@ public abstract class Entity
 	protected void setPosition(final float x, final float y)
 	{
 		pos.set(x, y);
-	}
-
-	protected void setBody(Body body, BodyDef bodyDef)
-	{
-		this.body = body;
-		this.bodyDef = bodyDef;
-	}
-
-	protected void setFixture(Fixture fixture)
-	{
-		this.fixture = fixture;
 	}
 
 	protected void setSize(final float width, final float height)

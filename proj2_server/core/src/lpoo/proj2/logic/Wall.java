@@ -9,13 +9,14 @@ public class Wall extends StaticEntity
 {
 	private ShapeRenderer shape;
 	private Color color;
+
 	public Wall(float x, float y, int width, int height, Color color)
 	{
 		super(x, y, width, height);
 		this.color = color;
 		this.shape = new ShapeRenderer();
 	}
-	
+
 	@Override
 	public void draw(SpriteBatch sb)
 	{

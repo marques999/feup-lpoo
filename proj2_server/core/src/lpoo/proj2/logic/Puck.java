@@ -1,5 +1,6 @@
 package lpoo.proj2.logic;
 
+import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,7 @@ public class Puck extends DynamicEntity
 	private Vector2 acceleration;
 	private ShapeRenderer circle;
 	private Color color;
+	private Random rand = new Random();
 
 	public Puck(float x, float y, Color color)
 	{
@@ -25,35 +27,22 @@ public class Puck extends DynamicEntity
 
 		if (color == Color.GREEN)
 		{
-			sprite = new Sprite(new Texture(
-					Gdx.files.internal("gfx/ball_green.png")));
-		}
-		else if (color == Color.BLUE)
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_green.png")));
+		} else if (color == Color.BLUE)
 		{
-			sprite = new Sprite(new Texture(
-					Gdx.files.internal("gfx/ball_blue.png")));
-		}
-		else if (color == Color.YELLOW)
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_blue.png")));
+		} else if (color == Color.YELLOW)
 		{
-			sprite = new Sprite(new Texture(
-					Gdx.files.internal("gfx/ball_yellow.png")));
-		}
-		else
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_yellow.png")));
+		} else
 		{
-			sprite = new Sprite(new Texture(
-					Gdx.files.internal("gfx/ball_red.png")));
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_red.png")));
 		}
 		velocity = new Vector2(-128, -128);
 		circle = new ShapeRenderer();
-		acceleration = new Vector2(-64, -64);
+		acceleration = new Vector2(rand.nextInt() % 50, rand.nextInt() % 50);
 		setSprite(sprite);
 		bounding.setRadius(getWidth() / 2);
-	}
-
-	@Override
-	public void setPosition(final float posX, final float posY)
-	{
-		bodyDef.position.set(posX, posY);
 	}
 
 	public void update(float delta)

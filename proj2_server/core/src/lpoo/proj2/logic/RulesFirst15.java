@@ -4,9 +4,9 @@ public class RulesFirst15 extends GameRules
 {
 	private final int NUMBER_POINTS = 15;
 	
-	public RulesFirst15(GameBoard board)
+	public RulesFirst15(Player[] players)
 	{
-		super(board);
+		super(players);
 	}
 
 	@Override
@@ -25,5 +25,11 @@ public class RulesFirst15 extends GameRules
 	public boolean checkTie()
 	{
 		return false;
+	}
+
+	@Override
+	public int numberPucks()
+	{
+		return 1;
 	}
 }

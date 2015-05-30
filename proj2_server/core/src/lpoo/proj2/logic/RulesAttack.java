@@ -2,28 +2,34 @@ package lpoo.proj2.logic;
 
 public class RulesAttack extends GameRules
 {
-	private GameBoard board;
-	private final int NUMBER_GOALS = 10;
+	private final int NUMBER_POINTS = 10;
 	
-	public RulesAttack(GameBoard board)
+	public RulesAttack(Player[] players)
 	{
+		super(players);
 	}
 	
 	@Override
 	public boolean checkOver()
 	{
-		return true; // number of pucks <= 0
+		return (players[0].getScore() + players[1].getScore() == NUMBER_POINTS);
 	}
 
 	@Override
 	public boolean checkLast()
 	{
-		return (players[0].getScore() + players[1].getScore() == NUMBER_GOALS - 1);
+		return (players[0].getScore() + players[1].getScore() == NUMBER_POINTS - 1);
 	}
 
 	@Override
 	public boolean checkTie()
 	{
-		return (players[0].getScore() == players[1].getScore() && players[0].getScore() == NUMBER_GOALS / 2);
+		return (players[0].getScore() == players[1].getScore() && players[0].getScore() == NUMBER_POINTS / 2);
+	}
+
+	@Override
+	public int numberPucks() 
+	{
+		return 10;
 	}
 }

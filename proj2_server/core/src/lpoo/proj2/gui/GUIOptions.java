@@ -4,7 +4,6 @@ import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
 import lpoo.proj2.audio.Special;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -30,11 +29,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GUIOptions extends GUIScreen
 {
-	private final String difficulty[] =
-	{
-		"Easy", "Medium", "Hard", "Insane"
-	};
-
+	private final String difficulty[] = { "Easy", "Medium", "Hard", "Insane" };
 	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private final ButtonGroup<TextButton> btnGroup = new ButtonGroup<TextButton>();
 	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
@@ -54,10 +49,10 @@ public class GUIOptions extends GUIScreen
 	private final SliderStyle styleDefaultSlider = new SliderStyle(skin.get("default-horizontal", SliderStyle.class));
 	private final Slider sliderMusicVolume = new Slider(0.0f, 1.0f, 0.1f, false, styleDefaultSlider);
 	private final Slider sliderSFXVolume = new Slider(0.0f, 1.0f, 0.1f, false, styleDefaultSlider);
-	
+
 	private final ImageButtonStyle stylePreviewButton = new ImageButtonStyle(skin.get("default", ImageButtonStyle.class));
 	private final ImageButton btnPreview = new ImageButton(stylePreviewButton);
-	
+
 	private final TextButtonStyle styleDefaultButton = new TextButtonStyle(skin.get("default", TextButtonStyle.class));
 	private final TextButtonStyle styleMenuButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
 	private final TextButtonStyle styleToggleButton = new TextButtonStyle(skin.get("toggle", TextButtonStyle.class));
@@ -70,7 +65,7 @@ public class GUIOptions extends GUIScreen
 	private int oldDifficulty = parent.getDifficulty();
 	private float oldMusicVolume;
 	private float oldSFXVolume;
-	
+
 	public GUIOptions(final AirHockey parent)
 	{
 		super(parent);
@@ -108,7 +103,7 @@ public class GUIOptions extends GUIScreen
 		stage.addActor(table);
 
 		bgmusic = Song.THEME_SPLASH;
-		
+
 		sliderSFXVolume.addListener(new ChangeListener()
 		{
 			@Override
@@ -154,7 +149,7 @@ public class GUIOptions extends GUIScreen
 				audio.playSound(SFX.MENU_CLICK);
 				audio.setMusicVolume(sliderMusicVolume.getValue());
 				audio.setSFXVolume(sliderSFXVolume.getValue());
-				
+
 				if (chkQuake.isChecked())
 				{
 					parent.enableQuake();
@@ -163,7 +158,7 @@ public class GUIOptions extends GUIScreen
 				{
 					parent.disableQuake();
 				}
-				
+
 				parent.setDifficulty(oldDifficulty);
 				parent.setTheme(btnThemeA.isChecked() ? 0 : 1);
 				parent.setMusicVolume(sliderMusicVolume.getValue());
@@ -197,7 +192,7 @@ public class GUIOptions extends GUIScreen
 				audio.playSound(SFX.MENU_CLICK);
 			}
 		});
-		
+
 		btnThemeB.addListener(new ClickListener()
 		{
 			@Override
@@ -206,7 +201,7 @@ public class GUIOptions extends GUIScreen
 				audio.playSound(SFX.MENU_CLICK);
 			}
 		});
-		
+
 		btnPreview.addListener(new ClickListener()
 		{
 			@Override
@@ -236,7 +231,7 @@ public class GUIOptions extends GUIScreen
 		});
 	}
 
-	private final Stage stage = new Stage(new FitViewport(480,800));
+	private final Stage stage = new Stage(new FitViewport(480, 800));
 
 	@Override
 	public void render(final float delta)
@@ -262,7 +257,7 @@ public class GUIOptions extends GUIScreen
 		sliderSFXVolume.setValue(parent.getSFXVolume());
 		sliderMusicVolume.setValue(parent.getMusicVolume());
 		chkQuake.setChecked(parent.isQuakeEnabled());
-		
+
 		if (parent.getTheme() == Song.THEME_A)
 		{
 			btnThemeA.setChecked(true);
@@ -273,7 +268,7 @@ public class GUIOptions extends GUIScreen
 			btnThemeA.setChecked(false);
 			btnThemeB.setChecked(true);
 		}
-		
+
 		oldMusicVolume = audio.getMusicVolume();
 		oldSFXVolume = audio.getSFXVolume();
 	}

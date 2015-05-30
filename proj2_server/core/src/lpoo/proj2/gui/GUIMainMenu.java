@@ -3,7 +3,6 @@ package lpoo.proj2.gui;
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,10 +25,10 @@ public class GUIMainMenu extends GUIScreen
 	private Texture texture = new Texture(Gdx.files.internal("menu/bg.png"));
 	private TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-	
+
 	private LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
 	private Label lblTitle = new Label("Air Hockey", styleTitleLabel);
-	
+
 	private TextButtonStyle styleMenuButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
 	private TextButton btnSingleplayer = new TextButton("Singleplayer", styleMenuButton);
 	private TextButton btnMultiplayer = new TextButton("Multiplayer", styleMenuButton);
@@ -51,7 +50,7 @@ public class GUIMainMenu extends GUIScreen
 		table.setFillParent(true);
 		stage.addActor(table);
 		bgmusic = Song.THEME_MAIN_MENU;
-		
+
 		btnSingleplayer.addListener(new ClickListener()
 		{
 			@Override
@@ -67,7 +66,7 @@ public class GUIMainMenu extends GUIScreen
 				audio.playSound(SFX.MENU_SELECT);
 			}
 		});
-		
+
 		btnMultiplayer.addListener(new ClickListener()
 		{
 			@Override
@@ -86,7 +85,7 @@ public class GUIMainMenu extends GUIScreen
 
 		btnPreferences.addListener(new MenuListener(2, SFX.MENU_SELECT, SFX.MENU_CLICK));
 		btnCredits.addListener(new MenuListener(4, SFX.MENU_SELECT, SFX.MENU_CLICK));
-		
+
 		btnExit.addListener(new ClickListener()
 		{
 			@Override
@@ -95,7 +94,7 @@ public class GUIMainMenu extends GUIScreen
 				audio.playSound(SFX.MENU_CLICK);
 				Gdx.app.exit();
 			}
-			
+
 			@Override
 			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
 			{
@@ -119,29 +118,29 @@ public class GUIMainMenu extends GUIScreen
 	@Override
 	public void resize(int width, int height)
 	{
-		  stage.getViewport().update(width, height);
+		stage.getViewport().update(width, height);
 	}
-	
+
 	private class MenuListener extends ClickListener
 	{
 		private int _id;
 		private SFX _hover;
 		private SFX _click;
-		
+
 		public MenuListener(int menuId, SFX sfxHover, SFX sfxClick)
 		{
 			_id = menuId;
 			_hover = sfxHover;
 			_click = sfxClick;
 		}
-		
+
 		@Override
 		public void clicked(InputEvent event, float x, float y)
 		{
 			audio.playSound(_click);
 			parent.switchTo(_id);
 		}
-		
+
 		@Override
 		public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 		{

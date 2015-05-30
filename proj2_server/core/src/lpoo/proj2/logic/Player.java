@@ -1,55 +1,56 @@
 package lpoo.proj2.logic;
 
+import com.badlogic.gdx.graphics.Color;
+
 public class Player
 {
+	private Color color;
 	private String name;
-	private boolean fb;
 	private int score;
 	private int streak;
 
-	public Player(String str)
+	public Player(String name, Color color)
 	{
-		name = str;
-		score = 0;
-		streak = 0;
-		fb = true;
+		this.name = name;
+		this.color = color;
+		this.score = 0;
+		this.streak = 0;
 	}
 
-	public boolean firstBlood()
+	public Color getColor()
 	{
-		return fb;
-	}
-
-	public int getScore()
-	{
-		return score;
-	}
-
-	public int getStreak()
-	{
-		return streak;
+		return this.color;
 	}
 
 	public String getName()
 	{
-		return name;
+		return this.name;
+	}
+
+	public int getScore()
+	{
+		return this.score;
+	}
+
+	public int getStreak()
+	{
+		return this.streak;
 	}
 
 	public void resetScore()
 	{
-		score = 0;
-		streak = 0;
-		fb = true;
+		this.score = 0;
+		this.streak = 0;
 	}
 
 	public void resetStreak()
 	{
-		streak = 0;
+		this.streak = 0;
 	}
 
 	public void score()
 	{
-		score++;
-		streak++;
+		this.score++;
+		this.streak++;
 	}
 }

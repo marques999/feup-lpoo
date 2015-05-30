@@ -3,7 +3,6 @@ package lpoo.proj2.gui;
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,7 +26,7 @@ public class GUICredits extends GUIScreen
 	private Texture _bg = new Texture(Gdx.files.internal("menu/bg_credits.png"));
 	private TextureAtlas _buttons = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), _buttons);
-	
+
 	private LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
 	private LabelStyle styleGradientLabel = new LabelStyle(skin.get("gradientLabel", LabelStyle.class));
 	private LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
@@ -42,7 +41,7 @@ public class GUICredits extends GUIScreen
 	private Label lblChaseHQ = new Label("Chase H.Q.", styleSmallLabel);
 	private Label lblRoundStart = new Label("Round Start (X68000)", styleSmallLabel);
 	private Label lblTitle = new Label("Credits", styleDefaultLabel);
-	
+
 	private TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
 	private TextButton btnBack = new TextButton("< BACK", styleButton);
 
@@ -84,29 +83,29 @@ public class GUICredits extends GUIScreen
 	@Override
 	public void resize(int width, int height)
 	{
-		 stage.getViewport().update(width, height);
+		stage.getViewport().update(width, height);
 	}
-	
+
 	private class MenuListener extends ClickListener
 	{
 		private int _id;
 		private SFX _hover;
 		private SFX _click;
-		
+
 		public MenuListener(int menuId, SFX sfxHover, SFX sfxClick)
 		{
 			_id = menuId;
 			_hover = sfxHover;
 			_click = sfxClick;
 		}
-		
+
 		@Override
 		public void clicked(InputEvent event, float x, float y)
 		{
 			audio.playSound(_click);
 			parent.switchTo(_id);
 		}
-		
+
 		@Override
 		public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 		{

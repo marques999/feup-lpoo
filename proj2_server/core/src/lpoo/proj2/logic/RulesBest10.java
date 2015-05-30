@@ -4,9 +4,9 @@ public class RulesBest10 extends GameRules
 {
 	private final int NUMBER_ROUNDS = 10;
 	
-	public RulesBest10()
+	public RulesBest10(Player[] players)
 	{
-		super();
+		super(players);
 	}
 
 	@Override
@@ -25,5 +25,11 @@ public class RulesBest10 extends GameRules
 	public boolean checkTie()
 	{
 		return false;
+	}
+
+	@Override
+	public int numberPucks() 
+	{
+		return 1;
 	}
 }
