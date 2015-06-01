@@ -1,22 +1,17 @@
 package lpoo.proj2.logic;
 
-import java.util.Random;
 import lpoo.proj2.audio.AudioManager;
 import lpoo.proj2.audio.SFX;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 public class Puck extends DynamicEntity
 {
 	private Vector2 acceleration;
-	private ShapeRenderer circle = new ShapeRenderer();
 
 	public Puck(float x, float y, Color color)
 	{
@@ -141,15 +136,5 @@ public class Puck extends DynamicEntity
 		}
 		
 		return false;
-	}
-
-	@Override
-	public void draw(SpriteBatch sb)
-	{
-		circle.begin(ShapeType.Filled);
-		circle.setColor(getColor());
-		circle.circle(bounding.x, bounding.y, getRadius());
-		circle.end();
-
 	}
 }

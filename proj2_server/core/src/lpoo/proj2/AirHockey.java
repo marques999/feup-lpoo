@@ -22,6 +22,7 @@ public class AirHockey extends Game
 	private Stack<Integer> _stack;
 	private AudioManager _am;
 	private boolean _multiplayer = false;
+	private int _mode = 1;
 
 	public AirHockey()
 	{
@@ -42,6 +43,16 @@ public class AirHockey extends Game
 	{
 		_multiplayer = false;
 		switchTo(3);
+	}
+	
+	public int getMode()
+	{
+		return _mode;
+	}
+	
+	public void setMode(int mode)
+	{
+		_mode = mode;
 	}
 
 	private static Preferences preferences;

@@ -43,17 +43,17 @@ public class EntityFactory
 
 	private Goal createGoal(float x, float y)
 	{
-		return new Goal(x, y, (screenWidth - 64) / 2, 16);
+		return new Goal(x, y, (screenWidth - 100) / 2, 16);
 	}
 
 	public Goal createP1Goal()
 	{
-		return createGoal(screenWidth * 0.25f, 0);
+		return createGoal(screenWidth * 0.3f, 0);
 	}
 
 	public Goal createP2Goal()
 	{
-		return createGoal(screenWidth * 0.25f, screenHeight - 16);
+		return createGoal(screenWidth * 0.3f, screenHeight - 16);
 	}
 
 	public ArrayList<Wall> createP1Walls(Color color)

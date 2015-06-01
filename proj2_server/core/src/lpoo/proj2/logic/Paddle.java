@@ -6,16 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 public class Paddle extends DynamicEntity
 {
-	private ShapeRenderer circle;
-
 	protected Paddle(float x, float y, Color color)
 	{
 		super(x, y, color);
@@ -41,17 +36,7 @@ public class Paddle extends DynamicEntity
 
 		setSprite(sprite);
 		velocity = new Vector2(0, 0);
-		circle = new ShapeRenderer();
 		bounding.setRadius(getWidth() / 2);
-	}
-
-	@Override
-	public void draw(SpriteBatch sb)
-	{
-		circle.begin(ShapeType.Filled);
-		circle.setColor(getColor());
-		circle.circle(bounding.x, bounding.y, getRadius());
-		circle.end();
 	}
 
 	public void update(float delta)
@@ -105,6 +90,8 @@ public class Paddle extends DynamicEntity
 			{
 				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
 				puck.impulse(velocity.scl(1 / 16f));
+				setColliding(true);
+				return true;
 			}
 
 			setColliding(true);

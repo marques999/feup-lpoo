@@ -22,13 +22,12 @@ public class GUISelect extends GUIScreen
 {
 	private Stage stage = new Stage();
 	private Table table = new Table();
-	private Texture background = new Texture(Gdx.files.internal("menu/bg_select.png"));
+	private Texture overlay = new Texture(Gdx.files.internal("menu/bg_select.png"));
 	private TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
+	private TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_select2.png"), true);
 	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-
 	private LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
 	private Label lblTitle = new Label("Singleplayer", styleTitleLabel);
-
 	private TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
 	private TextButton btnMode1 = new TextButton("BEST OF 5", styleButton);
 	private TextButton btnMode2 = new TextButton("BEST OF 10", styleButton);
@@ -36,11 +35,40 @@ public class GUISelect extends GUIScreen
 	private TextButton btnMode4 = new TextButton("PUCK ATTACK", styleButton);
 	private TextButton btnBack = new TextButton("< BACK", styleButton);
 
+	private class MenuListener extends ClickListener
+	{
+		private final TextButton button;
+		private int mode;
+
+		public MenuListener(TextButton paramButton, int paramMode)
+		{
+			button = paramButton;
+			mode = paramMode;
+		}
+
+		@Override
+		public void clicked(InputEvent event, float x, float y)
+		{
+			audio.playSound(SFX.MENU_CLICK);
+			parent.setMode(mode);
+			parent.switchTo(0);
+		}
+
+		@Override
+		public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+		{
+			if (!button.isPressed())
+			{
+				audio.playSound(SFX.MENU_SELECT);
+			}
+		}
+	}
+
 	public GUISelect(final AirHockey parent)
 	{
 		super(parent, Song.THEME_SELECT);
 
-		table.add(lblTitle).padBottom(64).row();
+		table.add(lblTitle).padBottom(96).row();
 		table.defaults().size(216, 49).padBottom(16);
 		table.add(btnMode1).row();
 		table.add(btnMode2).row();
@@ -48,12 +76,12 @@ public class GUISelect extends GUIScreen
 		table.add(btnMode4).row();
 		table.setFillParent(true);
 		btnBack.setPosition(36, 32);
-		btnMode1.addListener(new MenuListener(0, 0, SFX.MENU_SELECT, SFX.MENU_CLICK));
-		btnMode2.addListener(new MenuListener(0, 1, SFX.MENU_SELECT, SFX.MENU_CLICK));
-		btnMode3.addListener(new MenuListener(0, 2, SFX.MENU_SELECT, SFX.MENU_CLICK));
-		btnMode4.addListener(new MenuListener(0, 3, SFX.MENU_SELECT, SFX.MENU_CLICK));
 		stage.addActor(table);
 		stage.addActor(btnBack);
+		btnMode1.addListener(new MenuListener(btnMode1, 0));
+		btnMode2.addListener(new MenuListener(btnMode2, 1));
+		btnMode3.addListener(new MenuListener(btnMode3, 2));
+		btnMode4.addListener(new MenuListener(btnMode4, 3));
 
 		btnBack.addListener(new ClickListener()
 		{
@@ -67,7 +95,10 @@ public class GUISelect extends GUIScreen
 			@Override
 			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
 			{
-				audio.playSound(SFX.MENU_SELECT);
+				if (!btnBack.isPressed())
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
 			}
 		});
 	}
@@ -77,9 +108,11 @@ public class GUISelect extends GUIScreen
 	{
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		bg.update(delta);
 		stage.act();
 		batch.begin();
-		batch.draw(background, 0, 0, 480, 800);
+		bg.render(batch);
+		batch.draw(overlay, 0, 0, overlay.getWidth(), overlay.getHeight());
 		batch.end();
 		stage.draw();
 	}
@@ -90,35 +123,6 @@ public class GUISelect extends GUIScreen
 		stage.getViewport().update(width, height);
 	}
 
-	private class MenuListener extends ClickListener
-	{
-		private int _id;
-		private int _mode;
-		private SFX _hover;
-		private SFX _click;
-
-		public MenuListener(int menuId, int modeId, SFX sfxHover, SFX sfxClick)
-		{
-			_id = menuId;
-			_mode = modeId;
-			_hover = sfxHover;
-			_click = sfxClick;
-		}
-
-		@Override
-		public void clicked(InputEvent event, float x, float y)
-		{
-			audio.playSound(_click);
-			parent.switchTo(_id);
-		}
-
-		@Override
-		public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
-		{
-			audio.playSound(_hover);
-		}
-	}
-
 	@Override
 	public void show()
 	{
@@ -127,28 +131,13 @@ public class GUISelect extends GUIScreen
 		if (parent.isMultiplayer())
 		{
 			lblTitle.setText("multiplayer");
-			btnMode4.setDisabled(false);
+			btnMode4.setVisible(true);
 		}
 		else
 		{
 			lblTitle.setText("singleplayer");
-			btnMode4.setDisabled(true);
+			btnMode4.setVisible(false);
 		}
-	}
-
-	@Override
-	public void hide()
-	{
-	}
-
-	@Override
-	public void pause()
-	{
-	}
-
-	@Override
-	public void resume()
-	{
 	}
 
 	@Override

@@ -22,13 +22,11 @@ public class GUIMainMenu extends GUIScreen
 {
 	private Stage stage = new Stage();
 	private Table table = new Table();
-	private ScrollBackground bg = new ScrollBackground(Gdx.files.internal("menu/bg_main.png"), 1600, 1600);
+	private TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_main.png"), false);
 	private TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-
 	private LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
 	private Label lblTitle = new Label("AIR HOCKEY", styleTitleLabel);
-
 	private TextButtonStyle styleMenuButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
 	private TextButton btnSingleplayer = new TextButton("Singleplayer", styleMenuButton);
 	private TextButton btnMultiplayer = new TextButton("Multiplayer", styleMenuButton);
@@ -44,7 +42,7 @@ public class GUIMainMenu extends GUIScreen
 			parent.startMultiplayer();
 		}
 	};
-	
+
 	class RunSingleplayer implements Runnable
 	{
 		@Override
@@ -53,7 +51,7 @@ public class GUIMainMenu extends GUIScreen
 			parent.startSingleplayer();
 		}
 	};
-	
+
 	class RunPreferences implements Runnable
 	{
 		@Override
@@ -62,7 +60,7 @@ public class GUIMainMenu extends GUIScreen
 			parent.switchTo(2);
 		}
 	}
-	
+
 	class RunCredits implements Runnable
 	{
 		@Override
@@ -71,7 +69,7 @@ public class GUIMainMenu extends GUIScreen
 			parent.switchTo(4);
 		}
 	}
-	
+
 	public GUIMainMenu(final AirHockey parent)
 	{
 		super(parent, Song.THEME_MAIN_MENU);
@@ -104,7 +102,7 @@ public class GUIMainMenu extends GUIScreen
 				}
 			}
 		});
-		
+
 		btnMultiplayer.addListener(new ClickListener()
 		{
 			@Override
@@ -123,7 +121,7 @@ public class GUIMainMenu extends GUIScreen
 				}
 			}
 		});
-		
+
 		btnPreferences.addListener(new ClickListener()
 		{
 			@Override
@@ -206,21 +204,6 @@ public class GUIMainMenu extends GUIScreen
 	{
 		Gdx.input.setInputProcessor(stage);
 		stage.addAction(Actions.moveTo(0.0f, 0.0f, 1.0f));
-	}
-
-	@Override
-	public void hide()
-	{
-	}
-
-	@Override
-	public void pause()
-	{
-	}
-
-	@Override
-	public void resume()
-	{
 	}
 
 	@Override

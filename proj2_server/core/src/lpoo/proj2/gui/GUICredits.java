@@ -26,13 +26,11 @@ public class GUICredits extends GUIScreen
 	private Texture _bg = new Texture(Gdx.files.internal("menu/bg_credits.png"));
 	private TextureAtlas _buttons = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), _buttons);
-
 	private LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
 	private LabelStyle styleGradientLabel = new LabelStyle(skin.get("gradientLabel", LabelStyle.class));
 	private LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
 	private Label lblDiogoMarques = new Label("Diogo Marques", styleSmallLabel);
 	private Label lblPedroMelo = new Label("Pedro Melo", styleSmallLabel);
-
 	private TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
 	private TextButton btnBack = new TextButton("< BACK", styleButton);
 
@@ -61,7 +59,26 @@ public class GUICredits extends GUIScreen
 		table.add(lblPedroMelo).padBottom(16).row();
 		table.setFillParent(true);
 		btnBack.setPosition(48, 30);
-		btnBack.addListener(new MenuListener(1, SFX.MENU_SELECT, SFX.MENU_CLICK));
+
+		btnBack.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				audio.playSound(SFX.MENU_CLICK);
+				parent.switchTo(1);
+			}
+
+			@Override
+			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			{
+				if (!btnBack.isPressed())
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
+			}
+		});
+
 		stage.addActor(table);
 		stage.addActor(btnBack);
 	}
@@ -71,12 +88,12 @@ public class GUICredits extends GUIScreen
 	{
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		if (table.getY() >= 1800.0f)
 		{
 			show();
 		}
-		
+
 		stage.act();
 		batch.begin();
 		batch.draw(_bg, 0, 0, 480, 800);
@@ -90,33 +107,6 @@ public class GUICredits extends GUIScreen
 		stage.getViewport().update(width, height);
 	}
 
-	private class MenuListener extends ClickListener
-	{
-		private int _id;
-		private SFX _hover;
-		private SFX _click;
-
-		public MenuListener(int menuId, SFX sfxHover, SFX sfxClick)
-		{
-			_id = menuId;
-			_hover = sfxHover;
-			_click = sfxClick;
-		}
-
-		@Override
-		public void clicked(InputEvent event, float x, float y)
-		{
-			audio.playSound(_click);
-			parent.switchTo(_id);
-		}
-
-		@Override
-		public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
-		{
-			audio.playSound(_hover);
-		}
-	}
-
 	@Override
 	public void show()
 	{
@@ -124,21 +114,6 @@ public class GUICredits extends GUIScreen
 		table.getActions().clear();
 		table.setPosition(0.0f, -800.0f);
 		table.addAction(Actions.moveBy(0.0f, 1800.0f, 30));
-	}
-
-	@Override
-	public void hide()
-	{
-	}
-
-	@Override
-	public void pause()
-	{
-	}
-
-	@Override
-	public void resume()
-	{
 	}
 
 	@Override

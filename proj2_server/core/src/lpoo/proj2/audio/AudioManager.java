@@ -1,5 +1,6 @@
 package lpoo.proj2.audio;
 
+import lpoo.proj2.AirHockey;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -66,14 +67,14 @@ public class AudioManager
 		return this.musicVolume;
 	}
 
-	public void setSFXVolume(final float sfxVolume)
+	public void setSFXVolume(final float paramSfxVolume)
 	{
-		this.sfxVolume = sfxVolume;
+		sfxVolume = paramSfxVolume;
 	}
 
-	public void setMusicVolume(final float musicVolume)
+	public void setMusicVolume(final float paramMusicVolume)
 	{
-		this.musicVolume = musicVolume;
+		musicVolume = paramMusicVolume;
 		
 		if (currentSongName != null)
 		{
@@ -86,7 +87,7 @@ public class AudioManager
 
 	public void playSong(final Song songName, final boolean looping)
 	{
-		if (currentSongName == songName)
+		if (currentSongName == songName && currentSong != null)
 		{
 			if (currentSong.isPlaying())
 			{
@@ -122,7 +123,6 @@ public class AudioManager
 				currentSong = playlist[5];
 				break;
 			case THEME_NONE:
-				currentSong.stop();
 				currentSong = null;
 				break;
 			}
@@ -139,6 +139,11 @@ public class AudioManager
 
 	public final void playSpecial(final Special soundName)
 	{
+		if (!AirHockey.isQuakeEnabled())
+		{
+			return;
+		}
+		
 		switch (soundName)
 		{
 		case QUAKE_DOUBLEKILL:
