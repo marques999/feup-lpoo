@@ -1,6 +1,8 @@
 package lpoo.proj2.logic;
 
 import java.util.Random;
+import lpoo.proj2.audio.AudioManager;
+import lpoo.proj2.audio.SFX;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,32 +17,34 @@ public class Puck extends DynamicEntity
 {
 	private Vector2 velocity;
 	private Vector2 acceleration;
-	private ShapeRenderer circle;
-	private Color color;
+	private ShapeRenderer circle = new ShapeRenderer();
 	private Random rand = new Random();
 
 	public Puck(float x, float y, Color color)
 	{
-		super(x, y);
-		this.color = color;
+		super(x, y, color);
+		
 		Sprite sprite;
 
 		if (color == Color.GREEN)
 		{
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_green.png")));
-		} else if (color == Color.BLUE)
+		}
+		else if (color == Color.BLUE)
 		{
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_blue.png")));
-		} else if (color == Color.YELLOW)
+		}
+		else if (color == Color.YELLOW)
 		{
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_yellow.png")));
-		} else
+		}
+		else
 		{
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_red.png")));
 		}
+		
 		velocity = new Vector2(-128, -128);
-		circle = new ShapeRenderer();
-		acceleration = new Vector2(rand.nextInt() % 50, rand.nextInt() % 50);
+		acceleration = new Vector2(-8, -8);
 		setSprite(sprite);
 		bounding.setRadius(getWidth() / 2);
 	}
@@ -56,17 +60,18 @@ public class Puck extends DynamicEntity
 	@Override
 	public boolean collides(Paddle paddle)
 	{
-		if (this.getX() > paddle.getX() - paddle.getWidth()
-				&& this.getX() < paddle.getX() + paddle.getWidth()
-				&& this.getY() + this.getHeight() > paddle.getY()
-				&& this.getY() < paddle.getY() + paddle.getHeight())
+		if (Intersector.overlaps(bounding, paddle.bounding))
 		{
-			if (Intersector.overlaps(bounding, paddle.bounding))
+			if (!isColliding())
 			{
-				acceleration.scl(-1);
-				velocity.scl(-1);
-				return true;
+				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
 			}
+
+			setColliding(true);
+		}
+		else
+		{
+			setColliding(false);
 		}
 
 		return false;
@@ -75,30 +80,43 @@ public class Puck extends DynamicEntity
 	@Override
 	public boolean collides(Puck puck)
 	{
-		if (this.getX() > puck.getX() - puck.getWidth()
-				&& this.getX() < puck.getX() + puck.getWidth()
-				&& this.getY() + this.getHeight() > puck.getY()
-				&& this.getY() < puck.getY() + puck.getHeight())
-		{
 			if (Intersector.overlaps(bounding, puck.bounding))
 			{
 				acceleration.scl(-1);
 				velocity.scl(-1);
 				return true;
 			}
-		}
+
 		return false;
 	}
 
+	public void impulse(Vector2 velocity)
+	{
+		this.pos.add(velocity);
+		this.velocity.add(velocity.scl(2));
+	}
+	
 	@Override
 	public boolean collides(Wall wall)
 	{
 		if (Intersector.overlaps(bounding, wall.bounding))
 		{
-			acceleration.scl(-1);
-			velocity.scl(-1);
+			if (!isColliding())
+			{
+				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
+				acceleration.scl(-1);
+				velocity.scl(-1);
+			}
+
+			setColliding(true);
+			
 			return true;
 		}
+		else
+		{
+			setColliding(false);
+		}
+		
 		return false;
 	}
 
@@ -106,7 +124,7 @@ public class Puck extends DynamicEntity
 	public void draw(SpriteBatch sb)
 	{
 		circle.begin(ShapeType.Filled);
-		circle.setColor(color);
+		circle.setColor(getColor());
 		circle.circle(bounding.x, bounding.y, getRadius());
 		circle.end();
 

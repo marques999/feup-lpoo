@@ -5,6 +5,7 @@ import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
 import lpoo.proj2.audio.Special;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,14 +26,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GUIOptions extends GUIScreen
 {
 	private final String difficulty[] = { "Easy", "Medium", "Hard", "Insane" };
+	private final String colors[] = { "Blue", "Green", "Red", "Yellow" };
+	private final Color colorsKey[] = { Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW };
+
+	private int colorIndex;
+	private int difficultyIndex;
+
 	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private final ButtonGroup<TextButton> btnGroup = new ButtonGroup<TextButton>();
 	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
+	private final Stage stage = new Stage();
 	private final Table table = new Table();
 
 	private final CheckBoxStyle styleCheckboxDefault = new CheckBoxStyle(skin.get("default", CheckBoxStyle.class));
@@ -40,11 +47,12 @@ public class GUIOptions extends GUIScreen
 
 	private final LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
 	private final LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
-	private final Label lblDifficulty = new Label("Difficulty", styleSmallLabel);
-	private final Label lblBGM = new Label("BGM Music", styleSmallLabel);
-	private final Label lblMusicVolume = new Label("Music Volume", styleSmallLabel);
-	private final Label lblSFXVolume = new Label("SFX volume", styleSmallLabel);
-	private final Label lblTitle = new Label("Preferences", styleTitleLabel);
+	private final Label lblDifficulty = new Label("DIFFICULTY", styleSmallLabel);
+	private final Label lblBGM = new Label("BGM MUSIC", styleSmallLabel);
+	private final Label lblMusicVolume = new Label("MUSIC VOLUME", styleSmallLabel);
+	private final Label lblSFXVolume = new Label("SFX VOLUME", styleSmallLabel);
+	private final Label lblPaddle = new Label("PADDLE COLOR", styleSmallLabel);
+	private final Label lblTitle = new Label("preferences", styleTitleLabel);
 
 	private final SliderStyle styleDefaultSlider = new SliderStyle(skin.get("default-horizontal", SliderStyle.class));
 	private final Slider sliderMusicVolume = new Slider(0.0f, 1.0f, 0.1f, false, styleDefaultSlider);
@@ -55,20 +63,24 @@ public class GUIOptions extends GUIScreen
 
 	private final TextButtonStyle styleDefaultButton = new TextButtonStyle(skin.get("default", TextButtonStyle.class));
 	private final TextButtonStyle styleMenuButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
+	private final TextButtonStyle styleGreenButton = new TextButtonStyle(skin.get("menuGreen", TextButtonStyle.class));
+	private final TextButtonStyle styleRedButton = new TextButtonStyle(skin.get("menuRed", TextButtonStyle.class));
+	private final TextButtonStyle styleYellowButton = new TextButtonStyle(skin.get("menuYellow", TextButtonStyle.class));
 	private final TextButtonStyle styleToggleButton = new TextButtonStyle(skin.get("toggle", TextButtonStyle.class));
 	private final TextButton btnOK = new TextButton("OK", styleMenuButton);
 	private final TextButton btnCancel = new TextButton("Cancel", styleMenuButton);
+	private final TextButton btnDifficulty = new TextButton(difficulty[difficultyIndex], styleDefaultButton);
+	private final TextButton btnColor = new TextButton(colors[colorIndex], styleDefaultButton);
+	private final TextButtonStyle btnColorStyle[] = { styleDefaultButton, styleGreenButton, styleRedButton, styleYellowButton };
 	private final TextButton btnThemeA = new TextButton("THEME A", styleToggleButton);
 	private final TextButton btnThemeB = new TextButton("THEME B", styleToggleButton);
-	private final TextButton btnDifficulty = new TextButton(difficulty[0], styleDefaultButton);
 
-	private int oldDifficulty = parent.getDifficulty();
 	private float oldMusicVolume;
 	private float oldSFXVolume;
 
 	public GUIOptions(final AirHockey parent)
 	{
-		super(parent);
+		super(parent, Song.THEME_SPLASH);
 
 		btnGroup.add(btnThemeA);
 		btnGroup.add(btnThemeB);
@@ -97,12 +109,13 @@ public class GUIOptions extends GUIScreen
 		table.add(lblDifficulty).left();
 		table.add(btnDifficulty).width(180);
 		table.row();
+		table.add(lblPaddle).left();
+		table.add(btnColor).width(180);
+		table.row();
 		table.add(btnOK).padTop(48).width(160).center();
 		table.add(btnCancel).padTop(48).width(160).center();
 		table.row();
 		stage.addActor(table);
-
-		bgmusic = Song.THEME_SPLASH;
 
 		sliderSFXVolume.addListener(new ChangeListener()
 		{
@@ -119,7 +132,6 @@ public class GUIOptions extends GUIScreen
 			public void changed(final ChangeEvent event, final Actor actor)
 			{
 				audio.setMusicVolume(sliderMusicVolume.getValue());
-				audio.playSong(bgmusic, true);
 			}
 		});
 
@@ -137,7 +149,10 @@ public class GUIOptions extends GUIScreen
 			@Override
 			public void enter(final InputEvent event, float x, float y, int pointer, final Actor fromActor)
 			{
-				audio.playSound(SFX.MENU_SELECT);
+				if (!btnCancel.isPressed())
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
 			}
 		});
 
@@ -152,24 +167,29 @@ public class GUIOptions extends GUIScreen
 
 				if (chkQuake.isChecked())
 				{
-					parent.enableQuake();
+					AirHockey.enableQuake();
 				}
 				else
 				{
-					parent.disableQuake();
+					AirHockey.disableQuake();
 				}
 
-				parent.setDifficulty(oldDifficulty);
-				parent.setTheme(btnThemeA.isChecked() ? 0 : 1);
-				parent.setMusicVolume(sliderMusicVolume.getValue());
-				parent.setSFXVolume(sliderSFXVolume.getValue());
+				AirHockey.setDifficulty(difficultyIndex);
+				AirHockey.setColor(colorsKey[colorIndex]);
+				AirHockey.setColorIndex(colorIndex);
+				AirHockey.setTheme(btnThemeA.isChecked() ? 0 : 1);
+				AirHockey.setMusicVolume(sliderMusicVolume.getValue());
+				AirHockey.setSFXVolume(sliderSFXVolume.getValue());
 				parent.switchTo(1);
 			}
 
 			@Override
 			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
 			{
-				audio.playSound(SFX.MENU_SELECT);
+				if (!btnOK.isPressed())
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
 			}
 		});
 
@@ -179,8 +199,38 @@ public class GUIOptions extends GUIScreen
 			public void clicked(final InputEvent event, final float x, final float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
-				oldDifficulty = (oldDifficulty + 1) % difficulty.length;
-				btnDifficulty.setText(difficulty[oldDifficulty]);
+				difficultyIndex = (difficultyIndex + 1) % difficulty.length;
+				btnDifficulty.setText(difficulty[difficultyIndex]);
+			}
+			
+			@Override
+			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			{
+				if (!btnDifficulty.isPressed())
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
+			}
+		});
+
+		btnColor.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(final InputEvent event, final float x, final float y)
+			{
+				audio.playSound(SFX.MENU_CLICK);
+				colorIndex = (colorIndex + 1) % colors.length;
+				btnColor.setText(colors[colorIndex]);
+				btnColor.setStyle(btnColorStyle[colorIndex]);
+			}
+			
+			@Override
+			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			{
+				if (!btnColor.isPressed())
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
 			}
 		});
 
@@ -207,6 +257,8 @@ public class GUIOptions extends GUIScreen
 			@Override
 			public void clicked(final InputEvent event, final float x, final float y)
 			{
+				audio.playSound(SFX.MENU_CLICK);
+				
 				if (btnThemeA.isChecked())
 				{
 					audio.playSong(Song.THEME_A, false);
@@ -214,6 +266,15 @@ public class GUIOptions extends GUIScreen
 				else
 				{
 					audio.playSong(Song.THEME_B, false);
+				}
+			}
+			
+			@Override
+			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			{
+				if (!btnPreview.isPressed())
+				{
+					audio.playSound(SFX.MENU_SELECT);
 				}
 			}
 		});
@@ -230,8 +291,6 @@ public class GUIOptions extends GUIScreen
 			}
 		});
 	}
-
-	private final Stage stage = new Stage(new FitViewport(480, 800));
 
 	@Override
 	public void render(final float delta)
@@ -252,13 +311,16 @@ public class GUIOptions extends GUIScreen
 	public void show()
 	{
 		Gdx.input.setInputProcessor(stage);
-		oldDifficulty = parent.getDifficulty();
-		btnDifficulty.setText(difficulty[oldDifficulty]);
-		sliderSFXVolume.setValue(parent.getSFXVolume());
-		sliderMusicVolume.setValue(parent.getMusicVolume());
-		chkQuake.setChecked(parent.isQuakeEnabled());
+		difficultyIndex = AirHockey.getDifficulty();
+		btnDifficulty.setText(difficulty[difficultyIndex]);
+		colorIndex = AirHockey.getColorIndex();
+		btnColor.setText(colors[colorIndex]);
+		btnColor.setStyle(btnColorStyle[colorIndex]);
+		sliderSFXVolume.setValue(AirHockey.getSFXVolume());
+		sliderMusicVolume.setValue(AirHockey.getMusicVolume());
+		chkQuake.setChecked(AirHockey.isQuakeEnabled());
 
-		if (parent.getTheme() == Song.THEME_A)
+		if (AirHockey.getTheme() == Song.THEME_A)
 		{
 			btnThemeA.setChecked(true);
 			btnThemeB.setChecked(false);

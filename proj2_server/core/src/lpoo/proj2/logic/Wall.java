@@ -7,21 +7,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Wall extends StaticEntity
 {
-	private ShapeRenderer shape;
-	private Color color;
+	private ShapeRenderer shape = new ShapeRenderer();
 
 	public Wall(float x, float y, int width, int height, Color color)
 	{
-		super(x, y, width, height);
-		this.color = color;
-		this.shape = new ShapeRenderer();
+		super(x, y, width, height, color);
 	}
 
 	@Override
 	public void draw(SpriteBatch sb)
 	{
 		shape.begin(ShapeType.Filled);
-		shape.setColor(color);
+		shape.setColor(getColor());
 		shape.rect(getX(), getY(), getWidth(), getHeight());
 		shape.end();
 	}

@@ -88,7 +88,10 @@ public abstract class GameRules
 		new Thread(runner).start();
 	}
 
-	public abstract int numberPucks();
+	public int numberPucks() 
+	{
+		return 1;
+	}
 
 	public abstract boolean checkOver();
 

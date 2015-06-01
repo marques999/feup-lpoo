@@ -38,7 +38,7 @@ public class GUISelect extends GUIScreen
 
 	public GUISelect(final AirHockey parent)
 	{
-		super(parent);
+		super(parent, Song.THEME_SELECT);
 
 		table.add(lblTitle).padBottom(64).row();
 		table.defaults().size(216, 49).padBottom(16);
@@ -47,14 +47,13 @@ public class GUISelect extends GUIScreen
 		table.add(btnMode3).row();
 		table.add(btnMode4).row();
 		table.setFillParent(true);
-		stage.addActor(table);
 		btnBack.setPosition(36, 32);
-		stage.addActor(btnBack);
-		bgmusic = Song.THEME_SELECT;
 		btnMode1.addListener(new MenuListener(0, 0, SFX.MENU_SELECT, SFX.MENU_CLICK));
 		btnMode2.addListener(new MenuListener(0, 1, SFX.MENU_SELECT, SFX.MENU_CLICK));
 		btnMode3.addListener(new MenuListener(0, 2, SFX.MENU_SELECT, SFX.MENU_CLICK));
 		btnMode4.addListener(new MenuListener(0, 3, SFX.MENU_SELECT, SFX.MENU_CLICK));
+		stage.addActor(table);
+		stage.addActor(btnBack);
 
 		btnBack.addListener(new ClickListener()
 		{
@@ -127,12 +126,12 @@ public class GUISelect extends GUIScreen
 
 		if (parent.isMultiplayer())
 		{
-			lblTitle.setText("Multiplayer");
+			lblTitle.setText("multiplayer");
 			btnMode4.setDisabled(false);
 		}
 		else
 		{
-			lblTitle.setText("Singleplayer");
+			lblTitle.setText("singleplayer");
 			btnMode4.setDisabled(true);
 		}
 	}

@@ -26,10 +26,4 @@ public class RulesFirst15 extends GameRules
 	{
 		return false;
 	}
-
-	@Override
-	public int numberPucks()
-	{
-		return 1;
-	}
 }

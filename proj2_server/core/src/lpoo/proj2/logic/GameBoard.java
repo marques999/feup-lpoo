@@ -1,8 +1,10 @@
 package lpoo.proj2.logic;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
+import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.AudioManager;
 import lpoo.proj2.audio.SFX;
 
@@ -15,6 +17,7 @@ public class GameBoard
 	private Goal p1Goal;
 	private Goal p2Goal;
 	private EntityFactory factory;
+	private CPUPaddle cpu;
 	private Player players[];
 	private ArrayList<Puck> pucks = new ArrayList<Puck>();
 	private ArrayList<Wall> walls = new ArrayList<Wall>();
@@ -24,9 +27,22 @@ public class GameBoard
 	{
 		this.rules = rules;
 		this.players = players;
+		this.cpu = new CPUPaddle();
 		this.audio = AudioManager.getInstance();
 		this.factory = new EntityFactory();
 		this.initialize();
+	}
+	
+	private class CPUPaddle implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			if (pucks.get(0).pos.y > Gdx.graphics.getHeight() / 2)
+			{
+				p2Paddle.move(pucks.get(0).pos.x, Gdx.graphics.getHeight() - p2Paddle.getY());
+			}
+		}
 	}
 
 	private void initialize()
@@ -35,12 +51,12 @@ public class GameBoard
 		{
 			for (int i = 0; i < rules.numberPucks(); i++)
 			{
-				pucks.add(factory.createRandomPuck(Color.RED));
+				pucks.add(factory.createRandomPuck(AirHockey.getColor()));
 			}
 		}
 		else
 		{
-			pucks.add(factory.createSinglePuck(Color.RED));
+			pucks.add(factory.createSinglePuck(AirHockey.getColor()));
 		}
 
 		walls.addAll(factory.createP1Walls(players[0].getColor()));
@@ -54,35 +70,38 @@ public class GameBoard
 	public void update(float delta)
 	{
 		p1Paddle.update(delta);
-
+	
 		for (Puck puck : pucks)
 		{
 			puck.update(delta);
+			p1Paddle.collides(puck);
+			p2Paddle.collides(puck);
 			puck.collides(p1Paddle);
 			puck.collides(p2Paddle);
 		}
-
+		
+		new Thread(cpu).start();
 		p1Paddle.collides(p2Paddle);
 
 		for (Wall wall : walls)
 		{
 			for (Puck puck : pucks)
 			{
-				if (puck.collides(wall))
-				{
-					audio.playSound(SFX.SFX_PUCK_HIT);
-				}
+				puck.collides(wall);
 			}
 		}
 	}
 
 	public void movePaddle(int paddleId, float x, float y)
 	{
-		p1Paddle.move(x, y);
-
-		if (paddleId == 0)
+		if (!multiplayer)
 		{
-			rules.p1Score();
+			p1Paddle.move(x, y);
+			
+			if (paddleId == 0)
+			{
+				rules.p1Score();
+			}
 		}
 	}
 
@@ -92,6 +111,7 @@ public class GameBoard
 		p2Paddle.draw(sb);
 		p1Goal.draw(sb);
 		p2Goal.draw(sb);
+
 		for (Wall wall : walls)
 		{
 			wall.draw(sb);

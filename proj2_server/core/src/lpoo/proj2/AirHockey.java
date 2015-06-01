@@ -13,6 +13,7 @@ import lpoo.proj2.gui.GUIScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 
 public class AirHockey extends Game
 {
@@ -43,19 +44,21 @@ public class AirHockey extends Game
 		switchTo(3);
 	}
 
-	private Preferences preferences;
+	private static Preferences preferences;
 	private static final String PREF_SINGLEPLAYER_THEME = "game.bgmusic";
 	private static final String PREF_SINGLEPLAYER_DIFFICULTY = "game.difficulty";
+	private static final String PREF_SINGLEPLAYER_PUCK = "game.puck.color";
+	private static final String PREF_SINGLEPLAYER_PUCKINDEX = "game.puck.index";
 	private static final String PREF_AUDIO_QUAKE_SOUNDS = "audio.sfx.quake";
 	private static final String PREF_AUDIO_SFX_VOLUME = "audio.sfx.volume";
 	private static final String PREF_AUDIO_MUSIC_VOLUME = "audio.music.volume";
 
-	public enum Difficulty
+	public static enum Difficulty
 	{
 		EASY, MEDIUM, HARD, INSANE
 	}
 
-	public void getPreferences()
+	public static void getPreferences()
 	{
 		if (preferences == null)
 		{
@@ -63,60 +66,80 @@ public class AirHockey extends Game
 		}
 	}
 
-	public int getDifficulty()
+	public static int getDifficulty()
 	{
 		return preferences.getInteger(PREF_SINGLEPLAYER_DIFFICULTY, 0);
 	}
 
-	public void setDifficulty(int difficulty)
+	public static void setDifficulty(int difficulty)
 	{
 		if (difficulty >= 0 && difficulty <= 3)
 		{
 			preferences.putInteger(PREF_SINGLEPLAYER_DIFFICULTY, difficulty);
 		}
 	}
-
-	public boolean isQuakeEnabled()
+	
+	public static Color getColor()
 	{
-		return preferences.getBoolean(PREF_AUDIO_QUAKE_SOUNDS, true);
+		return new Color(preferences.getInteger(PREF_SINGLEPLAYER_PUCK, Color.rgba8888(Color.RED)));
 	}
-
-	public void enableQuake()
+	
+	public static int getColorIndex()
 	{
-		preferences.putBoolean(PREF_AUDIO_QUAKE_SOUNDS, true);
+		return preferences.getInteger(PREF_SINGLEPLAYER_PUCKINDEX, 0);
 	}
-
-	public void disableQuake()
+	
+	public static void setColor(Color color)
 	{
-		preferences.putBoolean(PREF_AUDIO_QUAKE_SOUNDS, false);
+		preferences.putInteger(PREF_SINGLEPLAYER_PUCK, Color.rgba8888(color));
 	}
-
-	public Song getTheme()
+	
+	public static void setColorIndex(int index)
+	{
+		preferences.putInteger(PREF_SINGLEPLAYER_PUCKINDEX, index);
+	}
+	
+	public static Song getTheme()
 	{
 		return preferences.getInteger(PREF_SINGLEPLAYER_THEME, 0) == 0 ? Song.THEME_A : Song.THEME_B;
 	}
 
-	public void setTheme(int theme)
+	public static void setTheme(int theme)
 	{
 		preferences.putInteger(PREF_SINGLEPLAYER_THEME, theme);
 	}
 
-	public float getSFXVolume()
+	public static boolean isQuakeEnabled()
+	{
+		return preferences.getBoolean(PREF_AUDIO_QUAKE_SOUNDS, true);
+	}
+
+	public static void enableQuake()
+	{
+		preferences.putBoolean(PREF_AUDIO_QUAKE_SOUNDS, true);
+	}
+
+	public static void disableQuake()
+	{
+		preferences.putBoolean(PREF_AUDIO_QUAKE_SOUNDS, false);
+	}
+
+	public static float getSFXVolume()
 	{
 		return preferences.getFloat(PREF_AUDIO_SFX_VOLUME, 0.6f);
 	}
 
-	public float getMusicVolume()
+	public static float getMusicVolume()
 	{
 		return preferences.getFloat(PREF_AUDIO_MUSIC_VOLUME, 1.0f);
 	}
 
-	public void setSFXVolume(float sfxVolume)
+	public static void setSFXVolume(float sfxVolume)
 	{
 		preferences.putFloat(PREF_AUDIO_SFX_VOLUME, sfxVolume);
 	}
 
-	public void setMusicVolume(float musicVolume)
+	public static void setMusicVolume(float musicVolume)
 	{
 		preferences.putFloat(PREF_AUDIO_MUSIC_VOLUME, musicVolume);
 	}

@@ -1,11 +1,13 @@
 package lpoo.proj2.gui;
 
+import java.io.IOException;
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.SFX;
-import lpoo.proj2.audio.Song;
 import lpoo.proj2.logic.GameBoard;
 import lpoo.proj2.logic.Player;
 import lpoo.proj2.logic.RulesAttack;
+import lpoo.proj2.logic.RulesBest5;
+import lpoo.proj2.net.GameServer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -24,7 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GUIGame extends GUIScreen
 {
-	private final GameBoard game;
+	private GameBoard game;
+	private GameServer s;
 	private Player players[];
 
 	private enum State
@@ -47,10 +50,20 @@ public class GUIGame extends GUIScreen
 		players = new Player[2];
 		players[0] = new Player("Diogo Marques", Color.YELLOW);
 		players[1] = new Player("CPU", Color.BLUE);
-		game = new GameBoard(players, new RulesAttack(players));
+		
 		state = State.RUNNING;
-		bgmusic = Song.THEME_NONE;
-
+		s = null;
+		
+		try
+		{
+			s = new GameServer(5545);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		tablePaused.setFillParent(true);
 		tablePaused.defaults().padBottom(16);
 		tablePaused.add(lblPaused).row();
@@ -217,6 +230,7 @@ public class GUIGame extends GUIScreen
 	@Override
 	public void show()
 	{
+		game = new GameBoard(players, new RulesBest5(players));
 		state = State.RUNNING;
 		Gdx.input.setInputProcessor(this);
 	}

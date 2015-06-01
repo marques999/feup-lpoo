@@ -73,6 +73,14 @@ public class AudioManager
 	public void setMusicVolume(final float musicVolume)
 	{
 		this.musicVolume = musicVolume;
+		
+		if (currentSongName != null)
+		{
+			if (currentSong.isPlaying())
+			{
+				currentSong.setVolume(musicVolume);
+			}
+		}
 	}
 
 	public void playSong(final Song songName, final boolean looping)

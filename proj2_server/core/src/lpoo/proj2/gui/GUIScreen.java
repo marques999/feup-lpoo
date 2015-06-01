@@ -16,7 +16,12 @@ public abstract class GUIScreen implements Screen, InputProcessor
 
 	public GUIScreen(final AirHockey parent)
 	{
-		this.bgmusic = Song.THEME_NONE;
+		this(parent, Song.THEME_NONE);
+	}
+
+	public GUIScreen(final AirHockey parent, Song bgmusic)
+	{
+		this.bgmusic = bgmusic;
 		this.audio = AudioManager.getInstance();
 		this.parent = parent;
 		this.batch = new SpriteBatch();

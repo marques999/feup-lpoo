@@ -1,5 +1,7 @@
 package lpoo.proj2.logic;
 
+import lpoo.proj2.audio.AudioManager;
+import lpoo.proj2.audio.SFX;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,11 +16,10 @@ public class Paddle extends DynamicEntity
 {
 	private Vector2 velocity;
 	private ShapeRenderer circle;
-	private Color color;
 
 	protected Paddle(float x, float y, Color color)
 	{
-		super(x, y);
+		super(x, y, color);
 
 		Sprite sprite;
 
@@ -40,7 +41,6 @@ public class Paddle extends DynamicEntity
 		}
 
 		setSprite(sprite);
-		this.color = color;
 		velocity = new Vector2(0, 0);
 		circle = new ShapeRenderer();
 		bounding.setRadius(getWidth() / 2);
@@ -50,7 +50,7 @@ public class Paddle extends DynamicEntity
 	public void draw(SpriteBatch sb)
 	{
 		circle.begin(ShapeType.Filled);
-		circle.setColor(color);
+		circle.setColor(getColor());
 		circle.circle(bounding.x, bounding.y, getRadius());
 		circle.end();
 	}
@@ -80,12 +80,18 @@ public class Paddle extends DynamicEntity
 	@Override
 	public boolean collides(Paddle paddle)
 	{
-		if (this.getX() > paddle.getX() - paddle.getWidth()
-				&& this.getX() < paddle.getX() + paddle.getWidth()
-				&& this.getY() + this.getHeight() > paddle.getY()
-				&& this.getY() < paddle.getY() + paddle.getHeight())
+		if (Intersector.overlaps(bounding, paddle.bounding))
 		{
-			return Intersector.overlaps(bounding, paddle.bounding);
+			if (!isColliding())
+			{
+				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
+			}
+
+			setColliding(true);
+		}
+		else
+		{
+			setColliding(false);
 		}
 
 		return false;
@@ -94,12 +100,19 @@ public class Paddle extends DynamicEntity
 	@Override
 	public boolean collides(Puck puck)
 	{
-		if (this.getX() > puck.getX() - puck.getWidth()
-				&& this.getX() < puck.getX() + puck.getWidth()
-				&& this.getY() + this.getHeight() > puck.getY()
-				&& this.getY() < puck.getY() + puck.getHeight())
+		if (Intersector.overlaps(bounding, puck.bounding))
 		{
-			return Intersector.overlaps(bounding, puck.bounding);
+			if (!isColliding())
+			{
+				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
+				puck.impulse(velocity.scl(1 / 16f));
+			}
+
+			setColliding(true);
+		}
+		else
+		{
+			setColliding(false);
 		}
 
 		return false;
@@ -113,7 +126,10 @@ public class Paddle extends DynamicEntity
 				|| this.getY() <= wall.getY() + wall.getHeight()
 				|| this.getY() >= wall.getY())
 		{
-			return Intersector.overlaps(bounding, wall.bounding);
+			if (Intersector.overlaps(bounding, wall.bounding))
+			{
+				return true;
+			}
 		}
 
 		return false;

@@ -26,10 +26,4 @@ public class RulesBest10 extends GameRules
 	{
 		return false;
 	}
-
-	@Override
-	public int numberPucks() 
-	{
-		return 1;
-	}
 }

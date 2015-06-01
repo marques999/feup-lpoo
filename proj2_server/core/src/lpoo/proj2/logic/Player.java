@@ -5,10 +5,17 @@ import com.badlogic.gdx.graphics.Color;
 public class Player
 {
 	private Color color;
+	private Paddle paddle;
 	private String name;
 	private int score;
 	private int streak;
+	private int id;
 
+	public Player()
+	{
+		this("", Color.RED);
+	}
+	
 	public Player(String name, Color color)
 	{
 		this.name = name;
@@ -21,10 +28,40 @@ public class Player
 	{
 		return this.color;
 	}
+	
+	public int getID()
+	{
+		return this.id;
+	}
+	
+	public void setID(int id)
+	{
+		this.id = id;
+	}
 
 	public String getName()
 	{
 		return this.name;
+	}
+	
+	public final float getX()
+	{
+		return this.paddle.getX();
+	}
+	
+	public final float getY()
+	{
+		return this.paddle.getY();
+	}
+	
+	public void setX(float x)
+	{
+		this.paddle.setX(x);
+	}
+	
+	public void setY(float y)
+	{
+		this.paddle.setY(y);
 	}
 
 	public int getScore()
@@ -52,5 +89,25 @@ public class Player
 	{
 		this.score++;
 		this.streak++;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public void setColor(Color color)
+	{
+		this.color = color;
+	}
+
+	public Paddle getPaddle()
+	{
+		return paddle;
+	}
+
+	public void setPaddle(Paddle paddle)
+	{
+		this.paddle = paddle;
 	}
 }

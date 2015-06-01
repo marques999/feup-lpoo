@@ -1,17 +1,23 @@
 package lpoo.proj2.logic;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
 
 public abstract class DynamicEntity extends Entity implements CollisionDetector
 {
 	public DynamicEntity(float x, float y)
 	{
-		super(x, y);
-
+		this(x, y, Color.WHITE);
+	}
+	
+	public DynamicEntity(float x, float y, Color color)
+	{
+		super(x, y, color);
+		
 		bounding = new Circle(x, y, 1.0f);
 	}
-
+	
 	protected Circle bounding;
 
 	public Circle getBoundingCircle()

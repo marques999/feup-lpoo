@@ -30,42 +30,40 @@ public class GUICredits extends GUIScreen
 	private LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
 	private LabelStyle styleGradientLabel = new LabelStyle(skin.get("gradientLabel", LabelStyle.class));
 	private LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
-	private Label lblPhysics = new Label("Physics", styleGradientLabel);
-	private Label lblMusic = new Label("Music", styleGradientLabel);
-	private Label lblMarkMothersbaugh = new Label("Mark Mothersbaugh", styleSmallLabel);
-	private Label lblCrashBandicoot = new Label("Crash Bandicoot 3: Warped", styleSmallLabel);
-	private Label lblWarpRoom = new Label("Warp Room", styleSmallLabel);
 	private Label lblDiogoMarques = new Label("Diogo Marques", styleSmallLabel);
 	private Label lblPedroMelo = new Label("Pedro Melo", styleSmallLabel);
-	private Label lblTaito = new Label("Taito", styleSmallLabel);
-	private Label lblChaseHQ = new Label("Chase H.Q.", styleSmallLabel);
-	private Label lblRoundStart = new Label("Round Start (X68000)", styleSmallLabel);
-	private Label lblTitle = new Label("Credits", styleDefaultLabel);
 
 	private TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
 	private TextButton btnBack = new TextButton("< BACK", styleButton);
 
-	public GUICredits(AirHockey parent)
+	public GUICredits(final AirHockey parent)
 	{
-		super(parent);
+		super(parent, Song.THEME_CREDITS);
 
-		table.add(lblTitle).padBottom(32).row();
-		table.add(lblMusic).padBottom(16).row();
-		table.add(lblWarpRoom).padBottom(8).row();
-		table.add(lblMarkMothersbaugh).padBottom(8).row();
-		table.add(lblCrashBandicoot).padBottom(32).row();
-		table.add(lblRoundStart).padBottom(8).row();
-		table.add(lblTaito).padBottom(8).row();
-		table.add(lblChaseHQ).padBottom(32).row();
-		table.add(lblPhysics).padBottom(16).row();
+		table.add(new Label("credits", styleDefaultLabel)).padBottom(32).row();
+		table.add(new Label("Music", styleGradientLabel)).padBottom(16).row();
+		table.add(new Label("\"Warp Room\"", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("Mark Mothersbaugh", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("Crash Bandicoot: Warped / SCEE", styleSmallLabel)).padBottom(32).row();
+		table.add(new Label("\"Round Start\"", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("Katsushi Tatsuma", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("Chase H.Q / Taito", styleSmallLabel)).padBottom(32).row();
+		table.add(new Label("\"Name Entry\"", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("Go Satou", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("Raiden DX / Seibu Kaihatsu", styleSmallLabel)).padBottom(48).row();
+		table.add(new Label("Sound Effects", styleGradientLabel)).padBottom(16).row();
+		table.add(new Label("Quake II", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("id Software", styleSmallLabel)).padBottom(32).row();
+		table.add(new Label("Glow Hockey 2", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("Natenai Ariyatrakool", styleSmallLabel)).padBottom(32).row();
+		table.add(new Label("Physics", styleGradientLabel)).padBottom(16).row();
 		table.add(lblDiogoMarques).padBottom(8).row();
 		table.add(lblPedroMelo).padBottom(16).row();
 		table.setFillParent(true);
-		stage.addActor(table);
 		btnBack.setPosition(48, 30);
-		stage.addActor(btnBack);
-		bgmusic = Song.THEME_CREDITS;
 		btnBack.addListener(new MenuListener(1, SFX.MENU_SELECT, SFX.MENU_CLICK));
+		stage.addActor(table);
+		stage.addActor(btnBack);
 	}
 
 	@Override
@@ -73,6 +71,12 @@ public class GUICredits extends GUIScreen
 	{
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		if (table.getY() >= 1800.0f)
+		{
+			show();
+		}
+		
 		stage.act();
 		batch.begin();
 		batch.draw(_bg, 0, 0, 480, 800);
@@ -118,8 +122,8 @@ public class GUICredits extends GUIScreen
 	{
 		Gdx.input.setInputProcessor(stage);
 		table.getActions().clear();
-		table.setPosition(0.0f, 0.0f);
-		table.addAction(Actions.moveBy(0.0f, 800.0f, 12));
+		table.setPosition(0.0f, -800.0f);
+		table.addAction(Actions.moveBy(0.0f, 1800.0f, 30));
 	}
 
 	@Override
