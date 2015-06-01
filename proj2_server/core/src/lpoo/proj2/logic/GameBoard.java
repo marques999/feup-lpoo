@@ -1,12 +1,11 @@
 package lpoo.proj2.logic;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.AudioManager;
-import lpoo.proj2.audio.SFX;
+import lpoo.proj2.audio.Special;
 
 public class GameBoard
 {
@@ -78,11 +77,46 @@ public class GameBoard
 			p2Paddle.collides(puck);
 			puck.collides(p1Paddle);
 			puck.collides(p2Paddle);
+			
+			if (puck.collides(p1Goal))
+			{
+				rules.p1Score();
+				pucks.remove(puck);
+				pucks.add(factory.createSinglePuck(AirHockey.getColor()));
+			}
+			
+			if (puck.collides(p2Goal))
+			{
+				rules.p2Goal();
+				pucks.remove(puck);
+				pucks.add(factory.createSinglePuck(AirHockey.getColor()));
+			}
+		}
+		
+		p1Paddle.collides(p2Paddle);
+		
+		if (p1Paddle.collides(p1Goal) || p2Paddle.collides(p1Goal))
+		{
+//			if (p1Paddle.collides(p1Goal))
+//			{
+//				audio.playSpecial(Special.QUAKE_HUMILIATION);
+//			}
+			
+		//	rules.p2Goal();
+		}
+		
+		if (p1Paddle.collides(p2Goal) || p2Paddle.collides(p2Goal))
+		{
+//			if (p2Paddle.collides(p2Goal))
+//			{
+//				audio.playSpecial(Special.QUAKE_HUMILIATION);
+//			}
+			
+		//	rules.p1Score();
 		}
 		
 		new Thread(cpu).start();
-		p1Paddle.collides(p2Paddle);
-
+		
 		for (Wall wall : walls)
 		{
 			for (Puck puck : pucks)
@@ -97,11 +131,6 @@ public class GameBoard
 		if (!multiplayer)
 		{
 			p1Paddle.move(x, y);
-			
-			if (paddleId == 0)
-			{
-				rules.p1Score();
-			}
 		}
 	}
 

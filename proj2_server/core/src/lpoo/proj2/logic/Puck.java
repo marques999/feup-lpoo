@@ -15,10 +15,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Puck extends DynamicEntity
 {
-	private Vector2 velocity;
 	private Vector2 acceleration;
 	private ShapeRenderer circle = new ShapeRenderer();
-	private Random rand = new Random();
 
 	public Puck(float x, float y, Color color)
 	{
@@ -111,6 +109,31 @@ public class Puck extends DynamicEntity
 			setColliding(true);
 			
 			return true;
+		}
+		else
+		{
+			setColliding(false);
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean collides(Goal goal)
+	{
+		if (Intersector.overlaps(bounding, goal.bounding))
+		{
+			if (!isColliding())
+			{
+				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
+				acceleration.scl(-1);
+				velocity.scl(-1);
+				setColliding(true);
+				
+				return true;
+			}
+
+			setColliding(true);
 		}
 		else
 		{

@@ -47,6 +47,11 @@ public class Network
 	{
 		public int id;
 	}
+	
+	static public class ServerFull
+	{
+		public int numberPlayers;
+	}
 
 	static public class PlayerConnection extends Connection
 	{

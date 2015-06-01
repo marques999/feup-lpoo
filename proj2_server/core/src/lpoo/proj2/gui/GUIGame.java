@@ -5,7 +5,6 @@ import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.logic.GameBoard;
 import lpoo.proj2.logic.Player;
-import lpoo.proj2.logic.RulesAttack;
 import lpoo.proj2.logic.RulesBest5;
 import lpoo.proj2.net.GameServer;
 import com.badlogic.gdx.Gdx;
@@ -56,11 +55,10 @@ public class GUIGame extends GUIScreen
 		
 		try
 		{
-			s = new GameServer(5545);
+			s = new GameServer(9732, 9733);
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Rectangle;
 
 public abstract class StaticEntity extends Entity
 {
+	protected Rectangle bounding;
+	
 	public StaticEntity(float x, float y)
 	{
 		this(x, y, Color.WHITE);
@@ -26,10 +28,8 @@ public abstract class StaticEntity extends Entity
 		bounding = new Rectangle(x, y, w, h);
 	}
 
-	protected Rectangle bounding;
-
 	public Rectangle getBoudingRectangle()
 	{
-		return this.bounding;
+		return bounding;
 	}
 }

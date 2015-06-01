@@ -50,6 +50,7 @@ public class AudioManager
 		Gdx.audio.newSound(Gdx.files.internal("audio/godlike.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/hattrick.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/holyshit.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/humiliation.mp3")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/killingspree.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/prepare.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/rampage.ogg")) 
@@ -155,14 +156,17 @@ public class AudioManager
 		case QUAKE_HOLYSHIT:
 			special[4].play(sfxVolume);
 			break;
-		case QUAKE_KILLINGSPREE:
+		case QUAKE_HUMILIATION:
 			special[5].play(sfxVolume);
 			break;
-		case QUAKE_PREPARE:
+		case QUAKE_KILLINGSPREE:
 			special[6].play(sfxVolume);
 			break;
-		case QUAKE_RAMPAGE:
+		case QUAKE_PREPARE:
 			special[7].play(sfxVolume);
+			break;
+		case QUAKE_RAMPAGE:
+			special[8].play(sfxVolume);
 			break;
 		}
 	}

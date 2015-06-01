@@ -94,8 +94,6 @@ public abstract class GameRules
 	}
 
 	public abstract boolean checkOver();
-
 	public abstract boolean checkLast();
-
 	public abstract boolean checkTie();
 }

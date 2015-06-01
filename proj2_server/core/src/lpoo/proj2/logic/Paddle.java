@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Paddle extends DynamicEntity
 {
-	private Vector2 velocity;
 	private ShapeRenderer circle;
 
 	protected Paddle(float x, float y, Color color)
