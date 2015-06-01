@@ -1,10 +1,11 @@
 {
 	"com.badlogic.gdx.graphics.Color": 
 	{
-		"green": { hex: "0096a0ff" }, 
+		"lightblue": { hex: "0096a0ff" }, 
+		"red": { hex: "bf0909ff" },
+		"green": { hex: "28b914ff" },
+		"yellow": { hex: "ffb419ff" },
 		"white": { a: 1, b: 1, g: 1, r: 1 }, 
-		"red": { a: 1, b: 0, g: 0, r: 1 }, 
-		"black": { a: 1, b: 0, g: 0, r: 0 },
 	}, 
 
     "com.badlogic.gdx.graphics.g2d.BitmapFont": 
@@ -23,7 +24,37 @@
 			"over": "button_hover", 
 			"font": comicsans26,
 			"pressedOffsetY": -2,
+			"fontColor": lightblue,
+		},
+		
+		"menuGreen": 
+        { 
+			"up": "button_normal", 
+			"down": "button_hover", 
+			"over": "button_hover", 
+			"font": comicsans26,
+			"pressedOffsetY": -2,
 			"fontColor": green,
+		},
+		
+		"menuRed": 
+        { 
+			"up": "button_normal", 
+			"down": "button_hover", 
+			"over": "button_hover", 
+			"font": comicsans26,
+			"pressedOffsetY": -2,
+			"fontColor": red,
+		},
+		
+		"menuYellow": 
+        { 
+			"up": "button_normal", 
+			"down": "button_hover", 
+			"over": "button_hover", 
+			"font": comicsans26,
+			"pressedOffsetY": -2,
+			"fontColor": yellow,
 		},
 		
 		"menuLabel": 
@@ -42,7 +73,7 @@
 			"checked": "button_hover", 
 			"over": "button_hover", 
 			"font": comicsans26,
-			"fontColor": green,
+			"fontColor": lightblue,
 		 },
     },
     
