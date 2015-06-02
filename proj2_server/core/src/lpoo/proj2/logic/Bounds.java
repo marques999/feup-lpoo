@@ -7,7 +7,7 @@ public class Bounds
 	protected float minY;
 	protected float maxY;
 
-	public Bounds(float minX, float minY, float maxX, float maxY)
+	public Bounds(final float minX, final float minY, final float maxX, final float maxY)
 	{
 		this.minX = minX;
 		this.minY = minY;

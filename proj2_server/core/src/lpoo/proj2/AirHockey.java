@@ -13,7 +13,6 @@ import lpoo.proj2.gui.GUIScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.graphics.Color;
 
 public class AirHockey extends Game
 {
@@ -22,13 +21,13 @@ public class AirHockey extends Game
 	private Stack<Integer> _stack;
 	private AudioManager _am;
 	private boolean _multiplayer = false;
-	private int _mode = 1;
+	private int mode = 1;
 
 	public AirHockey()
 	{
 	}
 
-	public boolean isMultiplayer()
+	public final boolean isMultiplayer()
 	{
 		return _multiplayer;
 	}
@@ -44,25 +43,24 @@ public class AirHockey extends Game
 		_multiplayer = false;
 		switchTo(3);
 	}
-	
-	public int getMode()
+
+	public final int getMode()
 	{
-		return _mode;
+		return mode;
 	}
-	
-	public void setMode(int mode)
+
+	public void setMode(int paramMode)
 	{
-		_mode = mode;
+		mode = paramMode;
 	}
 
 	private static Preferences preferences;
-	private static final String PREF_SINGLEPLAYER_THEME = "game.bgmusic";
-	private static final String PREF_SINGLEPLAYER_DIFFICULTY = "game.difficulty";
-	private static final String PREF_SINGLEPLAYER_PUCK = "game.puck.color";
-	private static final String PREF_SINGLEPLAYER_PUCKINDEX = "game.puck.index";
-	private static final String PREF_AUDIO_QUAKE_SOUNDS = "audio.sfx.quake";
-	private static final String PREF_AUDIO_SFX_VOLUME = "audio.sfx.volume";
-	private static final String PREF_AUDIO_MUSIC_VOLUME = "audio.music.volume";
+	private final static String PREF_SINGLEPLAYER_THEME = "game.bgmusic";
+	private final static String PREF_SINGLEPLAYER_DIFFICULTY = "game.difficulty";
+	private final static String PREF_SINGLEPLAYER_PUCK = "game.puck.color";
+	private final static String PREF_AUDIO_QUAKE_SOUNDS = "audio.sfx.quake";
+	private final static String PREF_AUDIO_SFX_VOLUME = "audio.sfx.volume";
+	private final static String PREF_AUDIO_MUSIC_VOLUME = "audio.music.volume";
 
 	public static enum Difficulty
 	{
@@ -89,27 +87,17 @@ public class AirHockey extends Game
 			preferences.putInteger(PREF_SINGLEPLAYER_DIFFICULTY, difficulty);
 		}
 	}
-	
-	public static Color getColor()
+
+	public static int getColor()
 	{
-		return new Color(preferences.getInteger(PREF_SINGLEPLAYER_PUCK, Color.rgba8888(Color.RED)));
+		return preferences.getInteger(PREF_SINGLEPLAYER_PUCK, 0);
 	}
-	
-	public static int getColorIndex()
+
+	public static void setColor(int color)
 	{
-		return preferences.getInteger(PREF_SINGLEPLAYER_PUCKINDEX, 0);
+		preferences.putInteger(PREF_SINGLEPLAYER_PUCK, color);
 	}
-	
-	public static void setColor(Color color)
-	{
-		preferences.putInteger(PREF_SINGLEPLAYER_PUCK, Color.rgba8888(color));
-	}
-	
-	public static void setColorIndex(int index)
-	{
-		preferences.putInteger(PREF_SINGLEPLAYER_PUCKINDEX, index);
-	}
-	
+
 	public static Song getTheme()
 	{
 		return preferences.getInteger(PREF_SINGLEPLAYER_THEME, 0) == 0 ? Song.THEME_A : Song.THEME_B;

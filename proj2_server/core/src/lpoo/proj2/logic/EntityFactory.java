@@ -3,60 +3,59 @@ package lpoo.proj2.logic;
 import java.util.ArrayList;
 import java.util.Random;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 
 public class EntityFactory
 {
-	private Random rand = new Random();
+	private final Random rand = new Random();
 	private final int screenWidth = Gdx.graphics.getWidth();
 	private final int screenHeight = Gdx.graphics.getHeight();
 
-	private Puck createPuck(float x, float y, Color color)
+	private final Puck createPuck(float x, float y, int color)
 	{
 		return new Puck(x, y, color);
 	}
 
-	public Puck createSinglePuck(Color color)
+	public final Puck createSinglePuck(int paramColor)
 	{
-		return createPuck(screenWidth / 2, screenHeight / 2, color);
+		return createPuck(screenWidth / 2, screenHeight / 2, paramColor);
 	}
 
-	public Puck createRandomPuck(Color color)
+	public final Puck createRandomPuck(int paramColor)
 	{
-		return createPuck(rand.nextInt(screenWidth), rand.nextInt(screenHeight), color);
+		return createPuck(rand.nextInt(screenWidth), rand.nextInt(screenHeight), paramColor);
 	}
 
-	private Paddle createPaddle(float x, float y, Color color)
+	private final Paddle createPaddle(float x, float y, int color)
 	{
 		return new Paddle(x, y, color);
 	}
 
-	public Paddle createP1Paddle(Color color)
+	public final Paddle createP1Paddle(int paramColor)
 	{
-		return createPaddle(screenWidth / 2, 64, color);
+		return createPaddle(screenWidth / 2, 64, paramColor);
 	}
 
-	public Paddle createP2Paddle(Color color)
+	public final Paddle createP2Paddle(int color)
 	{
 		return createPaddle(screenWidth / 2, screenHeight - 64, color);
 	}
 
-	private Goal createGoal(float x, float y)
+	private final Goal createGoal(float x, float y)
 	{
 		return new Goal(x, y, (screenWidth - 100) / 2, 16);
 	}
 
-	public Goal createP1Goal()
+	public final Goal createP1Goal()
 	{
 		return createGoal(screenWidth * 0.3f, 0);
 	}
 
-	public Goal createP2Goal()
+	public final Goal createP2Goal()
 	{
 		return createGoal(screenWidth * 0.3f, screenHeight - 16);
 	}
 
-	public ArrayList<Wall> createP1Walls(Color color)
+	public final ArrayList<Wall> createP1Walls(int color)
 	{
 		ArrayList<Wall> walls = new ArrayList<Wall>();
 
@@ -68,7 +67,7 @@ public class EntityFactory
 		return walls;
 	}
 
-	public ArrayList<Wall> createP2Walls(Color color)
+	public final ArrayList<Wall> createP2Walls(int color)
 	{
 		ArrayList<Wall> walls = new ArrayList<Wall>();
 

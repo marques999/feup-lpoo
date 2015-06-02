@@ -90,7 +90,7 @@ public class GUIMainMenu extends GUIScreen
 			public void clicked(final InputEvent event, final float x, final float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
-				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 1.0f), Actions.run(new RunSingleplayer())));
+				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 0.5f), Actions.run(new RunSingleplayer())));
 			}
 
 			@Override
@@ -109,7 +109,7 @@ public class GUIMainMenu extends GUIScreen
 			public void clicked(final InputEvent event, final float x, final float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
-				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 1.0f), Actions.run(new RunMultiplayer())));
+				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 0.5f), Actions.run(new RunMultiplayer())));
 			}
 
 			@Override
@@ -128,7 +128,7 @@ public class GUIMainMenu extends GUIScreen
 			public void clicked(final InputEvent event, final float x, final float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
-				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 1.0f), Actions.run(new RunPreferences())));
+				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 0.5f), Actions.run(new RunPreferences())));
 			}
 
 			@Override
@@ -147,7 +147,7 @@ public class GUIMainMenu extends GUIScreen
 			public void clicked(final InputEvent event, final float x, final float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
-				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 1.0f), Actions.run(new RunCredits())));
+				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 0.5f), Actions.run(new RunCredits())));
 			}
 
 			@Override
@@ -203,7 +203,7 @@ public class GUIMainMenu extends GUIScreen
 	public void show()
 	{
 		Gdx.input.setInputProcessor(stage);
-		stage.addAction(Actions.moveTo(0.0f, 0.0f, 1.0f));
+		stage.addAction(Actions.moveTo(0.0f, 0.0f, 0.5f));
 	}
 
 	@Override

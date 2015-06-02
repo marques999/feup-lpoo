@@ -34,7 +34,7 @@ public class GameBoard
 		factory = new EntityFactory();
 		initialize();
 	}
-	
+
 	private class CPUPaddle implements Runnable
 	{
 		@Override
@@ -42,7 +42,8 @@ public class GameBoard
 		{
 			if (pucks.get(0).pos.y > Gdx.graphics.getHeight() / 2)
 			{
-				p2Paddle.move(pucks.get(0).pos.x, Gdx.graphics.getHeight() - p2Paddle.getY());
+				p2Paddle.move(pucks.get(0).pos.x, Gdx.graphics.getHeight()
+						- p2Paddle.getY());
 			}
 		}
 	}
@@ -78,63 +79,63 @@ public class GameBoard
 			{
 				parent.actionGameover(parent.getP1());
 			}
-			
+
 			if (rules.p2Wins())
 			{
 				parent.actionGameover(parent.getP2());
 			}
 		}
-		
+
 		p1Paddle.update(delta);
-	
+
 		for (Puck puck : pucks)
-		{
+		{	
 			puck.update(delta);
-			
+
 			if (p1Paddle.collides(puck))
 			{
 				lastPlayed = parent.getP1();
 			}
-			
+
 			if (p2Paddle.collides(puck))
 			{
 				lastPlayed = parent.getP2();
 			}
-			
+
 			puck.collides(p1Paddle);
 			puck.collides(p2Paddle);
-			
+
 			if (puck.collides(p1Goal))
 			{
 				if (lastPlayed == parent.getP1())
 				{
 					audio.playSpecial(Special.QUAKE_HUMILIATION);
 				}
-				
-				rules.p1Score();
-				pucks.remove(puck);
+
+				rules.p2Score();
 				pucks.add(factory.createSinglePuck(AirHockey.getColor()));
+				pucks.remove(puck);
 				parent.actionScore(parent.getP2());
 			}
-			
+
 			if (puck.collides(p2Goal))
 			{
 				if (lastPlayed == parent.getP2())
 				{
 					audio.playSpecial(Special.QUAKE_HUMILIATION);
 				}
-				
-				rules.p2Score();
-				pucks.remove(puck);
+
+				rules.p1Score();
 				pucks.add(factory.createSinglePuck(AirHockey.getColor()));
+				pucks.remove(puck);
 				parent.actionScore(parent.getP1());
 			}
 		}
-		
+
 		p1Paddle.collides(p2Paddle);
-				
+
 		new Thread(cpu).start();
-		
+
 		for (Wall wall : walls)
 		{
 			for (Puck puck : pucks)
@@ -158,7 +159,7 @@ public class GameBoard
 		{
 			puck.draw(sb);
 		}
-		
+
 		p1Paddle.draw(sb);
 		p2Paddle.draw(sb);
 	}

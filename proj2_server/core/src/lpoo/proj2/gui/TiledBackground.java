@@ -10,18 +10,18 @@ import com.badlogic.gdx.math.Vector2;
 
 public class TiledBackground
 {
-	private int textureWidth = 1600;
-	private int textureHeight = 1600;
+	private int textureWidth;
+	private int textureHeight;
 	private boolean horizontal;
 	private Texture image;
 	private TextureRegion region;
 	private Vector2 position;
 	private Vector2 speed;
 
-	public TiledBackground(FileHandle name, boolean horz)
+	public TiledBackground(FileHandle paramName, boolean paramHorizontal)
 	{
-		image = new Texture(name);
-		horizontal = horz;
+		image = new Texture(paramName);
+		horizontal = paramHorizontal;
 
 		if (horizontal)
 		{
@@ -91,7 +91,7 @@ public class TiledBackground
 		}
 	}
 
-	public void render(SpriteBatch sb)
+	public final void render(SpriteBatch sb)
 	{
 		sb.draw(region, position.x, position.y, textureWidth, textureHeight);
 	}

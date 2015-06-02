@@ -3,7 +3,6 @@ package lpoo.proj2.logic;
 import lpoo.proj2.audio.AudioManager;
 import lpoo.proj2.audio.SFX;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Intersector;
@@ -13,29 +12,28 @@ public class Puck extends DynamicEntity
 {
 	private Vector2 acceleration;
 
-	public Puck(float x, float y, Color color)
+	public Puck(float x, float y, int color)
 	{
 		super(x, y, color);
-		
+
 		Sprite sprite;
 
-		if (color == Color.GREEN)
+		switch (color)
 		{
+		case 1:
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_green.png")));
-		}
-		else if (color == Color.BLUE)
-		{
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_blue.png")));
-		}
-		else if (color == Color.YELLOW)
-		{
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_yellow.png")));
-		}
-		else
-		{
+			break;
+		case 2:
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_red.png")));
+			break;
+		case 3:
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_yellow.png")));
+			break;
+		default:
+			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_blue.png")));
+			break;
 		}
-		
+
 		velocity = new Vector2(-128, -128);
 		acceleration = new Vector2(-8, -8);
 		setSprite(sprite);
@@ -73,12 +71,12 @@ public class Puck extends DynamicEntity
 	@Override
 	public boolean collides(Puck puck)
 	{
-			if (Intersector.overlaps(bounding, puck.bounding))
-			{
-				acceleration.scl(-1);
-				velocity.scl(-1);
-				return true;
-			}
+		if (Intersector.overlaps(bounding, puck.bounding))
+		{
+			acceleration.scl(-1);
+			velocity.scl(-1);
+			return true;
+		}
 
 		return false;
 	}
@@ -88,7 +86,7 @@ public class Puck extends DynamicEntity
 		this.pos.add(velocity);
 		this.velocity.add(velocity.scl(2));
 	}
-	
+
 	@Override
 	public boolean collides(Wall wall)
 	{
@@ -102,17 +100,17 @@ public class Puck extends DynamicEntity
 			}
 
 			setColliding(true);
-			
+
 			return true;
 		}
 		else
 		{
 			setColliding(false);
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public boolean collides(Goal goal)
 	{
@@ -124,7 +122,7 @@ public class Puck extends DynamicEntity
 				acceleration.scl(-1);
 				velocity.scl(-1);
 				setColliding(true);
-				
+
 				return true;
 			}
 
@@ -134,7 +132,7 @@ public class Puck extends DynamicEntity
 		{
 			setColliding(false);
 		}
-		
+
 		return false;
 	}
 }

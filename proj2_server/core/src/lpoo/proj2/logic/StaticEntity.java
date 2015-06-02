@@ -1,34 +1,33 @@
 package lpoo.proj2.logic;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
 public abstract class StaticEntity extends Entity
 {
 	protected Rectangle bounding;
 	
-	public StaticEntity(float x, float y)
+	public StaticEntity(float paramX, float y)
 	{
-		this(x, y, Color.WHITE);
+		this(paramX, y, 0);
 	}
 
-	public StaticEntity(float x, float y, Color color)
+	public StaticEntity(float paramX, float y, int color)
 	{
-		this(x, y, 0, 0, color);
+		this(paramX, y, 0, 0, color);
 	}
 
-	public StaticEntity(float x, float y, float w, float h)
+	public StaticEntity(float paramX, float y, float paramWidth, float paramHeight)
 	{
-		this(x, y, w, h, Color.WHITE);
+		this(paramX, y, paramWidth, paramHeight, 0);
 	}
 
-	public StaticEntity(float x, float y, float w, float h, Color color)
+	public StaticEntity(float paramX, float paramY, float paramWidth, float paramHeight, int paramColor)
 	{
-		super(x, y, w, h, color);
-		bounding = new Rectangle(x, y, w, h);
+		super(paramX, paramY, paramWidth, paramHeight, paramColor);
+		bounding = new Rectangle(paramX, paramY, paramWidth, paramHeight);
 	}
 
-	public Rectangle getBoudingRectangle()
+	public final Rectangle getBoudingRectangle()
 	{
 		return bounding;
 	}

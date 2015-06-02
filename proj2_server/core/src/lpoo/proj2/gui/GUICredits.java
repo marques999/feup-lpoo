@@ -21,18 +21,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GUICredits extends GUIScreen
 {
-	private Stage stage = new Stage();
-	private Table table = new Table();
-	private Texture _bg = new Texture(Gdx.files.internal("menu/bg_credits.png"));
-	private TextureAtlas _buttons = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
-	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), _buttons);
-	private LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
-	private LabelStyle styleGradientLabel = new LabelStyle(skin.get("gradientLabel", LabelStyle.class));
-	private LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
-	private Label lblDiogoMarques = new Label("Diogo Marques", styleSmallLabel);
-	private Label lblPedroMelo = new Label("Pedro Melo", styleSmallLabel);
-	private TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
-	private TextButton btnBack = new TextButton("< BACK", styleButton);
+	private final Stage stage = new Stage();
+	private final Table table = new Table();
+	private final Texture background = new Texture(Gdx.files.internal("menu/bg_credits.png"));
+	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
+	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
+	private final LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
+	private final LabelStyle styleGradientLabel = new LabelStyle(skin.get("gradientLabel", LabelStyle.class));
+	private final LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
+	private final Label lblDiogoMarques = new Label("Diogo Marques", styleSmallLabel);
+	private final Label lblPedroMelo = new Label("Pedro Melo", styleSmallLabel);
+	private final TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
+	private final TextButton btnBack = new TextButton("< BACK", styleButton);
 
 	public GUICredits(final AirHockey parent)
 	{
@@ -96,7 +96,7 @@ public class GUICredits extends GUIScreen
 
 		stage.act();
 		batch.begin();
-		batch.draw(_bg, 0, 0, 480, 800);
+		batch.draw(background, 0, 0, 480, 800);
 		batch.end();
 		stage.draw();
 	}

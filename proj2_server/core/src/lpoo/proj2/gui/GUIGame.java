@@ -13,7 +13,6 @@ import lpoo.proj2.logic.RulesFirst15;
 import lpoo.proj2.net.GameServer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -21,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -32,10 +33,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class GUIGame extends GUIScreen
 {
 	private GameBoard game;
-	private GameServer s;
-	private Player players[];
-	private Texture bg;
 	private GameState state;
+	private GameServer s = null;
+	private Player players[];
+	
+	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
+	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
+	private final LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
+	private final LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
+	private final LabelStyle styleGradientLabel = new LabelStyle(skin.get("gradientLabel", LabelStyle.class));
+	private final TextButtonStyle styleMenuButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
+	private final Texture background = new Texture(Gdx.files.internal("gfx/table.png"));
+	private final Image overlay = new Image(new Texture(Gdx.files.internal("menu/bg_darken.png")));
 
 	public void changeState(GameState newState)
 	{
@@ -47,12 +56,12 @@ public class GUIGame extends GUIScreen
 		changeState(new GameOverState(p));
 	}
 
-	public Player getP1()
+	public final Player getP1()
 	{
 		return players[0];
 	}
 
-	public Player getP2()
+	public final Player getP2()
 	{
 		return players[1];
 	}
@@ -77,6 +86,7 @@ public class GUIGame extends GUIScreen
 			tablePaused.add(lblResume);
 			tablePaused.row();
 			tablePaused.add(btnResume);
+			stagePause.addActor(overlay);
 			stagePause.addActor(tablePaused);
 
 			btnResume.addListener(new ClickListener()
@@ -110,12 +120,17 @@ public class GUIGame extends GUIScreen
 			stagePause.draw();
 		}
 	}
-
+	
+	private SequenceAction blinkAction = Actions.sequence(Actions.fadeOut(0.5f), Actions.fadeIn(0.5f));
+	private Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...", styleGradientLabel);
+	
 	private class GameOverState extends GameState
 	{
 		private final Stage stageOver = new Stage();
 		private final Table tableOver = new Table();
-
+		private Label lblName;
+		private Label lblScore;
+		
 		public GameOverState(Player p)
 		{
 			StringBuilder strName = new StringBuilder();
@@ -126,11 +141,18 @@ public class GUIGame extends GUIScreen
 			strScore.append(Integer.toString(players[0].getScore()));
 			strScore.append(" - ");
 			strScore.append(Integer.toString(players[1].getScore()));
-
-			tableOver.defaults().padBottom(16).center();
-			tableOver.add(new Label(strName, styleSmallLabel)).padBottom(32).row();
-			tableOver.add(new Label(strScore, styleSmallLabel));
+			
+			lblName = new Label(strName, styleGradientLabel);
+			lblScore = new Label(strScore, styleDefaultLabel);
+			lblName.addAction(Actions.forever(blinkAction));
+			tableOver.defaults().center();
+			tableOver.add(lblName).padBottom(8);
+			tableOver.row();
+			tableOver.add(lblScore).padBottom(24);
+			tableOver.row();
+			tableOver.add(lblContinue);
 			tableOver.setFillParent(true);
+			stageOver.addActor(overlay);
 			stageOver.addActor(tableOver);
 			audio.playSong(Song.THEME_SELECT, true);
 			
@@ -200,6 +222,7 @@ public class GUIGame extends GUIScreen
 			tableConfirm.add(lblConfirm).padBottom(32).row();
 			tableConfirm.add(btnYes).width(160).row();
 			tableConfirm.add(btnNo).width(160).row();
+			stageConfirm.addActor(overlay);
 			stageConfirm.addActor(tableConfirm);
 			
 			btnYes.addListener(new ClickListener()
@@ -267,8 +290,8 @@ public class GUIGame extends GUIScreen
 
 		public PlayerScoredState(Player p)
 		{
-			StringBuilder strName = new StringBuilder();
-			StringBuilder strScore = new StringBuilder();
+			final StringBuilder strName = new StringBuilder();
+			final StringBuilder strScore = new StringBuilder();
 
 			strName.append(p.getName());
 			strName.append(" SCORES!");
@@ -277,11 +300,12 @@ public class GUIGame extends GUIScreen
 			strScore.append(Integer.toString(players[1].getScore()));
 
 			tableScore.defaults().padBottom(16).center();
-			tableScore.add(new Label(strName, styleSmallLabel)).padBottom(32).row();
-			tableScore.add(new Label(strScore, styleSmallLabel));
+			tableScore.add(new Label(strName, styleGradientLabel)).padBottom(8).row();
+			tableScore.add(new Label(strScore, styleDefaultLabel));
 			tableScore.setFillParent(true);
 			tableScore.setTransform(true);
 			tableScore.setOrigin(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+			stageScore.addActor(overlay);
 			stageScore.addActor(tableScore);
 			tableScore.addAction(Actions.rotateBy(360, 1.0f));
 			audio.playSound(SFX.SFX_GOAL);
@@ -317,10 +341,8 @@ public class GUIGame extends GUIScreen
 		super(parent, Song.THEME_NONE);
 
 		players = new Player[2];
-		players[0] = new Player("Diogo Marques", Color.YELLOW);
-		players[1] = new Player("CPU", Color.BLUE);
-		s = null;
-		bg = new Texture(Gdx.files.internal("gfx/table.png"));
+		players[0] = new Player("Diogo Marques", 3);
+		players[1] = new Player("CPU", 0);
 		changeState(new GameRunningState());
 
 		try
@@ -333,11 +355,6 @@ public class GUIGame extends GUIScreen
 		}
 	}
 
-	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
-	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-	private final LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
-	private final TextButtonStyle styleMenuButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
-
 	@Override
 	public void render(final float delta)
 	{
@@ -345,7 +362,7 @@ public class GUIGame extends GUIScreen
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		state.update(delta);
 		batch.begin();
-		batch.draw(bg, 0, 0, 480, 800);
+		batch.draw(background, 0, 0, 480, 800);
 		game.draw(batch);
 		batch.end();
 		state.draw();

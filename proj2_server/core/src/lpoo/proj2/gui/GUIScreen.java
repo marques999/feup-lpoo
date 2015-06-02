@@ -14,22 +14,22 @@ public abstract class GUIScreen implements Screen, InputProcessor
 	protected AudioManager audio;
 	protected Song bgmusic;
 
-	public GUIScreen(final AirHockey parent)
+	public GUIScreen(final AirHockey paramParent)
 	{
-		this(parent, Song.THEME_NONE);
+		this(paramParent, Song.THEME_NONE);
 	}
 
-	public GUIScreen(final AirHockey parent, Song bgmusic)
+	public GUIScreen(final AirHockey paramParent, Song paramMusic)
 	{
-		this.bgmusic = bgmusic;
-		this.audio = AudioManager.getInstance();
-		this.parent = parent;
-		this.batch = new SpriteBatch();
+		bgmusic = paramMusic;
+		audio = AudioManager.getInstance();
+		parent = paramParent;
+		batch = new SpriteBatch();
 	}
 
 	public final Song getSong()
 	{
-		return this.bgmusic;
+		return bgmusic;
 	}
 
 	@Override
@@ -53,7 +53,6 @@ public abstract class GUIScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchDown(final int screenX, final int screenY, final int pointer, final int button)
 	{
-
 		return false;
 	}
 

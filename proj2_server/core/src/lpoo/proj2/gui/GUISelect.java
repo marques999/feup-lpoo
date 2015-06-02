@@ -20,25 +20,25 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GUISelect extends GUIScreen
 {
-	private Stage stage = new Stage();
-	private Table table = new Table();
-	private Texture overlay = new Texture(Gdx.files.internal("menu/bg_select.png"));
-	private TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
-	private TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_select2.png"), true);
-	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-	private LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
-	private Label lblTitle = new Label("Singleplayer", styleTitleLabel);
-	private TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
-	private TextButton btnMode1 = new TextButton("BEST OF 5", styleButton);
-	private TextButton btnMode2 = new TextButton("BEST OF 10", styleButton);
-	private TextButton btnMode3 = new TextButton("FIRST TO 15", styleButton);
-	private TextButton btnMode4 = new TextButton("PUCK ATTACK", styleButton);
-	private TextButton btnBack = new TextButton("< BACK", styleButton);
+	private final Stage stage = new Stage();
+	private final Table table = new Table();
+	private final Texture overlay = new Texture(Gdx.files.internal("menu/bg_select.png"));
+	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
+	private final TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_select2.png"), true);
+	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
+	private final LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
+	private final Label lblTitle = new Label("Singleplayer", styleTitleLabel);
+	private final TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
+	private final TextButton btnMode1 = new TextButton("BEST OF 5", styleButton);
+	private final TextButton btnMode2 = new TextButton("BEST OF 10", styleButton);
+	private final TextButton btnMode3 = new TextButton("FIRST TO 15", styleButton);
+	private final TextButton btnMode4 = new TextButton("PUCK ATTACK", styleButton);
+	private final TextButton btnBack = new TextButton("< BACK", styleButton);
 
 	private class MenuListener extends ClickListener
 	{
 		private final TextButton button;
-		private int mode;
+		private final int mode;
 
 		public MenuListener(TextButton paramButton, int paramMode)
 		{

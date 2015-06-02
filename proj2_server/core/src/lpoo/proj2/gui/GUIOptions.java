@@ -5,7 +5,6 @@ import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
 import lpoo.proj2.audio.Special;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -31,11 +30,12 @@ public class GUIOptions extends GUIScreen
 {
 	private final String difficulty[] = { "Easy", "Medium", "Hard", "Insane" };
 	private final String colors[] = { "Blue", "Green", "Red", "Yellow" };
-	private final Color colorsKey[] = { Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW };
 
 	private int colorIndex;
 	private int difficultyIndex;
-
+	private float oldMusicVolume;
+	private float oldSFXVolume;
+	
 	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private final ButtonGroup<TextButton> btnGroup = new ButtonGroup<TextButton>();
 	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
@@ -51,7 +51,7 @@ public class GUIOptions extends GUIScreen
 	private final Label lblBGM = new Label("BGM MUSIC", styleSmallLabel);
 	private final Label lblMusicVolume = new Label("MUSIC VOLUME", styleSmallLabel);
 	private final Label lblSFXVolume = new Label("SFX VOLUME", styleSmallLabel);
-	private final Label lblPaddle = new Label("PADDLE COLOR", styleSmallLabel);
+	private final Label lblPaddle = new Label("PUCK COLOR", styleSmallLabel);
 	private final Label lblTitle = new Label("preferences", styleTitleLabel);
 
 	private final SliderStyle styleDefaultSlider = new SliderStyle(skin.get("default-horizontal", SliderStyle.class));
@@ -74,9 +74,6 @@ public class GUIOptions extends GUIScreen
 	private final TextButtonStyle btnColorStyle[] = { styleDefaultButton, styleGreenButton, styleRedButton, styleYellowButton };
 	private final TextButton btnThemeA = new TextButton("THEME A", styleToggleButton);
 	private final TextButton btnThemeB = new TextButton("THEME B", styleToggleButton);
-
-	private float oldMusicVolume;
-	private float oldSFXVolume;
 
 	public GUIOptions(final AirHockey parent)
 	{
@@ -175,8 +172,7 @@ public class GUIOptions extends GUIScreen
 				}
 
 				AirHockey.setDifficulty(difficultyIndex);
-				AirHockey.setColor(colorsKey[colorIndex]);
-				AirHockey.setColorIndex(colorIndex);
+				AirHockey.setColor(colorIndex);
 				AirHockey.setTheme(btnThemeA.isChecked() ? 0 : 1);
 				AirHockey.setMusicVolume(sliderMusicVolume.getValue());
 				AirHockey.setSFXVolume(sliderSFXVolume.getValue());
@@ -313,7 +309,7 @@ public class GUIOptions extends GUIScreen
 		Gdx.input.setInputProcessor(stage);
 		difficultyIndex = AirHockey.getDifficulty();
 		btnDifficulty.setText(difficulty[difficultyIndex]);
-		colorIndex = AirHockey.getColorIndex();
+		colorIndex = AirHockey.getColor();
 		btnColor.setText(colors[colorIndex]);
 		btnColor.setStyle(btnColorStyle[colorIndex]);
 		sliderSFXVolume.setValue(AirHockey.getSFXVolume());
@@ -333,18 +329,6 @@ public class GUIOptions extends GUIScreen
 
 		oldMusicVolume = audio.getMusicVolume();
 		oldSFXVolume = audio.getSFXVolume();
-	}
-
-	@Override
-	public void pause()
-	{
-		System.out.println("GAME PAUSED");
-	}
-
-	@Override
-	public void resume()
-	{
-		System.out.println("GAME RESUMED");
 	}
 
 	@Override

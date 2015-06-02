@@ -10,12 +10,12 @@ public abstract class GameRules
 	private boolean p2FirstBlood;
 	private AudioManager audio;
 
-	public GameRules(Player[] players)
+	public GameRules(Player[] paramPlayers)
 	{
-		this.players = players;
-		this.p1FirstBlood = false;
-		this.p2FirstBlood = false;
-		this.audio = AudioManager.getInstance();
+		players = paramPlayers;
+		p1FirstBlood = false;
+		p2FirstBlood = false;
+		audio = AudioManager.getInstance();
 	}
 
 	private void update()

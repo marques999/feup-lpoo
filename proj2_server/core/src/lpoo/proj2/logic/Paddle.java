@@ -3,7 +3,6 @@ package lpoo.proj2.logic;
 import lpoo.proj2.audio.AudioManager;
 import lpoo.proj2.audio.SFX;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Intersector;
@@ -11,29 +10,28 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Paddle extends DynamicEntity
 {
-	protected Paddle(float x, float y, Color color)
+	protected Paddle(float x, float y, int color)
 	{
 		super(x, y, color);
 
 		Sprite sprite;
 
-		if (color == Color.GREEN)
+		switch (color)
 		{
+		case 1:
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_green.png")));
-		}
-		else if (color == Color.BLUE)
-		{
+			break;
+		case 2:
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_blue.png")));
-		}
-		else if (color == Color.YELLOW)
-		{
+			break;
+		case 3:
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_yellow.png")));
-		}
-		else
-		{
+			break;
+		default:
 			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_red.png")));
+			break;
 		}
-
+		
 		setSprite(sprite);
 		velocity = new Vector2(0, 0);
 		bounding.setRadius(getWidth() / 2);

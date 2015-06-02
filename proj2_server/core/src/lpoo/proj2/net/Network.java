@@ -1,7 +1,6 @@
 package lpoo.proj2.net;
 
 import lpoo.proj2.logic.Player;
-import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.EndPoint;
@@ -22,7 +21,7 @@ public class Network
 	static public class Login
 	{
 		public String name;
-		public Color color;
+		public int color;
 	}
 
 	static public class UpdatePlayer

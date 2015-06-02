@@ -1,7 +1,6 @@
 package lpoo.proj2.logic;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,32 +10,33 @@ public abstract class Entity
 	protected Vector2 pos;
 	protected Vector2 old;
 	protected Bounds bounds;
-	private Color color;
+	private int color;
 	private boolean colliding;
 	private Sprite sprite;
 	private float width;
 	private float height;
 
-	public Entity(float x, float y, Color color)
+	public Entity(float x, float y, int color)
 	{
 		this(x, y, 0.0f, 0.0f, color);
 	}
 
-	public Entity(float x, float y, float w, float h, Color c)
+	public Entity(float paramX, float paramY, float paramWidth, float paramHeight, int paramColor)
 	{
 		bounds = new Bounds(0.0f, 0.0f, 0.0f, 0.0f);
-		color = c;
+		pos = new Vector2(paramX, paramY);
+		old = new Vector2(paramX, paramY);
 		colliding = false;
-		width = w;
-		height = h;
-		pos = new Vector2(x, y);
-		old = new Vector2(x, y);
+		color = paramColor;
+		width = paramWidth;
+		height = paramHeight;
 	}
 
 	public final boolean isColliding()
 	{
 		return colliding;
 	}
+	
 	public final float getX()
 	{
 		return pos.x;
@@ -46,43 +46,7 @@ public abstract class Entity
 	{
 		return pos.y;
 	}
-
-	public final Color getColor()
-	{
-		return color;
-	}
-
-	public void setColor(Color color)
-	{
-		this.color = color;
-	}
-
-	public void setX(float x)
-	{
-		pos.x = x;
-	}
-
-	public void setY(float y)
-	{
-		pos.y = y;
-	}
 	
-	protected void setColliding(boolean colliding)
-	{
-		this.colliding = colliding;
-	}
-
-	protected void setPosition(final float x, final float y)
-	{
-		pos.set(x, y);
-	}
-
-	protected void setSize(final float width, final float height)
-	{
-		this.width = width;
-		this.height = height;
-	}
-
 	public final float getWidth()
 	{
 		return width;
@@ -92,22 +56,58 @@ public abstract class Entity
 	{
 		return height;
 	}
+	
+	public final int getColor()
+	{
+		return color;
+	}
 
 	public final Sprite getSprite()
 	{
 		return sprite;
 	}
 
-	protected void setSprite(final Sprite sprite)
+	public void setX(final float paramX)
 	{
-		this.sprite = sprite;
-		this.sprite.setCenter(pos.x, pos.y);
-		this.width = sprite.getWidth() * sprite.getScaleX();
-		this.height = sprite.getHeight() * sprite.getScaleY();
-		this.bounds.minX = this.width / 2;
-		this.bounds.minY = this.height / 2;
-		this.bounds.maxX = Gdx.graphics.getWidth() - this.bounds.minX;
-		this.bounds.maxY = Gdx.graphics.getHeight() - this.bounds.minY;
+		pos.x = paramX;
+	}
+
+	public void setY(final float paramY)
+	{
+		pos.y = paramY;
+	}
+	
+	protected void setColliding(boolean colliding)
+	{
+		this.colliding = colliding;
+	}
+	
+	public void setColor(int paramColor)
+	{
+		color = paramColor;
+	}
+
+	protected void setPosition(final float paramX, final float paramY)
+	{
+		pos.set(paramX, paramY);
+	}
+
+	protected void setSize(final float paramWidth, final float paramHeight)
+	{
+		width = paramWidth;
+		height = paramHeight;
+	}
+
+	protected void setSprite(Sprite paramSprite)
+	{
+		sprite = paramSprite;
+		sprite.setCenter(pos.x, pos.y);
+		width = paramSprite.getWidth() * paramSprite.getScaleX();
+		height = paramSprite.getHeight() * paramSprite.getScaleY();
+		bounds.minX = width / 2;
+		bounds.minY = height / 2;
+		bounds.maxX = Gdx.graphics.getWidth() - bounds.minX;
+		bounds.maxY = Gdx.graphics.getHeight() - bounds.minY;
 	}
 
 	public void draw(SpriteBatch sb)
