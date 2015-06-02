@@ -12,10 +12,10 @@ public abstract class GameRules
 
 	public GameRules(Player[] paramPlayers)
 	{
+		audio = AudioManager.getInstance();
 		players = paramPlayers;
 		p1FirstBlood = false;
 		p2FirstBlood = false;
-		audio = AudioManager.getInstance();
 	}
 
 	private void update()

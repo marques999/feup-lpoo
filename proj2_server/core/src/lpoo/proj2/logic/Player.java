@@ -32,10 +32,7 @@ public class Player
 		return id;
 	}
 
-	public void setID(int paramId)
-	{
-		id = paramId;
-	}
+
 
 	public final String getName()
 	{
@@ -62,22 +59,27 @@ public class Player
 		return streak;
 	}
 
-	public void setX(float x)
+	public void setX(final float x)
 	{
 		paddle.setX(x);
 	}
 
-	public void setY(float y)
+	public void setY(final float y)
 	{
 		paddle.setY(y);
 	}
 
-	public void setName(String paramName)
+	public void setName(final String paramName)
 	{
 		name = paramName;
 	}
+	
+	public void setID(final int paramId)
+	{
+		id = paramId;
+	}
 
-	public void setColor(int paramColor)
+	public void setColor(final int paramColor)
 	{
 		color = paramColor;
 	}

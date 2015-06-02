@@ -16,27 +16,24 @@ public class Puck extends DynamicEntity
 	{
 		super(x, y, color);
 
-		Sprite sprite;
-
 		switch (color)
 		{
 		case 1:
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_green.png")));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/ball_green.png"))));
 			break;
 		case 2:
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_red.png")));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/ball_red.png"))));
 			break;
 		case 3:
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_yellow.png")));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/ball_yellow.png"))));
 			break;
 		default:
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/ball_blue.png")));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/ball_blue.png"))));
 			break;
 		}
 
 		velocity = new Vector2(-128, -128);
 		acceleration = new Vector2(-8, -8);
-		setSprite(sprite);
 		bounding.setRadius(getWidth() / 2);
 	}
 

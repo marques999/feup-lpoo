@@ -5,20 +5,20 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class StaticEntity extends Entity
 {
 	protected Rectangle bounding;
-	
-	public StaticEntity(float paramX, float y)
+
+	public StaticEntity(float paramX, float paramY)
 	{
-		this(paramX, y, 0);
+		this(paramX, paramY, 0);
 	}
 
-	public StaticEntity(float paramX, float y, int color)
+	public StaticEntity(float paramX, float paramY, int paramColor)
 	{
-		this(paramX, y, 0, 0, color);
+		this(paramX, paramY, 0, 0, paramColor);
 	}
 
-	public StaticEntity(float paramX, float y, float paramWidth, float paramHeight)
+	public StaticEntity(float paramX, float paramY, float paramWidth, float paramHeight)
 	{
-		this(paramX, y, paramWidth, paramHeight, 0);
+		this(paramX, paramY, paramWidth, paramHeight, 0);
 	}
 
 	public StaticEntity(float paramX, float paramY, float paramWidth, float paramHeight, int paramColor)

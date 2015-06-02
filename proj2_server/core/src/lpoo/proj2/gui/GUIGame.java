@@ -121,13 +121,12 @@ public class GUIGame extends GUIScreen
 		}
 	}
 	
-	private SequenceAction blinkAction = Actions.sequence(Actions.fadeOut(0.5f), Actions.fadeIn(0.5f));
-	private Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...", styleGradientLabel);
-	
 	private class GameOverState extends GameState
 	{
+		private final SequenceAction blinkAction = Actions.sequence(Actions.fadeOut(0.5f), Actions.fadeIn(0.5f));
 		private final Stage stageOver = new Stage();
 		private final Table tableOver = new Table();
+		private Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...", styleGradientLabel);
 		private Label lblName;
 		private Label lblScore;
 		
@@ -377,18 +376,6 @@ public class GUIGame extends GUIScreen
 			changeState(new ConfirmExitState());
 			break;
 		}
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(final int mKeycode)
-	{
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(final char character)
-	{
 		return false;
 	}
 

@@ -14,25 +14,22 @@ public class Paddle extends DynamicEntity
 	{
 		super(x, y, color);
 
-		Sprite sprite;
-
 		switch (color)
 		{
 		case 1:
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_green.png")));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_green.png"))));
 			break;
 		case 2:
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_blue.png")));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_blue.png"))));
 			break;
 		case 3:
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_yellow.png")));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_yellow.png"))));
 			break;
 		default:
-			sprite = new Sprite(new Texture(Gdx.files.internal("gfx/paddle_red.png")));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_red.png"))));
 			break;
 		}
-		
-		setSprite(sprite);
+
 		velocity = new Vector2(0, 0);
 		bounding.setRadius(getWidth() / 2);
 	}

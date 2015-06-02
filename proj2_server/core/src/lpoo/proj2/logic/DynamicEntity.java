@@ -17,7 +17,6 @@ public abstract class DynamicEntity extends Entity implements CollisionDetector
 	public DynamicEntity(final float paramX, final float paramY, final int paramColor)
 	{
 		super(paramX, paramY, paramColor);
-		
 		bounding = new Circle(paramX, paramY, 1.0f);
 	}
 
@@ -60,7 +59,7 @@ public abstract class DynamicEntity extends Entity implements CollisionDetector
 		return false;
 	}
 
-	public boolean move(float x, float y)
+	public boolean move(final float x, final float y)
 	{
 		setX(x <= bounds.maxX ? (x < bounds.minX ? bounds.minX : x)	: bounds.maxX);
 
