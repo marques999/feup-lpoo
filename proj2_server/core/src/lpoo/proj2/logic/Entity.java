@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity
 {
-	protected Vector2 pos;
-	protected Vector2 old;
+	private Vector2 pos;
+	private Vector2 old;
 	protected Bounds bounds;
 	private int color;
 	private boolean colliding;
@@ -37,6 +37,30 @@ public abstract class Entity
 		return colliding;
 	}
 	
+	public final Vector2 getPosition()
+	{
+		return pos;
+	}
+	
+	public final Vector2 getPrevious()
+	{
+		return old;
+	}
+	
+	public final float getPreviousX()
+	{
+		return old.x;
+	}
+	
+	public final float getPreviousY()
+	{
+		return old.y;
+	}
+	
+	public void setPrevious(float paramX, float paramY)
+	{
+		old.set(paramX, paramY);
+	}
 	public final float getX()
 	{
 		return pos.x;

@@ -29,8 +29,6 @@ public class GUICredits extends GUIScreen
 	private final LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
 	private final LabelStyle styleGradientLabel = new LabelStyle(skin.get("gradientLabel", LabelStyle.class));
 	private final LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
-	private final Label lblDiogoMarques = new Label("Diogo Marques", styleSmallLabel);
-	private final Label lblPedroMelo = new Label("Pedro Melo", styleSmallLabel);
 	private final TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
 	private final TextButton btnBack = new TextButton("< BACK", styleButton);
 
@@ -43,6 +41,9 @@ public class GUICredits extends GUIScreen
 		table.add(new Label("\"Warp Room\"", styleSmallLabel)).padBottom(8).row();
 		table.add(new Label("Mark Mothersbaugh", styleSmallLabel)).padBottom(8).row();
 		table.add(new Label("Crash Bandicoot: Warped / SCEE", styleSmallLabel)).padBottom(32).row();
+		table.add(new Label("\"Gangnam Style\"", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("Psy", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("BLAHBLAHBLAH", styleSmallLabel)).padBottom(48).row();
 		table.add(new Label("\"Round Start\"", styleSmallLabel)).padBottom(8).row();
 		table.add(new Label("Katsushi Tatsuma", styleSmallLabel)).padBottom(8).row();
 		table.add(new Label("Chase H.Q / Taito", styleSmallLabel)).padBottom(32).row();
@@ -55,11 +56,11 @@ public class GUICredits extends GUIScreen
 		table.add(new Label("Glow Hockey 2", styleSmallLabel)).padBottom(8).row();
 		table.add(new Label("Natenai Ariyatrakool", styleSmallLabel)).padBottom(32).row();
 		table.add(new Label("Physics", styleGradientLabel)).padBottom(16).row();
-		table.add(lblDiogoMarques).padBottom(8).row();
-		table.add(lblPedroMelo).padBottom(16).row();
+		table.add(new Label("Diogo Marques", styleSmallLabel)).padBottom(8).row();
+		table.add(new Label("Pedro Melo", styleSmallLabel)).padBottom(16).row();
 		table.setFillParent(true);
+		
 		btnBack.setPosition(48, 30);
-
 		btnBack.addListener(new ClickListener()
 		{
 			@Override

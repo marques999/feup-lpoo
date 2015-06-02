@@ -32,23 +32,22 @@ public class Puck extends DynamicEntity
 			break;
 		}
 
-		velocity = new Vector2(-128, -128);
+		setRadius(getWidth() / 2);
+		setVelocity(new Vector2(-128, -128));
 		acceleration = new Vector2(-8, -8);
-		bounding.setRadius(getWidth() / 2);
 	}
 
 	public void update(float delta)
 	{
-		velocity.add(acceleration.cpy().scl(delta));
-		pos.add(velocity.cpy().scl(delta));
-		bounding.x = getX();
-		bounding.y = getY();
+		getVelocity().add(acceleration.cpy().scl(delta));
+		getPosition().add(getVelocity().cpy().scl(delta));
+		setBounding(getX(), getY());
 	}
 
 	@Override
 	public boolean collides(Paddle paddle)
 	{
-		if (Intersector.overlaps(bounding, paddle.bounding))
+		if (Intersector.overlaps(getBounding(), paddle.getBounding()))
 		{
 			if (!isColliding())
 			{
@@ -68,10 +67,10 @@ public class Puck extends DynamicEntity
 	@Override
 	public boolean collides(Puck puck)
 	{
-		if (Intersector.overlaps(bounding, puck.bounding))
+		if (Intersector.overlaps(getBounding(), puck.getBounding()))
 		{
 			acceleration.scl(-1);
-			velocity.scl(-1);
+			getVelocity().scl(-1);
 			return true;
 		}
 
@@ -80,20 +79,19 @@ public class Puck extends DynamicEntity
 
 	public void impulse(Vector2 velocity)
 	{
-		//this.pos.add(velocity);
-		this.velocity.add(velocity.scl(2));
+		getVelocity().mulAdd(velocity, 2);
 	}
 
 	@Override
 	public boolean collides(Wall wall)
 	{
-		if (Intersector.overlaps(bounding, wall.bounding))
+		if (Intersector.overlaps(getBounding(), wall.getBounding()))
 		{
 			if (!isColliding())
 			{
 				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
 				acceleration.scl(wall.getNormal());
-				velocity.scl(wall.getNormal());
+				getVelocity().scl(wall.getNormal());
 			}
 			
 			setColliding(true);
@@ -111,13 +109,13 @@ public class Puck extends DynamicEntity
 	@Override
 	public boolean collides(Goal goal)
 	{
-		if (Intersector.overlaps(bounding, goal.bounding))
+		if (Intersector.overlaps(getBounding(), goal.getBounding()))
 		{
 			if (!isColliding())
 			{
 				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
 				acceleration.scl(-1);
-				velocity.scl(-1);
+				getVelocity().scl(-1);
 				setColliding(true);
 
 				return true;

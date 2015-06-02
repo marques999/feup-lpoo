@@ -55,7 +55,7 @@ public class EntityFactory
 		return createGoal(screenWidth * 0.3f, screenHeight - 16);
 	}
 
-	public final ArrayList<Wall> createP1Walls(int color)
+	public final ArrayList<Wall> createWalls(int color)
 	{
 		ArrayList<Wall> walls = new ArrayList<Wall>();
 
@@ -63,25 +63,14 @@ public class EntityFactory
 		walls.add(new Wall(screenWidth - 32, 0, 32, screenHeight, color));
 		walls.add(new Wall(32, 0, screenWidth / 4, 32, color));
 		walls.add(new Wall(screenWidth * 0.75f - 32, 0, screenWidth / 4, 32, color));
-		
+		walls.add(new Wall(32, screenHeight - 32, screenWidth / 4, 32, color));
+		walls.add(new Wall(screenWidth * 0.75f - 32, screenHeight - 32, screenWidth / 4, 32, color));
 		walls.get(0).setNormal(-1, 1);
 		walls.get(1).setNormal(-1, 1);
 		walls.get(2).setNormal(1, -1);
 		walls.get(3).setNormal(1, -1);
-		
-
-		return walls;
-	}
-
-	public final ArrayList<Wall> createP2Walls(int color)
-	{
-		ArrayList<Wall> walls = new ArrayList<Wall>();
-
-		walls.add(new Wall(32, screenHeight - 32, screenWidth / 4, 32, color));
-		walls.add(new Wall(screenWidth * 0.75f - 32, screenHeight - 32, screenWidth / 4, 32, color));
-		
-		walls.get(0).setNormal(1, -1);
-		walls.get(1).setNormal(1, -1);
+		walls.get(4).setNormal(1, -1);
+		walls.get(5).setNormal(1, -1);
 
 		return walls;
 	}

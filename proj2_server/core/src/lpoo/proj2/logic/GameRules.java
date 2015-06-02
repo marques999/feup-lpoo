@@ -37,13 +37,19 @@ public abstract class GameRules
 			case 2:
 				audio.playSpecial(Special.QUAKE_DOUBLEKILL);
 				break;
-			case 4:
+			case 3:
+				audio.playSpecial(Special.QUAKE_HATTRICK);
+				break;
+			case 5:
 				audio.playSpecial(Special.QUAKE_KILLINGSPREE);
 				break;
-			case 6:
+			case 7:
+				audio.playSpecial(Special.QUAKE_RAMPAGE);
+				break;
+			case 9:
 				audio.playSpecial(Special.QUAKE_HOLYSHIT);
 				break;
-			case 8:
+			case 11:
 				audio.playSpecial(Special.QUAKE_GODLIKE);
 				break;
 			}

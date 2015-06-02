@@ -2,7 +2,10 @@ package lpoo.proj2.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.ArrayList;
+
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.AudioManager;
 import lpoo.proj2.audio.Special;
@@ -22,11 +25,12 @@ public class GameBoard
 	private GUIGame parent;
 	private ArrayList<Puck> pucks = new ArrayList<Puck>();
 	private ArrayList<Wall> walls = new ArrayList<Wall>();
-	protected boolean multiplayer = false;
+	private boolean multiplayer;
 
-	public GameBoard(GUIGame paramParent, GameRules paramRules)
+	public GameBoard(GUIGame paramParent, GameRules paramRules, boolean paramMultiplayer)
 	{
 		rules = paramRules;
+		multiplayer = paramMultiplayer;
 		lastPlayed = null;
 		parent = paramParent;
 		cpu = new CPUPaddle();
@@ -37,14 +41,78 @@ public class GameBoard
 
 	private class CPUPaddle implements Runnable
 	{
+		private float currentTime = 0.0f;
+		private float reactionTime = 0.5f;
+		private Puck puck;
+		private final float screenWidth = Gdx.graphics.getWidth();
+		private final float screenHeight = Gdx.graphics.getHeight();
+
 		@Override
 		public void run()
 		{
-			if (pucks.get(0).pos.y > Gdx.graphics.getHeight() / 2)
+		   puck = pucks.get(0);
+		   currentTime += Gdx.graphics.getDeltaTime();
+		   
+		    if (currentTime < 0.700f) 
+		    {
+		        defense(p2Paddle.getX(), p2Paddle.getY(), puck.getX(), puck.getY(), puck.getRadius());
+		    }
+		    else
+		    {
+		    	currentTime = 0.0f;
+		    	 makeDecision(p2Paddle.getX(), p2Paddle.getY(), puck.getX(), puck.getY(), puck.getRadius());
+		    }
+		}
+		
+		public void makeDecision(float x, float y, float px, float py, float radius)
+		{
+			boolean puckInCorner = px < screenWidth / 5 || px > 4 * screenWidth / 5;
+
+			if (puckInCorner && py < 2 * radius)
 			{
-				p2Paddle.move(pucks.get(0).pos.x, Gdx.graphics.getHeight()
-						- p2Paddle.getY());
+				return;
 			}
+
+			if (py < (9 * screenHeight / 20))
+			{
+				moveTo(x, y, px, py - radius / 4);
+			}
+
+			defense(x, y, px, py, radius);
+		}
+
+		private boolean defense(float x, float y, float px, float py, float radius)
+		{
+			if (py < y && Math.abs(screenWidth / 2 - px) > screenWidth / 5)
+			{
+				moveTo(x, y, px, py - radius);
+			}
+
+			moveTo(x, y, screenWidth / 4 + screenWidth / 2 * (px / (float) (1.0 * screenWidth)), screenHeight / 6);
+
+			return true;
+		}
+
+		private void moveTo(float x, float y, float px, float py)
+		{
+			// be random
+			int speed = 0;
+			// calculate deltas
+			float dx = px - x;
+			float dy = py - y;
+			// calculate distance between puck and paddle position (we use
+			// Pythagorean theorem)
+			Vector2 distance = new Vector2(dx, dy);
+			Vector2 velocity = distance.scl(0.2f, 0.2f);
+			// if total distance is greater than the distance, of which we can
+			// move in one step calculate new x and y coordinates somewhere
+			// between current puck and paddle position.
+			// if (distance > speed) {
+			// // x = current padle x position + equally part of speed on x axis
+			// px = x + speed / distance * dx;
+			// py = y + speed / distance * dy;
+			// }
+
 		}
 	}
 
@@ -63,8 +131,7 @@ public class GameBoard
 		}
 
 		rules.reset();
-		walls.addAll(factory.createP1Walls(parent.getP1().getColor()));
-		walls.addAll(factory.createP2Walls(parent.getP2().getColor()));
+		walls = factory.createWalls(parent.getP1().getColor());
 		p1Paddle = factory.createP1Paddle(parent.getP1().getColor());
 		p2Paddle = factory.createP2Paddle(parent.getP2().getColor());
 		p1Goal = factory.createP1Goal();
@@ -89,7 +156,7 @@ public class GameBoard
 		p1Paddle.update(delta);
 
 		for (Puck puck : pucks)
-		{	
+		{
 			puck.update(delta);
 
 			if (p1Paddle.collides(puck))
@@ -145,12 +212,9 @@ public class GameBoard
 		}
 	}
 
-	public void movePaddle(int paddleId, float x, float y)
+	public void movePaddle(float x, float y)
 	{
-		if (!multiplayer)
-		{
-			p1Paddle.move(x, y);
-		}
+		p1Paddle.move(x, y);
 	}
 
 	public void draw(SpriteBatch sb)

@@ -32,38 +32,32 @@ public class Paddle extends DynamicEntity
 			break;
 		}
 
-		velocity = new Vector2(0, 0);
-		bounding.setRadius(getWidth() / 2);
+		setVelocity(new Vector2(0.0f, 0.0f));
+		setRadius(getWidth() / 2);
 	}
 
-	
-	
 	public void update(float delta)
 	{
-		float dx = (getX() - old.x) / delta;
-		float dy = (getY() - old.y) / delta;
+		float dx = (getX() - getPreviousX()) / delta;
+		float dy = (getY() - getPreviousY()) / delta;
 
-		if(Math.abs(dx) <= minimumSpeed && dx != 0.0f)
+		if (Math.abs(dx) <= minimumSpeed && dx != 0.0f)
 			dx = minimumSpeed * Math.signum(dx);
-		else if(dx == 0.0f)
+		else if (dx == 0.0f)
 			dx = minimumSpeed;
-		
-		if(Math.abs(dy) <= minimumSpeed && dy != 0.0f)
+		if (Math.abs(dy) <= minimumSpeed && dy != 0.0f)
 			dy = minimumSpeed * Math.signum(dy);
-		else if(dy == 0.0f)
+		else if (dy == 0.0f)
 			dy = minimumSpeed;
 		
-		velocity.set(new Vector2(dx, dy));
-		System.out.println(velocity.toString());
-		
-		old.x = getX();
-		old.y = getY();
+		setVelocity(new Vector2(dx, dy));
+		setPrevious(getX(), getY());
 	}
 
 	@Override
 	public boolean collides(Paddle paddle)
 	{
-		if (Intersector.overlaps(bounding, paddle.bounding))
+		if (Intersector.overlaps(getBounding(), paddle.getBounding()))
 		{
 			if (!isColliding())
 			{
@@ -83,17 +77,17 @@ public class Paddle extends DynamicEntity
 	@Override
 	public boolean collides(Puck puck)
 	{
-		if (Intersector.overlaps(bounding, puck.bounding))
+		if (Intersector.overlaps(getBounding(), puck.getBounding()))
 		{
 			if (!isColliding())
 			{
 				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
-				puck.impulse(velocity.scl(1 / 16f));
+				puck.impulse(getVelocity().scl(1 / 16f));
 				setColliding(true);
 				return true;
 			}
 			
-			puck.pos.add(velocity.x/100, velocity.y/100);
+			puck.getPosition().add(getVelocity().x/100, getVelocity().y/100);
 			setColliding(true);
 		}
 		else
@@ -112,7 +106,7 @@ public class Paddle extends DynamicEntity
 				|| this.getY() <= wall.getY() + wall.getHeight()
 				|| this.getY() >= wall.getY())
 		{
-			if (Intersector.overlaps(bounding, wall.bounding))
+			if (Intersector.overlaps(getBounding(), wall.getBounding()))
 			{
 				return true;
 			}
