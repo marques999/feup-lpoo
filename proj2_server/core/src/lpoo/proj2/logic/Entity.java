@@ -16,9 +16,9 @@ public abstract class Entity
 	private float width;
 	private float height;
 
-	public Entity(float x, float y, int color)
+	public Entity(float paramX, float paramY, int paramColor)
 	{
-		this(x, y, 0.0f, 0.0f, color);
+		this(paramX, paramY, 0.0f, 0.0f, paramColor);
 	}
 
 	public Entity(float paramX, float paramY, float paramWidth, float paramHeight, int paramColor)
@@ -77,9 +77,9 @@ public abstract class Entity
 		pos.y = paramY;
 	}
 	
-	protected void setColliding(boolean colliding)
+	protected void setColliding(boolean paramColliding)
 	{
-		this.colliding = colliding;
+		colliding = paramColliding;
 	}
 	
 	public void setColor(int paramColor)

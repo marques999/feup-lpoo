@@ -75,9 +75,9 @@ public class GUISelect extends GUIScreen
 		table.add(btnMode3).row();
 		table.add(btnMode4).row();
 		table.setFillParent(true);
-		btnBack.setPosition(36, 32);
 		stage.addActor(table);
 		stage.addActor(btnBack);
+		btnBack.setPosition(36, 32);
 		btnMode1.addListener(new MenuListener(btnMode1, 0));
 		btnMode2.addListener(new MenuListener(btnMode2, 1));
 		btnMode3.addListener(new MenuListener(btnMode3, 2));

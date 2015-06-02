@@ -1,6 +1,8 @@
 package lpoo.proj2.gui;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
@@ -70,6 +72,71 @@ public class GUIGame extends GUIScreen
 	{	
 		public abstract void update(float delta);
 		public abstract void draw();
+	}
+	
+	private class WaitingState extends GameState
+	{
+		private final Stage stageWaiting = new Stage();
+		private final Table tableWaiting = new Table();
+		private final TextButton btnResume = new TextButton("RESUME", styleMenuButton);
+
+		public WaitingState()
+		{
+			tableWaiting.setFillParent(true);
+			tableWaiting.defaults().padBottom(16);
+			tableWaiting.add(new Label("WAITING FOR PLAYERS...", styleGradientLabel)).colspan(2);
+			tableWaiting.row();
+			tableWaiting.add(new Label("Hostname:", styleGradientLabel)).left();
+			
+			try
+			{
+				tableWaiting.add(new Label(InetAddress.getLocalHost().getHostAddress(), styleSmallLabel)).right();
+			}
+			catch (UnknownHostException e)
+			{
+
+				e.printStackTrace();
+			}
+			
+			tableWaiting.row();
+			tableWaiting.add(new Label("Port:", styleGradientLabel)).left().padBottom(32);
+			tableWaiting.add(new Label(Integer.toString(9732), styleSmallLabel)).right().padBottom(32);
+			tableWaiting.row();
+			tableWaiting.add(new Label("Players connected:", styleGradientLabel)).left();
+			tableWaiting.add(new Label("0 / 2", styleSmallLabel)).right();
+			stageWaiting.addActor(overlay);
+			stageWaiting.addActor(tableWaiting);
+
+			btnResume.addListener(new ClickListener()
+			{
+				@Override
+				public void clicked(InputEvent event, float x, float y)
+				{
+					audio.playSound(SFX.MENU_CLICK);
+					changeState(new GameRunningState());
+				}
+
+				@Override
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
+			});
+
+			Gdx.input.setInputProcessor(stageWaiting);
+		}
+
+		@Override
+		public void update(float delta)
+		{
+			stageWaiting.act(delta);
+		}
+
+		@Override
+		public void draw()
+		{
+			stageWaiting.draw();
+		}
 	}
 	
 	private class GamePausedState extends GameState
@@ -344,14 +411,8 @@ public class GUIGame extends GUIScreen
 		players[1] = new Player("CPU", 0);
 		changeState(new GameRunningState());
 
-		try
-		{
-			s = new GameServer(9732, 9733);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+
+		
 	}
 
 	@Override
@@ -424,7 +485,29 @@ public class GUIGame extends GUIScreen
 			break;
 		}
 		
-		changeState(new GameRunningState());
+		if (parent.isMultiplayer())
+		{
+			changeState(new WaitingState());
+			
+			if (s != null)
+			{
+				return;
+			}
+			
+			try
+			{
+				s = new GameServer(9732, 9733);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			changeState(new GameRunningState());
+		}
+		
 	}
 
 	@Override
