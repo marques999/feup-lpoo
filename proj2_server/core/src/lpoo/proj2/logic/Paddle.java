@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Paddle extends DynamicEntity
 {
+	private static final float minimumSpeed = 200.0f;
+
 	protected Paddle(float x, float y, int color)
 	{
 		super(x, y, color);
@@ -34,24 +36,26 @@ public class Paddle extends DynamicEntity
 		bounding.setRadius(getWidth() / 2);
 	}
 
+	
+	
 	public void update(float delta)
 	{
 		float dx = (getX() - old.x) / delta;
 		float dy = (getY() - old.y) / delta;
 
-		if (Math.abs(dx) < 0.1)
-		{
-			velocity.set(new Vector2(0.0f, dy));
-		}
-		else if (Math.abs(dy) < 0.1)
-		{
-			velocity.set(new Vector2(dx, 0.0f));
-		}
-		else
-		{
-			velocity.set(new Vector2(dx, dy));
-		}
-
+		if(Math.abs(dx) <= minimumSpeed && dx != 0.0f)
+			dx = minimumSpeed * Math.signum(dx);
+		else if(dx == 0.0f)
+			dx = minimumSpeed;
+		
+		if(Math.abs(dy) <= minimumSpeed && dy != 0.0f)
+			dy = minimumSpeed * Math.signum(dy);
+		else if(dy == 0.0f)
+			dy = minimumSpeed;
+		
+		velocity.set(new Vector2(dx, dy));
+		System.out.println(velocity.toString());
+		
 		old.x = getX();
 		old.y = getY();
 	}
@@ -88,7 +92,8 @@ public class Paddle extends DynamicEntity
 				setColliding(true);
 				return true;
 			}
-
+			
+			puck.pos.add(velocity.x/100, velocity.y/100);
 			setColliding(true);
 		}
 		else

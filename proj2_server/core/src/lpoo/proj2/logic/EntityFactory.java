@@ -59,10 +59,16 @@ public class EntityFactory
 	{
 		ArrayList<Wall> walls = new ArrayList<Wall>();
 
-		walls.add(new Wall(0, 0, 32, screenHeight / 2, color));
-		walls.add(new Wall(screenWidth - 32, 0, 32, screenHeight / 2, color));
+		walls.add(new Wall(0, 0, 32, screenHeight, color));
+		walls.add(new Wall(screenWidth - 32, 0, 32, screenHeight, color));
 		walls.add(new Wall(32, 0, screenWidth / 4, 32, color));
 		walls.add(new Wall(screenWidth * 0.75f - 32, 0, screenWidth / 4, 32, color));
+		
+		walls.get(0).setNormal(-1, 1);
+		walls.get(1).setNormal(-1, 1);
+		walls.get(2).setNormal(1, -1);
+		walls.get(3).setNormal(1, -1);
+		
 
 		return walls;
 	}
@@ -71,10 +77,11 @@ public class EntityFactory
 	{
 		ArrayList<Wall> walls = new ArrayList<Wall>();
 
-		walls.add(new Wall(0, screenHeight / 2, 32, screenHeight / 2, color));
-		walls.add(new Wall(screenWidth - 32, screenHeight / 2, 32, screenHeight / 2, color));
 		walls.add(new Wall(32, screenHeight - 32, screenWidth / 4, 32, color));
 		walls.add(new Wall(screenWidth * 0.75f - 32, screenHeight - 32, screenWidth / 4, 32, color));
+		
+		walls.get(0).setNormal(1, -1);
+		walls.get(1).setNormal(1, -1);
 
 		return walls;
 	}

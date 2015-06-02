@@ -80,7 +80,7 @@ public class Puck extends DynamicEntity
 
 	public void impulse(Vector2 velocity)
 	{
-		this.pos.add(velocity);
+		//this.pos.add(velocity);
 		this.velocity.add(velocity.scl(2));
 	}
 
@@ -92,12 +92,12 @@ public class Puck extends DynamicEntity
 			if (!isColliding())
 			{
 				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
-				acceleration.scl(-1);
-				velocity.scl(-1);
+				acceleration.scl(wall.getNormal());
+				velocity.scl(wall.getNormal());
 			}
-
+			
 			setColliding(true);
-
+			
 			return true;
 		}
 		else
