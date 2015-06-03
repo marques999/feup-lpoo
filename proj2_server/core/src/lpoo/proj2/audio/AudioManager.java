@@ -24,6 +24,7 @@ public class AudioManager
 	private final Music[] playlist = 
 	{
 		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_main.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_over.ogg")),
 		Gdx.audio.newMusic(Gdx.files.internal("audio/daisukiss.ogg")),
 		Gdx.audio.newMusic(Gdx.files.internal("audio/gangnam.ogg")),
 		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_splash.ogg")),
@@ -48,6 +49,7 @@ public class AudioManager
 	{
 		Gdx.audio.newSound(Gdx.files.internal("audio/doublekill.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/firstblood.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/flawless.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/godlike.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/hattrick.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/holyshit.ogg")),
@@ -107,20 +109,23 @@ public class AudioManager
 			case THEME_MAIN_MENU:
 				currentSong = playlist[0];
 				break;
-			case THEME_A:
+			case THEME_GAME_OVER:
 				currentSong = playlist[1];
 				break;
-			case THEME_B:
+			case THEME_A:
 				currentSong = playlist[2];
 				break;
-			case THEME_SPLASH:
+			case THEME_B:
 				currentSong = playlist[3];
 				break;
-			case THEME_SELECT:
+			case THEME_SPLASH:
 				currentSong = playlist[4];
 				break;
-			case THEME_CREDITS:
+			case THEME_SELECT:
 				currentSong = playlist[5];
+				break;
+			case THEME_CREDITS:
+				currentSong = playlist[6];
 				break;
 			case THEME_NONE:
 				currentSong = null;
@@ -143,7 +148,7 @@ public class AudioManager
 		{
 			return;
 		}
-		
+
 		switch (soundName)
 		{
 		case QUAKE_DOUBLEKILL:
@@ -152,26 +157,29 @@ public class AudioManager
 		case QUAKE_FIRSTBLOOD:
 			special[1].play(sfxVolume);
 			break;
-		case QUAKE_GODLIKE:
+		case QUAKE_FLAWLESS:
 			special[2].play(sfxVolume);
 			break;
-		case QUAKE_HATTRICK:
-			special[3].play(sfxVolume);
-			break;
-		case QUAKE_HOLYSHIT:
-			special[4].play(sfxVolume);
-			break;
-		case QUAKE_HUMILIATION:
-			special[5].play(sfxVolume);
-			break;
-		case QUAKE_KILLINGSPREE:
+		case QUAKE_GODLIKE:
 			special[6].play(sfxVolume);
 			break;
-		case QUAKE_PREPARE:
+		case QUAKE_HATTRICK:
+			special[4].play(sfxVolume);
+			break;
+		case QUAKE_HOLYSHIT:
+			special[5].play(sfxVolume);
+			break;
+		case QUAKE_HUMILIATION:
+			special[6].play(sfxVolume);
+			break;
+		case QUAKE_KILLINGSPREE:
 			special[7].play(sfxVolume);
 			break;
-		case QUAKE_RAMPAGE:
+		case QUAKE_PREPARE:
 			special[8].play(sfxVolume);
+			break;
+		case QUAKE_RAMPAGE:
+			special[9].play(sfxVolume);
 			break;
 		}
 	}

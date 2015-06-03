@@ -102,6 +102,11 @@ public abstract class GameRules
 	{
 		return players[1].getScore() > players[0].getScore();
 	}
+	
+	public boolean checkAce()
+	{
+		return checkOver() && (players[0].getScore() == 0 || players[1].getScore() == 0);
+	}
 
 	public abstract boolean checkOver();
 	public abstract boolean checkLast();

@@ -141,7 +141,8 @@ public class GUISelect extends GUIScreen
 	@Override
 	public void dispose()
 	{
-		stage.dispose();
+		atlas.dispose();
 		skin.dispose();
+		stage.dispose();
 	}
 }

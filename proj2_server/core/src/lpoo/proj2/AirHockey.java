@@ -1,6 +1,7 @@
 package lpoo.proj2;
 
 import java.util.ArrayList;
+import java.util.Stack;
 import lpoo.proj2.audio.AudioManager;
 import lpoo.proj2.audio.Song;
 import lpoo.proj2.gui.GUICredits;
@@ -15,22 +16,15 @@ import com.badlogic.gdx.Preferences;
 
 public class AirHockey extends Game
 {
-	private GUIScreen current;
-	private ArrayList<GUIScreen> menus;
-	private AudioManager audio;
+	private GUIScreen _current;
+	private ArrayList<GUIScreen> _menus;
+	private Stack<Integer> _stack;
+	private AudioManager _am;
 	private boolean _multiplayer = false;
 	private int mode = 1;
 
 	public AirHockey()
 	{
-	}
-	
-	public void resize (int width, int height) 
-	{
-		if (screen != null) 
-		{
-			screen.resize(width, height);
-		}
 	}
 
 	public final boolean isMultiplayer()
@@ -153,28 +147,29 @@ public class AirHockey extends Game
 	public void create()
 	{
 		getPreferences();
-		menus = new ArrayList<GUIScreen>();
-		menus.add(new GUIGame(this));
-		menus.add(new GUIMainMenu(this));
-		menus.add(new GUIOptions(this));
-		menus.add(new GUISelect(this));
-		menus.add(new GUICredits(this));
-		audio = AudioManager.getInstance();
+		_menus = new ArrayList<GUIScreen>();
+		_stack = new Stack<Integer>();
+		_menus.add(new GUIGame(this));
+		_menus.add(new GUIMainMenu(this));
+		_menus.add(new GUIOptions(this));
+		_menus.add(new GUISelect(this));
+		_menus.add(new GUICredits(this));
+		_am = AudioManager.getInstance();
 		switchTo(1);
 	}
 
 	public void switchTo(final int i)
 	{
-		if (current != null)
+		if (_current != null)
 		{
-			current.hide();
+			_current.hide();
 		}
 
-		current = menus.get(i);
-		Gdx.input.setInputProcessor(current);
-		current.show();
-		setScreen(current);
-		audio.playSong(current.getSong(), true);
+		_current = _menus.get(i);
+		_stack.push(i);
+		Gdx.input.setInputProcessor(_current);
+		setScreen(_current);
+		_am.playSong(_current.getSong(), true);
 		preferences.flush();
 	}
 

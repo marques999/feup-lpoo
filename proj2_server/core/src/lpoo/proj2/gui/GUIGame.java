@@ -1,19 +1,14 @@
 package lpoo.proj2.gui;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
+import lpoo.proj2.audio.Special;
 import lpoo.proj2.logic.GameBoard;
 import lpoo.proj2.logic.Player;
-import lpoo.proj2.logic.RulesAttack;
-import lpoo.proj2.logic.RulesBest10;
-import lpoo.proj2.logic.RulesBest5;
-import lpoo.proj2.logic.RulesFirst15;
-import lpoo.proj2.net.GameServer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -38,9 +33,7 @@ public class GUIGame extends GUIScreen
 {
 	private GameBoard game;
 	private GameState state;
-	private GameServer s = null;
-	private Player players[];
-	
+
 	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private final BitmapFont nameFont = new BitmapFont(Gdx.files.internal("menu/bebasbold.fnt"));
 	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
@@ -54,16 +47,6 @@ public class GUIGame extends GUIScreen
 	public void changeState(GameState newState)
 	{
 		state = newState;
-	}
-
-	public final Player getP1()
-	{
-		return players[0];
-	}
-
-	public final Player getP2()
-	{
-		return players[1];
 	}
 
 	private abstract class GameState
@@ -201,9 +184,9 @@ public class GUIGame extends GUIScreen
 
 			strName.append(p.getName());
 			strName.append(" WINS!");
-			strScore.append(Integer.toString(players[0].getScore()));
+			strScore.append(Integer.toString(game.getPlayer1().getScore()));
 			strScore.append(" - ");
-			strScore.append(Integer.toString(players[1].getScore()));
+			strScore.append(Integer.toString(game.getPlayer2().getScore()));
 			
 			lblName = new Label(strName, styleGradientLabel);
 			lblScore = new Label(strScore, styleDefaultLabel);
@@ -217,7 +200,7 @@ public class GUIGame extends GUIScreen
 			tableOver.setFillParent(true);
 			stageOver.addActor(overlay);
 			stageOver.addActor(tableOver);
-			audio.playSong(Song.THEME_SELECT, true);
+			audio.playSong(Song.THEME_GAME_OVER, true);
 			
 			stageOver.addListener(new ClickListener()
 			{
@@ -358,9 +341,9 @@ public class GUIGame extends GUIScreen
 
 			strName.append(p.getName());
 			strName.append(" SCORES!");
-			strScore.append(Integer.toString(players[0].getScore()));
+			strScore.append(Integer.toString(game.getPlayer1().getScore()));
 			strScore.append(" - ");
-			strScore.append(Integer.toString(players[1].getScore()));
+			strScore.append(Integer.toString(game.getPlayer2().getScore()));
 
 			tableScore.defaults().padBottom(16).center();
 			tableScore.add(new Label(strName, styleGradientLabel)).padBottom(8).row();
@@ -406,8 +389,6 @@ public class GUIGame extends GUIScreen
 	public GUIGame(final AirHockey parent)
 	{
 		super(parent, Song.THEME_NONE);
-
-		changeState(new GameRunningState());
 	}
 
 	@Override
@@ -416,8 +397,8 @@ public class GUIGame extends GUIScreen
 		state.update(delta);
 		batch.begin();
 		batch.draw(background, 0, 0, 480, 800);
-		nameFont.draw(batch, getP1().getName(), 64, 64);
-		nameFont.draw(batch, getP2().getName(), 64, 720);
+		nameFont.draw(batch, game.getPlayer1().getName(), 64, 64);
+		nameFont.draw(batch, game.getPlayer2().getName(), 64, 720);
 		game.draw(batch);
 		batch.end();
 		state.draw();
@@ -441,7 +422,7 @@ public class GUIGame extends GUIScreen
 	{
 		if (!parent.isMultiplayer())
 		{
-			game.movePaddle(screenX, screenY);
+			game.movePaddle(0, screenX, screenY);
 		}
 		
 		return true;
@@ -452,7 +433,7 @@ public class GUIGame extends GUIScreen
 	{
 		if (!parent.isMultiplayer())
 		{
-			game.movePaddle(screenX, screenY);
+			game.movePaddle(0, screenX, screenY);
 		}
 		
 		return true;
@@ -461,62 +442,24 @@ public class GUIGame extends GUIScreen
 	@Override
 	public void show()
 	{
-		players = new Player[2];
+		game = new GameBoard(this, parent.getMode(), parent.isMultiplayer());
 		
-		if (parent.isMultiplayer())
-		{
-			players[0] = new Player("Player 1", 0);
-			players[1] = new Player("Player 2", 0);
-		}
-		else
-		{	
-			players[0] = new Player("Human", 3);
-			players[1] = new Player("CPU", 0);
-		}
-		
-		switch (parent.getMode())
-		{
-		case 0:
-			game = new GameBoard(this, new RulesBest5(players), parent.isMultiplayer());
-			break;
-		case 1:
-			game = new GameBoard(this, new RulesBest10(players), parent.isMultiplayer());
-			break;
-		case 2:
-			game = new GameBoard(this, new RulesFirst15(players), parent.isMultiplayer());
-			break;
-		case 3:
-			game = new GameBoard(this, new RulesAttack(players), parent.isMultiplayer());
-			break;
-		}
+		audio.playSpecial(Special.QUAKE_PREPARE);
 		
 		if (parent.isMultiplayer())
 		{
 			changeState(new WaitingState());
-			
-			if (s != null)
-			{
-				return;
-			}
-			
-			try
-			{
-				s = new GameServer(9732, 9733);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
 		}
 		else
 		{
 			changeState(new GameRunningState());
-		}		
+		}
 	}
-
+	
 	@Override
 	public void hide()
 	{
+		game.dispose();
 	}
 
 	@Override

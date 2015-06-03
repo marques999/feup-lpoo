@@ -24,7 +24,7 @@ public abstract class DynamicEntity extends Entity implements CollisionDetector
 	{
 		return bounding;
 	}
-	
+
 	public void setBounding(final float paramX, final float paramY)
 	{
 		bounding.setPosition(paramX, paramY);
@@ -39,12 +39,12 @@ public abstract class DynamicEntity extends Entity implements CollisionDetector
 	{
 		bounding.radius = paramRadius;
 	}
-	
+
 	public final Vector2 getVelocity()
 	{
 		return velocity;
 	}
-	
+
 	public void setVelocity(Vector2 paramVelocity)
 	{
 		velocity = paramVelocity;
@@ -76,7 +76,7 @@ public abstract class DynamicEntity extends Entity implements CollisionDetector
 
 	public boolean move(final float x, final float y)
 	{
-		setX(x <= bounds.maxX ? (x < bounds.minX ? bounds.minX : x)	: bounds.maxX);
+		setX(x <= bounds.maxX ? (x < bounds.minX ? bounds.minX : x) : bounds.maxX);
 
 		if (y > bounds.maxY)
 		{

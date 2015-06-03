@@ -2,6 +2,7 @@ package lpoo.proj2.logic;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 
 public class EntityFactory
@@ -32,12 +33,16 @@ public class EntityFactory
 
 	public final Paddle createP1Paddle(int paramColor)
 	{
-		return createPaddle(screenWidth / 2, 64, paramColor);
+		Paddle p1Paddle = createPaddle(screenWidth / 2, 64, paramColor);
+		p1Paddle.bounds.minY = screenHeight / 2 - p1Paddle.getHeight() / 16;
+		return p1Paddle;
 	}
 
-	public final Paddle createP2Paddle(int color)
+	public final Paddle createP2Paddle(int paramColor)
 	{
-		return createPaddle(screenWidth / 2, screenHeight - 64, color);
+		Paddle p2Paddle = createPaddle(screenWidth / 2, screenHeight - 64, paramColor);
+		p2Paddle.bounds.maxY = screenHeight / 2 - p2Paddle.getHeight() / 16;
+		return p2Paddle;
 	}
 
 	private final Goal createGoal(float x, float y)

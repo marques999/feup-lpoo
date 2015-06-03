@@ -2,12 +2,13 @@ package lpoo.proj2.logic;
 
 public class Player
 {
-	private Paddle paddle;
 	private String name;
 	private int color;
 	private int score;
 	private int streak;
 	private int id;
+	private float x;
+	private float y;
 
 	public Player()
 	{
@@ -16,10 +17,18 @@ public class Player
 
 	public Player(String paramName, int paramColor)
 	{
+		this(0, paramName, paramColor);
+	}
+
+	public Player(int paramId, String paramName, int paramColor)
+	{
 		name = paramName;
 		color = paramColor;
+		id = paramId;
 		score = 0;
 		streak = 0;
+		x = 0;
+		y = 0;
 	}
 
 	public final int getColor()
@@ -27,26 +36,34 @@ public class Player
 		return color;
 	}
 
+	public final float getX()
+	{
+		return x;
+	}
+
+	public final float getY()
+	{
+		return y;
+	}
+
+	public void setX(float paramX)
+	{
+		x = paramX;
+	}
+
+	public void setY(float paramY)
+	{
+		y = paramY;
+	}
+
 	public final int getID()
 	{
 		return id;
 	}
 
-
-
 	public final String getName()
 	{
 		return name;
-	}
-
-	public final float getX()
-	{
-		return paddle.getX();
-	}
-
-	public final float getY()
-	{
-		return paddle.getY();
 	}
 
 	public final int getScore()
@@ -59,21 +76,11 @@ public class Player
 		return streak;
 	}
 
-	public void setX(final float x)
-	{
-		paddle.setX(x);
-	}
-
-	public void setY(final float y)
-	{
-		paddle.setY(y);
-	}
-
 	public void setName(final String paramName)
 	{
 		name = paramName;
 	}
-	
+
 	public void setID(final int paramId)
 	{
 		id = paramId;
@@ -99,15 +106,5 @@ public class Player
 	{
 		score++;
 		streak++;
-	}
-
-	public final Paddle getPaddle()
-	{
-		return paddle;
-	}
-
-	public void setPaddle(Paddle paramPaddle)
-	{
-		paddle = paramPaddle;
 	}
 }

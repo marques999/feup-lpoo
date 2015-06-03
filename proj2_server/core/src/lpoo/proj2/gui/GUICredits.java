@@ -3,8 +3,8 @@ package lpoo.proj2.gui;
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -59,7 +59,7 @@ public class GUICredits extends GUIScreen
 		table.add(new Label("Diogo Marques", styleSmallLabel)).padBottom(8).row();
 		table.add(new Label("Pedro Melo", styleSmallLabel)).padBottom(16).row();
 		table.setFillParent(true);
-		
+
 		btnBack.setPosition(48, 30);
 		btnBack.addListener(new ClickListener()
 		{
@@ -84,17 +84,18 @@ public class GUICredits extends GUIScreen
 		stage.addActor(btnBack);
 	}
 
-	@Override
-	public void render(float delta)
+	public void reset()
 	{
-		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		if (table.getY() >= 1800.0f)
+		if (table.getY() >= 1000.0f)
 		{
 			show();
 		}
+	}
 
+	@Override
+	public void render(float delta)
+	{
+		reset();
 		stage.act();
 		batch.begin();
 		batch.draw(background, 0, 0, 480, 800);
@@ -120,7 +121,8 @@ public class GUICredits extends GUIScreen
 	@Override
 	public void dispose()
 	{
-		stage.dispose();
+		atlas.dispose();
 		skin.dispose();
+		stage.dispose();
 	}
 }
