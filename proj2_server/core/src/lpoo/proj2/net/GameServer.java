@@ -2,16 +2,18 @@ package lpoo.proj2.net;
 
 import java.io.IOException;
 import java.util.HashSet;
+
 import lpoo.proj2.logic.GameBoard;
 import lpoo.proj2.logic.Player;
-import lpoo.proj2.net.Network.AddPlayer;
+import lpoo.proj2.net.Network.GameOver;
+import lpoo.proj2.net.Network.PlayerConnected;
 import lpoo.proj2.net.Network.Login;
 import lpoo.proj2.net.Network.MovePaddle;
 import lpoo.proj2.net.Network.PlayerConnection;
-import lpoo.proj2.net.Network.RemovePlayer;
+import lpoo.proj2.net.Network.PlayerDisconnected;
 import lpoo.proj2.net.Network.ServerFull;
-import lpoo.proj2.net.Network.UpdatePlayer;
 import lpoo.proj2.net.Network.UpdateScore;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -53,7 +55,7 @@ public class GameServer
 
 				if (object instanceof Login)
 				{
-					Login login = (Login) object;
+					final Login login = (Login) object;
 					
 					if (player != null)
 					{
@@ -86,20 +88,14 @@ public class GameServer
 				}
 				else if (object instanceof MovePaddle)
 				{
-					if (player == null)
-					{
-						return;
-					}
-
-					MovePaddle msg = (MovePaddle) object;
-					UpdatePlayer update = new UpdatePlayer();
+					final MovePaddle msg = (MovePaddle) object;
 					
-					player.setX(msg.x);
-					player.setY(msg.y);
-					update.x = msg.x;
-					update.y = msg.y;
-					board.movePaddle(player.getID(), player.getX(), player.getY());
-					server.sendToAllTCP(update);
+					if (player != null)
+					{
+						player.setX(msg.x);
+						player.setY(msg.y);
+						board.movePaddle(player.getID(), player.getX(), player.getY());
+					}
 				}
 				else
 				{
@@ -109,15 +105,21 @@ public class GameServer
 			@Override
 			public void disconnected(Connection c)
 			{
-				PlayerConnection connection = (PlayerConnection) c;
+				final PlayerConnection connection = (PlayerConnection) c;
 
 				if (connection.player != null)
 				{
 					players.remove(connection.player);
-					RemovePlayer removeCharacter = new RemovePlayer();
-					removeCharacter.id = connection.player.getID();
-					nextId--;
-					server.sendToAllTCP(removeCharacter);
+					PlayerDisconnected playerDisconnected = new PlayerDisconnected();
+					playerDisconnected.id = connection.player.getID();
+					
+					if (board.getPlayer1() == null && playerDisconnected.id == 1)
+					{
+						nextId--;
+						// set player 2 as the new player 1
+					}
+					
+					server.sendToAllTCP(playerDisconnected);
 				}
 			}
 		});
@@ -132,15 +134,15 @@ public class GameServer
 
 		for (Player other : players)
 		{
-			AddPlayer addCharacter = new AddPlayer();
-			addCharacter.id = other.getID();
-			pc.sendTCP(addCharacter);
+			PlayerConnected playerConnected = new PlayerConnected();
+			playerConnected.id = other.getID();
+			pc.sendTCP(playerConnected);
 		}
 
 		players.add(player);
-		AddPlayer addCharacter = new AddPlayer();
-		addCharacter.id = player.getID();
-		server.sendToAllTCP(addCharacter);
+		PlayerConnected playerConnected = new PlayerConnected();
+		playerConnected.id = player.getID();
+		server.sendToAllTCP(playerConnected);
 	}
 	
 	public void disconnect()
@@ -149,11 +151,17 @@ public class GameServer
 		server.stop();
 	}
 
-	public void sendScore(Player player)
+	public void sendScore()
 	{
 		UpdateScore updateScore = new UpdateScore();
-		updateScore.id = player.getID();
-		updateScore.score = player.getScore();
+		updateScore.p1Score = board.getPlayer1().getScore();
+		updateScore.p2Score = board.getPlayer2().getScore();
 		server.sendToAllTCP(updateScore);
+	}
+	
+	public void sendGameover()
+	{
+		GameOver gameOver = new GameOver();
+		server.sendToAllTCP(gameOver);
 	}
 }

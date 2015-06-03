@@ -52,7 +52,7 @@ public class EntityFactory
 
 	public final Goal createP1Goal()
 	{
-		return createGoal(screenWidth * 0.3f, 0);
+		return createGoal(screenWidth * 0.3f, 16);
 	}
 
 	public final Goal createP2Goal()

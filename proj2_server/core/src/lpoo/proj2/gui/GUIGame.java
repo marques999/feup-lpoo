@@ -14,6 +14,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -28,6 +29,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 public class GUIGame extends GUIScreen
 {
@@ -52,7 +55,7 @@ public class GUIGame extends GUIScreen
 	private abstract class GameState
 	{	
 		public abstract void update(float delta);
-		public abstract void draw();
+		public abstract void draw(SpriteBatch paramBatch);
 	}
 	
 	private class WaitingState extends GameState
@@ -113,7 +116,7 @@ public class GUIGame extends GUIScreen
 		}
 
 		@Override
-		public void draw()
+		public void draw(SpriteBatch paramBatch)
 		{
 			stageWaiting.draw();
 		}
@@ -162,7 +165,7 @@ public class GUIGame extends GUIScreen
 		}
 
 		@Override
-		public void draw()
+		public void draw(SpriteBatch paramBatch)
 		{
 			stagePause.draw();
 		}
@@ -228,7 +231,7 @@ public class GUIGame extends GUIScreen
 		}
 
 		@Override
-		public void draw()
+		public void draw(SpriteBatch paramBatch)
 		{
 			stageOver.draw();
 		}
@@ -236,6 +239,9 @@ public class GUIGame extends GUIScreen
 
 	private class GameRunningState extends GameState
 	{
+		private boolean displayMessage = false;
+		private String strMessage = "";
+		
 		public GameRunningState()
 		{
 			Gdx.input.setInputProcessor(GUIGame.this);
@@ -246,10 +252,31 @@ public class GUIGame extends GUIScreen
 		{
 			game.update(delta);
 		}
+		
+		public void display(String paramString)
+		{
+			strMessage = paramString;
+			displayMessage = true;
+			
+			Timer.schedule(new Task()
+			{
+					@Override
+					public void run()
+					{
+						displayMessage = false;
+					}
+			}, 1);
+		}
 
 		@Override
-		public void draw()
+		public void draw(SpriteBatch paramBatch)
 		{
+			if (displayMessage)
+			{
+				paramBatch.begin();
+				nameFont.draw(paramBatch, strMessage, Gdx.graphics.getWidth() >> 1, Gdx.graphics.getHeight() >> 1);
+				paramBatch.end();
+			}
 		}
 	}
 
@@ -313,7 +340,7 @@ public class GUIGame extends GUIScreen
 		}
 
 		@Override
-		public void draw()
+		public void draw(SpriteBatch paramBatch)
 		{
 			stageConfirm.draw();
 		}
@@ -322,6 +349,11 @@ public class GUIGame extends GUIScreen
 	public void actionScore(Player player)
 	{
 		changeState(new PlayerScoredState(player));
+		
+		if (parent.isMultiplayer())
+		{
+			Timer.schedule(new ReturnGame(), 2);
+		}
 	}
 
 	public void actionGameover(Player p)
@@ -380,7 +412,7 @@ public class GUIGame extends GUIScreen
 		}
 
 		@Override
-		public void draw()
+		public void draw(SpriteBatch paramBatch)
 		{
 			stageScore.draw();
 		}
@@ -389,6 +421,15 @@ public class GUIGame extends GUIScreen
 	public GUIGame(final AirHockey parent)
 	{
 		super(parent, Song.THEME_NONE);
+	}
+	
+	class ReturnGame extends Task
+	{
+		@Override
+		public void run()
+		{
+			changeState(new GameRunningState());
+		}	
 	}
 
 	@Override
@@ -401,7 +442,7 @@ public class GUIGame extends GUIScreen
 		nameFont.draw(batch, game.getPlayer2().getName(), 64, 720);
 		game.draw(batch);
 		batch.end();
-		state.draw();
+		state.draw(batch);
 	}
 
 	@Override
@@ -453,6 +494,11 @@ public class GUIGame extends GUIScreen
 		else
 		{
 			changeState(new GameRunningState());
+			
+			if (state instanceof GameRunningState)
+			{
+				((GameRunningState)state).display("PREPARE TO FIGHT!");
+			}
 		}
 	}
 	

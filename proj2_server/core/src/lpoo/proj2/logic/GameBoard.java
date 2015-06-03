@@ -2,8 +2,11 @@ package lpoo.proj2.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
+
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.AudioManager;
 import lpoo.proj2.audio.Special;
@@ -37,14 +40,14 @@ public class GameBoard
 
 		if (multiplayer)
 		{
-			players[0] = new Player("Player 1", 0);
-			players[1] = new Player("Player 2", 0);
+			players[0] = new Player(0, "Player 1", 0);
+			players[1] = new Player(1, "Player 2", 0);
 			connect();
 		}
 		else
 		{
-			players[0] = new Player("Human", 3);
-			players[1] = new Player("CPU", 0);
+			players[0] = new Player(0, "Human", 3);
+			players[1] = new Player(1, "CPU", 0);
 		}
 
 		switch (paramMode)
@@ -148,6 +151,8 @@ public class GameBoard
 			{
 				parent.actionGameover(players[1]);
 			}
+			
+			server.sendGameover();
 		}
 
 		p1Paddle.update(delta);
@@ -171,8 +176,8 @@ public class GameBoard
 
 			if (puck.collides(p1Goal) || puck.collides(p2Goal))
 			{
-				p1Paddle = factory.createP1Paddle(players[0].getColor());
-				p2Paddle = factory.createP2Paddle(players[1].getColor());
+			//	p1Paddle = factory.createP1Paddle(players[0].getColor());
+			//	p2Paddle = factory.createP2Paddle(players[1].getColor());
 			}
 
 			if (puck.collides(p1Goal))
@@ -183,13 +188,12 @@ public class GameBoard
 				}
 
 				rules.p2Score();
-				pucks.add(factory.createSinglePuck(AirHockey.getColor()));
-				pucks.remove(puck);
+				placePuck(players[0]);
 				parent.actionScore(players[1]);
 
 				if (multiplayer)
 				{
-					server.sendScore(players[1]);
+					server.sendScore();
 				}
 			}
 
@@ -201,13 +205,12 @@ public class GameBoard
 				}
 
 				rules.p1Score();
-				pucks.add(factory.createSinglePuck(AirHockey.getColor()));
-				pucks.remove(puck);
+				placePuck(players[1]);
 				parent.actionScore(players[0]);
 
 				if (multiplayer)
 				{
-					server.sendScore(players[0]);
+					server.sendScore();
 				}
 			}
 		}
@@ -247,8 +250,37 @@ public class GameBoard
 		}
 	}
 
+	private Random rand = new Random();
+	private float screenWidth = Gdx.graphics.getWidth();
+	
+	public void placePuck(Player player)
+	{
+		if (rules instanceof RulesAttack)
+		{
+			return;
+		}
+		
+		int randomDelta = 16 + rand.nextInt(64);
+		
+		pucks.remove(0);
+		pucks.add(factory.createSinglePuck(AirHockey.getColor()));
+		
+		if (player.getID() == 0) // Player 1
+		{
+			pucks.get(0).setPosition(screenWidth / 2, screenHeight / 2 + randomDelta);
+		}
+		else if (player.getID() == 1) // Player 2
+		{
+			pucks.get(0).setPosition(screenWidth / 2, screenHeight / 2 - randomDelta);
+		}
+	}
+	
 	public void draw(SpriteBatch sb)
 	{
+		for (Wall wall : walls)
+		{
+			wall.draw(sb);
+		}
 		for (Puck puck : pucks)
 		{
 			puck.draw(sb);
