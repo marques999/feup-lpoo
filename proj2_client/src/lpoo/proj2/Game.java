@@ -30,34 +30,36 @@ import android.widget.TextView;
 public class Game extends Activity
 {
 	private final int MAX_PLAYERS = 2;
-	private final int MIN_PLAYERS = 0;
+	private final int MIN_PLAYERS = 1;
+
 	private AlertDialog.Builder alertConnection;
 	private AlertDialog.Builder alertDisconnected;
 	private AlertDialog.Builder alertForfeited;
 	private AlertDialog.Builder alertGameover;
 	private AlertDialog.Builder alertServerFull;
 	private ProgressDialog progressConnect;
-	private Client client;
+	private ProgressDialog progressWaiting;
 
+	private Client client;
 	private GameView gameView;
-	private UpdateScore lastUpdate;
 	private TextView scores[];
-	private int playersConnected = 0;
-	
 	private String playerName;
+	private UpdateScore playerScores;
 	private String serverHost;
 	private int playerColor;
 	private int serverPort;
-	
+
+	private int playersConnected = 0;
+
 	private class ExitActivity implements DialogInterface.OnClickListener
 	{
 		@Override
 		public void onClick(DialogInterface dialog, int which)
 		{
-			System.exit(0);
+			finish();
 		}
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -68,36 +70,41 @@ public class Game extends Activity
 
 		alertConnection = new AlertDialog.Builder(this);
 		alertConnection.setMessage("Could not connect to target computer... is the server running?");
-		alertConnection.setTitle("Connection error");
+		alertConnection.setTitle("Connection Error");
 		alertConnection.setPositiveButton("OK", new ExitActivity());
 		alertConnection.setCancelable(false);
-		
+
 		alertDisconnected = new AlertDialog.Builder(this);
 		alertDisconnected.setMessage("You were disconnected from the server.");
 		alertDisconnected.setTitle("Disconnected");
 		alertDisconnected.setPositiveButton("OK", new ExitActivity());
 		alertDisconnected.setCancelable(false);
-		
+
 		alertForfeited = new AlertDialog.Builder(this);
 		alertForfeited.setMessage("Your opponent has forfeited the match.");
 		alertForfeited.setTitle("YOU WIN!");
 		alertForfeited.setPositiveButton("OK", new ExitActivity());
 		alertForfeited.setCancelable(false);
-		
+
 		alertServerFull = new AlertDialog.Builder(this);
-		alertServerFull.setMessage("Could not connect to target computer: server is full!");
-		alertServerFull.setTitle("Connection error");
+		alertServerFull.setMessage("Could not connect to target computer: server is full.");
+		alertServerFull.setTitle("Connection Error");
 		alertServerFull.setPositiveButton("OK", new ExitActivity());
 		alertServerFull.setCancelable(false);
-		
+
 		progressConnect = new ProgressDialog(this);
 		progressConnect.setTitle("Please wait...");
 		progressConnect.setMessage("Connecting to server... (1/1)");
 		progressConnect.setCancelable(false);
 		progressConnect.show();
 		
+		progressWaiting = new ProgressDialog(this);
+		progressWaiting.setTitle("Please wait...");
+		progressWaiting.setMessage("Waiting for players... (0/2)");
+		progressWaiting.setCancelable(false);
+
 		alertGameover = new AlertDialog.Builder(this);
-		lastUpdate = new UpdateScore();
+		playerScores = new UpdateScore();
 		client = new Client();
 
 		Network.register(client);
@@ -123,17 +130,31 @@ public class Game extends Activity
 				if (object instanceof PlayerConnected)
 				{
 					PlayerConnected playerConnected = (PlayerConnected) object;
+					
 					addPlayer(playerConnected.id);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							progressWaiting.setMessage("Waiting for players... (" + playersConnected + "/2)");
+							
+							if (playersConnected == MAX_PLAYERS && progressWaiting.isShowing())
+							{
+								progressWaiting.dismiss();
+							}
+						}
+					});
 				}
 				else if (object instanceof GameOver)
-				{					
+				{
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							alertGameover.setTitle("Game Over");
-							
-							if(lastUpdate.p1Score > lastUpdate.p2Score)
+
+							if (playerScores.p1Score > playerScores.p2Score)
 							{
 								alertGameover.setMessage("Player 1 won the match!");
 							}
@@ -141,7 +162,7 @@ public class Game extends Activity
 							{
 								alertGameover.setMessage("Player 2 won the match!");
 							}
-							
+
 							alertGameover.setPositiveButton("OK", new ExitActivity());
 							alertGameover.setCancelable(false);
 							alertGameover.show();
@@ -158,13 +179,16 @@ public class Game extends Activity
 						}
 					});
 
-					client.close();
-					client = null;
+					if (client != null)
+					{
+						client.close();
+						client = null;
+					}
 				}
 				else if (object instanceof UpdateScore)
 				{
 					final UpdateScore updateScore = (UpdateScore) object;
-					
+
 					runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -178,7 +202,7 @@ public class Game extends Activity
 				{
 					PlayerDisconnected playerDisconnected = (PlayerDisconnected) object;
 					removePlayer(playerDisconnected.id);
-					
+
 					runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -192,8 +216,11 @@ public class Game extends Activity
 			@Override
 			public void disconnected(Connection connection)
 			{
-				client.close();
-				client = null;
+				if (client != null)
+				{
+					client.close();
+					client = null;
+				}
 
 				runOnUiThread(new Runnable()
 				{
@@ -202,8 +229,6 @@ public class Game extends Activity
 						alertDisconnected.show();
 					}
 				});
-
-				System.exit(0);
 			}
 		}));
 
@@ -211,6 +236,7 @@ public class Game extends Activity
 
 		gameView = (GameView) findViewById(R.id.gameView);
 		gameView.setClient(client);
+		gameView.setBitmap(playerColor);
 		scores = new TextView[2];
 		scores[0] = (TextView) findViewById(R.id.txtP1Score);
 		scores[1] = (TextView) findViewById(R.id.txtP2Score);
@@ -224,7 +250,7 @@ public class Game extends Activity
 			try
 			{
 				client.connect(2000, serverHost, serverPort, serverPort + 1);
-				
+
 				runOnUiThread(new Runnable()
 				{
 					public void run()
@@ -232,6 +258,7 @@ public class Game extends Activity
 						if (progressConnect != null && progressConnect.isShowing())
 						{
 							progressConnect.dismiss();
+							progressWaiting.show();
 						}
 					}
 				});
@@ -246,7 +273,7 @@ public class Game extends Activity
 						{
 							progressConnect.dismiss();
 						}
-						
+
 						if (alertConnection != null)
 						{
 							alertConnection.show();
@@ -254,10 +281,13 @@ public class Game extends Activity
 					}
 				});
 
-				client.close();
-				client = null;
+				if (client != null)
+				{
+					client.close();
+					client = null;
+				}
 			}
-			
+
 			Login login = new Login();
 			login.name = playerName;
 			login.color = playerColor;
@@ -308,11 +338,6 @@ public class Game extends Activity
 		}
 	}
 
-	public void updateScore(int id, int score)
-	{
-
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -324,10 +349,10 @@ public class Game extends Activity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		if (item.getItemId() == R.id.action_settings)
+		if (item.getItemId() == R.id.action_disconnect)
 		{
 			new CloseNetwork().start();
-			System.exit(0);
+			finish();
 		}
 
 		return super.onOptionsItemSelected(item);

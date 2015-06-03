@@ -33,19 +33,25 @@
 
 			<Button
 			    android:id="@+id/btnConnect"
-			    android:layout_width="wrap_content"
+			    android:layout_width="96dp"
 			    android:layout_height="wrap_content"
 			    android:layout_gravity="center_horizontal"
 			    android:enabled="true"
-			    android:text="@string/button_connect" />
+			    android:text="@string/button_connect"
+			    android:textAllCaps="true"
+			    android:textSize="12sp"
+			    android:textStyle="bold" />
 
 			<Button
 			    android:id="@+id/btnExit"
-			    android:layout_width="wrap_content"
+			    android:layout_width="96dp"
 			    android:layout_height="wrap_content"
 			    android:layout_gravity="center_horizontal"
 			    android:singleLine="true"
-			    android:text="@string/button_exit" />
+			    android:text="@string/button_exit"
+			    android:textAllCaps="true"
+			    android:textSize="12sp"
+			    android:textStyle="bold" />
 
 		</LinearLayout>
 

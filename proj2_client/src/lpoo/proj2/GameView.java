@@ -1,6 +1,8 @@
 package lpoo.proj2;
 
 import lpoo.proj2.Network.MovePaddle;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,8 +12,10 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 import com.esotericsoftware.kryonet.Client;
 
+@SuppressLint("ClickableViewAccessibility")
 public class GameView extends View
 {
 	private float posX;
@@ -57,6 +61,31 @@ public class GameView extends View
 		}
 	}
 
+	protected void setBitmap(int paramIndex)
+	{
+		switch (paramIndex)
+		{
+		case 0:
+			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_green);
+			break;
+		case 1:
+			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_red);
+			break;
+		case 2:
+			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_yellow);
+			break;
+		case 3:
+			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_blue);
+			break;
+		case 4:
+			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_purple);
+			break;
+		case 5:
+			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_orange);
+			break;
+		}
+	}
+
 	@Override
 	public void onSizeChanged(int xNew, int yNew, int xOld, int yOld)
 	{
@@ -82,17 +111,17 @@ public class GameView extends View
 		posX = paramX <= bounds.maxX ? (paramX < bounds.minX ? bounds.minX : paramX) : bounds.maxX;
 		posY = paramY <= bounds.maxY ? (paramY < bounds.minY ? bounds.minY : paramY) : bounds.maxY;
 	}
-	
+
 	private class SendMessage extends Thread
 	{
 		final MovePaddle msg = new MovePaddle();
-		
+
 		public SendMessage(float x, float y)
 		{
 			msg.x = posX;
 			msg.y = posY;
 		}
-		
+
 		@Override
 		public void run()
 		{
@@ -102,7 +131,7 @@ public class GameView extends View
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
@@ -124,7 +153,7 @@ public class GameView extends View
 
 		newX *= ratioX;
 		newY *= ratioY;
-		
+
 		new SendMessage(newX, newY).start();
 
 		return true;

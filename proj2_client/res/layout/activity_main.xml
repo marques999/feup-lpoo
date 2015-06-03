@@ -1,9 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#ffffffff"
-                tools:context="com.dmpm.tabletennis.ConnectMenu">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff"
+    tools:context="com.dmpm.tabletennis.ConnectMenu" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,15 +11,16 @@
         android:layout_gravity="center"
         android:background="#ffffffff"
         android:orientation="vertical"
-        android:weightSum="1">
+        android:weightSum="1" >
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
+            android:paddingTop="8dp"
             android:scaleType="matrix"
-            android:src="@drawable/feup_logo"/>
+            android:src="@drawable/feup_logo" />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -27,8 +28,7 @@
             android:layout_gravity="center_horizontal"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
-            android:paddingTop="16dp"
-            >
+            android:paddingTop="16dp" >
 
             <TextView
                 android:id="@+id/textView6"
@@ -37,13 +37,12 @@
                 android:paddingBottom="16dp"
                 android:text="@string/menu_connect"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:baselineAligned="false"
-                >
+                android:baselineAligned="false" >
 
                 <TextView
                     android:id="@+id/textView"
@@ -51,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_column="0"
                     android:layout_gravity="start|center"
-                    android:text="@string/menu_hostip"/>
+                    android:text="@string/menu_hostip" />
 
                 <EditText
                     android:id="@+id/txtIP"
@@ -64,12 +63,11 @@
                     android:minLines="0"
                     android:minWidth="192dp"
                     android:text="@string/text_defaultip" />
-
             </TableRow>
 
             <TableRow
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent" >
 
                 <TextView
                     android:id="@+id/textView5"
@@ -77,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_column="0"
                     android:layout_gravity="center|start"
-                    android:text="@string/menu_port"/>
+                    android:text="@string/menu_port" />
 
                 <EditText
                     android:id="@+id/txtPort"
@@ -89,14 +87,13 @@
                     android:inputType="number"
                     android:maxLength="5"
                     android:singleLine="true"
-                    android:text="@string/text_defaultport"
-                    />
+                    android:text="@string/text_defaultport" />
             </TableRow>
 
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:paddingTop="16dp">
+                android:paddingTop="16dp" >
 
                 <TextView
                     android:id="@+id/lblPreferences"
@@ -107,12 +104,12 @@
                     android:paddingBottom="16dp"
                     android:text="@string/menu_preferences"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </TableRow>
 
             <TableRow
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent" >
 
                 <TextView
                     android:id="@+id/lblUsername"
@@ -120,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_column="0"
                     android:layout_gravity="start|center"
-                    android:text="@string/menu_username"/>
+                    android:text="@string/menu_username" />
 
                 <EditText
                     android:id="@+id/txtUsername"
@@ -131,13 +128,13 @@
                     android:ems="10"
                     android:inputType="textAutoCorrect"
                     android:maxWidth="192dp"
+                    android:minWidth="192dp"
                     android:text="@string/text_defaultuser" />
-
             </TableRow>
 
             <TableRow
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent" >
 
                 <TextView
                     android:id="@+id/lblColor"
@@ -145,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_column="0"
                     android:layout_gravity="center|left"
-                    android:text="@string/menu_color"/>
+                    android:text="@string/menu_color" />
 
                 <Spinner
                     android:id="@+id/spnColor"
@@ -154,9 +151,8 @@
                     android:layout_column="1"
                     android:layout_gravity="start"
                     android:entries="@array/color_array"
-                    android:focusable="false"/>
+                    android:focusable="false" />
             </TableRow>
-
         </TableLayout>
 
         <LinearLayout
@@ -164,29 +160,30 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal" >
 
             <Button
                 android:id="@+id/btnConnect"
-                android:layout_width="wrap_content"
+                android:layout_width="96dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:enabled="true"
                 android:text="@string/button_connect"
-                android:textAllCaps="true" />
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnExit"
-                android:layout_width="wrap_content"
+                android:layout_width="96dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:enabled="true"
                 android:text="@string/button_exit"
-                android:textAllCaps="true" />
-
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:textStyle="bold" />
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

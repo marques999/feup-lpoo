@@ -1,14 +1,12 @@
-<FrameLayout
-    android:id="@+id/container"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:configChanges="keyboardHidden|screenSize"
     android:screenOrientation="portrait"
     tools:context="com.dmpm.tabletennis.Main"
-    tools:ignore="MergeRootFrame"
->
+    tools:ignore="MergeRootFrame" >
 
     <GridLayout
         android:layout_width="wrap_content"
@@ -72,7 +70,6 @@
             android:layout_row="8"
             android:paddingLeft="64dp"
             android:paddingRight="64dp" />
-
     </GridLayout>
 
 </FrameLayout>
