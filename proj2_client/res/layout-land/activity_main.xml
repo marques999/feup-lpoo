@@ -86,7 +86,7 @@
 				    android:layout_height="wrap_content"
 				    android:layout_column="1"
 				    android:layout_gravity="start"
-				    android:inputType="text"
+				    android:inputType="numberDecimal"
 				    android:maxLength="16"
 				    android:minLines="0"
 				    android:minWidth="150dp"
@@ -114,7 +114,7 @@
 				    android:layout_gravity="start"
 				    android:ems="4"
 				    android:inputType="number"
-				    android:maxLength="4"
+				    android:maxLength="5"
 				    android:minWidth="64dp"
 				    android:singleLine="true"
 				    android:text="@string/text_defaultport" />

@@ -42,12 +42,12 @@ public final class R {
         public static final int spnColor=0x7f090010;
         public static final int textView=0x7f090008;
         public static final int textView1=0x7f090002;
-        public static final int textView2=0x7f090001;
-        public static final int textView3=0x7f090003;
         public static final int textView4=0x7f090004;
         public static final int textView5=0x7f09000a;
         public static final int textView6=0x7f090007;
         public static final int txtIP=0x7f090009;
+        public static final int txtP1Score=0x7f090001;
+        public static final int txtP2Score=0x7f090003;
         public static final int txtPort=0x7f09000b;
         public static final int txtUsername=0x7f09000e;
     }
@@ -60,6 +60,7 @@ public final class R {
         public static final int main=0x7f080001;
     }
     public static final class string {
+        public static final int action_disconnect=0x7f060014;
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
         public static final int button_connect=0x7f06000e;
@@ -75,7 +76,7 @@ public final class R {
         public static final int menu_username=0x7f060009;
         public static final int msg_lose=0x7f060005;
         public static final int msg_win=0x7f060004;
-        public static final int text_anonymous=0x7f060014;
+        public static final int text_anonymous=0x7f060015;
         public static final int text_defaultip=0x7f060011;
         public static final int text_defaultport=0x7f060010;
         public static final int text_defaultuser=0x7f060012;

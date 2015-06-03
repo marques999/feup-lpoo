@@ -3,14 +3,18 @@ package lpoo.proj2;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class Main extends Activity
@@ -18,38 +22,75 @@ public class Main extends Activity
 	private TextView txtUsername;
 	private TextView txtIP;
 	private TextView txtPort;
+	private Spinner spnColor;
 	private Button btnConnect;
 	private Button btnExit;
-
+	
+	private AlertDialog.Builder alertWifi;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
+		
 		setContentView(R.layout.activity_main);
 		
 		txtIP = (TextView) findViewById(R.id.txtIP);
 		txtPort = (TextView) findViewById(R.id.txtPort);
 		txtUsername = (TextView) findViewById(R.id.txtUsername);
+		spnColor = (Spinner) findViewById(R.id.spnColor);
 		btnConnect = (Button) findViewById(R.id.btnConnect);
 		btnExit = (Button) findViewById(R.id.btnExit);
 		txtIP.addTextChangedListener(IPAddressTextWatcher);
 		txtPort.addTextChangedListener(PortTextWatcher);
 		txtUsername.addTextChangedListener(UsernameTextWatcher);
 		
+		if (savedInstanceState != null)
+		{
+		    txtIP.setText(savedInstanceState.getCharSequence("prefIP"));
+		    txtPort.setText(savedInstanceState.getInt("prefPort"));
+		    txtUsername.setText(savedInstanceState.getCharSequence("prefUsername"));
+		    spnColor.setSelection(savedInstanceState.getInt("prefColor"));
+		}
+	
+		final ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		final WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		
+		alertWifi = new AlertDialog.Builder(this);
+		alertWifi.setMessage("No active network connections, do you want to enable wireless?");
+		alertWifi.setTitle("Wi-Fi Disabled");
+		
+		alertWifi.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				wifiManager.setWifiEnabled(true);
+			}
+		});
+		
+		alertWifi.setNegativeButton("No", null);
+		alertWifi.setCancelable(false);
+		
 		btnConnect.setOnClickListener((new View.OnClickListener()
 		{
 			public void onClick(View v)
-			{
-				Bundle b = new Bundle();
-				Intent myIntent = new Intent(Main.this, Game.class);
-
-				b.putCharSequence("prefIP", txtIP.getText());
-				b.putInt("prefPort", Integer.parseInt(txtPort.getText().toString()));
-				b.putCharSequence("prefUsername", txtUsername.getText());
-				myIntent.putExtras(b);
-				startActivity(myIntent);
-
+			{			
+				if (connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected())
+				{
+					Bundle b = new Bundle();
+					Intent myIntent = new Intent(Main.this, Game.class);
+					b.putCharSequence("prefIP", txtIP.getText());
+					b.putInt("prefPort", Integer.parseInt(txtPort.getText().toString()));
+					b.putCharSequence("prefUsername", txtUsername.getText());
+					b.putInt("prefColor", spnColor.getSelectedItemPosition());
+					myIntent.putExtras(b);
+					startActivity(myIntent);
+				}
+				else
+				{
+					alertWifi.show();	
+				}				
 			}
 		}));
 
@@ -60,25 +101,6 @@ public class Main extends Activity
 				finish();
 			}
 		}));
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.main, menu);
-
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		if (item.getItemId() == R.id.action_settings)
-		{
-			return true;
-		}
-
-		return super.onOptionsItemSelected(item);
 	}
 
 	private final TextWatcher IPAddressTextWatcher = new TextWatcher()
@@ -197,4 +219,15 @@ public class Main extends Activity
 			}
 		}
 	};
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) 
+	{
+	    savedInstanceState.putCharSequence("prefIP", txtIP.getText());
+	    savedInstanceState.putInt("prefPort", Integer.parseInt(txtPort.getText().toString()));
+	    savedInstanceState.putCharSequence("prefUsername", txtUsername.getText());
+	    savedInstanceState.putInt("prefColor", spnColor.getSelectedItemPosition());
+	    
+	    super.onSaveInstanceState(savedInstanceState);
+	}
 }

@@ -10,9 +10,10 @@ public class Network
 	{
 		Kryo kryo = endPoint.getKryo();
 		kryo.register(Login.class);
-		kryo.register(AddPlayer.class);
-		kryo.register(RemovePlayer.class);
+		kryo.register(PlayerConnected.class);
+		kryo.register(PlayerDisconnected.class);
 		kryo.register(UpdatePlayer.class);
+		kryo.register(GameOver.class);
 		kryo.register(UpdateScore.class);
 		kryo.register(ServerFull.class);
 		kryo.register(Player.class);
@@ -25,12 +26,12 @@ public class Network
 		public int color;
 	}
 	
-	static public class AddPlayer
+	static public class PlayerConnected
 	{
 		public int id;
 	}
 	
-	static public class RemovePlayer
+	static public class PlayerDisconnected
 	{
 		public int id;
 	}
@@ -41,11 +42,15 @@ public class Network
 		public float x;
 		public float y;
 	}
-
+	
 	static public class UpdateScore
 	{
-		public int id;
-		public int score;
+		public int p1Score;
+		public int p2Score;
+	}
+	
+	static public class GameOver
+	{
 	}
 
 	static public class ServerFull

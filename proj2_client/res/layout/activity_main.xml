@@ -59,11 +59,12 @@
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_gravity="start"
-                    android:inputType="text"
+                    android:inputType="phone"
                     android:maxLength="16"
                     android:minLines="0"
                     android:minWidth="192dp"
-                    android:text="@string/text_defaultip"/>
+                    android:text="@string/text_defaultip" />
+
             </TableRow>
 
             <TableRow
@@ -86,7 +87,7 @@
                     android:layout_gravity="start"
                     android:ems="4"
                     android:inputType="number"
-                    android:maxLength="4"
+                    android:maxLength="5"
                     android:singleLine="true"
                     android:text="@string/text_defaultport"
                     />
@@ -130,7 +131,8 @@
                     android:ems="10"
                     android:inputType="textAutoCorrect"
                     android:maxWidth="192dp"
-                    android:text="@string/text_defaultuser"/>
+                    android:text="@string/text_defaultuser" />
+
             </TableRow>
 
             <TableRow
@@ -172,7 +174,7 @@
                 android:layout_gravity="center_vertical"
                 android:enabled="true"
                 android:text="@string/button_connect"
-                />
+                android:textAllCaps="true" />
 
             <Button
                 android:id="@+id/btnExit"
@@ -181,7 +183,8 @@
                 android:layout_gravity="center_vertical"
                 android:enabled="true"
                 android:text="@string/button_exit"
-                />
+                android:textAllCaps="true" />
+
         </LinearLayout>
 
     </LinearLayout>
