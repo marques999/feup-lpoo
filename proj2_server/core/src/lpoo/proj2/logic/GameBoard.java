@@ -30,6 +30,8 @@ public class GameBoard
 	private final float screenHeight = Gdx.graphics.getHeight();
 	private ArrayList<Puck> pucks = new ArrayList<Puck>();
 	private ArrayList<Wall> walls = new ArrayList<Wall>();
+	private boolean createP1 = false;
+	private boolean createP2 = false;
 	protected boolean multiplayer;
 
 	public GameBoard(GUIGame paramParent, int paramMode, boolean paramMultiplayer)
@@ -84,14 +86,16 @@ public class GameBoard
 		return players[1];
 	}
 	
-		public void setPlayer1(Player player)
+	public void setPlayer1(Player player)
 	{
 		players[0] = player;
+		createP1 = true;
 	}
 	
 	public void setPlayer2(Player player)
 	{
 		players[1] = player;
+		createP2 = true;
 	}
 
 	public void connect()
@@ -138,13 +142,25 @@ public class GameBoard
 		rules.reset();
 		walls = factory.createWalls(players[0].getColor());
 		p1Paddle = factory.createP1Paddle(players[0].getColor());
-		p2Paddle = factory.createP2Paddle(players[1].getColor());
+		p2Paddle = factory.createP2Paddle(players[1].getColor());	
 		p1Goal = factory.createP1Goal();
 		p2Goal = factory.createP2Goal();
 	}
 
 	public void update(float delta)
 	{
+		if (createP1)
+		{
+			p1Paddle = factory.createP1Paddle(players[0].getColor());
+			createP1 = false;
+		}
+		
+		if (createP2)
+		{
+			p2Paddle = factory.createP1Paddle(players[1].getColor());
+			createP2 = false;
+		}
+		
 		if (rules.checkOver())
 		{
 			if (rules.checkAce())
@@ -295,8 +311,15 @@ public class GameBoard
 			puck.draw(sb);
 		}
 
-		p1Paddle.draw(sb);
-		p2Paddle.draw(sb);
+		if (p1Paddle != null)
+		{
+			p1Paddle.draw(sb);
+		}
+		
+		if (p2Paddle != null)
+		{
+			p2Paddle.draw(sb);
+		}
 	}
 	
 	public int getPlayersConnected()

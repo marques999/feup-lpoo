@@ -27,6 +27,12 @@ public class Puck extends DynamicEntity
 		case 3:
 			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/ball_yellow.png"))));
 			break;
+		case 4:
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/ball_purple.png"))));
+			break;
+		case 5:
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/ball_orange.png"))));
+			break;
 		default:
 			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/ball_blue.png"))));
 			break;

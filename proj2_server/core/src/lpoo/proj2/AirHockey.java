@@ -82,10 +82,7 @@ public class AirHockey extends Game
 
 	public static void setDifficulty(int difficulty)
 	{
-		if (difficulty >= 0 && difficulty <= 3)
-		{
-			preferences.putInteger(PREF_SINGLEPLAYER_DIFFICULTY, difficulty);
-		}
+		preferences.putInteger(PREF_SINGLEPLAYER_DIFFICULTY, difficulty);
 	}
 
 	public static int getColor()

@@ -1,11 +1,13 @@
 {
 	"com.badlogic.gdx.graphics.Color": 
 	{
-		"lightblue": { hex: "0096a0ff" }, 
+		"blue": { hex: "0096a0ff" }, 
 		"red": { hex: "bf0909ff" },
 		"green": { hex: "28b914ff" },
-		"yellow": { hex: "ffb419ff" },
-		"white": { a: 1, b: 1, g: 1, r: 1 }, 
+		"yellow": { hex: "ffd800ff" },
+		"orange": { hex: "ff6600ff" },
+		"purple": { hex: "8232dcff" },
+		"white": { hex: "ffffffff" }, 
 	}, 
 
     "com.badlogic.gdx.graphics.g2d.BitmapFont": 
@@ -24,7 +26,7 @@
 			"over": "button_hover", 
 			"font": comicsans26,
 			"pressedOffsetY": -2,
-			"fontColor": lightblue,
+			"fontColor": blue,
 		},
 		
 		"menuGreen": 
@@ -57,6 +59,26 @@
 			"fontColor": yellow,
 		},
 		
+		"menuPurple": 
+        { 
+			"up": "button_normal", 
+			"down": "button_hover", 
+			"over": "button_hover", 
+			"font": comicsans26,
+			"pressedOffsetY": -2,
+			"fontColor": purple,
+		},
+		
+		"menuOrange": 
+        { 
+			"up": "button_normal", 
+			"down": "button_hover", 
+			"over": "button_hover", 
+			"font": comicsans26,
+			"pressedOffsetY": -2,
+			"fontColor": orange,
+		},
+		
 		"menuLabel": 
 		{ 
 			"up": "button_normal", 
@@ -73,7 +95,7 @@
 			"checked": "button_hover", 
 			"over": "button_hover", 
 			"font": comicsans26,
-			"fontColor": lightblue,
+			"fontColor": blue,
 		 },
     },
     
@@ -102,7 +124,7 @@
 			"checkboxOn": "checkbox_checked", 
 			"checkboxOver": "checkbox_hover", 
 			"font": comicsans26,
-			"fontColor": "white",
+			"fontColor": white,
 		}
     },
     

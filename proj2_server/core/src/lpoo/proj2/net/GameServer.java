@@ -9,7 +9,6 @@ import lpoo.proj2.net.Network.GameOver;
 import lpoo.proj2.net.Network.Login;
 import lpoo.proj2.net.Network.MovePaddle;
 import lpoo.proj2.net.Network.PlayerConnected;
-import lpoo.proj2.net.Network.PlayerConnection;
 import lpoo.proj2.net.Network.PlayerDisconnected;
 import lpoo.proj2.net.Network.ServerFull;
 import lpoo.proj2.net.Network.UpdateScore;
@@ -33,7 +32,7 @@ public class GameServer
 		serverTcpPort = tcpPort;
 		serverUdpPort = udpPort;
 		board = paramBoard;
-		
+
 		server = new Server()
 		{
 			@Override
@@ -56,7 +55,7 @@ public class GameServer
 				if (object instanceof Login)
 				{
 					final Login login = (Login) object;
-					
+
 					if (player != null)
 					{
 						return;
@@ -77,7 +76,7 @@ public class GameServer
 						System.out.println("ID: " + player.getID());
 						System.out.println("Player name: " + login.name);
 						System.out.println("Player color: " + login.color);
-						
+
 						if (nextId == 1)
 						{
 							board.setPlayer1(player);
@@ -86,7 +85,7 @@ public class GameServer
 						{
 							board.setPlayer2(player);
 						}
-						
+
 						loggedIn(connection, player);
 					}
 					else
@@ -99,7 +98,7 @@ public class GameServer
 				else if (object instanceof MovePaddle)
 				{
 					final MovePaddle msg = (MovePaddle) object;
-					
+
 					if (player != null)
 					{
 						player.setX(msg.x);
@@ -122,7 +121,7 @@ public class GameServer
 					players.remove(connection.player);
 					PlayerDisconnected playerDisconnected = new PlayerDisconnected();
 					playerDisconnected.id = connection.player.getID();
-					nextId--;					
+					nextId--;
 					server.sendToAllTCP(playerDisconnected);
 				}
 			}
@@ -148,16 +147,21 @@ public class GameServer
 		playerConnected.id = player.getID();
 		server.sendToAllTCP(playerConnected);
 	}
-	
+
 	public int getPlayersConnected()
 	{
 		return nextId;
 	}
-	
+
 	public void disconnect()
 	{
 		server.close();
 		server.stop();
+	}
+
+	static public class PlayerConnection extends Connection
+	{
+		public Player player;
 	}
 
 	public void sendScore()
@@ -167,7 +171,7 @@ public class GameServer
 		updateScore.p2Score = board.getPlayer2().getScore();
 		server.sendToAllTCP(updateScore);
 	}
-	
+
 	public void sendGameover()
 	{
 		GameOver gameOver = new GameOver();

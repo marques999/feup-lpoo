@@ -24,13 +24,19 @@ public class Paddle extends DynamicEntity
 			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_green.png"))));
 			break;
 		case 2:
-			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_blue.png"))));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_red.png"))));
 			break;
 		case 3:
 			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_yellow.png"))));
 			break;
+		case 4:
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_purple.png"))));
+			break;
+		case 5:
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_orange.png"))));
+			break;
 		default:
-			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_red.png"))));
+			setSprite(new Sprite(new Texture(Gdx.files.internal("gfx/paddle_blue.png"))));
 			break;
 		}
 
