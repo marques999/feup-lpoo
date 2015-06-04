@@ -330,12 +330,6 @@ public class Game extends Activity
 			players.remove(id);
 			playersConnected--;
 		}
-		else
-		{
-			alertForfeited.show();
-			new CloseNetwork().start();
-			System.exit(0);
-		}
 	}
 
 	@Override

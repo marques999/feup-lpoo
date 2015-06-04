@@ -83,6 +83,16 @@ public class GameBoard
 	{
 		return players[1];
 	}
+	
+		public void setPlayer1(Player player)
+	{
+		players[0] = player;
+	}
+	
+	public void setPlayer2(Player player)
+	{
+		players[1] = player;
+	}
 
 	public void connect()
 	{
