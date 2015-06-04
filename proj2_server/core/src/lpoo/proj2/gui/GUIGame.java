@@ -15,7 +15,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,10 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -35,17 +32,8 @@ public class GUIGame extends GUIScreen
 {
 	private GameBoard game;
 	private GameState state;
-
-	private final TextureAtlas atlas = new TextureAtlas(
-			Gdx.files.internal("menu/menu.atlas"));
-	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"),
-			atlas);
-	private final TextButtonStyle styleMenuButton = new TextButtonStyle(
-			skin.get("menuLabel", TextButtonStyle.class));
-	private final Texture background = new Texture(
-			Gdx.files.internal("gfx/table.png"));
-	private final Image overlay = new Image(new Texture(
-			Gdx.files.internal("menu/bg_darken.png")));
+	private final Texture background = new Texture( Gdx.files.internal("gfx/table.png"));
+	private final Image overlay = new Image(new Texture(Gdx.files.internal("menu/bg_darken.png")));
 
 	public void changeState(GameState newState)
 	{
@@ -55,7 +43,6 @@ public class GUIGame extends GUIScreen
 	private abstract class GameState
 	{
 		public abstract void update(float delta);
-
 		public abstract void draw(SpriteBatch paramBatch);
 	}
 
@@ -63,27 +50,20 @@ public class GUIGame extends GUIScreen
 	{
 		private final Stage stageWaiting = new Stage();
 		private final Table tableWaiting = new Table();
-		private final TextButton btnCancel = new TextButton("CANCEL",
-				styleMenuButton);
+		private final TextButton btnCancel = new TextButton("CANCEL", StyleFactory.MenuButton);
 		private final Label lblPlayers = new Label("0 / 2", StyleFactory.SmallLabel);
 
 		public WaitingState()
 		{
 			tableWaiting.setFillParent(true);
 			tableWaiting.defaults().padBottom(32);
-			tableWaiting.add(
-					new Label("WAITING FOR PLAYERS...", StyleFactory.GradientLabel))
-					.colspan(2);
+			tableWaiting.add(new Label("WAITING FOR PLAYERS...", StyleFactory.GradientLabel)).colspan(2);
 			tableWaiting.row();
-			tableWaiting.add(new Label("Hostname:", StyleFactory.GradientLabel)).left()
-					.padBottom(16);
+			tableWaiting.add(new Label("Hostname:", StyleFactory.GradientLabel)).left().padBottom(16);
 
 			try
 			{
-				tableWaiting
-						.add(new Label(InetAddress.getLocalHost()
-								.getHostAddress(), StyleFactory.SmallLabel)).right()
-						.padBottom(16);
+				tableWaiting.add(new Label(InetAddress.getLocalHost().getHostAddress(), StyleFactory.SmallLabel)).right().padBottom(16);
 			}
 			catch (UnknownHostException e)
 			{
@@ -92,12 +72,9 @@ public class GUIGame extends GUIScreen
 
 			tableWaiting.row();
 			tableWaiting.add(new Label("Port:", StyleFactory.GradientLabel)).left();
-			tableWaiting
-					.add(new Label(Integer.toString(9732), StyleFactory.SmallLabel))
-					.right();
+			tableWaiting.add(new Label(Integer.toString(9732), StyleFactory.SmallLabel)).right();
 			tableWaiting.row();
-			tableWaiting.add(
-					new Label("Players connected:", StyleFactory.GradientLabel)).left();
+			tableWaiting.add(new Label("Players connected:", StyleFactory.GradientLabel)).left();
 			tableWaiting.add(lblPlayers).right().padBottom(32);
 			tableWaiting.row();
 			tableWaiting.add(btnCancel).colspan(2).width(180).center();
@@ -114,8 +91,7 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y,
-						int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
@@ -151,10 +127,8 @@ public class GUIGame extends GUIScreen
 	{
 		private final Stage stagePause = new Stage();
 		private final Table tablePaused = new Table();
-		private final Label lblResume = new Label("GAME PAUSED",
-				StyleFactory.SmallLabel);
-		private final TextButton btnResume = new TextButton("RESUME",
-				styleMenuButton);
+		private final Label lblResume = new Label("GAME PAUSED", StyleFactory.SmallLabel);
+		private final TextButton btnResume = new TextButton("RESUME", StyleFactory.MenuButton);
 
 		public GamePausedState()
 		{
@@ -176,8 +150,7 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y,
-						int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
@@ -201,12 +174,10 @@ public class GUIGame extends GUIScreen
 
 	private class GameOverState extends GameState
 	{
-		private final SequenceAction blinkAction = Actions.sequence(
-				Actions.fadeOut(0.5f), Actions.fadeIn(0.5f));
+		private final SequenceAction blinkAction = Actions.sequence(Actions.fadeOut(0.5f), Actions.fadeIn(0.5f));
 		private final Stage stageOver = new Stage();
 		private final Table tableOver = new Table();
-		private Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...",
-				StyleFactory.GradientLabel);
+		private Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...", StyleFactory.GradientLabel);
 		private Label lblName;
 		private Label lblScore;
 
@@ -274,10 +245,8 @@ public class GUIGame extends GUIScreen
 	private class GameRunningState extends GameState
 	{
 		private final Stage stageGame = new Stage();
-		private final Label lblPlayer1 = new Label(game.getPlayer1().getName(),
-				StyleFactory.LabelStyles[game.getPlayer1().getColor()]);
-		private final Label lblPlayer2 = new Label(game.getPlayer2().getName(),
-				StyleFactory.LabelStyles[game.getPlayer2().getColor()]);
+		private final Label lblPlayer1 = new Label(game.getPlayer1().getName(), StyleFactory.LabelStyles[game.getPlayer1().getColor()]);
+		private final Label lblPlayer2 = new Label(game.getPlayer2().getName(), StyleFactory.LabelStyles[game.getPlayer2().getColor()]);
 
 		public GameRunningState()
 		{
@@ -304,10 +273,9 @@ public class GUIGame extends GUIScreen
 
 	private class ConfirmExitState extends GameState
 	{
-		private final Label lblConfirm = new Label("FORFEIT MATCH?",
-				StyleFactory.SmallLabel);
-		private final TextButton btnYes = new TextButton("YES", styleMenuButton);
-		private final TextButton btnNo = new TextButton("NO", styleMenuButton);
+		private final Label lblConfirm = new Label("FORFEIT MATCH?", StyleFactory.SmallLabel);
+		private final TextButton btnYes = new TextButton("YES", StyleFactory.MenuButton);
+		private final TextButton btnNo = new TextButton("NO", StyleFactory.MenuButton);
 		private final Stage stageConfirm = new Stage();
 		private final Table tableConfirm = new Table();
 

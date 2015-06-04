@@ -1,21 +1,18 @@
 package lpoo.proj2.gui;
 
 import lpoo.proj2.AirHockey;
+import lpoo.proj2.StyleFactory;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GUIMainMenu extends GUIScreen
@@ -23,16 +20,12 @@ public class GUIMainMenu extends GUIScreen
 	private Stage stage = new Stage();
 	private Table table = new Table();
 	private TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_main.png"), false);
-	private TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
-	private Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-	private LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
-	private Label lblTitle = new Label("AIR HOCKEY", styleTitleLabel);
-	private TextButtonStyle styleMenuButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
-	private TextButton btnSingleplayer = new TextButton("Singleplayer", styleMenuButton);
-	private TextButton btnMultiplayer = new TextButton("Multiplayer", styleMenuButton);
-	private TextButton btnPreferences = new TextButton("Preferences", styleMenuButton);
-	private TextButton btnCredits = new TextButton("Credits", styleMenuButton);
-	private TextButton btnExit = new TextButton("Exit", styleMenuButton);
+	private Label lblTitle = new Label("AIR HOCKEY", StyleFactory.TitleLabel);
+	private TextButton btnSingleplayer = new TextButton("Singleplayer", StyleFactory.MenuButton);
+	private TextButton btnMultiplayer = new TextButton("Multiplayer", StyleFactory.MenuButton);
+	private TextButton btnPreferences = new TextButton("Preferences", StyleFactory.MenuButton);
+	private TextButton btnCredits = new TextButton("Credits", StyleFactory.MenuButton);
+	private TextButton btnExit = new TextButton("Exit", StyleFactory.MenuButton);
 
 	class RunMultiplayer implements Runnable
 	{
@@ -207,8 +200,6 @@ public class GUIMainMenu extends GUIScreen
 	@Override
 	public void dispose()
 	{
-		atlas.dispose();
-		skin.dispose();
 		stage.dispose();
 	}
 }

@@ -3,8 +3,6 @@ package lpoo.proj2.logic;
 import java.util.ArrayList;
 import java.util.Random;
 
-import lpoo.proj2.AirHockey;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 

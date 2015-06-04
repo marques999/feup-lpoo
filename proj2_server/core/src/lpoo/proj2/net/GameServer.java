@@ -106,9 +106,6 @@ public class GameServer
 						board.movePaddle(player.getID(), player.getX(), player.getY());
 					}
 				}
-				else
-				{
-				}
 			}
 
 			@Override
