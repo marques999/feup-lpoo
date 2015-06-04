@@ -6,9 +6,9 @@ import java.util.HashSet;
 import lpoo.proj2.logic.GameBoard;
 import lpoo.proj2.logic.Player;
 import lpoo.proj2.net.Network.GameOver;
-import lpoo.proj2.net.Network.PlayerConnected;
 import lpoo.proj2.net.Network.Login;
 import lpoo.proj2.net.Network.MovePaddle;
+import lpoo.proj2.net.Network.PlayerConnected;
 import lpoo.proj2.net.Network.PlayerConnection;
 import lpoo.proj2.net.Network.PlayerDisconnected;
 import lpoo.proj2.net.Network.ServerFull;
@@ -77,6 +77,16 @@ public class GameServer
 						System.out.println("ID: " + player.getID());
 						System.out.println("Player name: " + login.name);
 						System.out.println("Player color: " + login.color);
+						
+						if (nextId == 1)
+						{
+							board.setPlayer1(player);
+						}
+						else if (nextId == 2)
+						{
+							board.setPlayer2(player);
+						}
+						
 						loggedIn(connection, player);
 					}
 					else
@@ -112,13 +122,7 @@ public class GameServer
 					players.remove(connection.player);
 					PlayerDisconnected playerDisconnected = new PlayerDisconnected();
 					playerDisconnected.id = connection.player.getID();
-					
-					if (board.getPlayer1() == null && playerDisconnected.id == 1)
-					{
-						nextId--;
-						// set player 2 as the new player 1
-					}
-					
+					nextId--;					
 					server.sendToAllTCP(playerDisconnected);
 				}
 			}
@@ -143,6 +147,11 @@ public class GameServer
 		PlayerConnected playerConnected = new PlayerConnected();
 		playerConnected.id = player.getID();
 		server.sendToAllTCP(playerConnected);
+	}
+	
+	public int getPlayersConnected()
+	{
+		return nextId;
 	}
 	
 	public void disconnect()

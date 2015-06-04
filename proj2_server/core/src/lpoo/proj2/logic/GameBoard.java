@@ -162,7 +162,10 @@ public class GameBoard
 				parent.actionGameover(players[1]);
 			}
 			
-			server.sendGameover();
+			if (multiplayer)
+			{
+				server.sendGameover();
+			}
 		}
 
 		p1Paddle.update(delta);
@@ -198,7 +201,7 @@ public class GameBoard
 				}
 
 				rules.p2Score();
-				placePuck(players[0]);
+				placePuck(0);
 				parent.actionScore(players[1]);
 
 				if (multiplayer)
@@ -215,7 +218,7 @@ public class GameBoard
 				}
 
 				rules.p1Score();
-				placePuck(players[1]);
+				placePuck(1);
 				parent.actionScore(players[0]);
 
 				if (multiplayer)
@@ -263,7 +266,7 @@ public class GameBoard
 	private Random rand = new Random();
 	private float screenWidth = Gdx.graphics.getWidth();
 	
-	public void placePuck(Player player)
+	public void placePuck(int playerId)
 	{
 		if (rules instanceof RulesAttack)
 		{
@@ -275,11 +278,11 @@ public class GameBoard
 		pucks.remove(0);
 		pucks.add(factory.createSinglePuck(AirHockey.getColor()));
 		
-		if (player.getID() == 0) // Player 1
+		if (playerId == 0) // Player 1
 		{
 			pucks.get(0).setPosition(screenWidth / 2, screenHeight / 2 + randomDelta);
 		}
-		else if (player.getID() == 1) // Player 2
+		else if (playerId == 1) // Player 2
 		{
 			pucks.get(0).setPosition(screenWidth / 2, screenHeight / 2 - randomDelta);
 		}
@@ -287,10 +290,6 @@ public class GameBoard
 	
 	public void draw(SpriteBatch sb)
 	{
-		for (Wall wall : walls)
-		{
-			wall.draw(sb);
-		}
 		for (Puck puck : pucks)
 		{
 			puck.draw(sb);
@@ -298,6 +297,11 @@ public class GameBoard
 
 		p1Paddle.draw(sb);
 		p2Paddle.draw(sb);
+	}
+	
+	public int getPlayersConnected()
+	{
+		return server.getPlayersConnected();
 	}
 	
 	public void dispose()

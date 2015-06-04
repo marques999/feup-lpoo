@@ -30,13 +30,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class GUIOptions extends GUIScreen
 {
 	private final String difficulty[] = { "Easy", "Medium", "Hard", "Insane" };
-	private final String colors[] = { "Blue", "Green", "Red", "Yellow" };
+	private final String colors[] = { "Blue", "Green", "Red", "Yellow", "Purple", "Orange" };
 
 	private int colorIndex;
 	private int difficultyIndex;
 	private float oldMusicVolume;
 	private float oldSFXVolume;
-	
+
 	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private final ButtonGroup<TextButton> btnGroup = new ButtonGroup<TextButton>();
 	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
@@ -67,12 +67,24 @@ public class GUIOptions extends GUIScreen
 	private final TextButtonStyle styleGreenButton = new TextButtonStyle(skin.get("menuGreen", TextButtonStyle.class));
 	private final TextButtonStyle styleRedButton = new TextButtonStyle(skin.get("menuRed", TextButtonStyle.class));
 	private final TextButtonStyle styleYellowButton = new TextButtonStyle(skin.get("menuYellow", TextButtonStyle.class));
+	private final TextButtonStyle stylePurpleButton = new TextButtonStyle(skin.get("menuPurple", TextButtonStyle.class));
+	private final TextButtonStyle styleOrangeButton = new TextButtonStyle(skin.get("menuOrange", TextButtonStyle.class));
 	private final TextButtonStyle styleToggleButton = new TextButtonStyle(skin.get("toggle", TextButtonStyle.class));
 	private final TextButton btnOK = new TextButton("OK", styleMenuButton);
 	private final TextButton btnCancel = new TextButton("Cancel", styleMenuButton);
 	private final TextButton btnDifficulty = new TextButton(difficulty[difficultyIndex], styleDefaultButton);
 	private final TextButton btnColor = new TextButton(colors[colorIndex], styleDefaultButton);
-	private final TextButtonStyle btnColorStyle[] = { styleDefaultButton, styleGreenButton, styleRedButton, styleYellowButton };
+	
+	private final TextButtonStyle btnColorStyle[] = 
+	{
+		styleDefaultButton, 
+		styleGreenButton, 
+		styleRedButton, 
+		styleYellowButton, 
+		stylePurpleButton,
+		styleOrangeButton
+	};
+	
 	private final TextButton btnThemeA = new TextButton("THEME A", styleToggleButton);
 	private final TextButton btnThemeB = new TextButton("THEME B", styleToggleButton);
 
@@ -199,7 +211,7 @@ public class GUIOptions extends GUIScreen
 				difficultyIndex = (difficultyIndex + 1) % difficulty.length;
 				btnDifficulty.setText(difficulty[difficultyIndex]);
 			}
-			
+
 			@Override
 			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
 			{
@@ -220,7 +232,7 @@ public class GUIOptions extends GUIScreen
 				btnColor.setText(colors[colorIndex]);
 				btnColor.setStyle(btnColorStyle[colorIndex]);
 			}
-			
+
 			@Override
 			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
 			{
@@ -255,7 +267,7 @@ public class GUIOptions extends GUIScreen
 			public void clicked(final InputEvent event, final float x, final float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
-				
+
 				if (btnThemeA.isChecked())
 				{
 					audio.playSong(Song.THEME_A, false);
@@ -265,7 +277,7 @@ public class GUIOptions extends GUIScreen
 					audio.playSong(Song.THEME_B, false);
 				}
 			}
-			
+
 			@Override
 			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
 			{

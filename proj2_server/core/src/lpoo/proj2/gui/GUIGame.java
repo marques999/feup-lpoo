@@ -12,6 +12,7 @@ import lpoo.proj2.logic.Player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -38,7 +39,7 @@ public class GUIGame extends GUIScreen
 	private GameState state;
 
 	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
-	private final BitmapFont nameFont = new BitmapFont(Gdx.files.internal("menu/bebasbold.fnt"));
+	private final BitmapFont nameFont = new BitmapFont(Gdx.files.internal("menu/comicsans.fnt"));
 	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
 	private final LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
 	private final LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
@@ -62,19 +63,20 @@ public class GUIGame extends GUIScreen
 	{
 		private final Stage stageWaiting = new Stage();
 		private final Table tableWaiting = new Table();
-		private final TextButton btnResume = new TextButton("RESUME", styleMenuButton);
-
+		private final TextButton btnCancel = new TextButton("CANCEL", styleMenuButton);
+		private final Label lblPlayers = new Label("0 / 2", styleSmallLabel);
+		
 		public WaitingState()
 		{
 			tableWaiting.setFillParent(true);
-			tableWaiting.defaults().padBottom(16);
+			tableWaiting.defaults().padBottom(32);
 			tableWaiting.add(new Label("WAITING FOR PLAYERS...", styleGradientLabel)).colspan(2);
 			tableWaiting.row();
-			tableWaiting.add(new Label("Hostname:", styleGradientLabel)).left();
+			tableWaiting.add(new Label("Hostname:", styleGradientLabel)).left().padBottom(16);
 			
 			try
 			{
-				tableWaiting.add(new Label(InetAddress.getLocalHost().getHostAddress(), styleSmallLabel)).right();
+				tableWaiting.add(new Label(InetAddress.getLocalHost().getHostAddress(), styleSmallLabel)).right().padBottom(16);
 			}
 			catch (UnknownHostException e)
 			{
@@ -82,21 +84,23 @@ public class GUIGame extends GUIScreen
 			}
 			
 			tableWaiting.row();
-			tableWaiting.add(new Label("Port:", styleGradientLabel)).left().padBottom(32);
-			tableWaiting.add(new Label(Integer.toString(9732), styleSmallLabel)).right().padBottom(32);
+			tableWaiting.add(new Label("Port:", styleGradientLabel)).left();
+			tableWaiting.add(new Label(Integer.toString(9732), styleSmallLabel)).right();
 			tableWaiting.row();
 			tableWaiting.add(new Label("Players connected:", styleGradientLabel)).left();
-			tableWaiting.add(new Label("0 / 2", styleSmallLabel)).right();
+			tableWaiting.add(lblPlayers).right().padBottom(32);
+			tableWaiting.row();
+			tableWaiting.add(btnCancel).colspan(2).width(180).center();
 			stageWaiting.addActor(overlay);
 			stageWaiting.addActor(tableWaiting);
-
-			btnResume.addListener(new ClickListener()
+			
+			btnCancel.addListener(new ClickListener()
 			{
 				@Override
 				public void clicked(InputEvent event, float x, float y)
 				{
 					audio.playSound(SFX.MENU_CLICK);
-					changeState(new GameRunningState());
+					parent.switchTo(1);
 				}
 
 				@Override
@@ -106,12 +110,14 @@ public class GUIGame extends GUIScreen
 				}
 			});
 
+			audio.playSong(Song.THEME_LOBBY, true);
 			Gdx.input.setInputProcessor(stageWaiting);
 		}
 
 		@Override
 		public void update(float delta)
 		{
+			lblPlayers.setText(game.getPlayersConnected() + " / 2");
 			stageWaiting.act(delta);
 		}
 
@@ -438,7 +444,9 @@ public class GUIGame extends GUIScreen
 		state.update(delta);
 		batch.begin();
 		batch.draw(background, 0, 0, 480, 800);
+		nameFont.setColor(Color.RED);
 		nameFont.draw(batch, game.getPlayer1().getName(), 64, 64);
+		nameFont.setColor(Color.BLUE);
 		nameFont.draw(batch, game.getPlayer2().getName(), 64, 720);
 		game.draw(batch);
 		batch.end();
