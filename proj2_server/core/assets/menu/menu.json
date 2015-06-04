@@ -113,7 +113,13 @@
     {
         "default": { "font": orange96 },
         "gradientLabel": { "font" : bebasbold },
-        "smallLabel": { "font": comicsans26 },
+        "smallLabel": { "font": comicsans26, "fontColor": white },
+        "blueLabel":  { "font": comicsans26, "fontColor": blue },
+        "greenLabel": { "font": comicsans26, "fontColor": green },
+        "orangeLabel": { "font": comicsans26, "fontColor": orange },
+        "purpleLabel": { "font" : comicsans26, "fontColor": purple },
+        "redLabel": { "font" : comicsans26, "fontColor": red },
+        "yellowLabel": { "font": comicsans26, "fontColor": yellow },
     },
     
     "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": 

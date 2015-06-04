@@ -3,7 +3,10 @@ package lpoo.proj2.logic;
 import java.util.ArrayList;
 import java.util.Random;
 
+import lpoo.proj2.AirHockey;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 
 public class EntityFactory
 {
@@ -20,7 +23,33 @@ public class EntityFactory
 	{
 		return createPuck(screenWidth / 2, screenHeight / 2, paramColor);
 	}
+	
+	public final void resetP1Paddle(Paddle paddle)
+	{
+		paddle.setPosition(screenWidth / 2, 64);
+	}
 
+	public final void resetP2Paddle(Paddle paddle)
+	{
+		paddle.setPosition(screenWidth / 2, screenHeight - 64);
+	}
+	
+	public final void resetPuck(Puck puck, int playerId)
+	{
+		int randomDelta = 16 + rand.nextInt(64);
+		
+		if (playerId == 0)
+		{
+			puck.setPosition(screenWidth / 2, screenHeight / 2);
+			puck.setVelocity(new Vector2(0.0f, 0.0f));
+		}
+		else if (playerId == 1)
+		{
+			puck.setPosition(screenWidth / 2, screenHeight / 2);
+			puck.setVelocity(new Vector2(0.0f, 0.0f));
+		}
+	}
+	
 	public final Puck createRandomPuck(int paramColor)
 	{
 		return createPuck(rand.nextInt(screenWidth), rand.nextInt(screenHeight), paramColor);

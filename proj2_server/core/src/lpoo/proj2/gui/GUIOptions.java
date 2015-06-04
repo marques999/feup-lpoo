@@ -1,6 +1,7 @@
 package lpoo.proj2.gui;
 
 import lpoo.proj2.AirHockey;
+import lpoo.proj2.StyleFactory;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
 import lpoo.proj2.audio.Special;
@@ -37,56 +38,25 @@ public class GUIOptions extends GUIScreen
 	private float oldMusicVolume;
 	private float oldSFXVolume;
 
-	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private final ButtonGroup<TextButton> btnGroup = new ButtonGroup<TextButton>();
-	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
 	private final Stage stage = new Stage();
 	private final Table table = new Table();
-
-	private final CheckBoxStyle styleCheckboxDefault = new CheckBoxStyle(skin.get("default", CheckBoxStyle.class));
-	private final CheckBox chkQuake = new CheckBox("quake-style sounds", styleCheckboxDefault);
-
-	private final LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
-	private final LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
-	private final Label lblDifficulty = new Label("DIFFICULTY", styleSmallLabel);
-	private final Label lblBGM = new Label("BGM MUSIC", styleSmallLabel);
-	private final Label lblMusicVolume = new Label("MUSIC VOLUME", styleSmallLabel);
-	private final Label lblSFXVolume = new Label("SFX VOLUME", styleSmallLabel);
-	private final Label lblPaddle = new Label("PUCK COLOR", styleSmallLabel);
-	private final Label lblTitle = new Label("preferences", styleTitleLabel);
-
-	private final SliderStyle styleDefaultSlider = new SliderStyle(skin.get("default-horizontal", SliderStyle.class));
-	private final Slider sliderMusicVolume = new Slider(0.0f, 1.0f, 0.1f, false, styleDefaultSlider);
-	private final Slider sliderSFXVolume = new Slider(0.0f, 1.0f, 0.1f, false, styleDefaultSlider);
-
-	private final ImageButtonStyle stylePreviewButton = new ImageButtonStyle(skin.get("default", ImageButtonStyle.class));
-	private final ImageButton btnPreview = new ImageButton(stylePreviewButton);
-
-	private final TextButtonStyle styleDefaultButton = new TextButtonStyle(skin.get("default", TextButtonStyle.class));
-	private final TextButtonStyle styleMenuButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
-	private final TextButtonStyle styleGreenButton = new TextButtonStyle(skin.get("menuGreen", TextButtonStyle.class));
-	private final TextButtonStyle styleRedButton = new TextButtonStyle(skin.get("menuRed", TextButtonStyle.class));
-	private final TextButtonStyle styleYellowButton = new TextButtonStyle(skin.get("menuYellow", TextButtonStyle.class));
-	private final TextButtonStyle stylePurpleButton = new TextButtonStyle(skin.get("menuPurple", TextButtonStyle.class));
-	private final TextButtonStyle styleOrangeButton = new TextButtonStyle(skin.get("menuOrange", TextButtonStyle.class));
-	private final TextButtonStyle styleToggleButton = new TextButtonStyle(skin.get("toggle", TextButtonStyle.class));
-	private final TextButton btnOK = new TextButton("OK", styleMenuButton);
-	private final TextButton btnCancel = new TextButton("Cancel", styleMenuButton);
-	private final TextButton btnDifficulty = new TextButton(difficulty[difficultyIndex], styleDefaultButton);
-	private final TextButton btnColor = new TextButton(colors[colorIndex], styleDefaultButton);
-	
-	private final TextButtonStyle btnColorStyle[] = 
-	{
-		styleDefaultButton, 
-		styleGreenButton, 
-		styleRedButton, 
-		styleYellowButton, 
-		stylePurpleButton,
-		styleOrangeButton
-	};
-	
-	private final TextButton btnThemeA = new TextButton("THEME A", styleToggleButton);
-	private final TextButton btnThemeB = new TextButton("THEME B", styleToggleButton);
+	private final CheckBox chkQuake = new CheckBox("quake-style sounds", StyleFactory.DefaultCheckbox);
+	private final Label lblDifficulty = new Label("DIFFICULTY",  StyleFactory.SmallLabel);
+	private final Label lblBGM = new Label("BGM MUSIC",  StyleFactory.SmallLabel);
+	private final Label lblMusicVolume = new Label("MUSIC VOLUME",  StyleFactory.SmallLabel);
+	private final Label lblSFXVolume = new Label("SFX VOLUME",  StyleFactory.SmallLabel);
+	private final Label lblPaddle = new Label("PUCK COLOR", StyleFactory.SmallLabel);
+	private final Label lblTitle = new Label("preferences", StyleFactory.TitleLabel);
+	private final Slider sliderMusicVolume = new Slider(0.0f, 1.0f, 0.1f, false, StyleFactory.DefaultSlider);
+	private final Slider sliderSFXVolume = new Slider(0.0f, 1.0f, 0.1f, false,  StyleFactory.DefaultSlider);
+	private final ImageButton btnPreview = new ImageButton(StyleFactory.VolumeButton);
+	private final TextButton btnOK = new TextButton("OK", StyleFactory.MenuButton);
+	private final TextButton btnCancel = new TextButton("Cancel",  StyleFactory.MenuButton);
+	private final TextButton btnDifficulty = new TextButton(difficulty[difficultyIndex],  StyleFactory.BlueButton);
+	private final TextButton btnColor = new TextButton(colors[colorIndex], StyleFactory.BlueButton);
+	private final TextButton btnThemeA = new TextButton("THEME A", StyleFactory.ToggleButton);
+	private final TextButton btnThemeB = new TextButton("THEME B", StyleFactory.ToggleButton);
 
 	public GUIOptions(final AirHockey parent)
 	{
@@ -230,7 +200,7 @@ public class GUIOptions extends GUIScreen
 				audio.playSound(SFX.MENU_CLICK);
 				colorIndex = (colorIndex + 1) % colors.length;
 				btnColor.setText(colors[colorIndex]);
-				btnColor.setStyle(btnColorStyle[colorIndex]);
+				btnColor.setStyle(StyleFactory.ButtonStyles[colorIndex]);
 			}
 
 			@Override
@@ -324,7 +294,7 @@ public class GUIOptions extends GUIScreen
 		btnDifficulty.setText(difficulty[difficultyIndex]);
 		colorIndex = AirHockey.getColor();
 		btnColor.setText(colors[colorIndex]);
-		btnColor.setStyle(btnColorStyle[colorIndex]);
+		btnColor.setStyle(StyleFactory.ButtonStyles[colorIndex]);
 		sliderSFXVolume.setValue(AirHockey.getSFXVolume());
 		sliderMusicVolume.setValue(AirHockey.getMusicVolume());
 		chkQuake.setChecked(AirHockey.isQuakeEnabled());
@@ -348,7 +318,5 @@ public class GUIOptions extends GUIScreen
 	public void dispose()
 	{
 		stage.dispose();
-		atlas.dispose();
-		skin.dispose();
 	}
 }

@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import lpoo.proj2.AirHockey;
+import lpoo.proj2.StyleFactory;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
 import lpoo.proj2.audio.Special;
@@ -12,9 +13,7 @@ import lpoo.proj2.logic.Player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -27,7 +26,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
@@ -38,15 +36,16 @@ public class GUIGame extends GUIScreen
 	private GameBoard game;
 	private GameState state;
 
-	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
-	private final BitmapFont nameFont = new BitmapFont(Gdx.files.internal("menu/comicsans.fnt"));
-	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-	private final LabelStyle styleDefaultLabel = new LabelStyle(skin.get("default", LabelStyle.class));
-	private final LabelStyle styleSmallLabel = new LabelStyle(skin.get("smallLabel", LabelStyle.class));
-	private final LabelStyle styleGradientLabel = new LabelStyle(skin.get("gradientLabel", LabelStyle.class));
-	private final TextButtonStyle styleMenuButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
-	private final Texture background = new Texture(Gdx.files.internal("gfx/table.png"));
-	private final Image overlay = new Image(new Texture(Gdx.files.internal("menu/bg_darken.png")));
+	private final TextureAtlas atlas = new TextureAtlas(
+			Gdx.files.internal("menu/menu.atlas"));
+	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"),
+			atlas);
+	private final TextButtonStyle styleMenuButton = new TextButtonStyle(
+			skin.get("menuLabel", TextButtonStyle.class));
+	private final Texture background = new Texture(
+			Gdx.files.internal("gfx/table.png"));
+	private final Image overlay = new Image(new Texture(
+			Gdx.files.internal("menu/bg_darken.png")));
 
 	public void changeState(GameState newState)
 	{
@@ -54,46 +53,57 @@ public class GUIGame extends GUIScreen
 	}
 
 	private abstract class GameState
-	{	
+	{
 		public abstract void update(float delta);
+
 		public abstract void draw(SpriteBatch paramBatch);
 	}
-	
+
 	private class WaitingState extends GameState
 	{
 		private final Stage stageWaiting = new Stage();
 		private final Table tableWaiting = new Table();
-		private final TextButton btnCancel = new TextButton("CANCEL", styleMenuButton);
-		private final Label lblPlayers = new Label("0 / 2", styleSmallLabel);
-		
+		private final TextButton btnCancel = new TextButton("CANCEL",
+				styleMenuButton);
+		private final Label lblPlayers = new Label("0 / 2", StyleFactory.SmallLabel);
+
 		public WaitingState()
 		{
 			tableWaiting.setFillParent(true);
 			tableWaiting.defaults().padBottom(32);
-			tableWaiting.add(new Label("WAITING FOR PLAYERS...", styleGradientLabel)).colspan(2);
+			tableWaiting.add(
+					new Label("WAITING FOR PLAYERS...", StyleFactory.GradientLabel))
+					.colspan(2);
 			tableWaiting.row();
-			tableWaiting.add(new Label("Hostname:", styleGradientLabel)).left().padBottom(16);
-			
+			tableWaiting.add(new Label("Hostname:", StyleFactory.GradientLabel)).left()
+					.padBottom(16);
+
 			try
 			{
-				tableWaiting.add(new Label(InetAddress.getLocalHost().getHostAddress(), styleSmallLabel)).right().padBottom(16);
+				tableWaiting
+						.add(new Label(InetAddress.getLocalHost()
+								.getHostAddress(), StyleFactory.SmallLabel)).right()
+						.padBottom(16);
 			}
 			catch (UnknownHostException e)
 			{
 				e.printStackTrace();
 			}
-			
+
 			tableWaiting.row();
-			tableWaiting.add(new Label("Port:", styleGradientLabel)).left();
-			tableWaiting.add(new Label(Integer.toString(9732), styleSmallLabel)).right();
+			tableWaiting.add(new Label("Port:", StyleFactory.GradientLabel)).left();
+			tableWaiting
+					.add(new Label(Integer.toString(9732), StyleFactory.SmallLabel))
+					.right();
 			tableWaiting.row();
-			tableWaiting.add(new Label("Players connected:", styleGradientLabel)).left();
+			tableWaiting.add(
+					new Label("Players connected:", StyleFactory.GradientLabel)).left();
 			tableWaiting.add(lblPlayers).right().padBottom(32);
 			tableWaiting.row();
 			tableWaiting.add(btnCancel).colspan(2).width(180).center();
 			stageWaiting.addActor(overlay);
 			stageWaiting.addActor(tableWaiting);
-			
+
 			btnCancel.addListener(new ClickListener()
 			{
 				@Override
@@ -104,7 +114,8 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y,
+						int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
@@ -118,7 +129,15 @@ public class GUIGame extends GUIScreen
 		public void update(float delta)
 		{
 			lblPlayers.setText(game.getPlayersConnected() + " / 2");
-			stageWaiting.act(delta);
+
+			if (game.getPlayersConnected() > 1)
+			{
+				changeState(new GameRunningState());
+			}
+			else
+			{
+				stageWaiting.act(delta);
+			}
 		}
 
 		@Override
@@ -127,13 +146,15 @@ public class GUIGame extends GUIScreen
 			stageWaiting.draw();
 		}
 	}
-	
+
 	private class GamePausedState extends GameState
 	{
 		private final Stage stagePause = new Stage();
 		private final Table tablePaused = new Table();
-		private final Label lblResume = new Label("GAME PAUSED", styleSmallLabel);
-		private final TextButton btnResume = new TextButton("RESUME", styleMenuButton);
+		private final Label lblResume = new Label("GAME PAUSED",
+				StyleFactory.SmallLabel);
+		private final TextButton btnResume = new TextButton("RESUME",
+				styleMenuButton);
 
 		public GamePausedState()
 		{
@@ -155,7 +176,8 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y,
+						int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
@@ -176,16 +198,18 @@ public class GUIGame extends GUIScreen
 			stagePause.draw();
 		}
 	}
-	
+
 	private class GameOverState extends GameState
 	{
-		private final SequenceAction blinkAction = Actions.sequence(Actions.fadeOut(0.5f), Actions.fadeIn(0.5f));
+		private final SequenceAction blinkAction = Actions.sequence(
+				Actions.fadeOut(0.5f), Actions.fadeIn(0.5f));
 		private final Stage stageOver = new Stage();
 		private final Table tableOver = new Table();
-		private Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...", styleGradientLabel);
+		private Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...",
+				StyleFactory.GradientLabel);
 		private Label lblName;
 		private Label lblScore;
-		
+
 		public GameOverState(Player p)
 		{
 			StringBuilder strName = new StringBuilder();
@@ -196,9 +220,9 @@ public class GUIGame extends GUIScreen
 			strScore.append(Integer.toString(game.getPlayer1().getScore()));
 			strScore.append(" - ");
 			strScore.append(Integer.toString(game.getPlayer2().getScore()));
-			
-			lblName = new Label(strName, styleGradientLabel);
-			lblScore = new Label(strScore, styleDefaultLabel);
+
+			lblName = new Label(strName, StyleFactory.GradientLabel);
+			lblScore = new Label(strScore, StyleFactory.TitleLabel);
 			lblName.addAction(Actions.forever(blinkAction));
 			tableOver.defaults().center();
 			tableOver.add(lblName).padBottom(8);
@@ -210,7 +234,7 @@ public class GUIGame extends GUIScreen
 			stageOver.addActor(overlay);
 			stageOver.addActor(tableOver);
 			audio.playSong(Song.THEME_GAME_OVER, true);
-			
+
 			stageOver.addListener(new ClickListener()
 			{
 				@Override
@@ -221,7 +245,8 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y,
+						int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
@@ -229,7 +254,7 @@ public class GUIGame extends GUIScreen
 
 			Gdx.input.setInputProcessor(stageOver);
 		}
-		
+
 		@Override
 		public void update(float delta)
 		{
@@ -243,57 +268,49 @@ public class GUIGame extends GUIScreen
 		}
 	}
 
+	private float screenWidth = Gdx.graphics.getWidth();
+	private float screenHeight = Gdx.graphics.getHeight();
+
 	private class GameRunningState extends GameState
 	{
-		private boolean displayMessage = false;
-		private String strMessage = "";
-		
+		private final Stage stageGame = new Stage();
+		private final Label lblPlayer1 = new Label(game.getPlayer1().getName(),
+				StyleFactory.LabelStyles[game.getPlayer1().getColor()]);
+		private final Label lblPlayer2 = new Label(game.getPlayer2().getName(),
+				StyleFactory.LabelStyles[game.getPlayer2().getColor()]);
+
 		public GameRunningState()
 		{
+			lblPlayer1.setPosition(48, 64);
+			lblPlayer2.setPosition(48, screenHeight - 64);
+			stageGame.addActor(lblPlayer1);
+			stageGame.addActor(lblPlayer2);
 			Gdx.input.setInputProcessor(GUIGame.this);
 		}
 
 		@Override
 		public void update(float delta)
 		{
+			stageGame.act();
 			game.update(delta);
-		}
-		
-		public void display(String paramString)
-		{
-			strMessage = paramString;
-			displayMessage = true;
-			
-			Timer.schedule(new Task()
-			{
-					@Override
-					public void run()
-					{
-						displayMessage = false;
-					}
-			}, 1);
 		}
 
 		@Override
 		public void draw(SpriteBatch paramBatch)
 		{
-			if (displayMessage)
-			{
-				paramBatch.begin();
-				nameFont.draw(paramBatch, strMessage, Gdx.graphics.getWidth() >> 1, Gdx.graphics.getHeight() >> 1);
-				paramBatch.end();
-			}
+			stageGame.draw();
 		}
 	}
 
 	private class ConfirmExitState extends GameState
 	{
-		private final Label lblConfirm = new Label("FORFEIT MATCH?", styleSmallLabel);
+		private final Label lblConfirm = new Label("FORFEIT MATCH?",
+				StyleFactory.SmallLabel);
 		private final TextButton btnYes = new TextButton("YES", styleMenuButton);
 		private final TextButton btnNo = new TextButton("NO", styleMenuButton);
 		private final Stage stageConfirm = new Stage();
 		private final Table tableConfirm = new Table();
-		
+
 		public ConfirmExitState()
 		{
 			tableConfirm.setFillParent(true);
@@ -303,7 +320,7 @@ public class GUIGame extends GUIScreen
 			tableConfirm.add(btnNo).width(160).row();
 			stageConfirm.addActor(overlay);
 			stageConfirm.addActor(tableConfirm);
-			
+
 			btnYes.addListener(new ClickListener()
 			{
 				@Override
@@ -314,7 +331,8 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y,
+						int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
@@ -330,12 +348,13 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y,
+						int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
 			});
-			
+
 			Gdx.input.setInputProcessor(stageConfirm);
 		}
 
@@ -355,7 +374,7 @@ public class GUIGame extends GUIScreen
 	public void actionScore(Player player)
 	{
 		changeState(new PlayerScoredState(player));
-		
+
 		if (parent.isMultiplayer())
 		{
 			Timer.schedule(new ReturnGame(), 2);
@@ -384,15 +403,17 @@ public class GUIGame extends GUIScreen
 			strScore.append(Integer.toString(game.getPlayer2().getScore()));
 
 			tableScore.defaults().padBottom(16).center();
-			tableScore.add(new Label(strName, styleGradientLabel)).padBottom(8).row();
-			tableScore.add(new Label(strScore, styleDefaultLabel));
+			tableScore.add(new Label(strName, StyleFactory.GradientLabel)).padBottom(8)
+					.row();
+			tableScore.add(new Label(strScore, StyleFactory.TitleLabel));
 			tableScore.setFillParent(true);
 			tableScore.setTransform(true);
-			tableScore.setOrigin(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+			tableScore.setOrigin(Gdx.graphics.getWidth() / 2,
+					Gdx.graphics.getHeight() / 2);
 			stageScore.addActor(overlay);
 			stageScore.addActor(tableScore);
 			tableScore.addAction(Actions.rotateBy(360, 1.0f));
-			
+
 			if (!AirHockey.isQuakeEnabled())
 			{
 				audio.playSound(SFX.SFX_GOAL);
@@ -407,7 +428,7 @@ public class GUIGame extends GUIScreen
 					changeState(new GameRunningState());
 				}
 			});
-			
+
 			Gdx.input.setInputProcessor(stageScore);
 		}
 
@@ -428,14 +449,14 @@ public class GUIGame extends GUIScreen
 	{
 		super(parent, Song.THEME_NONE);
 	}
-	
+
 	class ReturnGame extends Task
 	{
 		@Override
 		public void run()
 		{
 			changeState(new GameRunningState());
-		}	
+		}
 	}
 
 	@Override
@@ -444,10 +465,10 @@ public class GUIGame extends GUIScreen
 		state.update(delta);
 		batch.begin();
 		batch.draw(background, 0, 0, 480, 800);
-		nameFont.setColor(Color.RED);
-		nameFont.draw(batch, game.getPlayer1().getName(), 64, 64);
-		nameFont.setColor(Color.BLUE);
-		nameFont.draw(batch, game.getPlayer2().getName(), 64, 720);
+		// nameFont.setColor(Color.RED);
+		// nameFont.draw(batch, game.getPlayer1().getName(), 64, 64);
+		// nameFont.setColor(Color.BLUE);
+		// nameFont.draw(batch, game.getPlayer2().getName(), 64, 720);
 		game.draw(batch);
 		batch.end();
 		state.draw(batch);
@@ -462,29 +483,31 @@ public class GUIGame extends GUIScreen
 			changeState(new ConfirmExitState());
 			break;
 		}
-		
+
 		return false;
 	}
 
 	@Override
-	public boolean touchDown(final int screenX, final int screenY, final int pointer, final int button)
+	public boolean touchDown(final int screenX, final int screenY,
+			final int pointer, final int button)
 	{
 		if (!parent.isMultiplayer())
 		{
 			game.movePaddle(0, screenX, screenY);
 		}
-		
+
 		return true;
 	}
 
 	@Override
-	public boolean touchDragged(final int screenX, final int screenY, final int pointer)
+	public boolean touchDragged(final int screenX, final int screenY,
+			final int pointer)
 	{
 		if (!parent.isMultiplayer())
 		{
 			game.movePaddle(0, screenX, screenY);
 		}
-		
+
 		return true;
 	}
 
@@ -492,9 +515,9 @@ public class GUIGame extends GUIScreen
 	public void show()
 	{
 		game = new GameBoard(this, parent.getMode(), parent.isMultiplayer());
-		
+
 		audio.playSpecial(Special.QUAKE_PREPARE);
-		
+
 		if (parent.isMultiplayer())
 		{
 			changeState(new WaitingState());
@@ -502,14 +525,9 @@ public class GUIGame extends GUIScreen
 		else
 		{
 			changeState(new GameRunningState());
-			
-			if (state instanceof GameRunningState)
-			{
-				((GameRunningState)state).display("PREPARE TO FIGHT!");
-			}
 		}
 	}
-	
+
 	@Override
 	public void hide()
 	{

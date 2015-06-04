@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.AudioManager;
@@ -48,7 +47,7 @@ public class GameBoard
 		}
 		else
 		{
-			players[0] = new Player(0, "Human", 3);
+			players[0] = new Player(0, "Human", 2);
 			players[1] = new Player(1, "CPU", 0);
 		}
 
@@ -118,7 +117,7 @@ public class GameBoard
 		@Override
 		public void run()
 		{
-			if (pucks.get(0).getPosition().x > screenHeight / 2)
+			if (pucks.get(0).getPosition().y > screenHeight / 2)
 			{
 				p2Paddle.move(pucks.get(0).getPosition().x, screenHeight - p2Paddle.getY());
 			}
@@ -157,7 +156,7 @@ public class GameBoard
 		
 		if (createP2)
 		{
-			p2Paddle = factory.createP1Paddle(players[1].getColor());
+			p2Paddle = factory.createP2Paddle(players[1].getColor());
 			createP2 = false;
 		}
 		
@@ -203,44 +202,14 @@ public class GameBoard
 			puck.collides(p1Paddle);
 			puck.collides(p2Paddle);
 
-			if (puck.collides(p1Goal) || puck.collides(p2Goal))
-			{
-			//	p1Paddle = factory.createP1Paddle(players[0].getColor());
-			//	p2Paddle = factory.createP2Paddle(players[1].getColor());
-			}
-
 			if (puck.collides(p1Goal))
 			{
-				if (lastPlayed == players[0])
-				{
-					audio.playSpecial(Special.QUAKE_HUMILIATION);
-				}
-
-				rules.p2Score();
-				placePuck(0);
-				parent.actionScore(players[1]);
-
-				if (multiplayer)
-				{
-					server.sendScore();
-				}
+				p2Goal();
 			}
 
 			if (puck.collides(p2Goal))
 			{
-				if (lastPlayed == players[1])
-				{
-					audio.playSpecial(Special.QUAKE_HUMILIATION);
-				}
-
-				rules.p1Score();
-				placePuck(1);
-				parent.actionScore(players[0]);
-
-				if (multiplayer)
-				{
-					server.sendScore();
-				}
+				p1Goal();
 			}
 		}
 
@@ -257,6 +226,44 @@ public class GameBoard
 			{
 				puck.collides(wall);
 			}
+		}
+	}
+
+	private void p1Goal()
+	{
+		if (lastPlayed == players[1])
+		{
+			audio.playSpecial(Special.QUAKE_HUMILIATION);
+		}
+
+		rules.p1Score();
+		parent.actionScore(players[0]);
+		factory.resetPuck(pucks.get(0), 1);
+		factory.resetP1Paddle(p1Paddle);
+		factory.resetP2Paddle(p2Paddle);
+		
+		if (multiplayer)
+		{
+			server.sendScore();
+		}
+	}
+
+	private void p2Goal()
+	{
+		if (lastPlayed == players[0])
+		{
+			audio.playSpecial(Special.QUAKE_HUMILIATION);
+		}
+
+		rules.p2Score();
+		parent.actionScore(players[1]);
+		factory.resetPuck(pucks.get(0), 0);
+		factory.resetP1Paddle(p1Paddle);
+		factory.resetP2Paddle(p2Paddle);
+		
+		if (multiplayer)
+		{
+			server.sendScore();
 		}
 	}
 
@@ -279,31 +286,6 @@ public class GameBoard
 		}
 	}
 
-	private Random rand = new Random();
-	private float screenWidth = Gdx.graphics.getWidth();
-	
-	public void placePuck(int playerId)
-	{
-		if (rules instanceof RulesAttack)
-		{
-			return;
-		}
-		
-		int randomDelta = 16 + rand.nextInt(64);
-		
-		pucks.remove(0);
-		pucks.add(factory.createSinglePuck(AirHockey.getColor()));
-		
-		if (playerId == 0) // Player 1
-		{
-			pucks.get(0).setPosition(screenWidth / 2, screenHeight / 2 + randomDelta);
-		}
-		else if (playerId == 1) // Player 2
-		{
-			pucks.get(0).setPosition(screenWidth / 2, screenHeight / 2 - randomDelta);
-		}
-	}
-	
 	public void draw(SpriteBatch sb)
 	{
 		for (Puck puck : pucks)

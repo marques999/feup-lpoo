@@ -1,21 +1,18 @@
 package lpoo.proj2.gui;
 
 import lpoo.proj2.AirHockey;
+import lpoo.proj2.StyleFactory;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GUISelect extends GUIScreen
@@ -23,17 +20,13 @@ public class GUISelect extends GUIScreen
 	private final Stage stage = new Stage();
 	private final Table table = new Table();
 	private final Texture overlay = new Texture(Gdx.files.internal("menu/bg_select.png"));
-	private final TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("menu/menu.atlas"));
 	private final TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_select2.png"), true);
-	private final Skin skin = new Skin(Gdx.files.internal("menu/menu.json"), atlas);
-	private final LabelStyle styleTitleLabel = new LabelStyle(skin.get("default", LabelStyle.class));
-	private final Label lblTitle = new Label("Singleplayer", styleTitleLabel);
-	private final TextButtonStyle styleButton = new TextButtonStyle(skin.get("menuLabel", TextButtonStyle.class));
-	private final TextButton btnMode1 = new TextButton("BEST OF 5", styleButton);
-	private final TextButton btnMode2 = new TextButton("BEST OF 10", styleButton);
-	private final TextButton btnMode3 = new TextButton("FIRST TO 15", styleButton);
-	private final TextButton btnMode4 = new TextButton("PUCK ATTACK", styleButton);
-	private final TextButton btnBack = new TextButton("< BACK", styleButton);
+	private final Label lblTitle = new Label("Singleplayer", StyleFactory.TitleLabel);
+	private final TextButton btnMode1 = new TextButton("BEST OF 5", StyleFactory.MenuButton);
+	private final TextButton btnMode2 = new TextButton("BEST OF 10", StyleFactory.MenuButton);
+	private final TextButton btnMode3 = new TextButton("FIRST TO 15", StyleFactory.MenuButton);
+	private final TextButton btnMode4 = new TextButton("PUCK ATTACK", StyleFactory.MenuButton);
+	private final TextButton btnBack = new TextButton("< BACK", StyleFactory.MenuButton);
 
 	private class MenuListener extends ClickListener
 	{
@@ -141,8 +134,6 @@ public class GUISelect extends GUIScreen
 	@Override
 	public void dispose()
 	{
-		atlas.dispose();
-		skin.dispose();
 		stage.dispose();
 	}
 }
