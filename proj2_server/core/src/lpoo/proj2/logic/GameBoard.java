@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 
 import lpoo.proj2.AirHockey;
@@ -32,6 +33,7 @@ public class GameBoard
 	private ArrayList<Wall> walls = new ArrayList<Wall>();
 	private boolean createP1 = false;
 	private boolean createP2 = false;
+	private int serverPort;
 	protected boolean multiplayer;
 
 	public GameBoard(GUIGame paramParent, int paramMode, boolean paramMultiplayer)
@@ -85,13 +87,13 @@ public class GameBoard
 	{
 		return players[1];
 	}
-	
+
 	public void setPlayer1(Player player)
 	{
 		players[0] = player;
 		createP1 = true;
 	}
-	
+
 	public void setPlayer2(Player player)
 	{
 		players[1] = player;
@@ -104,13 +106,21 @@ public class GameBoard
 		{
 			try
 			{
-				server = new GameServer(9732, 9733, this);
+				ServerSocket socket = new ServerSocket(0);
+				serverPort = socket.getLocalPort();
+				socket.close();
+				server = new GameServer(serverPort, serverPort + 1, this);
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public int getPort()
+	{
+		return serverPort;
 	}
 
 	private class CPUPaddle implements Runnable
@@ -142,7 +152,7 @@ public class GameBoard
 		rules.reset();
 		walls = factory.createWalls(players[0].getColor());
 		p1Paddle = factory.createP1Paddle(players[0].getColor());
-		p2Paddle = factory.createP2Paddle(players[1].getColor());	
+		p2Paddle = factory.createP2Paddle(players[1].getColor());
 		p1Goal = factory.createP1Goal();
 		p2Goal = factory.createP2Goal();
 	}
@@ -154,13 +164,13 @@ public class GameBoard
 			p1Paddle = factory.createP1Paddle(players[0].getColor());
 			createP1 = false;
 		}
-		
+
 		if (createP2)
 		{
 			p2Paddle = factory.createP2Paddle(players[1].getColor());
 			createP2 = false;
 		}
-		
+
 		if (rules.checkOver())
 		{
 			if (rules.checkAce())
@@ -177,7 +187,7 @@ public class GameBoard
 			{
 				parent.actionGameover(players[1]);
 			}
-			
+
 			if (multiplayer)
 			{
 				server.sendGameover();
@@ -210,7 +220,7 @@ public class GameBoard
 				p2Goal(puck);
 				break;
 			}
-			
+
 			if (puck.collides(p2Goal))
 			{
 				p1Goal(puck);
@@ -246,7 +256,7 @@ public class GameBoard
 
 		rules.p1Score();
 		parent.actionScore(players[0]);
-		
+
 		if (rules instanceof RulesAttack)
 		{
 			pucks.remove(puck);
@@ -257,7 +267,7 @@ public class GameBoard
 			factory.resetP1Paddle(p1Paddle);
 			factory.resetP2Paddle(p2Paddle);
 		}
-		
+
 		if (multiplayer)
 		{
 			server.sendScore();
@@ -273,7 +283,7 @@ public class GameBoard
 
 		rules.p2Score();
 		parent.actionScore(players[1]);
-		
+
 		if (rules instanceof RulesAttack)
 		{
 			pucks.remove(puck);
@@ -321,18 +331,23 @@ public class GameBoard
 		{
 			p1Paddle.draw(sb);
 		}
-		
+
 		if (p2Paddle != null)
 		{
 			p2Paddle.draw(sb);
 		}
 	}
-	
+
+	public void actionDisconnect(Player paramPlayer)
+	{
+		parent.actionDisconnect(paramPlayer);
+	}
+
 	public int getPlayersConnected()
 	{
 		return server.getPlayersConnected();
 	}
-	
+
 	public void dispose()
 	{
 		if (multiplayer)

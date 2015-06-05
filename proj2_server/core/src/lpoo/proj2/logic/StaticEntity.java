@@ -27,7 +27,7 @@ public abstract class StaticEntity extends Entity
 		bounding = new Rectangle(paramX, paramY, paramWidth, paramHeight);
 	}
 
-	public final Rectangle getBounding()
+	public final Rectangle getBoundingRectangle()
 	{
 		return bounding;
 	}

@@ -36,7 +36,7 @@ public final class Puck extends DynamicEntity
 			break;
 		}
 
-		setBounding(x, y);
+		setBoundingCircle(x, y);
 		setRadius(getWidth() / 2);
 		setVelocity(new Vector2(-128, -128));
 	}
@@ -44,32 +44,19 @@ public final class Puck extends DynamicEntity
 	public void update(float delta)
 	{
 		getPosition().add(getVelocity().cpy().scl(delta));
-		setBounding(getX(), getY());
+		setBoundingCircle(getX(), getY());
 	}
 
 	@Override
 	public boolean collides(Paddle paddle)
 	{
-		if (Intersector.overlaps(getBounding(), paddle.getBounding()))
-		{
-			if (!isColliding())
-			{
-				setColliding(true);
-				return true;
-			}
-		}
-		else
-		{
-			setColliding(false);
-		}
-
 		return false;
 	}
 
 	@Override
 	public boolean collides(Puck puck)
 	{
-		if (Intersector.overlaps(getBounding(), puck.getBounding()))
+		if (Intersector.overlaps(getBoundingCircle(), puck.getBoundingCircle()))
 		{
 			if (!isColliding())
 			{
@@ -108,11 +95,12 @@ public final class Puck extends DynamicEntity
 	@Override
 	public boolean collides(Wall wall)
 	{
-		if (Intersector.overlaps(getBounding(), wall.getBounding()))
+		if (Intersector.overlaps(getBoundingCircle(), wall.getBoundingRectangle()))
 		{
 			if (!isColliding())
 			{
 				getVelocity().scl(wall.getNormal());
+				getPosition().mulAdd(getVelocity(), 0.02f);
 				getVelocity().scl(0.95f);
 				
 //				if (getPosition().dst(getX(), wall.getY()) < 16.0f || 
@@ -135,7 +123,7 @@ public final class Puck extends DynamicEntity
 	@Override
 	public boolean collides(Goal goal)
 	{
-		if (Intersector.overlaps(getBounding(), goal.getBounding()))
+		if (Intersector.overlaps(getBoundingCircle(), goal.getBoundingRectangle()))
 		{
 			if (!isColliding())
 			{

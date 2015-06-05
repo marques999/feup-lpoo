@@ -38,28 +38,37 @@ public final class Paddle extends DynamicEntity
 			break;
 		}
 
-		setBounding(x, y);
+		setBoundingCircle(x, y);
 		setRadius(getWidth() / 2 - radiusAdjustment);
 		setVelocity(new Vector2(0.0f, 0.0f));
 	}
 	
-
 	public void update(float delta)
 	{
 		float dx = (getX() - getPreviousX()) / delta;
 		float dy = (getY() - getPreviousY()) / delta;
 
 		if (Math.abs(dx) < minimumSpeed)
+		{
 			dx = minimumSpeed * Math.signum(dx);
+		}
+		
 		if (Math.abs(dy) < minimumSpeed)
+		{
 			dy = minimumSpeed * Math.signum(dy);
+		}
+		
 		if (Math.abs(dx) > maximumSpeed)
+		{
 			dx = maximumSpeed * Math.signum(dx);
+		}
+		
 		if (Math.abs(dy) > maximumSpeed)
+		{
 			dy = maximumSpeed * Math.signum(dy);
+		}
 
 		setVelocity(new Vector2(dx, dy));
-		setBounding(getX(), getY());
 		setPrevious(getX(), getY());
 	}
 
@@ -72,7 +81,7 @@ public final class Paddle extends DynamicEntity
 	@Override
 	public boolean collides(Puck puck)
 	{
-		if (Intersector.overlaps(getBounding(), puck.getBounding()))
+		if (Intersector.overlaps(getBoundingCircle(), puck.getBoundingCircle()))
 		{
 			if (!isColliding())
 			{
@@ -93,14 +102,6 @@ public final class Paddle extends DynamicEntity
 	@Override
 	public boolean collides(Wall wall)
 	{
-		if (this.getX() <= wall.getX() + wall.getWidth() || this.getX() >= wall.getX() || this.getY() <= wall.getY() + wall.getHeight() || this.getY() >= wall.getY())
-		{
-			if (Intersector.overlaps(getBounding(), wall.getBounding()))
-			{
-				return true;
-			}
-		}
-
-		return false;
+		return Intersector.overlaps(getBoundingCircle(), wall.getBoundingRectangle());
 	}
 }

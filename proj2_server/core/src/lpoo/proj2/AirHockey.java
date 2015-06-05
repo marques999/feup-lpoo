@@ -20,11 +20,13 @@ public class AirHockey extends Game
 	private GUIScreen _current;
 	private ArrayList<GUIScreen> _menus;
 	private AudioManager _am;
-	private boolean _multiplayer = false;
-	private int mode = 1;
+	private boolean _multiplayer;
+	private int _mode;
 
 	public AirHockey()
 	{
+		_multiplayer = false;
+		_mode = 1;
 	}
 
 	public final boolean isMultiplayer()
@@ -46,12 +48,12 @@ public class AirHockey extends Game
 
 	public final int getMode()
 	{
-		return mode;
+		return _mode;
 	}
 
 	public void setMode(int paramMode)
 	{
-		mode = paramMode;
+		_mode = paramMode;
 	}
 
 	private static Preferences preferences;

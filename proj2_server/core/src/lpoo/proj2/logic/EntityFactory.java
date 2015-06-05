@@ -34,17 +34,18 @@ public class EntityFactory
 	
 	public final void resetPuck(Puck puck, int playerId)
 	{
-		//int randomDelta = 16 + rand.nextInt(64);
+		int randomDelta = 16 + rand.nextInt(64);
 		
-		if (playerId == 0)
+		switch (playerId)
 		{
-			puck.setPosition(screenWidth / 2, screenHeight / 2);
-			puck.setVelocity(new Vector2(0.0f, 0.0f));
-		}
-		else if (playerId == 1)
-		{
-			puck.setPosition(screenWidth / 2, screenHeight / 2);
-			puck.setVelocity(new Vector2(0.0f, 0.0f));
+		case 0:
+			puck.setPosition(screenWidth / 2, screenHeight / 2 - randomDelta);
+			puck.setVelocity(new Vector2(0.0f, -randomDelta));
+			break;
+		case 1:
+			puck.setPosition(screenWidth / 2, screenHeight / 2 + randomDelta);
+			puck.setVelocity(new Vector2(0.0f, randomDelta));
+			break;
 		}
 	}
 	
@@ -73,13 +74,19 @@ public class EntityFactory
 	public final Paddle createP1Paddle(int paramColor)
 	{
 		Paddle p1Paddle = createPaddle(screenWidth / 2, 64, paramColor);
+		p1Paddle.bounds.minX = marginLeftWall + p1Paddle.getRadius();
 		p1Paddle.bounds.minY = screenHeight / 2 - p1Paddle.getHeight() / 16;
+		p1Paddle.bounds.maxX = screenWidth - marginRightWall - p1Paddle.getRadius();
+		p1Paddle.bounds.maxY = screenHeight - marginBottomWall - p1Paddle.getRadius();
 		return p1Paddle;
 	}
 
 	public final Paddle createP2Paddle(int paramColor)
 	{
 		Paddle p2Paddle = createPaddle(screenWidth / 2, screenHeight - 64, paramColor);
+		p2Paddle.bounds.minX = marginLeftWall + p2Paddle.getRadius();
+		p2Paddle.bounds.maxX = screenWidth - marginRightWall - p2Paddle.getRadius();
+		p2Paddle.bounds.minY = marginTopWall + p2Paddle.getRadius();
 		p2Paddle.bounds.maxY = screenHeight / 2 - p2Paddle.getHeight() / 16;
 		return p2Paddle;
 	}

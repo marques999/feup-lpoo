@@ -66,26 +66,30 @@ public class GameServer
 						if (other.getName().equals(login.name))
 						{
 							c.close();
+							
 							return;
 						}
 					}
 
 					if (players.size() < 2)
 					{
-						player = new Player(nextId++, login.name, login.color);
+						player = new Player(nextId, login.name, login.color);
+						
 						System.out.println("ID: " + player.getID());
 						System.out.println("Player name: " + login.name);
 						System.out.println("Player color: " + login.color);
 
-						if (nextId == 1)
+						switch (nextId)
 						{
+						case 0:
 							board.setPlayer1(player);
-						}
-						else if (nextId == 2)
-						{
+							break;
+						case 1:
 							board.setPlayer2(player);
+							break;
 						}
 
+						nextId++;
 						loggedIn(connection, player);
 					}
 					else
@@ -118,8 +122,9 @@ public class GameServer
 					players.remove(connection.player);
 					PlayerDisconnected playerDisconnected = new PlayerDisconnected();
 					playerDisconnected.id = connection.player.getID();
-					nextId--;
+					nextId = 0;
 					server.sendToAllTCP(playerDisconnected);
+					board.actionDisconnect(connection.player);
 				}
 			}
 		});

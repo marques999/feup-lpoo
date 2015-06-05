@@ -74,7 +74,7 @@ public class GUIGame extends GUIScreen
 
 			tableWaiting.row();
 			tableWaiting.add(new Label("Port:", StyleFactory.GradientLabel)).left();
-			tableWaiting.add(new Label(Integer.toString(9732), StyleFactory.SmallLabel)).right();
+			tableWaiting.add(new Label(Integer.toString(game.getPort()), StyleFactory.SmallLabel)).right();
 			tableWaiting.row();
 			tableWaiting.add(new Label("Players connected:", StyleFactory.GradientLabel)).left();
 			tableWaiting.add(lblPlayers).right().padBottom(32);
@@ -174,6 +174,60 @@ public class GUIGame extends GUIScreen
 			stagePause.draw();
 		}
 	}
+	
+	private class DisconnectedState extends GameState
+	{
+		private final Stage stageDisconnected = new Stage();
+		private final Table tableDisconnected = new Table();
+		private final TextButton btnOK = new TextButton("OK", StyleFactory.MenuButton);
+
+		public DisconnectedState(final Player paramPlayer)
+		{
+			final StringBuilder strName = new StringBuilder();
+
+			strName.append(paramPlayer.getName());
+			strName.append(" HAS DISCONNECTED.");
+			
+			tableDisconnected.setFillParent(true);
+			tableDisconnected.defaults().padBottom(16);
+			tableDisconnected.add(new Label(strName, StyleFactory.GradientLabel));
+			tableDisconnected.row();
+			tableDisconnected.add(btnOK);
+			stageDisconnected.addActor(overlay);
+			stageDisconnected.addActor(tableDisconnected);
+			audio.playSound(SFX.SFX_PAUSE);
+
+			btnOK.addListener(new ClickListener()
+			{
+				@Override
+				public void clicked(InputEvent event, float x, float y)
+				{
+					audio.playSound(SFX.MENU_CLICK);
+					changeState(new WaitingState());
+				}
+
+				@Override
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
+			});
+
+			Gdx.input.setInputProcessor(stageDisconnected);
+		}
+
+		@Override
+		public void update(float delta)
+		{
+			stageDisconnected.act(delta);
+		}
+
+		@Override
+		public void draw(SpriteBatch paramBatch)
+		{
+			stageDisconnected.draw();
+		}
+	}
 
 	private class GameOverState extends GameState
 	{
@@ -219,8 +273,7 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y,
-						int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
@@ -351,6 +404,11 @@ public class GUIGame extends GUIScreen
 	public void actionGameover(Player p)
 	{
 		changeState(new GameOverState(p));
+	}
+	
+	public void actionDisconnect(Player p)
+	{
+		changeState(new DisconnectedState(p));
 	}
 
 	private class PlayerScoredState extends GameState
