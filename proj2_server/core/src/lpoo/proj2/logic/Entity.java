@@ -1,6 +1,5 @@
 package lpoo.proj2.logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -9,7 +8,7 @@ public abstract class Entity
 {
 	private Vector2 pos;
 	private Vector2 old;
-	protected Bounds bounds;
+
 	private int color;
 	private boolean colliding;
 	private Sprite sprite;
@@ -23,7 +22,6 @@ public abstract class Entity
 
 	public Entity(float paramX, float paramY, float paramWidth, float paramHeight, int paramColor)
 	{
-		bounds = new Bounds(0.0f, 0.0f, 0.0f, 0.0f);
 		pos = new Vector2(paramX, paramY);
 		old = new Vector2(paramX, paramY);
 		colliding = false;
@@ -128,10 +126,6 @@ public abstract class Entity
 		sprite.setCenter(pos.x, pos.y);
 		width = paramSprite.getWidth() * paramSprite.getScaleX();
 		height = paramSprite.getHeight() * paramSprite.getScaleY();
-		bounds.minX = width / 2;
-		bounds.minY = height / 2;
-		bounds.maxX = Gdx.graphics.getWidth() - bounds.minX;
-		bounds.maxY = Gdx.graphics.getHeight() - bounds.minY;
 	}
 
 	public void draw(SpriteBatch sb)

@@ -2,6 +2,7 @@ package lpoo.proj2.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -36,7 +37,8 @@ public class GameBoard
 	private int serverPort;
 	protected boolean multiplayer;
 
-	public GameBoard(GUIGame paramParent, int paramMode, boolean paramMultiplayer)
+	public GameBoard(GUIGame paramParent, int paramMode,
+			boolean paramMultiplayer)
 	{
 		parent = paramParent;
 		players = new Player[2];
@@ -71,11 +73,32 @@ public class GameBoard
 		}
 
 		lastPlayed = null;
-		cpu = new CPUPaddle();
+
+		switch (AirHockey.getDifficulty())
+		{
+		case 0:
+			cpu = new EasyCPUPaddle();
+			break;
+		case 1:
+			cpu = new MediumCPUPaddle();
+			break;
+		case 2:
+			cpu = new HardCPUPaddle();
+			break;
+		case 3:
+			cpu = new InsaneCPUPaddle();
+			break;
+		}
+
 		audio = AudioManager.getInstance();
 		factory = new EntityFactory();
 
 		initialize();
+
+		if (!multiplayer)
+		{
+			new Thread(cpu).start();
+		}
 	}
 
 	public final Player getPlayer1()
@@ -117,20 +140,252 @@ public class GameBoard
 			}
 		}
 	}
-	
+
 	public int getPort()
 	{
 		return serverPort;
 	}
 
-	private class CPUPaddle implements Runnable
+	private float screenWidth = Gdx.graphics.getWidth();
+
+	private class EasyCPUPaddle extends CPUPaddle
 	{
+		public EasyCPUPaddle()
+		{
+			setReactionTime(0.4f);
+			setMovementSpeed(1.6f);
+		}
+	}
+
+	private class MediumCPUPaddle extends CPUPaddle
+	{
+		public MediumCPUPaddle()
+		{
+			setReactionTime(0.3f);
+			setMovementSpeed(1.2f);
+		}
+	}
+
+	private class HardCPUPaddle extends CPUPaddle
+	{
+		public HardCPUPaddle()
+		{
+			setReactionTime(0.2f);
+			setMovementSpeed(0.8f);
+		}
+	}
+
+	private class InsaneCPUPaddle extends CPUPaddle
+	{
+		public InsaneCPUPaddle()
+		{
+			setReactionTime(0.1f);
+			setMovementSpeed(0.5f);
+		}
+	}
+
+	private abstract class CPUPaddle implements Runnable
+	{
+		private float reactionTime = 0.0f;
+		private float movementSpeed = 0.0f;
+		private long busyTime = 0;
+
+		private Vector2 finalPosition = new Vector2(0.0f, 0.0f);
+
+		public void setReactionTime(final float paramTime)
+		{
+			reactionTime = paramTime;
+			busyTime = Math.round(reactionTime * 1000);
+		}
+
+		public void setMovementSpeed(final float paramSpeed)
+		{
+			movementSpeed = paramSpeed;
+		}
+
 		@Override
 		public void run()
 		{
-			if (pucks.get(0).getPosition().y > screenHeight / 2)
+			Puck puck = pucks.get(0);
+
+			while (!rules.checkOver())
 			{
-				p2Paddle.move(pucks.get(0).getPosition().x, screenHeight - p2Paddle.getY());
+
+				if (puck.getPosition().y <= screenHeight * 0.5
+						&& puck.goingUpwards())
+				{
+					// acompanha o puck
+					float dx = puck.getX() - p2Paddle.getX();
+					float dy = puck.getY() - p2Paddle.getY();
+					finalPosition = new Vector2(puck.getX(), puck.getY());
+					Vector2 finalSpeed = new Vector2(dx / movementSpeed, dy
+							/ movementSpeed);
+
+					// if (puck.goingRight())
+					// p2Paddle.move(p2Paddle.getPosition().x + 1,
+					// p2Paddle.getPosition().y);
+					// else
+					// p2Paddle.move(p2Paddle.getPosition().x - 1,
+					// p2Paddle.getPosition().y);
+
+					try
+					{
+						p2Paddle.impulse(finalSpeed);
+						System.out.println("[CPU] acompanhar puck");
+						Thread.sleep(busyTime);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				else if (puck.getPosition().y <= screenHeight * 0.5
+						&& puck.goingDownwards())
+				{
+					System.out.println("[CPU] contrariar puck");
+					Vector2 finalSpeed;
+					// contraria o puck
+					if (puck.goingRight())
+					{
+						float dx = p2Paddle.getBounds().minX - p2Paddle.getX();
+						float dy = 0.0f;
+						finalPosition = new Vector2(p2Paddle.getBounds().minX, p2Paddle.getY());
+						finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
+					}
+					else
+					{
+						float dx = p2Paddle.getBounds().maxX - p2Paddle.getX();
+						float dy = 0.0f;
+						finalPosition = new Vector2(p2Paddle.getBounds().maxX, p2Paddle.getY());
+						finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
+					}
+					
+					p2Paddle.impulse(finalSpeed);
+
+					try
+					{
+						Thread.sleep(busyTime);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				else if (puck.getPosition().y >= screenHeight * 0.5f
+						&& puck.getPosition().y <= screenHeight * 0.75f
+						&& puck.goingUpwards())
+				{
+
+					if (!puck.goingFast())
+					{
+						float dx = puck.getX() - p2Paddle.getX();
+						float dy = puck.getY() - p2Paddle.getY();
+
+						Vector2 finalSpeed = new Vector2(2 * dx / movementSpeed, 2 * dy
+								/ movementSpeed);
+
+						p2Paddle.impulse(finalSpeed);
+						System.out.println("[CPU] ataque");
+						// // Ataca
+						// if (puck.goingRight())
+						// p2Paddle.move(p2Paddle.getPosition().x + 1,
+						// p2Paddle.getPosition().y - 1);
+						// else
+						// p2Paddle.move(p2Paddle.getPosition().x - 1,
+						// p2Paddle.getPosition().y - 1);
+						try
+						{
+							Thread.sleep(busyTime);
+						}
+						catch (InterruptedException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+					else
+					{
+						Vector2 finalPosition = new Vector2(p2Goal.getX()
+								- p2Paddle.getX(), p2Goal.getY()
+								- p2Paddle.getY());
+						Vector2 finalSpeed = new Vector2(finalPosition.x
+								/ movementSpeed, finalPosition.y
+								/ movementSpeed);
+
+						p2Paddle.impulse(finalSpeed);
+						System.out.println("[CPU] defesa");
+						try
+						{
+							Thread.sleep(busyTime);
+						}
+						catch (InterruptedException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						// // Defende
+						// if (puck.goingRight())
+						// p2Paddle.move(p2Paddle.getPosition().x + 1,
+						// p2Paddle.getPosition().y + 1);
+						// else
+						// p2Paddle.move(p2Paddle.getPosition().x - 1,
+						// p2Paddle.getPosition().y + 1);
+
+					}
+
+				}
+				else if (puck.getPosition().y >= screenHeight * 0.5
+						&& puck.getPosition().y <= screenHeight * 0.75
+						&& puck.goingDownwards())
+				{
+					float dx = screenWidth / 2 - p2Paddle.getX();
+					float dy = screenHeight * 0.75f - p2Paddle.getY();
+					Vector2 finalSpeed = new Vector2(dx / movementSpeed, dy
+							/ movementSpeed);
+					// Reposiciona
+					p2Paddle.impulse(finalSpeed);
+					System.out.println("[CPU] reposiciona");
+					System.out.println(finalSpeed);
+					// if (p2Paddle.getPosition().x > screenWidth / 2)
+					// p2Paddle.move(p2Paddle.getPosition().x - 1,
+					// p2Paddle.getPosition().y - 1);
+					// else
+					// p2Paddle.move(p2Paddle.getPosition().x + 1,
+					// p2Paddle.getPosition().y - 1);
+					//
+					// if (p2Paddle.getPosition().y > screenHeight * 0.75)
+					// p2Paddle.move(p2Paddle.getPosition().x,
+					// p2Paddle.getPosition().y - 1);
+					// else
+					// p2Paddle.move(p2Paddle.getPosition().x + 1,
+					// p2Paddle.getPosition().y + 1);
+
+					try
+					{
+						Thread.sleep(busyTime);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				try
+				{
+					Thread.sleep(busyTime);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -195,6 +450,7 @@ public class GameBoard
 		}
 
 		p1Paddle.update(delta);
+		p2Paddle.update();
 
 		for (Puck puck : pucks)
 		{
@@ -229,11 +485,6 @@ public class GameBoard
 		}
 
 		p1Paddle.collides(p2Paddle);
-
-		if (!multiplayer)
-		{
-			new Thread(cpu).start();
-		}
 
 		for (Wall wall : walls)
 		{

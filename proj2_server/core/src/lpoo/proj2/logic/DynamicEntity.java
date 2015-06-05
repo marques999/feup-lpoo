@@ -8,23 +8,28 @@ public abstract class DynamicEntity extends Entity implements CollisionDetector
 {
 	private Circle bounding = new Circle(0.0f, 0.0f, 1.0f);
 	private Vector2 velocity = new Vector2(0.0f, 0.0f);
-
+	protected Bounds bounds = new Bounds(0.0f, 0.0f, 0.0f, 0.0f);
+	
 	public DynamicEntity(final float paramX, final float paramY)
 	{
 		this(paramX, paramY, 0);
 	}
 
+	public Bounds getBounds()
+	{
+		return bounds;
+	}
 	public DynamicEntity(final float paramX, final float paramY, final int paramColor)
 	{
 		super(paramX, paramY, paramColor);
 	}
 
-	public final Circle getBounding()
+	public final Circle getBoundingCircle()
 	{
 		return bounding;
 	}
 
-	public void setBounding(final float paramX, final float paramY)
+	public void setBoundingCircle(final float paramX, final float paramY)
 	{
 		bounding.setPosition(paramX, paramY);
 	}

@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public final class Puck extends DynamicEntity
 {
 	private final float minimumDelta = 0.05f;
-	
+
 	public Puck(float x, float y, int color)
 	{
 		super(x, y, color);
@@ -42,7 +42,7 @@ public final class Puck extends DynamicEntity
 	}
 
 	public void update(float delta)
-	{
+	{		
 		getPosition().add(getVelocity().cpy().scl(delta));
 		setBoundingCircle(getX(), getY());
 	}
@@ -73,14 +73,14 @@ public final class Puck extends DynamicEntity
 	{
 		float dx = Math.abs(velocity.x);
 		float dy = Math.abs(velocity.y);
-		
+
 		if (dx < minimumDelta || dy < minimumDelta)
 		{
 			if (dx < minimumDelta)
 			{
 				getVelocity().scl(-1, 1);
 			}
-			
+
 			if (dy < minimumDelta)
 			{
 				getVelocity().scl(1, -1);
@@ -92,22 +92,42 @@ public final class Puck extends DynamicEntity
 		}
 	}
 
+	public boolean goingUpwards()
+	{
+		return getVelocity().y >= 0.1f;
+	}
+
+	public boolean goingRight()
+	{
+		return getVelocity().x >= 0.1f;
+	}
+
+	public boolean goingLeft()
+	{
+		return getVelocity().x <= -0.1f;
+	}
+
+	public boolean goingFast()
+	{
+		return getVelocity().len() > 300.0f;
+	}
+	
+	public boolean goingDownwards()
+	{
+		return getVelocity().y <= -0.1f;
+	}
+
 	@Override
 	public boolean collides(Wall wall)
 	{
-		if (Intersector.overlaps(getBoundingCircle(), wall.getBoundingRectangle()))
+		if (Intersector.overlaps(getBoundingCircle(),
+				wall.getBoundingRectangle()))
 		{
 			if (!isColliding())
 			{
 				getVelocity().scl(wall.getNormal());
 				getPosition().mulAdd(getVelocity(), 0.02f);
 				getVelocity().scl(0.95f);
-				
-//				if (getPosition().dst(getX(), wall.getY()) < 16.0f || 
-//					getPosition().dst(wall.getX(), getY()) < 16.0f)
-//					{
-//						
-//					}
 				setColliding(true);
 				return true;
 			}
