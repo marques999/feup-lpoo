@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class DynamicEntity extends Entity implements CollisionDetector
 {
-	private Circle bounding;
+	private Circle bounding = new Circle(0.0f, 0.0f, 1.0f);
 	private Vector2 velocity = new Vector2(0.0f, 0.0f);
 
 	public DynamicEntity(final float paramX, final float paramY)
@@ -17,7 +17,6 @@ public abstract class DynamicEntity extends Entity implements CollisionDetector
 	public DynamicEntity(final float paramX, final float paramY, final int paramColor)
 	{
 		super(paramX, paramY, paramColor);
-		bounding = new Circle(paramX, paramY, 1.0f);
 	}
 
 	public final Circle getBounding()

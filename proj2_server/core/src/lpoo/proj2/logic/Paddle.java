@@ -1,8 +1,5 @@
 package lpoo.proj2.logic;
 
-import lpoo.proj2.audio.AudioManager;
-import lpoo.proj2.audio.SFX;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Paddle extends DynamicEntity
 {
+	private static final float radiusAdjustment = 13.0f;
 	private static final float minimumSpeed = 200.0f;
 	private static final float maximumSpeed = 800.0f;
 	
@@ -40,8 +38,9 @@ public class Paddle extends DynamicEntity
 			break;
 		}
 
+		setBounding(x, y);
+		setRadius(getWidth() / 2 - radiusAdjustment);
 		setVelocity(new Vector2(0.0f, 0.0f));
-		setRadius(getWidth() / 2);
 	}
 	
 
@@ -50,42 +49,23 @@ public class Paddle extends DynamicEntity
 		float dx = (getX() - getPreviousX()) / delta;
 		float dy = (getY() - getPreviousY()) / delta;
 
-		if (Math.abs(dx) < minimumSpeed && dx != 0.0f)
+		if (Math.abs(dx) < minimumSpeed)
 			dx = minimumSpeed * Math.signum(dx);
-		else if (dx == 0.0f)
-			dx = minimumSpeed;
-	
-		if (Math.abs(dy) < minimumSpeed && dy != 0.0f)
+		if (Math.abs(dy) < minimumSpeed)
 			dy = minimumSpeed * Math.signum(dy);
-		else if (dy == 0.0f)
-			dy = minimumSpeed;
-		
 		if (Math.abs(dx) > maximumSpeed)
 			dx = maximumSpeed * Math.signum(dx);
 		if (Math.abs(dy) > maximumSpeed)
 			dy = maximumSpeed * Math.signum(dy);
 
 		setVelocity(new Vector2(dx, dy));
+		setBounding(getX(), getY());
 		setPrevious(getX(), getY());
 	}
 
 	@Override
 	public boolean collides(Paddle paddle)
 	{
-		if (Intersector.overlaps(getBounding(), paddle.getBounding()))
-		{
-			if (!isColliding())
-			{
-				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
-			}
-
-			setColliding(true);
-		}
-		else
-		{
-			setColliding(false);
-		}
-
 		return false;
 	}
 
@@ -96,14 +76,11 @@ public class Paddle extends DynamicEntity
 		{
 			if (!isColliding())
 			{
-				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
-				puck.impulse(getVelocity().scl(1 / 16f));
+				puck.impulse(getVelocity());
+				puck.getPosition().add(getVelocity().x / 100, getVelocity().y / 100);
 				setColliding(true);
 				return true;
 			}
-
-			puck.getPosition().add(getVelocity().x / 100, getVelocity().y / 100);
-			setColliding(true);
 		}
 		else
 		{

@@ -32,6 +32,8 @@ public class GUIGame extends GUIScreen
 {
 	private GameBoard game;
 	private GameState state;
+	private final float screenWidth = Gdx.graphics.getWidth();
+	private final float screenHeight = Gdx.graphics.getHeight();
 	private final Texture background = new Texture( Gdx.files.internal("gfx/table.png"));
 	private final Image overlay = new Image(new Texture(Gdx.files.internal("menu/bg_darken.png")));
 
@@ -139,7 +141,8 @@ public class GUIGame extends GUIScreen
 			tablePaused.add(btnResume);
 			stagePause.addActor(overlay);
 			stagePause.addActor(tablePaused);
-
+			audio.playSound(SFX.SFX_PAUSE);
+			
 			btnResume.addListener(new ClickListener()
 			{
 				@Override
@@ -177,14 +180,14 @@ public class GUIGame extends GUIScreen
 		private final SequenceAction blinkAction = Actions.sequence(Actions.fadeOut(0.5f), Actions.fadeIn(0.5f));
 		private final Stage stageOver = new Stage();
 		private final Table tableOver = new Table();
-		private Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...", StyleFactory.GradientLabel);
+		private final Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...", StyleFactory.GradientLabel);
 		private Label lblName;
 		private Label lblScore;
 
 		public GameOverState(Player p)
 		{
-			StringBuilder strName = new StringBuilder();
-			StringBuilder strScore = new StringBuilder();
+			final StringBuilder strName = new StringBuilder();
+			final StringBuilder strScore = new StringBuilder();
 
 			strName.append(p.getName());
 			strName.append(" WINS!");
@@ -239,9 +242,6 @@ public class GUIGame extends GUIScreen
 		}
 	}
 
-	private float screenWidth = Gdx.graphics.getWidth();
-	private float screenHeight = Gdx.graphics.getHeight();
-
 	private class GameRunningState extends GameState
 	{
 		private final Stage stageGame = new Stage();
@@ -250,11 +250,12 @@ public class GUIGame extends GUIScreen
 
 		public GameRunningState()
 		{
-			lblPlayer1.setPosition(48, 64);
-			lblPlayer2.setPosition(48, screenHeight - 64);
+			lblPlayer1.setPosition(48, 72);
+			lblPlayer2.setPosition(48, screenHeight - 96);
 			stageGame.addActor(lblPlayer1);
 			stageGame.addActor(lblPlayer2);
 			Gdx.input.setInputProcessor(GUIGame.this);
+			audio.playSound(SFX.SFX_PUCK_PLACE);
 		}
 
 		@Override
@@ -299,8 +300,7 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y,
-						int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
@@ -316,8 +316,7 @@ public class GUIGame extends GUIScreen
 				}
 
 				@Override
-				public void enter(InputEvent event, float x, float y,
-						int pointer, Actor fromActor)
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 				{
 					audio.playSound(SFX.MENU_SELECT);
 				}
@@ -371,13 +370,11 @@ public class GUIGame extends GUIScreen
 			strScore.append(Integer.toString(game.getPlayer2().getScore()));
 
 			tableScore.defaults().padBottom(16).center();
-			tableScore.add(new Label(strName, StyleFactory.GradientLabel)).padBottom(8)
-					.row();
+			tableScore.add(new Label(strName, StyleFactory.GradientLabel)).padBottom(8).row();
 			tableScore.add(new Label(strScore, StyleFactory.TitleLabel));
 			tableScore.setFillParent(true);
 			tableScore.setTransform(true);
-			tableScore.setOrigin(Gdx.graphics.getWidth() / 2,
-					Gdx.graphics.getHeight() / 2);
+			tableScore.setOrigin(screenWidth / 2, screenHeight / 2);
 			stageScore.addActor(overlay);
 			stageScore.addActor(tableScore);
 			tableScore.addAction(Actions.rotateBy(360, 1.0f));
@@ -428,22 +425,18 @@ public class GUIGame extends GUIScreen
 	}
 
 	@Override
-	public void render(final float delta)
+	public void render(float delta)
 	{
 		state.update(delta);
 		batch.begin();
 		batch.draw(background, 0, 0, 480, 800);
-		// nameFont.setColor(Color.RED);
-		// nameFont.draw(batch, game.getPlayer1().getName(), 64, 64);
-		// nameFont.setColor(Color.BLUE);
-		// nameFont.draw(batch, game.getPlayer2().getName(), 64, 720);
 		game.draw(batch);
 		batch.end();
 		state.draw(batch);
 	}
 
 	@Override
-	public boolean keyDown(final int mKeycode)
+	public boolean keyDown(int mKeycode)
 	{
 		switch (mKeycode)
 		{
@@ -456,8 +449,7 @@ public class GUIGame extends GUIScreen
 	}
 
 	@Override
-	public boolean touchDown(final int screenX, final int screenY,
-			final int pointer, final int button)
+	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
 		if (!parent.isMultiplayer())
 		{
@@ -468,8 +460,7 @@ public class GUIGame extends GUIScreen
 	}
 
 	@Override
-	public boolean touchDragged(final int screenX, final int screenY,
-			final int pointer)
+	public boolean touchDragged(int screenX, int screenY, int pointer)
 	{
 		if (!parent.isMultiplayer())
 		{
@@ -505,6 +496,9 @@ public class GUIGame extends GUIScreen
 	@Override
 	public void pause()
 	{
-		changeState(new GamePausedState());
+		if (state instanceof GameRunningState)
+		{
+			changeState(new GamePausedState());
+		}
 	}
 }

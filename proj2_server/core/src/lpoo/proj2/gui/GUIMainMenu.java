@@ -17,17 +17,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GUIMainMenu extends GUIScreen
 {
-	private Stage stage = new Stage();
-	private Table table = new Table();
-	private TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_main.png"), false);
-	private Label lblTitle = new Label("AIR HOCKEY", StyleFactory.TitleLabel);
-	private TextButton btnSingleplayer = new TextButton("Singleplayer", StyleFactory.MenuButton);
-	private TextButton btnMultiplayer = new TextButton("Multiplayer", StyleFactory.MenuButton);
-	private TextButton btnPreferences = new TextButton("Preferences", StyleFactory.MenuButton);
-	private TextButton btnCredits = new TextButton("Credits", StyleFactory.MenuButton);
-	private TextButton btnExit = new TextButton("Exit", StyleFactory.MenuButton);
+	private final Stage stage = new Stage();
+	private final Table table = new Table();
+	private final TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_main.png"), false);
+	private final Label lblTitle = new Label("AIR HOCKEY", StyleFactory.TitleLabel);
+	private final TextButton btnSingleplayer = new TextButton("Singleplayer", StyleFactory.MenuButton);
+	private final TextButton btnMultiplayer = new TextButton("Multiplayer", StyleFactory.MenuButton);
+	private final TextButton btnPreferences = new TextButton("Preferences", StyleFactory.MenuButton);
+	private final TextButton btnCredits = new TextButton("Credits", StyleFactory.MenuButton);
+	private final TextButton btnExit = new TextButton("Exit", StyleFactory.MenuButton);
 
-	class RunMultiplayer implements Runnable
+	private class RunMultiplayer implements Runnable
 	{
 		@Override
 		public void run()
@@ -36,7 +36,7 @@ public class GUIMainMenu extends GUIScreen
 		}
 	};
 
-	class RunSingleplayer implements Runnable
+	private class RunSingleplayer implements Runnable
 	{
 		@Override
 		public void run()
@@ -45,7 +45,7 @@ public class GUIMainMenu extends GUIScreen
 		}
 	};
 
-	class RunPreferences implements Runnable
+	private class RunPreferences implements Runnable
 	{
 		@Override
 		public void run()
@@ -54,7 +54,7 @@ public class GUIMainMenu extends GUIScreen
 		}
 	}
 
-	class RunCredits implements Runnable
+	private class RunCredits implements Runnable
 	{
 		@Override
 		public void run()
@@ -80,14 +80,14 @@ public class GUIMainMenu extends GUIScreen
 		btnSingleplayer.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 0.5f), Actions.run(new RunSingleplayer())));
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnSingleplayer.isPressed())
 				{
@@ -99,14 +99,14 @@ public class GUIMainMenu extends GUIScreen
 		btnMultiplayer.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 0.5f), Actions.run(new RunMultiplayer())));
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnMultiplayer.isPressed())
 				{
@@ -118,14 +118,14 @@ public class GUIMainMenu extends GUIScreen
 		btnPreferences.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 0.5f), Actions.run(new RunPreferences())));
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnPreferences.isPressed())
 				{
@@ -137,14 +137,14 @@ public class GUIMainMenu extends GUIScreen
 		btnCredits.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 				stage.addAction(Actions.sequence(Actions.moveTo(-480.0f, 0.0f, 0.5f), Actions.run(new RunCredits())));
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnPreferences.isPressed())
 				{
@@ -163,7 +163,7 @@ public class GUIMainMenu extends GUIScreen
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnExit.isPressed())
 				{

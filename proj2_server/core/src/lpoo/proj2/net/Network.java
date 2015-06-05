@@ -8,16 +8,16 @@ public class Network
 	static public void register(EndPoint endPoint)
 	{
 		Kryo kryo = endPoint.getKryo();
-		kryo.register(Login.class);
+		kryo.register(PlayerLogin.class);
 		kryo.register(PlayerConnected.class);
 		kryo.register(PlayerDisconnected.class);
-		kryo.register(GameOver.class);
+		kryo.register(UpdatePaddle.class);
 		kryo.register(UpdateScore.class);
+		kryo.register(GameOver.class);
 		kryo.register(ServerFull.class);
-		kryo.register(MovePaddle.class);
 	}
 
-	static public class Login
+	static public class PlayerLogin
 	{
 		public String name;
 		public int color;
@@ -31,6 +31,12 @@ public class Network
 	static public class PlayerDisconnected
 	{
 		public int id;
+	}
+	
+	static public class UpdatePaddle
+	{
+		public float x;
+		public float y;
 	}
 
 	static public class UpdateScore
@@ -46,11 +52,5 @@ public class Network
 	static public class ServerFull
 	{
 		public int numberPlayers;
-	}
-
-	static public class MovePaddle
-	{
-		public float x;
-		public float y;
 	}
 };

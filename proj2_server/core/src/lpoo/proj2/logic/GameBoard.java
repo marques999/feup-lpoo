@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import lpoo.proj2.AirHockey;
 import lpoo.proj2.audio.AudioManager;
+import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Special;
 import lpoo.proj2.gui.GUIGame;
 import lpoo.proj2.net.GameServer;
@@ -191,11 +192,13 @@ public class GameBoard
 
 			if (p1Paddle.collides(puck))
 			{
+				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
 				lastPlayed = players[0];
 			}
 
 			if (p2Paddle.collides(puck))
 			{
+				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
 				lastPlayed = players[1];
 			}
 
@@ -204,12 +207,14 @@ public class GameBoard
 
 			if (puck.collides(p1Goal))
 			{
-				p2Goal();
+				p2Goal(puck);
+				break;
 			}
-
+			
 			if (puck.collides(p2Goal))
 			{
-				p1Goal();
+				p1Goal(puck);
+				break;
 			}
 		}
 
@@ -224,12 +229,15 @@ public class GameBoard
 		{
 			for (Puck puck : pucks)
 			{
-				puck.collides(wall);
+				if (puck.collides(wall))
+				{
+					audio.playSound(SFX.SFX_PADDLE_HIT);
+				}
 			}
 		}
 	}
 
-	private void p1Goal()
+	private void p1Goal(Puck puck)
 	{
 		if (lastPlayed == players[1])
 		{
@@ -238,9 +246,17 @@ public class GameBoard
 
 		rules.p1Score();
 		parent.actionScore(players[0]);
-		factory.resetPuck(pucks.get(0), 1);
-		factory.resetP1Paddle(p1Paddle);
-		factory.resetP2Paddle(p2Paddle);
+		
+		if (rules instanceof RulesAttack)
+		{
+			pucks.remove(puck);
+		}
+		else
+		{
+			factory.resetPuck(puck, 1);
+			factory.resetP1Paddle(p1Paddle);
+			factory.resetP2Paddle(p2Paddle);
+		}
 		
 		if (multiplayer)
 		{
@@ -248,7 +264,7 @@ public class GameBoard
 		}
 	}
 
-	private void p2Goal()
+	private void p2Goal(Puck puck)
 	{
 		if (lastPlayed == players[0])
 		{
@@ -257,10 +273,18 @@ public class GameBoard
 
 		rules.p2Score();
 		parent.actionScore(players[1]);
-		factory.resetPuck(pucks.get(0), 0);
-		factory.resetP1Paddle(p1Paddle);
-		factory.resetP2Paddle(p2Paddle);
 		
+		if (rules instanceof RulesAttack)
+		{
+			pucks.remove(puck);
+		}
+		else
+		{
+			factory.resetPuck(puck, 0);
+			factory.resetP1Paddle(p1Paddle);
+			factory.resetP2Paddle(p2Paddle);
+		}
+
 		if (multiplayer)
 		{
 			server.sendScore();

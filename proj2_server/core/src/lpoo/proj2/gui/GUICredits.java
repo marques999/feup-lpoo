@@ -62,7 +62,7 @@ public class GUICredits extends GUIScreen
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnBack.isPressed())
 				{
@@ -75,7 +75,7 @@ public class GUICredits extends GUIScreen
 		stage.addActor(btnBack);
 	}
 
-	public void reset()
+	private void reset()
 	{
 		if (table.getY() >= 1000.0f)
 		{

@@ -30,8 +30,8 @@ public class GUISelect extends GUIScreen
 
 	private class MenuListener extends ClickListener
 	{
-		private final TextButton button;
-		private final int mode;
+		private TextButton button;
+		private int mode;
 
 		public MenuListener(TextButton paramButton, int paramMode)
 		{
@@ -86,7 +86,7 @@ public class GUISelect extends GUIScreen
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnBack.isPressed())
 				{
@@ -124,11 +124,11 @@ public class GUISelect extends GUIScreen
 			lblTitle.setText("multiplayer");
 			btnMode4.setVisible(true);
 		}
-		else
-		{
-			lblTitle.setText("singleplayer");
-			btnMode4.setVisible(false);
-		}
+//		else
+//		{
+//			lblTitle.setText("singleplayer");
+//			btnMode4.setVisible(false);
+//		}
 	}
 
 	@Override

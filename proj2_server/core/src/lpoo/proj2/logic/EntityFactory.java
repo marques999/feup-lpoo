@@ -34,7 +34,7 @@ public class EntityFactory
 	
 	public final void resetPuck(Puck puck, int playerId)
 	{
-		int randomDelta = 16 + rand.nextInt(64);
+		//int randomDelta = 16 + rand.nextInt(64);
 		
 		if (playerId == 0)
 		{
@@ -48,9 +48,21 @@ public class EntityFactory
 		}
 	}
 	
+	private int randomBetween(int min, int max)
+	{
+		return rand.nextInt((max - min) + 1) + min;
+	}
+	
+	private final int marginLeftWall = 30;
+	private final int marginRightWall = 32;
+	private final int marginTopWall = 40;
+	private final int marginBottomWall = 45;
+	
 	public final Puck createRandomPuck(int paramColor)
 	{
-		return createPuck(rand.nextInt(screenWidth), rand.nextInt(screenHeight), paramColor);
+		float puckX = randomBetween(marginLeftWall + 24, screenWidth - marginRightWall - 24);
+		float puckY = randomBetween(marginBottomWall + 24, screenHeight - marginTopWall - 24);
+		return createPuck(puckX, puckY, paramColor);
 	}
 
 	private final Paddle createPaddle(float x, float y, int color)
@@ -91,12 +103,12 @@ public class EntityFactory
 	{
 		ArrayList<Wall> walls = new ArrayList<Wall>();
 
-		walls.add(new Wall(0, 0, 32, screenHeight, color));
-		walls.add(new Wall(screenWidth - 32, 0, 32, screenHeight, color));
-		walls.add(new Wall(32, 0, screenWidth / 4, 32, color));
-		walls.add(new Wall(screenWidth * 0.75f - 32, 0, screenWidth / 4, 32, color));
-		walls.add(new Wall(32, screenHeight - 32, screenWidth / 4, 32, color));
-		walls.add(new Wall(screenWidth * 0.75f - 32, screenHeight - 32, screenWidth / 4, 32, color));
+		walls.add(new Wall(0, 0, marginLeftWall, screenHeight, color));
+		walls.add(new Wall(screenWidth - 32, 0, marginRightWall, screenHeight, color));
+		walls.add(new Wall(32, 0, screenWidth / 4, marginBottomWall, color));
+		walls.add(new Wall(screenWidth * 0.75f - 32, 0, screenWidth / 4, marginBottomWall, color));
+		walls.add(new Wall(32, screenHeight - 32, screenWidth / 4, marginTopWall, color));
+		walls.add(new Wall(screenWidth * 0.75f - 32, screenHeight - 32, screenWidth / 4, marginTopWall, color));
 		walls.get(0).setNormal(-1, 1);
 		walls.get(1).setNormal(-1, 1);
 		walls.get(2).setNormal(1, -1);

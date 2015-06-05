@@ -28,6 +28,7 @@ public class GUIOptions extends GUIScreen
 
 	private int colorIndex;
 	private int difficultyIndex;
+	private boolean oldQuake;
 	private float oldMusicVolume;
 	private float oldSFXVolume;
 
@@ -116,6 +117,16 @@ public class GUIOptions extends GUIScreen
 				audio.playSound(SFX.MENU_CLICK);
 				audio.setMusicVolume(oldMusicVolume);
 				audio.setSFXVolume(oldSFXVolume);
+				
+				if (oldQuake)
+				{
+					AirHockey.enableQuake();
+				}
+				else
+				{
+					AirHockey.disableQuake();
+				}
+				
 				parent.switchTo(1);
 			}
 
@@ -135,18 +146,6 @@ public class GUIOptions extends GUIScreen
 			public void clicked(final InputEvent event, final float x, final float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
-				audio.setMusicVolume(sliderMusicVolume.getValue());
-				audio.setSFXVolume(sliderSFXVolume.getValue());
-
-				if (chkQuake.isChecked())
-				{
-					AirHockey.enableQuake();
-				}
-				else
-				{
-					AirHockey.disableQuake();
-				}
-
 				AirHockey.setDifficulty(difficultyIndex);
 				AirHockey.setColor(colorIndex);
 				AirHockey.setTheme(btnThemeA.isChecked() ? 0 : 1);
@@ -258,7 +257,12 @@ public class GUIOptions extends GUIScreen
 			{
 				if (chkQuake.isChecked())
 				{
+					AirHockey.enableQuake();
 					audio.playSpecial(Special.QUAKE_DOUBLEKILL);
+				}
+				else
+				{
+					AirHockey.disableQuake();
 				}
 			}
 		});
@@ -303,6 +307,7 @@ public class GUIOptions extends GUIScreen
 			btnThemeB.setChecked(true);
 		}
 
+		oldQuake = AirHockey.isQuakeEnabled();
 		oldMusicVolume = audio.getMusicVolume();
 		oldSFXVolume = audio.getSFXVolume();
 	}

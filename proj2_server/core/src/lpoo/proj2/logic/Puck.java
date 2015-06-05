@@ -1,7 +1,5 @@
 package lpoo.proj2.logic;
 
-import lpoo.proj2.audio.AudioManager;
-import lpoo.proj2.audio.SFX;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,8 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Puck extends DynamicEntity
 {
-	private Vector2 acceleration;
-
+	private final float minimumDelta = 0.05f;
+	
 	public Puck(float x, float y, int color)
 	{
 		super(x, y, color);
@@ -38,14 +36,13 @@ public class Puck extends DynamicEntity
 			break;
 		}
 
+		setBounding(x, y);
 		setRadius(getWidth() / 2);
 		setVelocity(new Vector2(-128, -128));
-		acceleration = new Vector2(-8, -8);
 	}
 
 	public void update(float delta)
 	{
-		getVelocity().add(acceleration.cpy().scl(delta));
 		getPosition().add(getVelocity().cpy().scl(delta));
 		setBounding(getX(), getY());
 	}
@@ -57,10 +54,9 @@ public class Puck extends DynamicEntity
 		{
 			if (!isColliding())
 			{
-				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
+				setColliding(true);
+				return true;
 			}
-
-			setColliding(true);
 		}
 		else
 		{
@@ -75,9 +71,12 @@ public class Puck extends DynamicEntity
 	{
 		if (Intersector.overlaps(getBounding(), puck.getBounding()))
 		{
-			acceleration.scl(-1);
-			getVelocity().scl(-1);
-			return true;
+			if (!isColliding())
+			{
+				getVelocity().scl(-1);
+				setColliding(true);
+				return true;
+			}
 		}
 
 		return false;
@@ -85,7 +84,25 @@ public class Puck extends DynamicEntity
 
 	public void impulse(Vector2 velocity)
 	{
-		getVelocity().mulAdd(velocity, 2);
+		float dx = Math.abs(velocity.x);
+		float dy = Math.abs(velocity.y);
+		
+		if (dx < minimumDelta || dy < minimumDelta)
+		{
+			if (dx < minimumDelta)
+			{
+				getVelocity().scl(-1, 1);
+			}
+			
+			if (dy < minimumDelta)
+			{
+				getVelocity().scl(1, -1);
+			}
+		}
+		else
+		{
+			getVelocity().set(velocity);
+		}
 	}
 
 	@Override
@@ -95,14 +112,17 @@ public class Puck extends DynamicEntity
 		{
 			if (!isColliding())
 			{
-				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
-				acceleration.scl(wall.getNormal());
 				getVelocity().scl(wall.getNormal());
+				getVelocity().scl(0.95f);
+				
+//				if (getPosition().dst(getX(), wall.getY()) < 16.0f || 
+//					getPosition().dst(wall.getX(), getY()) < 16.0f)
+//					{
+//						
+//					}
+				setColliding(true);
+				return true;
 			}
-			
-			setColliding(true);
-			
-			return true;
 		}
 		else
 		{
@@ -119,15 +139,10 @@ public class Puck extends DynamicEntity
 		{
 			if (!isColliding())
 			{
-				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
-				acceleration.scl(-1);
 				getVelocity().scl(-1);
 				setColliding(true);
-
 				return true;
 			}
-
-			setColliding(true);
 		}
 		else
 		{

@@ -42,6 +42,7 @@ public class AudioManager
 		Gdx.audio.newSound(Gdx.files.internal("audio/menu_select.mp3")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/goal.mp3")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/pause.mp3")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/paddle_hit.mp3")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/puck_hit.mp3")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/puck_place.mp3")),
 	};
@@ -54,7 +55,7 @@ public class AudioManager
 		Gdx.audio.newSound(Gdx.files.internal("audio/godlike.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/hattrick.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/holyshit.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/humiliation.mp3")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/humiliation.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/killingspree.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/prepare.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/rampage.ogg")) 
@@ -207,11 +208,14 @@ public class AudioManager
 		case SFX_PAUSE:
 			sfx[3].play(sfxVolume);
 			break;
-		case SFX_PUCK_HIT:
+		case SFX_PADDLE_HIT:
 			sfx[4].play(sfxVolume);
 			break;
-		case SFX_PUCK_PLACE:
+		case SFX_PUCK_HIT:
 			sfx[5].play(sfxVolume);
+			break;
+		case SFX_PUCK_PLACE:
+			sfx[6].play(sfxVolume);
 			break;
 		}
 	}

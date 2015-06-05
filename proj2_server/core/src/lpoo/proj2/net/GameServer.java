@@ -6,8 +6,8 @@ import java.util.HashSet;
 import lpoo.proj2.logic.GameBoard;
 import lpoo.proj2.logic.Player;
 import lpoo.proj2.net.Network.GameOver;
-import lpoo.proj2.net.Network.Login;
-import lpoo.proj2.net.Network.MovePaddle;
+import lpoo.proj2.net.Network.PlayerLogin;
+import lpoo.proj2.net.Network.UpdatePaddle;
 import lpoo.proj2.net.Network.PlayerConnected;
 import lpoo.proj2.net.Network.PlayerDisconnected;
 import lpoo.proj2.net.Network.ServerFull;
@@ -52,9 +52,9 @@ public class GameServer
 				PlayerConnection connection = (PlayerConnection) c;
 				Player player = connection.player;
 
-				if (object instanceof Login)
+				if (object instanceof PlayerLogin)
 				{
-					final Login login = (Login) object;
+					final PlayerLogin login = (PlayerLogin) object;
 
 					if (player != null)
 					{
@@ -95,9 +95,9 @@ public class GameServer
 						connection.sendTCP(serverFull);
 					}
 				}
-				else if (object instanceof MovePaddle)
+				else if (object instanceof UpdatePaddle)
 				{
-					final MovePaddle msg = (MovePaddle) object;
+					final UpdatePaddle msg = (UpdatePaddle) object;
 
 					if (player != null)
 					{
