@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
-public class Paddle extends DynamicEntity
+public final class Paddle extends DynamicEntity
 {
 	private static final float radiusAdjustment = 13.0f;
 	private static final float minimumSpeed = 200.0f;

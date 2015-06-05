@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
-public class Puck extends DynamicEntity
+public final class Puck extends DynamicEntity
 {
 	private final float minimumDelta = 0.05f;
 	

@@ -1,6 +1,6 @@
 package lpoo.proj2.logic;
 
-public class RulesAttack extends GameRules
+public final class RulesAttack extends GameRules
 {
 	private final int NUMBER_POINTS = 8;
 

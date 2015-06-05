@@ -112,12 +112,12 @@ public class GUIOptions extends GUIScreen
 		btnCancel.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, float x, float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 				audio.setMusicVolume(oldMusicVolume);
 				audio.setSFXVolume(oldSFXVolume);
-				
+
 				if (oldQuake)
 				{
 					AirHockey.enableQuake();
@@ -126,12 +126,12 @@ public class GUIOptions extends GUIScreen
 				{
 					AirHockey.disableQuake();
 				}
-				
+
 				parent.switchTo(1);
 			}
 
 			@Override
-			public void enter(final InputEvent event, float x, float y, int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnCancel.isPressed())
 				{
@@ -143,7 +143,7 @@ public class GUIOptions extends GUIScreen
 		btnOK.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 				AirHockey.setDifficulty(difficultyIndex);
@@ -155,7 +155,7 @@ public class GUIOptions extends GUIScreen
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnOK.isPressed())
 				{
@@ -167,7 +167,7 @@ public class GUIOptions extends GUIScreen
 		btnDifficulty.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 				difficultyIndex = (difficultyIndex + 1) % difficulty.length;
@@ -175,7 +175,7 @@ public class GUIOptions extends GUIScreen
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnDifficulty.isPressed())
 				{
@@ -187,7 +187,7 @@ public class GUIOptions extends GUIScreen
 		btnColor.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 				colorIndex = (colorIndex + 1) % colors.length;
@@ -196,7 +196,7 @@ public class GUIOptions extends GUIScreen
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnColor.isPressed())
 				{
@@ -208,7 +208,7 @@ public class GUIOptions extends GUIScreen
 		btnThemeA.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 			}
@@ -217,7 +217,7 @@ public class GUIOptions extends GUIScreen
 		btnThemeB.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 			}
@@ -226,7 +226,7 @@ public class GUIOptions extends GUIScreen
 		btnPreview.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
 
@@ -241,7 +241,7 @@ public class GUIOptions extends GUIScreen
 			}
 
 			@Override
-			public void enter(final InputEvent event, final float x, final float y, final int pointer, final Actor fromActor)
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
 			{
 				if (!btnPreview.isPressed())
 				{
@@ -253,7 +253,7 @@ public class GUIOptions extends GUIScreen
 		chkQuake.addListener(new ClickListener()
 		{
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y)
+			public void clicked(InputEvent event, float x, float y)
 			{
 				if (chkQuake.isChecked())
 				{
@@ -269,7 +269,7 @@ public class GUIOptions extends GUIScreen
 	}
 
 	@Override
-	public void render(final float delta)
+	public void render(float delta)
 	{
 		Gdx.gl.glClearColor(0.100f, 0.100f, 0.100f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -278,7 +278,7 @@ public class GUIOptions extends GUIScreen
 	}
 
 	@Override
-	public void resize(final int width, final int height)
+	public void resize(int width, int height)
 	{
 		stage.getViewport().update(width, height);
 	}

@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public abstract class StaticEntity extends Entity
 {
-	private Rectangle bounding;
+	private final Rectangle bounding;
 
 	public StaticEntity(float paramX, float paramY)
 	{

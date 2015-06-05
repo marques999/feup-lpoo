@@ -13,8 +13,8 @@ public class TiledBackground
 	private int textureWidth;
 	private int textureHeight;
 	private boolean horizontal;
-	private Texture image;
-	private TextureRegion region;
+	private final Texture image;
+	private final TextureRegion region;
 	private Vector2 position;
 	private Vector2 speed;
 

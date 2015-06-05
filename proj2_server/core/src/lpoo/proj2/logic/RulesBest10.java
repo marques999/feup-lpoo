@@ -1,6 +1,6 @@
 package lpoo.proj2.logic;
 
-public class RulesBest10 extends GameRules
+public final class RulesBest10 extends GameRules
 {
 	private final int NUMBER_ROUNDS = 10;
 

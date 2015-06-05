@@ -67,7 +67,7 @@ public class GUIGame extends GUIScreen
 			{
 				tableWaiting.add(new Label(InetAddress.getLocalHost().getHostAddress(), StyleFactory.SmallLabel)).right().padBottom(16);
 			}
-			catch (UnknownHostException e)
+			catch (final UnknownHostException e)
 			{
 				e.printStackTrace();
 			}
@@ -142,7 +142,7 @@ public class GUIGame extends GUIScreen
 			stagePause.addActor(overlay);
 			stagePause.addActor(tablePaused);
 			audio.playSound(SFX.SFX_PAUSE);
-			
+
 			btnResume.addListener(new ClickListener()
 			{
 				@Override
@@ -181,8 +181,8 @@ public class GUIGame extends GUIScreen
 		private final Stage stageOver = new Stage();
 		private final Table tableOver = new Table();
 		private final Label lblContinue = new Label("TOUCH SCREEN TO CONTINUE...", StyleFactory.GradientLabel);
-		private Label lblName;
-		private Label lblScore;
+		private final Label lblName;
+		private final Label lblScore;
 
 		public GameOverState(Player p)
 		{

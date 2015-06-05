@@ -2,7 +2,7 @@ package lpoo.proj2.logic;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Wall extends StaticEntity
+public final class Wall extends StaticEntity
 {
 	private final Vector2 normal = new Vector2(0.0f, 0.f);
 

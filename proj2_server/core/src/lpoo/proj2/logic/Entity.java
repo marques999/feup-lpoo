@@ -36,27 +36,27 @@ public abstract class Entity
 	{
 		return colliding;
 	}
-	
+
 	public final Vector2 getPosition()
 	{
 		return pos;
 	}
-	
+
 	public final Vector2 getPrevious()
 	{
 		return old;
 	}
-	
+
 	public final float getPreviousX()
 	{
 		return old.x;
 	}
-	
+
 	public final float getPreviousY()
 	{
 		return old.y;
 	}
-	
+
 	public void setPrevious(float paramX, float paramY)
 	{
 		old.set(paramX, paramY);
@@ -70,7 +70,7 @@ public abstract class Entity
 	{
 		return pos.y;
 	}
-	
+
 	public final float getWidth()
 	{
 		return width;
@@ -80,7 +80,7 @@ public abstract class Entity
 	{
 		return height;
 	}
-	
+
 	public final int getColor()
 	{
 		return color;
@@ -100,12 +100,12 @@ public abstract class Entity
 	{
 		pos.y = paramY;
 	}
-	
+
 	protected void setColliding(boolean paramColliding)
 	{
 		colliding = paramColliding;
 	}
-	
+
 	public void setColor(int paramColor)
 	{
 		color = paramColor;
