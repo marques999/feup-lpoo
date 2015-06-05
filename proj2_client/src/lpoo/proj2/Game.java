@@ -210,6 +210,12 @@ public class Game extends Activity
 							alertForfeited.show();
 						}
 					});
+					
+					if (client != null)
+					{
+						client.close();
+						client = null;
+					}
 				}
 			}
 
