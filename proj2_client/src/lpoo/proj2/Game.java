@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import lpoo.proj2.Network.GameOver;
 import lpoo.proj2.Network.PlayerConnected;
-import lpoo.proj2.Network.Login;
+import lpoo.proj2.Network.PlayerLogin;
 import lpoo.proj2.Network.PlayerDisconnected;
 import lpoo.proj2.Network.ServerFull;
 import lpoo.proj2.Network.UpdateScore;
@@ -46,10 +46,10 @@ public class Game extends Activity
 	private String playerName;
 	private UpdateScore playerScores;
 	private String serverHost;
-	private int playerColor;
-	private int serverPort;
 
+	private int playerColor;
 	private int playersConnected = 0;
+	private int serverPort;
 
 	private class ExitActivity implements DialogInterface.OnClickListener
 	{
@@ -97,7 +97,7 @@ public class Game extends Activity
 		progressConnect.setMessage("Connecting to server... (1/1)");
 		progressConnect.setCancelable(false);
 		progressConnect.show();
-		
+
 		progressWaiting = new ProgressDialog(this);
 		progressWaiting.setTitle("Please wait...");
 		progressWaiting.setMessage("Waiting for players... (0/2)");
@@ -108,7 +108,7 @@ public class Game extends Activity
 		client = new Client();
 
 		Network.register(client);
-		Bundle b = getIntent().getExtras();
+		final Bundle b = getIntent().getExtras();
 
 		serverHost = b.getCharSequence("prefIP").toString();
 		serverPort = b.getInt("prefPort");
@@ -130,15 +130,15 @@ public class Game extends Activity
 				if (object instanceof PlayerConnected)
 				{
 					PlayerConnected playerConnected = (PlayerConnected) object;
-					
 					addPlayer(playerConnected.id);
-					
+
 					runOnUiThread(new Runnable()
 					{
+						@Override
 						public void run()
 						{
 							progressWaiting.setMessage("Waiting for players... (" + playersConnected + "/2)");
-							
+
 							if (playersConnected == MAX_PLAYERS && progressWaiting.isShowing())
 							{
 								progressWaiting.dismiss();
@@ -150,6 +150,7 @@ public class Game extends Activity
 				{
 					runOnUiThread(new Runnable()
 					{
+						@Override
 						public void run()
 						{
 							alertGameover.setTitle("Game Over");
@@ -173,6 +174,7 @@ public class Game extends Activity
 				{
 					runOnUiThread(new Runnable()
 					{
+						@Override
 						public void run()
 						{
 							alertServerFull.show();
@@ -191,6 +193,7 @@ public class Game extends Activity
 
 					runOnUiThread(new Runnable()
 					{
+						@Override
 						public void run()
 						{
 							scores[0].setText(Integer.toString(updateScore.p1Score));
@@ -205,12 +208,13 @@ public class Game extends Activity
 
 					runOnUiThread(new Runnable()
 					{
+						@Override
 						public void run()
 						{
 							alertForfeited.show();
 						}
 					});
-					
+
 					if (client != null)
 					{
 						client.close();
@@ -230,6 +234,7 @@ public class Game extends Activity
 
 				runOnUiThread(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						alertDisconnected.show();
@@ -259,6 +264,7 @@ public class Game extends Activity
 
 				runOnUiThread(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						if (progressConnect != null && progressConnect.isShowing())
@@ -269,10 +275,11 @@ public class Game extends Activity
 					}
 				});
 			}
-			catch (IOException ex)
+			catch (final IOException ex)
 			{
 				runOnUiThread(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						if (progressConnect != null && progressConnect.isShowing())
@@ -294,7 +301,7 @@ public class Game extends Activity
 				}
 			}
 
-			Login login = new Login();
+			PlayerLogin login = new PlayerLogin();
 			login.name = playerName;
 			login.color = playerColor;
 

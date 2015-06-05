@@ -1,7 +1,5 @@
 package lpoo.proj2;
 
-import lpoo.proj2.Network.MovePaddle;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,8 +10,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.esotericsoftware.kryonet.Client;
+import lpoo.proj2.Network.UpdatePaddle;
 
 @SuppressLint("ClickableViewAccessibility")
 public class GameView extends View
@@ -114,7 +112,7 @@ public class GameView extends View
 
 	private class SendMessage extends Thread
 	{
-		final MovePaddle msg = new MovePaddle();
+		final UpdatePaddle msg = new UpdatePaddle();
 
 		public SendMessage(float x, float y)
 		{
@@ -135,11 +133,11 @@ public class GameView extends View
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		float newX = (float) event.getX();
-		float newY = (float) event.getY();
-		float ratioX = 480 / getWidth();
-		float ratioY = 400 / getHeight();
-		int action = event.getAction();
+		float newX = event.getX();
+		float newY = event.getY();
+		final float ratioX = 480 / getWidth();
+		final float ratioY = 400 / getHeight();
+		final int action = event.getAction();
 
 		switch (action & MotionEvent.ACTION_MASK)
 		{
