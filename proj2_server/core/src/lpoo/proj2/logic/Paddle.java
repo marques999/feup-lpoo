@@ -45,7 +45,8 @@ public final class Paddle extends DynamicEntity
 	}
 	
 	public void update()
-	{	 getPosition().add(getVelocity().cpy().scl(Gdx.graphics.getDeltaTime()));
+	{	 
+		getPosition().add(getVelocity().cpy().scl(Gdx.graphics.getDeltaTime()));
 		setBoundingCircle(getX(), getY());
 	}
 	

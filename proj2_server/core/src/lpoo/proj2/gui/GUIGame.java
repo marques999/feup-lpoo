@@ -30,12 +30,17 @@ import com.badlogic.gdx.utils.Timer.Task;
 
 public class GUIGame extends GUIScreen
 {
-	private GameBoard game;
+	private GameBoard board;
 	private GameState state;
 	private final float screenWidth = Gdx.graphics.getWidth();
 	private final float screenHeight = Gdx.graphics.getHeight();
-	private final Texture background = new Texture( Gdx.files.internal("gfx/table.png"));
+	private final Texture background = new Texture(Gdx.files.internal("gfx/table.png"));
+	private final DisconnectedState disconnectedState = new DisconnectedState();
 	private final Image overlay = new Image(new Texture(Gdx.files.internal("menu/bg_darken.png")));
+	private final Stage stageGame = new Stage();
+	private Label lblPlayer1;
+	private Label lblPlayer2;
+	private Label lblMessage;
 
 	public void changeState(GameState newState)
 	{
@@ -45,6 +50,7 @@ public class GUIGame extends GUIScreen
 	private abstract class GameState
 	{
 		public abstract void update(float delta);
+
 		public abstract void draw(SpriteBatch paramBatch);
 	}
 
@@ -74,7 +80,7 @@ public class GUIGame extends GUIScreen
 
 			tableWaiting.row();
 			tableWaiting.add(new Label("Port:", StyleFactory.GradientLabel)).left();
-			tableWaiting.add(new Label(Integer.toString(game.getPort()), StyleFactory.SmallLabel)).right();
+			tableWaiting.add(new Label(Integer.toString(board.getPort()), StyleFactory.SmallLabel)).right();
 			tableWaiting.row();
 			tableWaiting.add(new Label("Players connected:", StyleFactory.GradientLabel)).left();
 			tableWaiting.add(lblPlayers).right().padBottom(32);
@@ -106,9 +112,10 @@ public class GUIGame extends GUIScreen
 		@Override
 		public void update(float delta)
 		{
-			lblPlayers.setText(game.getPlayersConnected() + " / 2");
+			lblPlayers.setText(board.getPlayersConnected() + " / 2");
+			initializePlayers();
 
-			if (game.getPlayersConnected() > 1)
+			if (board.getPlayersConnected() > 1)
 			{
 				changeState(new GameRunningState());
 			}
@@ -174,36 +181,32 @@ public class GUIGame extends GUIScreen
 			stagePause.draw();
 		}
 	}
-	
+
+	public void initializePlayers()
+	{
+			lblPlayer1.setText(board.getPlayer1().getName());
+			lblPlayer1.setStyle(StyleFactory.LabelStyles[board.getPlayer1().getColor()]);
+			lblPlayer1.setPosition(48, 92);
+			lblPlayer2.setText(board.getPlayer2().getName());
+			lblPlayer2.setStyle(StyleFactory.LabelStyles[board.getPlayer2().getColor()]);
+			lblPlayer2.setPosition(48, screenHeight - 80);
+	}
+
 	private class DisconnectedState extends GameState
 	{
 		private final Stage stageDisconnected = new Stage();
 		private final Table tableDisconnected = new Table();
 		private final TextButton btnOK = new TextButton("OK", StyleFactory.MenuButton);
 
-		public DisconnectedState(final Player paramPlayer)
+		public DisconnectedState()
 		{
-			final StringBuilder strName = new StringBuilder();
-
-			strName.append(paramPlayer.getName());
-			strName.append(" HAS DISCONNECTED.");
-			
-			tableDisconnected.setFillParent(true);
-			tableDisconnected.defaults().padBottom(16);
-			tableDisconnected.add(new Label(strName, StyleFactory.GradientLabel));
-			tableDisconnected.row();
-			tableDisconnected.add(btnOK);
-			stageDisconnected.addActor(overlay);
-			stageDisconnected.addActor(tableDisconnected);
-			audio.playSound(SFX.SFX_PAUSE);
-
 			btnOK.addListener(new ClickListener()
 			{
 				@Override
 				public void clicked(InputEvent event, float x, float y)
 				{
 					audio.playSound(SFX.MENU_CLICK);
-					changeState(new WaitingState());
+					parent.switchTo(1);
 				}
 
 				@Override
@@ -212,7 +215,22 @@ public class GUIGame extends GUIScreen
 					audio.playSound(SFX.MENU_SELECT);
 				}
 			});
+		}
 
+		public void newInstance(final Player paramPlayer)
+		{
+			final StringBuilder strName = new StringBuilder();
+
+			strName.append(paramPlayer.getName());
+			strName.append(" HAS DISCONNECTED.");
+
+			tableDisconnected.setFillParent(true);
+			tableDisconnected.defaults().padBottom(16);
+			tableDisconnected.add(new Label(strName, StyleFactory.GradientLabel));
+			tableDisconnected.row();
+			tableDisconnected.add(btnOK);
+			stageDisconnected.addActor(overlay);
+			stageDisconnected.addActor(tableDisconnected);
 			Gdx.input.setInputProcessor(stageDisconnected);
 		}
 
@@ -245,9 +263,9 @@ public class GUIGame extends GUIScreen
 
 			strName.append(p.getName());
 			strName.append(" WINS!");
-			strScore.append(Integer.toString(game.getPlayer1().getScore()));
+			strScore.append(Integer.toString(board.getPlayer1().getScore()));
 			strScore.append(" - ");
-			strScore.append(Integer.toString(game.getPlayer2().getScore()));
+			strScore.append(Integer.toString(board.getPlayer2().getScore()));
 
 			lblName = new Label(strName, StyleFactory.GradientLabel);
 			lblScore = new Label(strScore, StyleFactory.TitleLabel);
@@ -297,16 +315,8 @@ public class GUIGame extends GUIScreen
 
 	private class GameRunningState extends GameState
 	{
-		private final Stage stageGame = new Stage();
-		private final Label lblPlayer1 = new Label(game.getPlayer1().getName(), StyleFactory.LabelStyles[game.getPlayer1().getColor()]);
-		private final Label lblPlayer2 = new Label(game.getPlayer2().getName(), StyleFactory.LabelStyles[game.getPlayer2().getColor()]);
-
 		public GameRunningState()
 		{
-			lblPlayer1.setPosition(48, 72);
-			lblPlayer2.setPosition(48, screenHeight - 96);
-			stageGame.addActor(lblPlayer1);
-			stageGame.addActor(lblPlayer2);
 			Gdx.input.setInputProcessor(GUIGame.this);
 			audio.playSound(SFX.SFX_PUCK_PLACE);
 		}
@@ -314,14 +324,12 @@ public class GUIGame extends GUIScreen
 		@Override
 		public void update(float delta)
 		{
-			stageGame.act();
-			game.update(delta);
+			board.update(delta);
 		}
 
 		@Override
 		public void draw(SpriteBatch paramBatch)
 		{
-			stageGame.draw();
 		}
 	}
 
@@ -405,10 +413,11 @@ public class GUIGame extends GUIScreen
 	{
 		changeState(new GameOverState(p));
 	}
-	
+
 	public void actionDisconnect(Player p)
 	{
-		changeState(new DisconnectedState(p));
+		disconnectedState.newInstance(p);
+		changeState(disconnectedState);
 	}
 
 	private class PlayerScoredState extends GameState
@@ -423,9 +432,9 @@ public class GUIGame extends GUIScreen
 
 			strName.append(p.getName());
 			strName.append(" SCORES!");
-			strScore.append(Integer.toString(game.getPlayer1().getScore()));
+			strScore.append(Integer.toString(board.getPlayer1().getScore()));
 			strScore.append(" - ");
-			strScore.append(Integer.toString(game.getPlayer2().getScore()));
+			strScore.append(Integer.toString(board.getPlayer2().getScore()));
 
 			tableScore.defaults().padBottom(16).center();
 			tableScore.add(new Label(strName, StyleFactory.GradientLabel)).padBottom(8).row();
@@ -471,6 +480,14 @@ public class GUIGame extends GUIScreen
 	public GUIGame(final AirHockey parent)
 	{
 		super(parent, Song.THEME_NONE);
+
+		lblPlayer1 = new Label("", StyleFactory.BlueLabel);
+		lblPlayer2 = new Label("", StyleFactory.BlueLabel);
+		lblMessage = new Label("", StyleFactory.GradientLabel);
+		lblMessage.setVisible(false);
+		stageGame.addActor(lblPlayer1);
+		stageGame.addActor(lblPlayer2);
+		stageGame.addActor(lblMessage);
 	}
 
 	class ReturnGame extends Task
@@ -485,11 +502,13 @@ public class GUIGame extends GUIScreen
 	@Override
 	public void render(float delta)
 	{
+		stageGame.act();
 		state.update(delta);
 		batch.begin();
-		batch.draw(background, 0, 0, 480, 800);
-		game.draw(batch);
+		batch.draw(background, 0, 0, background.getWidth(), background.getHeight());
+		board.draw(batch);
 		batch.end();
+		stageGame.draw();
 		state.draw(batch);
 	}
 
@@ -511,7 +530,7 @@ public class GUIGame extends GUIScreen
 	{
 		if (!parent.isMultiplayer())
 		{
-			game.movePaddle(0, screenX, screenY);
+			board.movePaddle(0, screenX, screenY);
 		}
 
 		return true;
@@ -522,17 +541,34 @@ public class GUIGame extends GUIScreen
 	{
 		if (!parent.isMultiplayer())
 		{
-			game.movePaddle(0, screenX, screenY);
+			board.movePaddle(0, screenX, screenY);
 		}
 
 		return true;
 	}
 
+	private class HideMessage extends Task
+	{
+		@Override
+		public void run()
+		{
+			lblMessage.setVisible(false);
+		}
+	}
+
+	public void displayMessage(String str)
+	{
+		lblMessage.setText(str);
+		lblMessage.setPosition(screenWidth / 2 - lblMessage.getPrefWidth() / 2, screenHeight / 2 - lblMessage.getPrefHeight() / 2);
+		lblMessage.setVisible(true);
+
+		Timer.schedule(new HideMessage(), 1.0f);
+	}
+
 	@Override
 	public void show()
 	{
-		game = new GameBoard(this, parent.getMode(), parent.isMultiplayer());
-
+		board = new GameBoard(this, parent.getMode(), parent.isMultiplayer());
 		audio.playSpecial(Special.QUAKE_PREPARE);
 
 		if (parent.isMultiplayer())
@@ -542,13 +578,14 @@ public class GUIGame extends GUIScreen
 		else
 		{
 			changeState(new GameRunningState());
+			displayMessage("PREPARE TO FIGHT!");
 		}
 	}
 
 	@Override
 	public void hide()
 	{
-		game.dispose();
+		board.dispose();
 	}
 
 	@Override

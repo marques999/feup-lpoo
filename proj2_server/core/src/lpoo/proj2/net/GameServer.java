@@ -61,25 +61,11 @@ public class GameServer
 						return;
 					}
 
-					for (Player other : players)
-					{
-						if (other.getName().equals(login.name))
-						{
-							c.close();
-							
-							return;
-						}
-					}
-
 					if (players.size() < 2)
 					{
 						player = new Player(nextId, login.name, login.color);
-						
-						System.out.println("ID: " + player.getID());
-						System.out.println("Player name: " + login.name);
-						System.out.println("Player color: " + login.color);
 
-						switch (nextId)
+						switch(nextId)
 						{
 						case 0:
 							board.setPlayer1(player);
@@ -88,9 +74,9 @@ public class GameServer
 							board.setPlayer2(player);
 							break;
 						}
-
-						nextId++;
+						
 						loggedIn(connection, player);
+						nextId++;
 					}
 					else
 					{
@@ -101,13 +87,11 @@ public class GameServer
 				}
 				else if (object instanceof UpdatePaddle)
 				{
-					final UpdatePaddle msg = (UpdatePaddle) object;
+					final UpdatePaddle updatePaddle = (UpdatePaddle) object;
 
 					if (player != null)
 					{
-						player.setX(msg.x);
-						player.setY(msg.y);
-						board.movePaddle(player.getID(), player.getX(), player.getY());
+						board.movePaddle(player.getID(), updatePaddle.x, updatePaddle.y);
 					}
 				}
 			}

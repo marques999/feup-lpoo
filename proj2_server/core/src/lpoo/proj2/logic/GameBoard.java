@@ -32,18 +32,36 @@ public class GameBoard
 	private final float screenHeight = Gdx.graphics.getHeight();
 	private ArrayList<Puck> pucks = new ArrayList<Puck>();
 	private ArrayList<Wall> walls = new ArrayList<Wall>();
-	private boolean createP1 = false;
-	private boolean createP2 = false;
 	private int serverPort;
+	private boolean gameRunning;
 	protected boolean multiplayer;
+	private boolean createP1Paddle = false;
+	private boolean createP2Paddle = false;
 
-	public GameBoard(GUIGame paramParent, int paramMode,
-			boolean paramMultiplayer)
+	public GameBoard(GUIGame paramParent, int paramMode, boolean paramMultiplayer)
 	{
+		audio = AudioManager.getInstance();
+		factory = new EntityFactory();
+		lastPlayed = null;
+		multiplayer = paramMultiplayer;
 		parent = paramParent;
 		players = new Player[2];
-		multiplayer = paramMultiplayer;
 
+		setDifficulty();
+		initializeRules(paramMode);
+		initializePlayers();
+		
+		if (multiplayer)
+		{
+			connect();
+		}
+		
+		initializeBoard();
+		initializeAI();
+	}
+
+	private void initializePlayers()
+	{
 		if (multiplayer)
 		{
 			players[0] = new Player(0, "Player 1", 0);
@@ -55,25 +73,23 @@ public class GameBoard
 			players[0] = new Player(0, "Human", 2);
 			players[1] = new Player(1, "CPU", 0);
 		}
+	}
 
-		switch (paramMode)
+	private void initializeAI()
+	{
+		if (!multiplayer)
 		{
-		case 0:
-			rules = new RulesBest5(players);
-			break;
-		case 1:
-			rules = new RulesBest10(players);
-			break;
-		case 2:
-			rules = new RulesFirst15(players);
-			break;
-		case 3:
-			rules = new RulesAttack(players);
-			break;
+			cpu.start();
+
+			synchronized (cpu)
+			{
+				gameRunning = true;
+			}
 		}
+	}
 
-		lastPlayed = null;
-
+	private void setDifficulty()
+	{
 		switch (AirHockey.getDifficulty())
 		{
 		case 0:
@@ -89,15 +105,24 @@ public class GameBoard
 			cpu = new InsaneCPUPaddle();
 			break;
 		}
+	}
 
-		audio = AudioManager.getInstance();
-		factory = new EntityFactory();
-
-		initialize();
-
-		if (!multiplayer)
+	private void initializeRules(int paramMode)
+	{
+		switch (paramMode)
 		{
-			new Thread(cpu).start();
+		case 0:
+			rules = new RulesBest5(players);
+			break;
+		case 1:
+			rules = new RulesBest10(players);
+			break;
+		case 2:
+			rules = new RulesFirst15(players);
+			break;
+		case 3:
+			rules = new RulesAttack(players);
+			break;
 		}
 	}
 
@@ -114,15 +139,15 @@ public class GameBoard
 	public void setPlayer1(Player player)
 	{
 		players[0] = player;
-		createP1 = true;
+		createP1Paddle = true;
 	}
 
 	public void setPlayer2(Player player)
 	{
 		players[1] = player;
-		createP2 = true;
+		createP2Paddle = true;
 	}
-
+	
 	public void connect()
 	{
 		if (server == null)
@@ -184,7 +209,7 @@ public class GameBoard
 		}
 	}
 
-	private abstract class CPUPaddle implements Runnable
+	private abstract class CPUPaddle extends Thread
 	{
 		private float reactionTime = 0.0f;
 		private float movementSpeed = 0.0f;
@@ -208,45 +233,31 @@ public class GameBoard
 		{
 			Puck puck = pucks.get(0);
 
-			while (!rules.checkOver())
+			while (gameRunning)
 			{
-
-				if (puck.getPosition().y <= screenHeight * 0.5
-						&& puck.goingUpwards())
+				// ACOMPANHAR PUCK
+				if (puck.getPosition().y <= screenHeight * 0.5 && puck.goingUpwards())
 				{
-					// acompanha o puck
 					float dx = puck.getX() - p2Paddle.getX();
 					float dy = puck.getY() - p2Paddle.getY();
 					finalPosition = new Vector2(puck.getX(), puck.getY());
-					Vector2 finalSpeed = new Vector2(dx / movementSpeed, dy
-							/ movementSpeed);
 
+					Vector2 finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
+					p2Paddle.impulse(finalSpeed);
 					// if (puck.goingRight())
 					// p2Paddle.move(p2Paddle.getPosition().x + 1,
 					// p2Paddle.getPosition().y);
 					// else
 					// p2Paddle.move(p2Paddle.getPosition().x - 1,
 					// p2Paddle.getPosition().y);
-
-					try
-					{
-						p2Paddle.impulse(finalSpeed);
-						System.out.println("[CPU] acompanhar puck");
-						Thread.sleep(busyTime);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 				}
-				else if (puck.getPosition().y <= screenHeight * 0.5
-						&& puck.goingDownwards())
+
+				// CONTRARIAR PUCK
+				else if (puck.getPosition().y <= screenHeight * 0.5 && puck.goingDownwards())
 				{
 					System.out.println("[CPU] contrariar puck");
 					Vector2 finalSpeed;
-					// contraria o puck
+
 					if (puck.goingRight())
 					{
 						float dx = p2Paddle.getBounds().minX - p2Paddle.getX();
@@ -261,35 +272,21 @@ public class GameBoard
 						finalPosition = new Vector2(p2Paddle.getBounds().maxX, p2Paddle.getY());
 						finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
 					}
-					
+
 					p2Paddle.impulse(finalSpeed);
-
-					try
-					{
-						Thread.sleep(busyTime);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 				}
-				else if (puck.getPosition().y >= screenHeight * 0.5f
-						&& puck.getPosition().y <= screenHeight * 0.75f
-						&& puck.goingUpwards())
+				else if (puck.getPosition().y >= screenHeight * 0.5f && puck.getPosition().y <= screenHeight * 0.75f && puck.goingUpwards())
 				{
-
 					if (!puck.goingFast())
 					{
 						float dx = puck.getX() - p2Paddle.getX();
 						float dy = puck.getY() - p2Paddle.getY();
 
-						Vector2 finalSpeed = new Vector2(2 * dx / movementSpeed, 2 * dy
-								/ movementSpeed);
+						Vector2 finalSpeed = new Vector2(dx / movementSpeed, 2 * dy / movementSpeed);
 
 						p2Paddle.impulse(finalSpeed);
 						System.out.println("[CPU] ataque");
+
 						// // Ataca
 						// if (puck.goingRight())
 						// p2Paddle.move(p2Paddle.getPosition().x + 1,
@@ -297,37 +294,17 @@ public class GameBoard
 						// else
 						// p2Paddle.move(p2Paddle.getPosition().x - 1,
 						// p2Paddle.getPosition().y - 1);
-						try
-						{
-							Thread.sleep(busyTime);
-						}
-						catch (InterruptedException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
 					}
 					else
 					{
-						Vector2 finalPosition = new Vector2(p2Goal.getX()
-								- p2Paddle.getX(), p2Goal.getY()
-								- p2Paddle.getY());
-						Vector2 finalSpeed = new Vector2(finalPosition.x
-								/ movementSpeed, finalPosition.y
-								/ movementSpeed);
+						float dx = p2Goal.getX() - p2Paddle.getX();
+						float dy = p2Goal.getY() - p2Paddle.getY();
+
+						Vector2 finalSpeed = new Vector2(dx / movementSpeed, 2 * dy / movementSpeed);
 
 						p2Paddle.impulse(finalSpeed);
+
 						System.out.println("[CPU] defesa");
-						try
-						{
-							Thread.sleep(busyTime);
-						}
-						catch (InterruptedException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 
 						// // Defende
 						// if (puck.goingRight())
@@ -336,22 +313,20 @@ public class GameBoard
 						// else
 						// p2Paddle.move(p2Paddle.getPosition().x - 1,
 						// p2Paddle.getPosition().y + 1);
-
 					}
-
 				}
-				else if (puck.getPosition().y >= screenHeight * 0.5
-						&& puck.getPosition().y <= screenHeight * 0.75
-						&& puck.goingDownwards())
+
+				// REPOSICIONAR
+				else if (puck.getPosition().y >= screenHeight * 0.5 && puck.getPosition().y <= screenHeight * 0.75 && puck.goingDownwards())
 				{
 					float dx = screenWidth / 2 - p2Paddle.getX();
 					float dy = screenHeight * 0.75f - p2Paddle.getY();
-					Vector2 finalSpeed = new Vector2(dx / movementSpeed, dy
-							/ movementSpeed);
-					// Reposiciona
+
+					Vector2 finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
+
 					p2Paddle.impulse(finalSpeed);
 					System.out.println("[CPU] reposiciona");
-					System.out.println(finalSpeed);
+
 					// if (p2Paddle.getPosition().x > screenWidth / 2)
 					// p2Paddle.move(p2Paddle.getPosition().x - 1,
 					// p2Paddle.getPosition().y - 1);
@@ -365,32 +340,21 @@ public class GameBoard
 					// else
 					// p2Paddle.move(p2Paddle.getPosition().x + 1,
 					// p2Paddle.getPosition().y + 1);
-
-					try
-					{
-						Thread.sleep(busyTime);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 				}
+
 				try
 				{
 					Thread.sleep(busyTime);
 				}
 				catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
 	}
 
-	private void initialize()
+	private void initializeBoard()
 	{
 		if (rules instanceof RulesAttack)
 		{
@@ -406,52 +370,43 @@ public class GameBoard
 
 		rules.reset();
 		walls = factory.createWalls(players[0].getColor());
-		p1Paddle = factory.createP1Paddle(players[0].getColor());
-		p2Paddle = factory.createP2Paddle(players[1].getColor());
+		p1Paddle = multiplayer ? null : factory.createP1Paddle(players[0].getColor());
+		p2Paddle =  multiplayer ? null : factory.createP2Paddle(players[1].getColor());
 		p1Goal = factory.createP1Goal();
 		p2Goal = factory.createP2Goal();
 	}
 
 	public void update(float delta)
 	{
-		if (createP1)
+		if (multiplayer)
 		{
-			p1Paddle = factory.createP1Paddle(players[0].getColor());
-			createP1 = false;
-		}
-
-		if (createP2)
-		{
-			p2Paddle = factory.createP2Paddle(players[1].getColor());
-			createP2 = false;
-		}
-
-		if (rules.checkOver())
-		{
-			if (rules.checkAce())
+			if (createP1Paddle)
 			{
-				audio.playSpecial(Special.QUAKE_FLAWLESS);
+				p1Paddle = factory.createP1Paddle(players[0].getColor());
+				createP1Paddle = false;
 			}
-
-			if (rules.p1Wins())
+			
+			if (createP2Paddle)
 			{
-				parent.actionGameover(players[0]);
-			}
-
-			if (rules.p2Wins())
-			{
-				parent.actionGameover(players[1]);
-			}
-
-			if (multiplayer)
-			{
-				server.sendGameover();
+				p2Paddle = factory.createP2Paddle(players[1].getColor());
+				createP2Paddle = false;
 			}
 		}
+		
+		updateState();
+		updatePaddles(delta);
+		updatePucks(delta);
+	}
 
+	private void updatePaddles(float delta)
+	{
 		p1Paddle.update(delta);
 		p2Paddle.update();
+		p1Paddle.collides(p2Paddle);
+	}
 
+	private void updatePucks(float delta)
+	{
 		for (Puck puck : pucks)
 		{
 			puck.update(delta);
@@ -484,8 +439,6 @@ public class GameBoard
 			}
 		}
 
-		p1Paddle.collides(p2Paddle);
-
 		for (Wall wall : walls)
 		{
 			for (Puck puck : pucks)
@@ -495,6 +448,40 @@ public class GameBoard
 					audio.playSound(SFX.SFX_PADDLE_HIT);
 				}
 			}
+		}
+	}
+
+	private void updateState()
+	{
+		if (rules.checkOver())
+		{
+			if (rules.checkAce())
+			{
+				audio.playSpecial(Special.QUAKE_FLAWLESS);
+			}
+
+			if (rules.p1Wins())
+			{
+				parent.actionGameover(players[0]);
+			}
+
+			if (rules.p2Wins())
+			{
+				parent.actionGameover(players[1]);
+			}
+
+			if (multiplayer)
+			{
+				server.sendGameover();
+			}
+		}
+		else if (rules.checkLast())
+		{
+			parent.displayMessage("LAST ROUND");
+		}
+		else if (rules.checkTie())
+		{
+			parent.displayMessage("TIE BREAK");
 		}
 	}
 
@@ -575,7 +562,10 @@ public class GameBoard
 	{
 		for (Puck puck : pucks)
 		{
-			puck.draw(sb);
+			if (puck != null)
+			{
+				puck.draw(sb);
+			}
 		}
 
 		if (p1Paddle != null)
@@ -604,6 +594,13 @@ public class GameBoard
 		if (multiplayer)
 		{
 			server.disconnect();
+		}
+		else
+		{
+			synchronized (cpu)
+			{
+				gameRunning = false;
+			}
 		}
 	}
 }

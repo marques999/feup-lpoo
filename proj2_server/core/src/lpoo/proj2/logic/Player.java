@@ -7,8 +7,6 @@ public class Player
 	private int score;
 	private int streak;
 	private int id;
-	private float x;
-	private float y;
 
 	public Player()
 	{
@@ -27,33 +25,11 @@ public class Player
 		id = paramId;
 		score = 0;
 		streak = 0;
-		x = 0;
-		y = 0;
 	}
 
 	public final int getColor()
 	{
 		return color;
-	}
-
-	public final float getX()
-	{
-		return x;
-	}
-
-	public final float getY()
-	{
-		return y;
-	}
-
-	public void setX(float paramX)
-	{
-		x = paramX;
-	}
-
-	public void setY(float paramY)
-	{
-		y = paramY;
 	}
 
 	public final int getID()

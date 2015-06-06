@@ -24,6 +24,6 @@ public final class RulesBest10 extends GameRules
 	@Override
 	public boolean checkTie()
 	{
-		return false;
+		return players[0].getScore() == NUMBER_ROUNDS / 2 && players[1].getScore() == NUMBER_ROUNDS / 2;
 	}
 }

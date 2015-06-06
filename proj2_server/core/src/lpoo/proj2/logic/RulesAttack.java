@@ -2,7 +2,7 @@ package lpoo.proj2.logic;
 
 public final class RulesAttack extends GameRules
 {
-	private final int NUMBER_POINTS = 8;
+	private final int NUMBER_POINTS = 6;
 
 	public RulesAttack(Player[] players)
 	{
@@ -24,7 +24,7 @@ public final class RulesAttack extends GameRules
 	@Override
 	public boolean checkTie()
 	{
-		return (players[0].getScore() == players[1].getScore() && players[0].getScore() == NUMBER_POINTS / 2);
+		return (players[0].getScore() == NUMBER_POINTS / 2 && players[1].getScore() == NUMBER_POINTS / 2);
 	}
 
 	@Override
