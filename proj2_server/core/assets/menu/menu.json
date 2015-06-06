@@ -12,9 +12,9 @@
 
     "com.badlogic.gdx.graphics.g2d.BitmapFont": 
     {
-        "comicsans26": { "file": "menu/comicsans.fnt" },
-        "bebasbold": { "file" : "menu/bebasbold.fnt" },
-        "orange96": { "file": "menu/orange.fnt" },
+        "regularFont": { "file": "menu/font_regular.fnt" },
+        "gradientFont": { "file" : "menu/font_gradient.fnt" },
+        "titleFont": { "file": "menu/font_title.fnt" },
     },
     
     "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": 
@@ -24,7 +24,7 @@
 			"up": "button_normal", 
 			"down": "button_hover", 
 			"over": "button_hover", 
-			"font": comicsans26,
+			"font": regularFont,
 			"pressedOffsetY": -2,
 			"fontColor": blue,
 		},
@@ -34,7 +34,7 @@
 			"up": "button_normal", 
 			"down": "button_hover", 
 			"over": "button_hover", 
-			"font": comicsans26,
+			"font": regularFont,
 			"pressedOffsetY": -2,
 			"fontColor": green,
 		},
@@ -44,7 +44,7 @@
 			"up": "button_normal", 
 			"down": "button_hover", 
 			"over": "button_hover", 
-			"font": comicsans26,
+			"font": regularFont,
 			"pressedOffsetY": -2,
 			"fontColor": red,
 		},
@@ -54,7 +54,7 @@
 			"up": "button_normal", 
 			"down": "button_hover", 
 			"over": "button_hover", 
-			"font": comicsans26,
+			"font": regularFont,
 			"pressedOffsetY": -2,
 			"fontColor": yellow,
 		},
@@ -64,7 +64,7 @@
 			"up": "button_normal", 
 			"down": "button_hover", 
 			"over": "button_hover", 
-			"font": comicsans26,
+			"font": regularFont,
 			"pressedOffsetY": -2,
 			"fontColor": purple,
 		},
@@ -74,7 +74,7 @@
 			"up": "button_normal", 
 			"down": "button_hover", 
 			"over": "button_hover", 
-			"font": comicsans26,
+			"font": regularFont,
 			"pressedOffsetY": -2,
 			"fontColor": orange,
 		},
@@ -85,7 +85,7 @@
 			"down": "button_hover", 
 			"over": "button_hover", 
 			"pressedOffsetY": -2,
-			"font": bebasbold,
+			"font": gradientFont,
 		 },
 		 
 		"toggle": 
@@ -94,7 +94,7 @@
 			"down": "button_hover", 
 			"checked": "button_hover", 
 			"over": "button_hover", 
-			"font": comicsans26,
+			"font": regularFont,
 			"fontColor": blue,
 		 },
     },
@@ -111,15 +111,15 @@
     
     "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": 
     {
-        "default": { "font": orange96 },
-        "gradientLabel": { "font" : bebasbold },
-        "smallLabel": { "font": comicsans26, "fontColor": white },
-        "blueLabel":  { "font": comicsans26, "fontColor": blue },
-        "greenLabel": { "font": comicsans26, "fontColor": green },
-        "orangeLabel": { "font": comicsans26, "fontColor": orange },
-        "purpleLabel": { "font" : comicsans26, "fontColor": purple },
-        "redLabel": { "font" : comicsans26, "fontColor": red },
-        "yellowLabel": { "font": comicsans26, "fontColor": yellow },
+        "default": { "font": titleFont },
+        "gradientLabel": { "font" : gradientFont },
+        "smallLabel": { "font": regularFont, "fontColor": white },
+        "blueLabel":  { "font": regularFont, "fontColor": blue },
+        "greenLabel": { "font": regularFont, "fontColor": green },
+        "orangeLabel": { "font": regularFont, "fontColor": orange },
+        "purpleLabel": { "font" : regularFont, "fontColor": purple },
+        "redLabel": { "font" : regularFont, "fontColor": red },
+        "yellowLabel": { "font": regularFont, "fontColor": yellow },
     },
     
     "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": 
@@ -129,7 +129,7 @@
 			"checkboxOff": "checkbox_normal", 
 			"checkboxOn": "checkbox_checked", 
 			"checkboxOver": "checkbox_hover", 
-			"font": comicsans26,
+			"font": regularFont,
 			"fontColor": white,
 		}
     },

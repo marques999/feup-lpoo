@@ -19,8 +19,8 @@ public class GUISelect extends GUIScreen
 {
 	private final Stage stage = new Stage();
 	private final Table table = new Table();
-	private final Texture overlay = new Texture(Gdx.files.internal("menu/bg_select.png"));
-	private final TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_select2.png"), true);
+	private final Texture overlay = new Texture(Gdx.files.internal("menu/bg_overlay.png"));
+	private final TiledBackground bg = new TiledBackground(Gdx.files.internal("menu/bg_select.png"), true);
 	private final Label lblTitle = new Label("Singleplayer", StyleFactory.TitleLabel);
 	private final TextButton btnMode1 = new TextButton("BEST OF 5", StyleFactory.MenuButton);
 	private final TextButton btnMode2 = new TextButton("BEST OF 10", StyleFactory.MenuButton);
