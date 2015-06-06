@@ -32,7 +32,7 @@ public class Network
 	{
 		public int id;
 	}
-
+	
 	static public class UpdatePaddle
 	{
 		public float x;

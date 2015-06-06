@@ -39,12 +39,10 @@ public class Game extends Activity
 	private AlertDialog.Builder alertServerFull;
 	private ProgressDialog progressConnect;
 	private ProgressDialog progressWaiting;
-
 	private Client client;
 	private GameView gameView;
 	private TextView scores[];
 	private String playerName;
-	private UpdateScore playerScores;
 	private String serverHost;
 
 	private int playerColor;
@@ -104,7 +102,6 @@ public class Game extends Activity
 		progressWaiting.setCancelable(false);
 
 		alertGameover = new AlertDialog.Builder(this);
-		playerScores = new UpdateScore();
 		client = new Client();
 
 		Network.register(client);
@@ -150,12 +147,15 @@ public class Game extends Activity
 				{
 					runOnUiThread(new Runnable()
 					{
+						int p1Score = Integer.parseInt(scores[0].getText().toString());
+						int p2Score = Integer.parseInt(scores[1].getText().toString());
+
 						@Override
 						public void run()
 						{
 							alertGameover.setTitle("Game Over");
 
-							if (playerScores.p1Score > playerScores.p2Score)
+							if (p1Score > p2Score)
 							{
 								alertGameover.setMessage("Player 1 won the match!");
 							}
@@ -226,12 +226,6 @@ public class Game extends Activity
 			@Override
 			public void disconnected(Connection connection)
 			{
-				if (client != null)
-				{
-					client.close();
-					client = null;
-				}
-
 				runOnUiThread(new Runnable()
 				{
 					@Override
@@ -240,6 +234,12 @@ public class Game extends Activity
 						alertDisconnected.show();
 					}
 				});
+
+				if (client != null)
+				{
+					client.close();
+					client = null;
+				}
 			}
 		}));
 

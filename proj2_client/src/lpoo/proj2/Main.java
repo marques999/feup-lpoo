@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import java.util.regex.Pattern;
 
 public class Main extends Activity
@@ -24,7 +25,6 @@ public class Main extends Activity
 	private Spinner spnColor;
 	private Button btnConnect;
 	private Button btnExit;
-
 	private AlertDialog.Builder alertWifi;
 
 	@Override
@@ -43,14 +43,6 @@ public class Main extends Activity
 		txtIP.addTextChangedListener(IPAddressTextWatcher);
 		txtPort.addTextChangedListener(PortTextWatcher);
 		txtUsername.addTextChangedListener(UsernameTextWatcher);
-
-		if (savedInstanceState != null)
-		{
-			txtIP.setText(savedInstanceState.getCharSequence("prefIP"));
-			txtPort.setText(savedInstanceState.getInt("prefPort"));
-			txtUsername.setText(savedInstanceState.getCharSequence("prefUsername"));
-			spnColor.setSelection(savedInstanceState.getInt("prefColor"));
-		}
 
 		final ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		final WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
@@ -107,7 +99,8 @@ public class Main extends Activity
 
 	private final TextWatcher IPAddressTextWatcher = new TextWatcher()
 	{
-		private final String mRegexPattern = "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+		private String mPreviousText = "";
+		private final String mRegexPattern = "^((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9])\\.){0,3}((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9])){0,1}$"; 
 		private final Pattern mRegex = Pattern.compile(mRegexPattern);
 
 		public boolean validate(String str)
@@ -131,10 +124,12 @@ public class Main extends Activity
 		{
 			if (validate(s.toString()))
 			{
+				mPreviousText = s.toString();
 				btnConnect.setEnabled(true);
 			}
 			else
 			{
+			    s.replace(0, s.length(), mPreviousText);
 				btnConnect.setEnabled(false);
 			}
 		}
@@ -223,13 +218,24 @@ public class Main extends Activity
 	};
 
 	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		txtIP.setText(savedInstanceState.getCharSequence("prefIP", "127.0.0.1"));
+		txtPort.setText(Integer.toString(savedInstanceState.getInt("prefPort", 8080)));
+		txtUsername.setText(savedInstanceState.getCharSequence("prefUsername", "Anonymous"));
+		spnColor.setSelection(savedInstanceState.getInt("prefColor", 0));
+		
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState)
 	{
 		savedInstanceState.putCharSequence("prefIP", txtIP.getText());
 		savedInstanceState.putInt("prefPort", Integer.parseInt(txtPort.getText().toString()));
 		savedInstanceState.putCharSequence("prefUsername", txtUsername.getText());
 		savedInstanceState.putInt("prefColor", spnColor.getSelectedItemPosition());
-
+		
 		super.onSaveInstanceState(savedInstanceState);
 	}
 }

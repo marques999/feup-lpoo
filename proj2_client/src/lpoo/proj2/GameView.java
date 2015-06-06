@@ -63,23 +63,23 @@ public class GameView extends View
 	{
 		switch (paramIndex)
 		{
-		case 0:
+		case 1:
 			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_green);
 			break;
-		case 1:
+		case 2:
 			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_red);
 			break;
-		case 2:
-			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_yellow);
-			break;
 		case 3:
-			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_blue);
+			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_yellow);
 			break;
 		case 4:
 			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_purple);
 			break;
 		case 5:
 			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_orange);
+			break;
+		default:
+			ballBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.paddle_blue);
 			break;
 		}
 	}
@@ -141,9 +141,13 @@ public class GameView extends View
 
 		switch (action & MotionEvent.ACTION_MASK)
 		{
-		case MotionEvent.ACTION_DOWN:
 		case MotionEvent.ACTION_MOVE:
 			processMove(newX, newY);
+			invalidate();
+			requestLayout();
+			break;
+		case MotionEvent.ACTION_DOWN:
+			processMove(newX - ballBitmap.getWidth() / 2, newY - ballBitmap.getHeight() / 2);
 			invalidate();
 			requestLayout();
 			break;
