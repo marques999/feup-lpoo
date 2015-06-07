@@ -6,9 +6,9 @@ public final class Wall extends StaticEntity
 {
 	private final Vector2 normal = new Vector2(0.0f, 0.f);
 
-	public Wall(float paramX, float paramY, int paramWidth, int paramHeight, int paramColor)
+	public Wall(float paramX, float paramY, int paramWidth, int paramHeight)
 	{
-		super(paramX, paramY, paramWidth, paramHeight, paramColor);
+		super(paramX, paramY, paramWidth, paramHeight);
 	}
 
 	public Vector2 getNormal()

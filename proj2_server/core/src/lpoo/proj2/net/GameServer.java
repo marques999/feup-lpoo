@@ -24,14 +24,15 @@ public class GameServer
 	private int nextId;
 	private GameBoard board;
 	private Server server;
-	private HashSet<Player> players = new HashSet<Player>();
+	private HashSet<Player> players;
 
 	public GameServer(int tcpPort, int udpPort, GameBoard paramBoard) throws IOException
 	{
+		board = paramBoard;
 		nextId = 0;
 		serverTcpPort = tcpPort;
 		serverUdpPort = udpPort;
-		board = paramBoard;
+		players = new HashSet<Player>();
 
 		server = new Server()
 		{
@@ -63,9 +64,9 @@ public class GameServer
 
 					if (players.size() < 2)
 					{
-						player = new Player(nextId, login.name, login.color);
+						player = new Player(nextId, login.playerName, login.playerColor);
 
-						switch(nextId)
+						switch (nextId)
 						{
 						case 0:
 							board.setPlayer1(player);
@@ -74,14 +75,13 @@ public class GameServer
 							board.setPlayer2(player);
 							break;
 						}
-						
-						loggedIn(connection, player);
+
+						actionConnect(connection, player);
 						nextId++;
 					}
 					else
 					{
 						ServerFull serverFull = new ServerFull();
-						serverFull.numberPlayers = players.size();
 						connection.sendTCP(serverFull);
 					}
 				}
@@ -105,7 +105,7 @@ public class GameServer
 				{
 					players.remove(connection.player);
 					PlayerDisconnected playerDisconnected = new PlayerDisconnected();
-					playerDisconnected.id = connection.player.getID();
+					playerDisconnected.playerId = connection.player.getID();
 					nextId = 0;
 					server.sendToAllTCP(playerDisconnected);
 					board.actionDisconnect(connection.player);
@@ -117,32 +117,32 @@ public class GameServer
 		server.start();
 	}
 
-	private void loggedIn(PlayerConnection pc, Player player)
+	private void actionConnect(PlayerConnection pc, Player player)
 	{
 		pc.player = player;
 
 		for (Player other : players)
 		{
 			PlayerConnected playerConnected = new PlayerConnected();
-			playerConnected.id = other.getID();
+			playerConnected.playerId = other.getID();
 			pc.sendTCP(playerConnected);
 		}
 
 		players.add(player);
 		PlayerConnected playerConnected = new PlayerConnected();
-		playerConnected.id = player.getID();
+		playerConnected.playerId = player.getID();
 		server.sendToAllTCP(playerConnected);
+	}
+
+	public void actionDisconnect()
+	{
+		server.close();
+		server.stop();
 	}
 
 	public int getPlayersConnected()
 	{
 		return nextId;
-	}
-
-	public void disconnect()
-	{
-		server.close();
-		server.stop();
 	}
 
 	static public class PlayerConnection extends Connection
@@ -158,9 +158,10 @@ public class GameServer
 		server.sendToAllTCP(updateScore);
 	}
 
-	public void sendGameover()
+	public void sendGameover(Player player)
 	{
 		GameOver gameOver = new GameOver();
+		gameOver.playerName = player.getName();
 		server.sendToAllTCP(gameOver);
 	}
 }

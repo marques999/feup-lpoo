@@ -19,20 +19,20 @@ public class Network
 
 	static public class PlayerLogin
 	{
-		public String name;
-		public int color;
+		public String playerName;
+		public int playerColor;
 	}
 
 	static public class PlayerConnected
 	{
-		public int id;
+		public int playerId;
 	}
 
 	static public class PlayerDisconnected
 	{
-		public int id;
+		public int playerId;
 	}
-	
+
 	static public class UpdatePaddle
 	{
 		public float x;
@@ -47,10 +47,10 @@ public class Network
 
 	static public class GameOver
 	{
+		public String playerName;
 	}
 
 	static public class ServerFull
 	{
-		public int numberPlayers;
 	}
 };

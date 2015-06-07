@@ -106,16 +106,16 @@ public class EntityFactory
 		return createGoal(screenWidth * 0.3f, screenHeight - 16);
 	}
 
-	public final ArrayList<Wall> createWalls(int color)
+	public final ArrayList<Wall> createWalls()
 	{
 		ArrayList<Wall> walls = new ArrayList<Wall>();
 
-		walls.add(new Wall(0, 0, marginLeftWall, screenHeight, color));
-		walls.add(new Wall(screenWidth - 32, 0, marginRightWall, screenHeight, color));
-		walls.add(new Wall(32, 0, screenWidth / 4, marginBottomWall, color));
-		walls.add(new Wall(screenWidth * 0.75f - 32, 0, screenWidth / 4, marginBottomWall, color));
-		walls.add(new Wall(32, screenHeight - 32, screenWidth / 4, marginTopWall, color));
-		walls.add(new Wall(screenWidth * 0.75f - 32, screenHeight - 32, screenWidth / 4, marginTopWall, color));
+		walls.add(new Wall(0, 0, marginLeftWall, screenHeight));
+		walls.add(new Wall(screenWidth - 32, 0, marginRightWall, screenHeight));
+		walls.add(new Wall(32, 0, screenWidth / 4, marginBottomWall));
+		walls.add(new Wall(screenWidth * 0.75f - 32, 0, screenWidth / 4, marginBottomWall));
+		walls.add(new Wall(32, screenHeight - 32, screenWidth / 4, marginTopWall));
+		walls.add(new Wall(screenWidth * 0.75f - 32, screenHeight - 32, screenWidth / 4, marginTopWall));
 		walls.get(0).setNormal(-1, 1);
 		walls.get(1).setNormal(-1, 1);
 		walls.get(2).setNormal(1, -1);

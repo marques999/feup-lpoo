@@ -564,6 +564,11 @@ public class GUIGame extends GUIScreen
 
 		Timer.schedule(new HideMessage(), 1.0f);
 	}
+	
+	public boolean isGamePaused()
+	{
+		return !(state instanceof GameRunningState);
+	}
 
 	@Override
 	public void show()

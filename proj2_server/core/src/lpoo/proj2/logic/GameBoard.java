@@ -20,42 +20,54 @@ public class GameBoard
 	private AudioManager audio;
 	private GameServer server;
 	private GameRules rules;
-	private Paddle p1Paddle;
-	private Paddle p2Paddle;
-	private Goal p1Goal;
-	private Goal p2Goal;
+	private Paddle paddles[];
+	private Goal goals[];
 	private Player players[];
 	private Player lastPlayed;
 	private EntityFactory factory;
 	private CPUPaddle cpu;
 	private GUIGame parent;
-	private final float screenHeight = Gdx.graphics.getHeight();
-	private ArrayList<Puck> pucks = new ArrayList<Puck>();
-	private ArrayList<Wall> walls = new ArrayList<Wall>();
+	private ArrayList<Puck> pucks;
+	private ArrayList<Wall> walls;
 	private int serverPort;
 	private boolean gameRunning;
-	protected boolean multiplayer;
-	private boolean createP1Paddle = false;
-	private boolean createP2Paddle = false;
+	private boolean multiplayer;
+	private boolean createP1Paddle;
+	private boolean createP2Paddle;
+	private final int PLAYER_1 = 0;
+	private final int PLAYER_2 = 1;
+	private float screenHeight;
+	private float screenWidth;
 
 	public GameBoard(GUIGame paramParent, int paramMode, boolean paramMultiplayer)
 	{
 		audio = AudioManager.getInstance();
+		createP1Paddle = false;
+		createP2Paddle = false;
+		screenHeight =  Gdx.graphics.getHeight();
+		screenWidth = Gdx.graphics.getWidth();
 		factory = new EntityFactory();
 		lastPlayed = null;
 		multiplayer = paramMultiplayer;
 		parent = paramParent;
+		goals = new Goal[2];
+		paddles = new Paddle[2];
 		players = new Player[2];
-
-		setDifficulty();
+		pucks = new ArrayList<Puck>();
+		walls = new ArrayList<Wall>();
+	
 		initializeRules(paramMode);
 		initializePlayers();
-		
+
 		if (multiplayer)
 		{
 			connect();
 		}
-		
+		else
+		{
+			setDifficulty(AirHockey.getDifficulty());
+		}
+
 		initializeBoard();
 		initializeAI();
 	}
@@ -64,14 +76,14 @@ public class GameBoard
 	{
 		if (multiplayer)
 		{
-			players[0] = new Player(0, "Player 1", 0);
-			players[1] = new Player(1, "Player 2", 0);
+			players[PLAYER_1] = new Player(PLAYER_1, "Player 1", 0);
+			players[PLAYER_2] = new Player(PLAYER_2, "Player 2", 0);
 			connect();
 		}
 		else
 		{
-			players[0] = new Player(0, "Human", 2);
-			players[1] = new Player(1, "CPU", 0);
+			players[PLAYER_1] = new Player(PLAYER_1, "Human", 2);
+			players[PLAYER_2] = new Player(PLAYER_2, "CPU", 0);
 		}
 	}
 
@@ -88,9 +100,9 @@ public class GameBoard
 		}
 	}
 
-	private void setDifficulty()
+	private void setDifficulty(int paramDifficulty)
 	{
-		switch (AirHockey.getDifficulty())
+		switch (paramDifficulty)
 		{
 		case 0:
 			cpu = new EasyCPUPaddle();
@@ -128,26 +140,26 @@ public class GameBoard
 
 	public final Player getPlayer1()
 	{
-		return players[0];
+		return players[PLAYER_1];
 	}
 
 	public final Player getPlayer2()
 	{
-		return players[1];
+		return players[PLAYER_2];
 	}
 
 	public void setPlayer1(Player player)
 	{
-		players[0] = player;
+		players[PLAYER_1] = player;
 		createP1Paddle = true;
 	}
 
 	public void setPlayer2(Player player)
 	{
-		players[1] = player;
+		players[PLAYER_2] = player;
 		createP2Paddle = true;
 	}
-	
+
 	public void connect()
 	{
 		if (server == null)
@@ -161,7 +173,10 @@ public class GameBoard
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
+				if (server != null)
+				{
+					server.actionDisconnect();
+				}
 			}
 		}
 	}
@@ -170,8 +185,6 @@ public class GameBoard
 	{
 		return serverPort;
 	}
-
-	private float screenWidth = Gdx.graphics.getWidth();
 
 	private class EasyCPUPaddle extends CPUPaddle
 	{
@@ -214,9 +227,9 @@ public class GameBoard
 		private float reactionTime = 0.0f;
 		private float movementSpeed = 0.0f;
 		private long busyTime = 0;
-
 		private Vector2 finalPosition = new Vector2(0.0f, 0.0f);
-
+		private Vector2 finalSpeed = new Vector2(0.0f, 0.0f);
+		
 		public void setReactionTime(final float paramTime)
 		{
 			reactionTime = paramTime;
@@ -238,108 +251,113 @@ public class GameBoard
 				// ACOMPANHAR PUCK
 				if (puck.getPosition().y <= screenHeight * 0.5 && puck.goingUpwards())
 				{
-					float dx = puck.getX() - p2Paddle.getX();
-					float dy = puck.getY() - p2Paddle.getY();
+					float dx = puck.getX() - paddles[PLAYER_2].getX();
+					float dy = puck.getY() - paddles[PLAYER_2].getY();
+					
 					finalPosition = new Vector2(puck.getX(), puck.getY());
-
-					Vector2 finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
-					p2Paddle.impulse(finalSpeed);
+					finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
+					paddles[PLAYER_2].impulse(finalSpeed);
 					// if (puck.goingRight())
-					// p2Paddle.move(p2Paddle.getPosition().x + 1,
-					// p2Paddle.getPosition().y);
+					// paddles[1].move(paddles[1].getPosition().x + 1,
+					// paddles[1].getPosition().y);
 					// else
-					// p2Paddle.move(p2Paddle.getPosition().x - 1,
-					// p2Paddle.getPosition().y);
+					// paddles[1].move(paddles[1].getPosition().x - 1,
+					// paddles[1].getPosition().y);
+					
+					System.out.println("[CPU] acompanhar puck");
 				}
 
 				// CONTRARIAR PUCK
 				else if (puck.getPosition().y <= screenHeight * 0.5 && puck.goingDownwards())
 				{
+					float dx;
+					float dy;
+					
 					System.out.println("[CPU] contrariar puck");
-					Vector2 finalSpeed;
 
 					if (puck.goingRight())
 					{
-						float dx = p2Paddle.getBounds().minX - p2Paddle.getX();
-						float dy = 0.0f;
-						finalPosition = new Vector2(p2Paddle.getBounds().minX, p2Paddle.getY());
-						finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
+						dx = paddles[PLAYER_2].getBounds().minX - paddles[PLAYER_2].getX();
+						dy = 0.0f;
+						finalPosition.set(paddles[PLAYER_2].getBounds().minX, paddles[PLAYER_2].getY());
 					}
 					else
 					{
-						float dx = p2Paddle.getBounds().maxX - p2Paddle.getX();
-						float dy = 0.0f;
-						finalPosition = new Vector2(p2Paddle.getBounds().maxX, p2Paddle.getY());
-						finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
+						dx = paddles[PLAYER_2].getBounds().maxX - paddles[PLAYER_2].getX();
+						dy = 0.0f;
+						finalPosition.set(paddles[PLAYER_2].getBounds().maxX, paddles[PLAYER_2].getY());
 					}
-
-					p2Paddle.impulse(finalSpeed);
+					
+					finalSpeed.set(dx / movementSpeed, dy / movementSpeed);
+					paddles[PLAYER_2].impulse(finalSpeed);
 				}
 				else if (puck.getPosition().y >= screenHeight * 0.5f && puck.getPosition().y <= screenHeight * 0.75f && puck.goingUpwards())
 				{
 					if (!puck.goingFast())
 					{
-						float dx = puck.getX() - p2Paddle.getX();
-						float dy = puck.getY() - p2Paddle.getY();
-
-						Vector2 finalSpeed = new Vector2(dx / movementSpeed, 2 * dy / movementSpeed);
-
-						p2Paddle.impulse(finalSpeed);
+						float dx = puck.getX() - paddles[PLAYER_2].getX();
+						float dy = puck.getY() - paddles[PLAYER_2].getY();
+						
+						finalPosition.set(puck.getX(), puck.getY());
+						finalSpeed.set(dx / movementSpeed, 2 * dy / movementSpeed);
+						paddles[PLAYER_2].impulse(finalSpeed);
+						
 						System.out.println("[CPU] ataque");
 
 						// // Ataca
 						// if (puck.goingRight())
-						// p2Paddle.move(p2Paddle.getPosition().x + 1,
-						// p2Paddle.getPosition().y - 1);
+						// paddles[1].move(paddles[1].getPosition().x + 1,
+						// paddles[1].getPosition().y - 1);
 						// else
-						// p2Paddle.move(p2Paddle.getPosition().x - 1,
-						// p2Paddle.getPosition().y - 1);
+						// paddles[1].move(paddles[1].getPosition().x - 1,
+						// paddles[1].getPosition().y - 1);
 					}
 					else
 					{
-						float dx = p2Goal.getX() - p2Paddle.getX();
-						float dy = p2Goal.getY() - p2Paddle.getY();
+						float dx = goals[PLAYER_2].getX() - paddles[PLAYER_2].getX();
+						float dy = goals[PLAYER_2].getY() - paddles[PLAYER_2].getY();
 
-						Vector2 finalSpeed = new Vector2(dx / movementSpeed, 2 * dy / movementSpeed);
-
-						p2Paddle.impulse(finalSpeed);
+						finalPosition.set(goals[PLAYER_2].getX(), goals[PLAYER_2].getY());
+						finalSpeed.set(dx / movementSpeed, 2 * dy / movementSpeed);
+						paddles[PLAYER_2].impulse(finalSpeed);
 
 						System.out.println("[CPU] defesa");
 
 						// // Defende
 						// if (puck.goingRight())
-						// p2Paddle.move(p2Paddle.getPosition().x + 1,
-						// p2Paddle.getPosition().y + 1);
+						// paddles[1].move(paddles[1].getPosition().x + 1,
+						// paddles[1].getPosition().y + 1);
 						// else
-						// p2Paddle.move(p2Paddle.getPosition().x - 1,
-						// p2Paddle.getPosition().y + 1);
+						// paddles[1].move(paddles[1].getPosition().x - 1,
+						// paddles[1].getPosition().y + 1);
 					}
 				}
 
 				// REPOSICIONAR
 				else if (puck.getPosition().y >= screenHeight * 0.5 && puck.getPosition().y <= screenHeight * 0.75 && puck.goingDownwards())
 				{
-					float dx = screenWidth / 2 - p2Paddle.getX();
-					float dy = screenHeight * 0.75f - p2Paddle.getY();
+					float dx = screenWidth / 2 - paddles[1].getX();
+					float dy = screenHeight * 0.75f - paddles[1].getY();
 
-					Vector2 finalSpeed = new Vector2(dx / movementSpeed, dy / movementSpeed);
-
-					p2Paddle.impulse(finalSpeed);
+					finalPosition.set(screenWidth / 2, screenHeight * 0.75f);
+					finalSpeed.set(dx / movementSpeed, dy / movementSpeed);
+					paddles[PLAYER_2].impulse(finalSpeed);
+					
 					System.out.println("[CPU] reposiciona");
 
-					// if (p2Paddle.getPosition().x > screenWidth / 2)
-					// p2Paddle.move(p2Paddle.getPosition().x - 1,
-					// p2Paddle.getPosition().y - 1);
+					// if (paddles[1].getPosition().x > screenWidth / 2)
+					// paddles[1].move(paddles[1].getPosition().x - 1,
+					// paddles[1].getPosition().y - 1);
 					// else
-					// p2Paddle.move(p2Paddle.getPosition().x + 1,
-					// p2Paddle.getPosition().y - 1);
+					// paddles[1].move(paddles[1].getPosition().x + 1,
+					// paddles[1].getPosition().y - 1);
 					//
-					// if (p2Paddle.getPosition().y > screenHeight * 0.75)
-					// p2Paddle.move(p2Paddle.getPosition().x,
-					// p2Paddle.getPosition().y - 1);
+					// if (paddles[1].getPosition().y > screenHeight * 0.75)
+					// paddles[1].move(paddles[1].getPosition().x,
+					// paddles[1].getPosition().y - 1);
 					// else
-					// p2Paddle.move(p2Paddle.getPosition().x + 1,
-					// p2Paddle.getPosition().y + 1);
+					// paddles[1].move(paddles[1].getPosition().x + 1,
+					// paddles[1].getPosition().y + 1);
 				}
 
 				try
@@ -348,7 +366,6 @@ public class GameBoard
 				}
 				catch (InterruptedException e)
 				{
-					e.printStackTrace();
 				}
 			}
 		}
@@ -369,11 +386,11 @@ public class GameBoard
 		}
 
 		rules.reset();
-		walls = factory.createWalls(players[0].getColor());
-		p1Paddle = multiplayer ? null : factory.createP1Paddle(players[0].getColor());
-		p2Paddle =  multiplayer ? null : factory.createP2Paddle(players[1].getColor());
-		p1Goal = factory.createP1Goal();
-		p2Goal = factory.createP2Goal();
+		walls = factory.createWalls();
+		paddles[PLAYER_1] = multiplayer ? null : factory.createP1Paddle(players[PLAYER_1].getColor());
+		paddles[PLAYER_2] = multiplayer ? null : factory.createP2Paddle(players[PLAYER_2].getColor());
+		goals[PLAYER_1] = factory.createP1Goal();
+		goals[PLAYER_2] = factory.createP2Goal();
 	}
 
 	public void update(float delta)
@@ -382,57 +399,69 @@ public class GameBoard
 		{
 			if (createP1Paddle)
 			{
-				p1Paddle = factory.createP1Paddle(players[0].getColor());
+				paddles[PLAYER_1] = factory.createP1Paddle(players[PLAYER_1].getColor());
 				createP1Paddle = false;
 			}
-			
+
 			if (createP2Paddle)
 			{
-				p2Paddle = factory.createP2Paddle(players[1].getColor());
+				paddles[PLAYER_2] = factory.createP2Paddle(players[PLAYER_2].getColor());
 				createP2Paddle = false;
 			}
 		}
-		
+
 		updateState();
-		updatePaddles(delta);
-		updatePucks(delta);
+		updatePaddle(delta);
+		updatePuck(delta);
 	}
 
-	private void updatePaddles(float delta)
+	private void updatePaddle(float delta)
 	{
-		p1Paddle.update(delta);
-		p2Paddle.update();
-		p1Paddle.collides(p2Paddle);
+		paddles[PLAYER_1].update(delta);
+		
+		if (multiplayer)
+		{
+			paddles[PLAYER_2].update(delta);
+			
+		}
+		else
+		{
+			paddles[PLAYER_2].update();
+		}
+		
+		paddles[PLAYER_1].collides(paddles[PLAYER_2]);
 	}
 
-	private void updatePucks(float delta)
+	private void updatePuck(float delta)
 	{
 		for (Puck puck : pucks)
 		{
 			puck.update(delta);
 
-			if (p1Paddle.collides(puck))
+			if (paddles[PLAYER_1].collides(puck))
 			{
 				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
-				lastPlayed = players[0];
+				lastPlayed = players[PLAYER_1];
 			}
 
-			if (p2Paddle.collides(puck))
+			if (paddles[PLAYER_2].collides(puck))
 			{
 				AudioManager.getInstance().playSound(SFX.SFX_PUCK_HIT);
-				lastPlayed = players[1];
+				lastPlayed = players[PLAYER_1];
+			}
+			
+			for (Paddle paddle : paddles)
+			{
+				puck.collides(paddle);
 			}
 
-			puck.collides(p1Paddle);
-			puck.collides(p2Paddle);
-
-			if (puck.collides(p1Goal))
+			if (puck.collides(goals[PLAYER_1]))
 			{
 				p2Goal(puck);
 				break;
 			}
 
-			if (puck.collides(p2Goal))
+			if (puck.collides(goals[PLAYER_2]))
 			{
 				p1Goal(puck);
 				break;
@@ -462,17 +491,22 @@ public class GameBoard
 
 			if (rules.p1Wins())
 			{
-				parent.actionGameover(players[0]);
+				if (multiplayer)
+				{
+					server.sendGameover(players[PLAYER_1]);
+				}
+
+				parent.actionGameover(players[PLAYER_1]);
 			}
 
 			if (rules.p2Wins())
 			{
-				parent.actionGameover(players[1]);
-			}
+				if (multiplayer)
+				{
+					server.sendGameover(players[PLAYER_2]);
+				}
 
-			if (multiplayer)
-			{
-				server.sendGameover();
+				parent.actionGameover(players[PLAYER_2]);
 			}
 		}
 		else if (rules.checkLast())
@@ -487,14 +521,15 @@ public class GameBoard
 
 	private void p1Goal(Puck puck)
 	{
-		if (lastPlayed == players[1])
+		if (lastPlayed == players[PLAYER_2])
 		{
 			audio.playSpecial(Special.QUAKE_HUMILIATION);
 		}
 
 		rules.p1Score();
-		parent.actionScore(players[0]);
-
+		parent.actionScore(players[PLAYER_1]);
+		lastPlayed = null;
+		
 		if (rules instanceof RulesAttack)
 		{
 			pucks.remove(puck);
@@ -502,8 +537,8 @@ public class GameBoard
 		else
 		{
 			factory.resetPuck(puck, 1);
-			factory.resetP1Paddle(p1Paddle);
-			factory.resetP2Paddle(p2Paddle);
+			factory.resetP1Paddle(paddles[PLAYER_1]);
+			factory.resetP2Paddle(paddles[PLAYER_2]);
 		}
 
 		if (multiplayer)
@@ -514,14 +549,15 @@ public class GameBoard
 
 	private void p2Goal(Puck puck)
 	{
-		if (lastPlayed == players[0])
+		if (lastPlayed == players[PLAYER_1])
 		{
 			audio.playSpecial(Special.QUAKE_HUMILIATION);
 		}
 
 		rules.p2Score();
-		parent.actionScore(players[1]);
-
+		parent.actionScore(players[PLAYER_2]);
+		lastPlayed = null;
+		
 		if (rules instanceof RulesAttack)
 		{
 			pucks.remove(puck);
@@ -529,8 +565,8 @@ public class GameBoard
 		else
 		{
 			factory.resetPuck(puck, 0);
-			factory.resetP1Paddle(p1Paddle);
-			factory.resetP2Paddle(p2Paddle);
+			factory.resetP1Paddle(paddles[PLAYER_1]);
+			factory.resetP2Paddle(paddles[PLAYER_2]);
 		}
 
 		if (multiplayer)
@@ -541,19 +577,24 @@ public class GameBoard
 
 	public void movePaddle(int paddleId, float x, float y)
 	{
-		if (paddleId == 1)
+		if (parent.isGamePaused())
 		{
-			p2Paddle.move(x, y);
+			return;
+		}
+		
+		if (paddleId == PLAYER_2)
+		{
+			paddles[PLAYER_2].move(x, y);
 		}
 		else
 		{
 			if (multiplayer)
 			{
-				p1Paddle.move(x, y + screenHeight / 2);
+				paddles[PLAYER_1].move(x, y + screenHeight / 2);
 			}
 			else
 			{
-				p1Paddle.move(x, y);
+				paddles[PLAYER_1].move(x, y);
 			}
 		}
 	}
@@ -567,15 +608,13 @@ public class GameBoard
 				puck.draw(sb);
 			}
 		}
-
-		if (p1Paddle != null)
+		
+		for (Paddle paddle : paddles)
 		{
-			p1Paddle.draw(sb);
-		}
-
-		if (p2Paddle != null)
-		{
-			p2Paddle.draw(sb);
+			if (paddle != null)
+			{
+				paddle.draw(sb);
+			}
 		}
 	}
 
@@ -593,7 +632,7 @@ public class GameBoard
 	{
 		if (multiplayer)
 		{
-			server.disconnect();
+			server.actionDisconnect();
 		}
 		else
 		{
