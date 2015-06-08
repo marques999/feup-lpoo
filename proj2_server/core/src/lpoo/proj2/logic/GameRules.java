@@ -41,13 +41,13 @@ public abstract class GameRules
 				audio.playSpecial(Special.QUAKE_HATTRICK);
 				break;
 			case 5:
-				audio.playSpecial(Special.QUAKE_KILLINGSPREE);
-				break;
-			case 7:
 				audio.playSpecial(Special.QUAKE_RAMPAGE);
 				break;
+			case 7:
+				audio.playSpecial(Special.QUAKE_MONSTERKILL);
+				break;
 			case 9:
-				audio.playSpecial(Special.QUAKE_HOLYSHIT);
+				audio.playSpecial(Special.QUAKE_UNSTOPPABLE);
 				break;
 			case 11:
 				audio.playSpecial(Special.QUAKE_GODLIKE);
@@ -109,6 +109,8 @@ public abstract class GameRules
 	}
 
 	public abstract boolean checkOver();
+
 	public abstract boolean checkLast();
+
 	public abstract boolean checkTie();
 }

@@ -8,8 +8,8 @@ import com.badlogic.gdx.audio.Sound;
 public class AudioManager
 {
 	private static AudioManager instance;
-	private float musicVolume = 1.0f;
-	private float sfxVolume = 1.0f;
+	private float musicVolume = 0.7f;
+	private float sfxVolume = 0.6f;
 
 	public static AudioManager getInstance()
 	{
@@ -54,11 +54,11 @@ public class AudioManager
 		Gdx.audio.newSound(Gdx.files.internal("audio/flawless.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/godlike.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/hattrick.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/holyshit.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/humiliation.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/killingspree.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/monsterkill.ogg")),
 		Gdx.audio.newSound(Gdx.files.internal("audio/prepare.ogg")),
-		Gdx.audio.newSound(Gdx.files.internal("audio/rampage.ogg")) 
+		Gdx.audio.newSound(Gdx.files.internal("audio/rampage.ogg")),
+		Gdx.audio.newSound(Gdx.files.internal("audio/unstoppable.ogg"))
 	};
 
 	public final float getSFXVolume()
@@ -169,24 +169,24 @@ public class AudioManager
 			special[2].play(sfxVolume);
 			break;
 		case QUAKE_GODLIKE:
-			special[6].play(sfxVolume);
+			special[3].play(sfxVolume);
 			break;
 		case QUAKE_HATTRICK:
 			special[4].play(sfxVolume);
 			break;
-		case QUAKE_HOLYSHIT:
+		case QUAKE_HUMILIATION:
 			special[5].play(sfxVolume);
 			break;
-		case QUAKE_HUMILIATION:
+		case QUAKE_MONSTERKILL:
 			special[6].play(sfxVolume);
 			break;
-		case QUAKE_KILLINGSPREE:
+		case QUAKE_PREPARE:
 			special[7].play(sfxVolume);
 			break;
-		case QUAKE_PREPARE:
+		case QUAKE_RAMPAGE:
 			special[8].play(sfxVolume);
 			break;
-		case QUAKE_RAMPAGE:
+		case QUAKE_UNSTOPPABLE:
 			special[9].play(sfxVolume);
 			break;
 		}

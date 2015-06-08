@@ -38,7 +38,6 @@ public final class Puck extends DynamicEntity
 
 		setBoundingCircle(x, y);
 		setRadius(getWidth() / 2);
-		setVelocity(new Vector2(-128, -128));
 	}
 
 	public void update(float delta)

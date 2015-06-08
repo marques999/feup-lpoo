@@ -14,14 +14,16 @@ public class EntityFactory
 
 	private final Puck createPuck(float x, float y, int color)
 	{
-		return new Puck(x, y, color);
+		Puck newPuck = new Puck(x, y, color);
+		newPuck.setVelocity(new Vector2(100.0f * Math.signum(rand.nextInt()), 100.0f * Math.signum(rand.nextInt())));
+		return newPuck;
 	}
 
 	public final Puck createSinglePuck(int paramColor)
 	{
 		return createPuck(screenWidth / 2, screenHeight / 2, paramColor);
 	}
-	
+
 	public final void resetP1Paddle(Paddle paddle)
 	{
 		paddle.setPosition(screenWidth / 2, 64);
@@ -31,11 +33,11 @@ public class EntityFactory
 	{
 		paddle.setPosition(screenWidth / 2, screenHeight - 64);
 	}
-	
+
 	public final void resetPuck(Puck puck, int playerId)
 	{
 		int randomDelta = 16 + rand.nextInt(64);
-		
+
 		switch (playerId)
 		{
 		case 0:
@@ -48,21 +50,21 @@ public class EntityFactory
 			break;
 		}
 	}
-	
+
 	private int randomBetween(int min, int max)
 	{
 		return rand.nextInt((max - min) + 1) + min;
 	}
-	
+
 	private final int marginLeftWall = 30;
 	private final int marginRightWall = 32;
 	private final int marginTopWall = 40;
 	private final int marginBottomWall = 45;
-	
+
 	public final Puck createRandomPuck(int paramColor)
 	{
-		float puckX = randomBetween(marginLeftWall + 24, screenWidth - marginRightWall - 24);
-		float puckY = randomBetween(marginBottomWall + 24, screenHeight - marginTopWall - 24);
+		float puckX = randomBetween(marginLeftWall + 32, screenWidth - marginRightWall - 32);
+		float puckY = randomBetween(screenHeight / 5, 4 * screenHeight / 5);
 		return createPuck(puckX, puckY, paramColor);
 	}
 

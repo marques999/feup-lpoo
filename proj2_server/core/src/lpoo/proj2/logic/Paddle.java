@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public final class Paddle extends DynamicEntity
 {
 	private static final float radiusAdjustment = 13.0f;
-	private final float minimumDelta = 0.05f;
+	private static final float minimumDelta = 0.05f;
 	private static final float minimumSpeed = 200.0f;
 	private static final float maximumSpeed = 800.0f;
 
@@ -41,7 +41,6 @@ public final class Paddle extends DynamicEntity
 
 		setBoundingCircle(x, y);
 		setRadius(getWidth() / 2 - radiusAdjustment);
-		setVelocity(new Vector2(0.0f, 0.0f));
 	}
 
 	public void update()
@@ -75,6 +74,7 @@ public final class Paddle extends DynamicEntity
 			dy = maximumSpeed * Math.signum(dy);
 		}
 
+		setBoundingCircle(getX(), getY());
 		setVelocity(new Vector2(dx, dy));
 		setPrevious(getX(), getY());
 	}
@@ -111,16 +111,6 @@ public final class Paddle extends DynamicEntity
 	@Override
 	public boolean collides(Paddle paddle)
 	{
-		if (Intersector.overlaps(getBoundingCircle(), paddle.getBoundingCircle()))
-		{
-			if (!isColliding())
-			{
-				getPosition().mulAdd(getVelocity(), 0.05f);
-				setColliding(true);
-				return true;
-			}
-		}
-
 		return false;
 	}
 

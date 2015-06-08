@@ -4,7 +4,6 @@ import lpoo.proj2.AirHockey;
 import lpoo.proj2.StyleFactory;
 import lpoo.proj2.audio.SFX;
 import lpoo.proj2.audio.Song;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

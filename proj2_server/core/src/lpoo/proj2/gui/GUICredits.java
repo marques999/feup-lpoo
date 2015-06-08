@@ -84,18 +84,14 @@ public class GUICredits extends GUIScreen
 		stage.addActor(btnBack);
 	}
 
-	private void reset()
+	@Override
+	public void render(float delta)
 	{
 		if (table.getY() >= 1200.0f)
 		{
 			show();
 		}
-	}
 
-	@Override
-	public void render(float delta)
-	{
-		reset();
 		stage.act();
 		batch.begin();
 		batch.draw(background, 0, 0, 480, 800);

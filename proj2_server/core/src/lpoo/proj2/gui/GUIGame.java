@@ -105,7 +105,6 @@ public class GUIGame extends GUIScreen
 				}
 			});
 
-			audio.playSong(Song.THEME_LOBBY, true);
 			Gdx.input.setInputProcessor(stageWaiting);
 		}
 
@@ -577,9 +576,11 @@ public class GUIGame extends GUIScreen
 	{
 		board = new GameBoard(this, parent.getMode(), parent.isMultiplayer());
 		audio.playSpecial(Special.QUAKE_PREPARE);
-
+		audio.playSong(Song.THEME_LOBBY, true);
+		
 		if (parent.isMultiplayer())
 		{
+			
 			changeState(new WaitingState());
 		}
 		else

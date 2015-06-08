@@ -8,16 +8,6 @@ public class Player
 	private int streak;
 	private int id;
 
-	public Player()
-	{
-		this("", 0);
-	}
-
-	public Player(String paramName, int paramColor)
-	{
-		this(0, paramName, paramColor);
-	}
-
 	public Player(int paramId, String paramName, int paramColor)
 	{
 		name = paramName;
