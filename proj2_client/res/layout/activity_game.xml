@@ -1,75 +1,58 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:configChanges="keyboardHidden|screenSize"
-    android:screenOrientation="portrait"
+    android:orientation="vertical"
     tools:context="com.dmpm.tabletennis.Main"
     tools:ignore="MergeRootFrame" >
 
-    <GridLayout
+    <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:columnCount="3"
-        android:focusable="false"
-        android:rowCount="9" >
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingBottom="8dp"
+        android:paddingTop="24dp"
+        android:text="@string/ingame_score"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_row="2"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/txtP1Score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="96sp" />
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:text="-"
-                android:textSize="64sp" />
-
-            <TextView
-                android:id="@+id/txtP2Score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="96sp" />
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/txtP1Score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_row="1"
-            android:paddingBottom="8dp"
-            android:paddingTop="24dp"
-            android:text="@string/ingame_score"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="96sp" />
 
-        <lpoo.proj2.GameView
-            android:id="@+id/gameView"
+        <TextView
+            android:id="@+id/textView1"
             android:layout_width="wrap_content"
-            android:layout_height="310dp"
-            android:layout_column="2"
-            android:layout_gravity="start|center_vertical"
-            android:layout_row="8"
-            android:paddingLeft="64dp"
-            android:paddingRight="64dp" />
-    </GridLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="-"
+            android:textSize="64sp" />
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/txtP2Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="96sp" />
+    </LinearLayout>
+
+    <lpoo.proj2.GameView
+        android:id="@+id/gameView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="64dp"
+        android:paddingRight="64dp" />
+
+</LinearLayout>

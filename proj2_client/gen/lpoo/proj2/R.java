@@ -14,12 +14,6 @@ public final class R {
     public static final class attr {
     }
     public static final class dimen {
-        /** 
-         Example customization of dimensions originally defined in res/values/dimens.xml
-         (such as screen margins) for screens with more than 820dp of available width. This
-         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
-    
-         */
         public static final int activity_horizontal_margin=0x7f050000;
         public static final int activity_vertical_margin=0x7f050001;
     }
@@ -46,13 +40,13 @@ public final class R {
         public static final int llayout=0x7f090011;
         public static final int spnColor=0x7f090010;
         public static final int textView=0x7f090008;
-        public static final int textView1=0x7f090002;
-        public static final int textView4=0x7f090004;
+        public static final int textView1=0x7f090003;
+        public static final int textView4=0x7f090001;
         public static final int textView5=0x7f09000a;
         public static final int textView6=0x7f090007;
         public static final int txtIP=0x7f090009;
-        public static final int txtP1Score=0x7f090001;
-        public static final int txtP2Score=0x7f090003;
+        public static final int txtP1Score=0x7f090002;
+        public static final int txtP2Score=0x7f090004;
         public static final int txtPort=0x7f09000b;
         public static final int txtUsername=0x7f09000e;
     }
@@ -64,28 +58,22 @@ public final class R {
         public static final int game_menu=0x7f080000;
     }
     public static final class string {
-        public static final int action_disconnect=0x7f060014;
-        public static final int action_settings=0x7f060001;
+        public static final int action_disconnect=0x7f06000f;
+        public static final int action_settings=0x7f060005;
         public static final int app_name=0x7f060000;
-        public static final int button_connect=0x7f06000e;
-        public static final int button_exit=0x7f06000f;
-        public static final int hello_world=0x7f06000c;
-        public static final int ingame_score=0x7f060002;
-        public static final int ingame_serve=0x7f060003;
-        public static final int menu_color=0x7f06000a;
-        public static final int menu_connect=0x7f060006;
-        public static final int menu_hostip=0x7f060007;
-        public static final int menu_port=0x7f060008;
-        public static final int menu_preferences=0x7f06000d;
-        public static final int menu_username=0x7f060009;
-        public static final int msg_lose=0x7f060005;
-        public static final int msg_win=0x7f060004;
-        public static final int text_anonymous=0x7f060015;
-        public static final int text_defaultip=0x7f060011;
-        public static final int text_defaultport=0x7f060010;
-        public static final int text_defaultuser=0x7f060012;
-        public static final int title_activity_connect_menu=0x7f06000b;
-        public static final int title_activity_main=0x7f060013;
+        public static final int button_connect=0x7f06000d;
+        public static final int button_exit=0x7f06000e;
+        public static final int ingame_score=0x7f060006;
+        public static final int menu_color=0x7f06000b;
+        public static final int menu_connect=0x7f060007;
+        public static final int menu_hostip=0x7f060008;
+        public static final int menu_port=0x7f060009;
+        public static final int menu_preferences=0x7f06000c;
+        public static final int menu_username=0x7f06000a;
+        public static final int text_defaultip=0x7f060002;
+        public static final int text_defaultport=0x7f060001;
+        public static final int text_defaultuser=0x7f060003;
+        public static final int title_activity_main=0x7f060004;
     }
     public static final class style {
         public static final int AppBaseTheme=0x7f070000;

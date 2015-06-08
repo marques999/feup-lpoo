@@ -18,6 +18,8 @@ public class GameView extends View
 {
 	private float posX;
 	private float posY;
+	private float ratioX = 1.0f;
+	private float ratioY = 1.0f;
 	private Client client;
 	private Bitmap ballBitmap;
 	private Paint lineColor;
@@ -87,9 +89,13 @@ public class GameView extends View
 	@Override
 	public void onSizeChanged(int xNew, int yNew, int xOld, int yOld)
 	{
-		bounds = new Bounds(0, 0, getWidth() - ballBitmap.getWidth(), getHeight() - ballBitmap.getHeight());
-		posX = (getWidth() - ballBitmap.getWidth()) / 2;
-		posY = (getHeight() - ballBitmap.getHeight()) / 2;
+		super.onSizeChanged(xNew, yNew, xOld, yOld);
+
+		ratioX = 480.0f / xNew;
+		ratioY = 400.0f / yNew;
+		bounds = new Bounds(0, 0, getWidth(), getHeight());
+		posX = getWidth() >> 1;
+		posY = getHeight() >> 1;
 	}
 
 	@Override
@@ -101,13 +107,14 @@ public class GameView extends View
 		canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), lineColor);
 		canvas.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight(), lineColor);
 		canvas.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2, lineColor);
-		canvas.drawBitmap(ballBitmap, posX, posY, lineColor);
+		canvas.drawBitmap(ballBitmap, posX - ballBitmap.getWidth() / 2, posY - ballBitmap.getHeight() / 2, lineColor);
 	}
 
 	protected void processMove(float paramX, float paramY)
 	{
 		posX = paramX <= bounds.maxX ? (paramX < bounds.minX ? bounds.minX : paramX) : bounds.maxX;
 		posY = paramY <= bounds.maxY ? (paramY < bounds.minY ? bounds.minY : paramY) : bounds.maxY;
+		new SendMessage(posX * ratioX, posY * ratioY).start();
 	}
 
 	private class SendMessage extends Thread
@@ -116,8 +123,8 @@ public class GameView extends View
 
 		public SendMessage(float x, float y)
 		{
-			msg.x = posX;
-			msg.y = posY;
+			msg.x = x;
+			msg.y = y;
 		}
 
 		@Override
@@ -131,32 +138,32 @@ public class GameView extends View
 	}
 
 	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+	{
+		int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
+		int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+		setMeasuredDimension(parentWidth, parentHeight);
+
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	}
+
+	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
 		float newX = event.getX();
 		float newY = event.getY();
-		final float ratioX = 480 / getWidth();
-		final float ratioY = 400 / getHeight();
 		final int action = event.getAction();
 
 		switch (action & MotionEvent.ACTION_MASK)
 		{
 		case MotionEvent.ACTION_MOVE:
+		case MotionEvent.ACTION_DOWN:
 			processMove(newX, newY);
 			invalidate();
 			requestLayout();
 			break;
-		case MotionEvent.ACTION_DOWN:
-			processMove(newX - ballBitmap.getWidth() / 2, newY - ballBitmap.getHeight() / 2);
-			invalidate();
-			requestLayout();
-			break;
 		}
-
-		newX *= ratioX;
-		newY *= ratioY;
-
-		new SendMessage(newX, newY).start();
 
 		return true;
 	}

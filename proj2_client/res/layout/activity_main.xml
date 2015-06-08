@@ -58,7 +58,8 @@
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_gravity="start"
-                    android:inputType="phone"
+					android:inputType="number|numberDecimal"
+					android:digits="0123456789."
                     android:maxLength="16"
                     android:minLines="0"
                     android:minWidth="192dp"
@@ -141,7 +142,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="0"
-                    android:layout_gravity="center|left"
+                    android:layout_gravity="center|start"
                     android:text="@string/menu_color" />
 
                 <Spinner
@@ -184,6 +185,7 @@
                 android:textSize="12sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

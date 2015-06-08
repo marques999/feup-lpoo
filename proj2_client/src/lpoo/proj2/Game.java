@@ -22,6 +22,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class Game extends Activity
 	private final int MAX_PLAYERS = 2;
 	private final int MIN_PLAYERS = 1;
 
+	private AlertDialog.Builder alertConfirm;
 	private AlertDialog.Builder alertConnection;
 	private AlertDialog.Builder alertDisconnected;
 	private AlertDialog.Builder alertForfeited;
@@ -42,6 +44,7 @@ public class Game extends Activity
 	private Client client;
 	private GameView gameView;
 	private TextView scores[];
+	private Thread clientThread;
 	private String playerName;
 	private String serverHost;
 
@@ -58,6 +61,16 @@ public class Game extends Activity
 		}
 	}
 
+	private class ExitDisconnect implements DialogInterface.OnClickListener
+	{
+		@Override
+		public void onClick(DialogInterface dialog, int which)
+		{
+			disconnectServer();
+			finish();
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -65,6 +78,13 @@ public class Game extends Activity
 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_game);
+
+		alertConfirm = new AlertDialog.Builder(this);
+		alertConfirm.setMessage("Are you sure you want to disconect from the current game?");
+		alertConfirm.setTitle("Disconnect");
+		alertConfirm.setPositiveButton("Yes", new ExitDisconnect());
+		alertConfirm.setNegativeButton("No", null);
+		alertConfirm.setCancelable(true);
 
 		alertConnection = new AlertDialog.Builder(this);
 		alertConnection.setMessage("Could not connect to target computer... is the server running?");
@@ -103,8 +123,10 @@ public class Game extends Activity
 
 		alertGameover = new AlertDialog.Builder(this);
 		client = new Client();
+		clientThread = new Thread(client);
 
 		Network.register(client);
+
 		final Bundle b = getIntent().getExtras();
 
 		serverHost = b.getCharSequence("prefIP").toString();
@@ -127,7 +149,7 @@ public class Game extends Activity
 				if (object instanceof PlayerConnected)
 				{
 					PlayerConnected playerConnected = (PlayerConnected) object;
-					addPlayer(playerConnected.id);
+					addPlayer(playerConnected.playerId);
 
 					runOnUiThread(new Runnable()
 					{
@@ -145,30 +167,22 @@ public class Game extends Activity
 				}
 				else if (object instanceof GameOver)
 				{
+					final GameOver gameOver = (GameOver) object;
+
 					runOnUiThread(new Runnable()
 					{
-						int p1Score = Integer.parseInt(scores[0].getText().toString());
-						int p2Score = Integer.parseInt(scores[1].getText().toString());
-
 						@Override
 						public void run()
 						{
 							alertGameover.setTitle("Game Over");
-
-							if (p1Score > p2Score)
-							{
-								alertGameover.setMessage("Player 1 won the match!");
-							}
-							else
-							{
-								alertGameover.setMessage("Player 2 won the match!");
-							}
-
+							alertGameover.setMessage(gameOver.playerName + " won the match!");
 							alertGameover.setPositiveButton("OK", new ExitActivity());
 							alertGameover.setCancelable(false);
 							alertGameover.show();
 						}
 					});
+
+					disconnectServer();
 				}
 				else if (object instanceof ServerFull)
 				{
@@ -181,11 +195,7 @@ public class Game extends Activity
 						}
 					});
 
-					if (client != null)
-					{
-						client.close();
-						client = null;
-					}
+					disconnectServer();
 				}
 				else if (object instanceof UpdateScore)
 				{
@@ -204,7 +214,7 @@ public class Game extends Activity
 				else if (object instanceof PlayerDisconnected)
 				{
 					PlayerDisconnected playerDisconnected = (PlayerDisconnected) object;
-					removePlayer(playerDisconnected.id);
+					removePlayer(playerDisconnected.playerId);
 
 					runOnUiThread(new Runnable()
 					{
@@ -215,11 +225,7 @@ public class Game extends Activity
 						}
 					});
 
-					if (client != null)
-					{
-						client.close();
-						client = null;
-					}
+					disconnectServer();
 				}
 			}
 
@@ -235,22 +241,26 @@ public class Game extends Activity
 					}
 				});
 
-				if (client != null)
-				{
-					client.close();
-					client = null;
-				}
+				disconnectServer();
 			}
 		}));
 
-		new Thread(client).start();
-
+		clientThread.start();
 		gameView = (GameView) findViewById(R.id.gameView);
 		gameView.setClient(client);
 		gameView.setBitmap(playerColor);
 		scores = new TextView[2];
 		scores[0] = (TextView) findViewById(R.id.txtP1Score);
 		scores[1] = (TextView) findViewById(R.id.txtP2Score);
+	}
+
+	private void disconnectServer()
+	{
+		if (client != null)
+		{
+			client.close();
+			client = null;
+		}
 	}
 
 	private class InitializeNetwork extends Thread
@@ -294,16 +304,12 @@ public class Game extends Activity
 					}
 				});
 
-				if (client != null)
-				{
-					client.close();
-					client = null;
-				}
+				disconnectServer();
 			}
 
 			PlayerLogin login = new PlayerLogin();
-			login.name = playerName;
-			login.color = playerColor;
+			login.playerName = playerName;
+			login.playerColor = playerColor;
 
 			if (client != null)
 			{
@@ -317,11 +323,7 @@ public class Game extends Activity
 		@Override
 		public void run()
 		{
-			if (client != null)
-			{
-				client.close();
-				client = null;
-			}
+			disconnectServer();
 		}
 	}
 
@@ -351,6 +353,22 @@ public class Game extends Activity
 		getMenuInflater().inflate(R.menu.game_menu, menu);
 
 		return true;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			if (alertConfirm != null)
+			{
+				alertConfirm.show();
+			}
+			
+			return true;
+		}
+
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
