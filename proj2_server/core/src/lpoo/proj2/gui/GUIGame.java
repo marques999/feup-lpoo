@@ -44,13 +44,13 @@ public class GUIGame extends GUIScreen
 
 	public void changeState(GameState newState)
 	{
+		bgmusic = AirHockey.getTheme();
 		state = newState;
 	}
 
 	private abstract class GameState
 	{
 		public abstract void update(float delta);
-
 		public abstract void draw(SpriteBatch paramBatch);
 	}
 
@@ -197,7 +197,8 @@ public class GUIGame extends GUIScreen
 		private final Stage stageDisconnected = new Stage();
 		private final Table tableDisconnected = new Table();
 		private final TextButton btnOK = new TextButton("OK", StyleFactory.MenuButton);
-
+		private final StringBuilder strName = new StringBuilder();
+		
 		public DisconnectedState()
 		{
 			btnOK.addListener(new ClickListener()
@@ -219,11 +220,9 @@ public class GUIGame extends GUIScreen
 
 		public void newInstance(final Player paramPlayer)
 		{
-			final StringBuilder strName = new StringBuilder();
-
+			strName.setLength(0);
 			strName.append(paramPlayer.getName());
 			strName.append(" HAS DISCONNECTED.");
-
 			tableDisconnected.setFillParent(true);
 			tableDisconnected.defaults().padBottom(16);
 			tableDisconnected.add(new Label(strName, StyleFactory.GradientLabel));
@@ -416,8 +415,11 @@ public class GUIGame extends GUIScreen
 
 	public void actionDisconnect(Player p)
 	{
-		disconnectedState.newInstance(p);
-		changeState(disconnectedState);
+		if (state instanceof GameRunningState)
+		{
+			disconnectedState.newInstance(p);
+			changeState(disconnectedState);
+		}
 	}
 
 	private class PlayerScoredState extends GameState

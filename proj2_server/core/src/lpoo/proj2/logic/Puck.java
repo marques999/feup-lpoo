@@ -42,31 +42,9 @@ public final class Puck extends DynamicEntity
 	}
 
 	public void update(float delta)
-	{		
+	{
 		getPosition().add(getVelocity().cpy().scl(delta));
 		setBoundingCircle(getX(), getY());
-	}
-
-	@Override
-	public boolean collides(Paddle paddle)
-	{
-		return false;
-	}
-
-	@Override
-	public boolean collides(Puck puck)
-	{
-		if (Intersector.overlaps(getBoundingCircle(), puck.getBoundingCircle()))
-		{
-			if (!isColliding())
-			{
-				getVelocity().scl(-1);
-				setColliding(true);
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public void impulse(Vector2 velocity)
@@ -109,24 +87,45 @@ public final class Puck extends DynamicEntity
 
 	public boolean goingFast()
 	{
-		return getVelocity().len() > 300.0f;
+		return getVelocity().len() > 100.0f;
 	}
-	
+
 	public boolean goingDownwards()
 	{
 		return getVelocity().y <= -0.1f;
 	}
 
 	@Override
+	public boolean collides(Paddle paddle)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean collides(Puck puck)
+	{
+		if (Intersector.overlaps(getBoundingCircle(), puck.getBoundingCircle()))
+		{
+			if (!isColliding())
+			{
+				getVelocity().scl(-1);
+				setColliding(true);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
 	public boolean collides(Wall wall)
 	{
-		if (Intersector.overlaps(getBoundingCircle(),
-				wall.getBoundingRectangle()))
+		if (Intersector.overlaps(getBoundingCircle(), wall.getBoundingRectangle()))
 		{
 			if (!isColliding())
 			{
 				getVelocity().scl(wall.getNormal());
-				getPosition().mulAdd(getVelocity(), 0.02f);
+				getPosition().mulAdd(getVelocity(), 0.03f);
 				getVelocity().scl(0.95f);
 				setColliding(true);
 				return true;
@@ -143,20 +142,6 @@ public final class Puck extends DynamicEntity
 	@Override
 	public boolean collides(Goal goal)
 	{
-		if (Intersector.overlaps(getBoundingCircle(), goal.getBoundingRectangle()))
-		{
-			if (!isColliding())
-			{
-				getVelocity().scl(-1);
-				setColliding(true);
-				return true;
-			}
-		}
-		else
-		{
-			setColliding(false);
-		}
-
-		return false;
+		return Intersector.overlaps(getBoundingCircle(), goal.getBoundingRectangle());
 	}
 }

@@ -36,18 +36,18 @@ public class GUIOptions extends GUIScreen
 	private final Stage stage = new Stage();
 	private final Table table = new Table();
 	private final CheckBox chkQuake = new CheckBox("quake-style sounds", StyleFactory.DefaultCheckbox);
-	private final Label lblDifficulty = new Label("DIFFICULTY",  StyleFactory.SmallLabel);
-	private final Label lblBGM = new Label("BGM MUSIC",  StyleFactory.SmallLabel);
-	private final Label lblMusicVolume = new Label("MUSIC VOLUME",  StyleFactory.SmallLabel);
-	private final Label lblSFXVolume = new Label("SFX VOLUME",  StyleFactory.SmallLabel);
+	private final Label lblDifficulty = new Label("DIFFICULTY", StyleFactory.SmallLabel);
+	private final Label lblBGM = new Label("BGM MUSIC", StyleFactory.SmallLabel);
+	private final Label lblMusicVolume = new Label("MUSIC VOLUME", StyleFactory.SmallLabel);
+	private final Label lblSFXVolume = new Label("SFX VOLUME", StyleFactory.SmallLabel);
 	private final Label lblPaddle = new Label("PUCK COLOR", StyleFactory.SmallLabel);
 	private final Label lblTitle = new Label("preferences", StyleFactory.TitleLabel);
 	private final Slider sliderMusicVolume = new Slider(0.0f, 1.0f, 0.1f, false, StyleFactory.DefaultSlider);
-	private final Slider sliderSFXVolume = new Slider(0.0f, 1.0f, 0.1f, false,  StyleFactory.DefaultSlider);
+	private final Slider sliderSFXVolume = new Slider(0.0f, 1.0f, 0.1f, false, StyleFactory.DefaultSlider);
 	private final ImageButton btnPreview = new ImageButton(StyleFactory.VolumeButton);
 	private final TextButton btnOK = new TextButton("OK", StyleFactory.MenuButton);
-	private final TextButton btnCancel = new TextButton("Cancel",  StyleFactory.MenuButton);
-	private final TextButton btnDifficulty = new TextButton(difficulty[difficultyIndex],  StyleFactory.BlueButton);
+	private final TextButton btnCancel = new TextButton("Cancel", StyleFactory.MenuButton);
+	private final TextButton btnDifficulty = new TextButton(difficulty[difficultyIndex], StyleFactory.BlueButton);
 	private final TextButton btnColor = new TextButton(colors[colorIndex], StyleFactory.BlueButton);
 	private final TextButton btnThemeA = new TextButton("THEME A", StyleFactory.ToggleButton);
 	private final TextButton btnThemeB = new TextButton("THEME B", StyleFactory.ToggleButton);
@@ -212,6 +212,15 @@ public class GUIOptions extends GUIScreen
 			{
 				audio.playSound(SFX.MENU_CLICK);
 			}
+
+			@Override
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+			{
+				if (!btnThemeA.isPressed() && !btnThemeA.isChecked())
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
+			}
 		});
 
 		btnThemeB.addListener(new ClickListener()
@@ -220,6 +229,15 @@ public class GUIOptions extends GUIScreen
 			public void clicked(InputEvent event, float x, float y)
 			{
 				audio.playSound(SFX.MENU_CLICK);
+			}
+
+			@Override
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
+			{
+				if (!btnThemeB.isPressed() && !btnThemeB.isChecked())
+				{
+					audio.playSound(SFX.MENU_SELECT);
+				}
 			}
 		});
 

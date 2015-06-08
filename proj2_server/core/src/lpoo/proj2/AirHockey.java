@@ -64,11 +64,6 @@ public class AirHockey extends Game
 	private final static String PREF_AUDIO_SFX_VOLUME = "audio.sfx.volume";
 	private final static String PREF_AUDIO_MUSIC_VOLUME = "audio.music.volume";
 
-	public static enum Difficulty
-	{
-		EASY, MEDIUM, HARD, INSANE
-	}
-
 	public static void getPreferences()
 	{
 		if (preferences == null)
@@ -129,7 +124,7 @@ public class AirHockey extends Game
 
 	public static float getMusicVolume()
 	{
-		return preferences.getFloat(PREF_AUDIO_MUSIC_VOLUME, 1.0f);
+		return preferences.getFloat(PREF_AUDIO_MUSIC_VOLUME, 0.7f);
 	}
 
 	public static void setSFXVolume(float sfxVolume)

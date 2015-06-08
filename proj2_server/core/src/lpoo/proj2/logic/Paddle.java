@@ -12,7 +12,7 @@ public final class Paddle extends DynamicEntity
 	private final float minimumDelta = 0.05f;
 	private static final float minimumSpeed = 200.0f;
 	private static final float maximumSpeed = 800.0f;
-	
+
 	protected Paddle(float x, float y, int color)
 	{
 		super(x, y, color);
@@ -43,13 +43,13 @@ public final class Paddle extends DynamicEntity
 		setRadius(getWidth() / 2 - radiusAdjustment);
 		setVelocity(new Vector2(0.0f, 0.0f));
 	}
-	
+
 	public void update()
-	{	 
+	{
 		getPosition().add(getVelocity().cpy().scl(Gdx.graphics.getDeltaTime()));
 		setBoundingCircle(getX(), getY());
 	}
-	
+
 	public void update(float delta)
 	{
 		float dx = (getX() - getPreviousX()) / delta;
@@ -59,17 +59,17 @@ public final class Paddle extends DynamicEntity
 		{
 			dx = minimumSpeed * Math.signum(dx);
 		}
-		
+
 		if (Math.abs(dy) < minimumSpeed)
 		{
 			dy = minimumSpeed * Math.signum(dy);
 		}
-		
+
 		if (Math.abs(dx) > maximumSpeed)
 		{
 			dx = maximumSpeed * Math.signum(dx);
 		}
-		
+
 		if (Math.abs(dy) > maximumSpeed)
 		{
 			dy = maximumSpeed * Math.signum(dy);
@@ -79,12 +79,6 @@ public final class Paddle extends DynamicEntity
 		setPrevious(getX(), getY());
 	}
 
-	@Override
-	public boolean collides(Paddle paddle)
-	{
-		return false;
-	}
-	
 	public void impulse(Vector2 velocity)
 	{
 		float dx = Math.abs(velocity.x);
@@ -109,6 +103,28 @@ public final class Paddle extends DynamicEntity
 	}
 
 	@Override
+	public boolean collides(Wall wall)
+	{
+		return Intersector.overlaps(getBoundingCircle(), wall.getBoundingRectangle());
+	}
+
+	@Override
+	public boolean collides(Paddle paddle)
+	{
+		if (Intersector.overlaps(getBoundingCircle(), paddle.getBoundingCircle()))
+		{
+			if (!isColliding())
+			{
+				getPosition().mulAdd(getVelocity(), 0.05f);
+				setColliding(true);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
 	public boolean collides(Puck puck)
 	{
 		if (Intersector.overlaps(getBoundingCircle(), puck.getBoundingCircle()))
@@ -130,8 +146,8 @@ public final class Paddle extends DynamicEntity
 	}
 
 	@Override
-	public boolean collides(Wall wall)
+	public boolean collides(Goal goal)
 	{
-		return Intersector.overlaps(getBoundingCircle(), wall.getBoundingRectangle());
+		return false;
 	}
 }

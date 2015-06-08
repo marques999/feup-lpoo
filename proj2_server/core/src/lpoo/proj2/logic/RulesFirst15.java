@@ -18,7 +18,7 @@ public final class RulesFirst15 extends GameRules
 	@Override
 	public boolean checkLast()
 	{
-		return players[0].getScore() == NUMBER_POINTS - 1 || players[1].getScore() == NUMBER_POINTS - 1;
+		return false;
 	}
 
 	@Override

@@ -25,8 +25,8 @@ public class AudioManager
 	{
 		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_main.ogg")),
 		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_over.ogg")),
-		Gdx.audio.newMusic(Gdx.files.internal("audio/daisukiss.ogg")),
-		Gdx.audio.newMusic(Gdx.files.internal("audio/gangnam.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_a.ogg")),
+		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_b.ogg")),
 		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_lobby.ogg")),
 		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_splash.ogg")),
 		Gdx.audio.newMusic(Gdx.files.internal("audio/bgm_select.ogg")),
